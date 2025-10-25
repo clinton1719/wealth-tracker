@@ -1,0 +1,13 @@
+{
+  "name": "wealth-tracker",
+  "version": "1.0.0",
+  "description": "Wealth tracker application to monitor and manage personal finances.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Clinton Fernandes",
+  "license": "MIT",
+  "packageManager": "pnpm@10.12.4"
+}
