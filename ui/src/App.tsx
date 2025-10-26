@@ -1,11 +1,8 @@
-import { Button } from "./components/ui/button"
+import { NavigationBar } from "./components/layout/navigation-bar"
 
 function App() {
-
   return (
-     <div className="flex min-h-svh flex-col items-center justify-center bg-green-900 text-red-400">
-      <Button>Click me</Button>
-    </div>
+    <NavigationBar />
   )
 }
 
