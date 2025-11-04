@@ -5,15 +5,15 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger
-} from "@/components/ui/navigation-menu"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { navigationStaticValues } from "@/static-values/navigation-values"
-import { Link } from "react-router"
+} from "@/components/ui/navigation-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { navigationStaticValues } from "@/static-values/navigation-values";
+import { Link } from "react-router";
 
 export function NavigationBar() {
     const isMobile = useIsMobile()
     return (<NavigationMenu viewport={isMobile}>
-        <NavigationMenuList className="flex-wrap">
+        <NavigationMenuList className="flex-wrap mb-4 mt-2 ml-2">
             <NavigationMenuItem>
                 <NavigationMenuTrigger>Home</NavigationMenuTrigger>
                 <NavigationMenuContent>
