@@ -3,4 +3,8 @@ SHOW DATABASES;
 
 SELECT * FROM expenses;
 
-DROP table expenses;
+DROP table users;
+truncate users;
+
+SELECT * FROM expenses;
+SELECT * FROM users;

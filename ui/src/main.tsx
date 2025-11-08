@@ -14,7 +14,6 @@ createRoot(document.getElementById('root')!).render(
         <Route index element={<App />} />
         <Route path="expense" element={<ViewExpenses />} />
       </Routes>
-
     </BrowserRouter>
   </StrictMode>,
 )
