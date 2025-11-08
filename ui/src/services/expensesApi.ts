@@ -1,20 +1,22 @@
+import { baseAPI } from '@/static-values/constants';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export interface Expense {
   id: number;
   amount: number;
   category: string;
-  date: string;
-  description?: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const expensesApi = createApi({
   reducerPath: 'expensesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseAPI }),
   tagTypes: ['Expenses'],
   endpoints: (builder) => ({
-    getExpenses: builder.query<Expense[], void>({
-      query: () => '/expenses',
+    getExpense: builder.query<Expense, number>({
+      query: (id: number) => `/expenses/${id}`,
       providesTags: ['Expenses'],
     }),
     addExpense: builder.mutation<Expense, Partial<Expense>>({
@@ -26,7 +28,7 @@ export const expensesApi = createApi({
       invalidatesTags: ['Expenses'],
     }),
     deleteExpense: builder.mutation<void, number>({
-      query: (id) => ({
+      query: (id: number) => ({
         url: `/expenses/${id}`,
         method: 'DELETE',
       }),
@@ -36,7 +38,7 @@ export const expensesApi = createApi({
 });
 
 export const {
-  useGetExpensesQuery,
+  useGetExpenseQuery,
   useAddExpenseMutation,
   useDeleteExpenseMutation,
 } = expensesApi;

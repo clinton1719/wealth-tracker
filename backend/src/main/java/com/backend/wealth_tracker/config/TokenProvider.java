@@ -5,15 +5,17 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.backend.wealth_tracker.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Service
 public class TokenProvider {
+    private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+    
     @Value("${security.jwt.token.secret-key}")
     private String JWT_SECRET;
 
@@ -33,16 +35,26 @@ public class TokenProvider {
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
-            return JWT.require(algorithm)
+            var decodedToken = JWT.require(algorithm)
+                    .acceptExpiresAt(0)
                     .build()
-                    .verify(token)
-                    .getSubject();
+                    .verify(token);
+            
+            Instant expiresAt = decodedToken.getExpiresAt().toInstant();
+            if (Instant.now().isAfter(expiresAt)) {
+                throw new JWTVerificationException("Token has expired");
+            }
+            
+            return decodedToken.getSubject();
         } catch (JWTVerificationException exception) {
             throw new JWTVerificationException("Error while validating token", exception);
         }
     }
 
     private Instant genAccessExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        Instant now = Instant.now();
+        Instant expiresAt = now.plusSeconds(60 * 60);
+        logger.info("Token generated at: {}, expires at: {}", now, expiresAt);
+        return expiresAt;
     }
 }
