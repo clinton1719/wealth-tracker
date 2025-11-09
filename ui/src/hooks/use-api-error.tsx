@@ -1,5 +1,5 @@
 import Login from '@/features/auth/login';
-import SignUp from '@/features/auth/signup';
+import SignUp from '@/features/auth/signUp';
 import ErrorPage from '@/features/error/errorPage';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
