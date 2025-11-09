@@ -23,15 +23,15 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        return repository.findByLogin(username);
+        return repository.findByUsername(username);
     }
 
     public void signUp(SignUpDto signUpDto) throws InvalidJwtException {
-        if (repository.findByLogin(signUpDto.getLogin()) != null) {
-            throw new InvalidJwtException("Username already exists for name: " + signUpDto.getLogin());
+        if (repository.findByUsername(signUpDto.getUsername()) != null) {
+            throw new InvalidJwtException("Username already exists for name: " + signUpDto.getUsername());
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(signUpDto.getPassword());
-        User newUser = new User(signUpDto.getLogin(), encryptedPassword, signUpDto.getRole());
+        User newUser = new User(signUpDto.getUsername(), encryptedPassword, signUpDto.getRole());
         LOGGER.info("New user registered: {}", newUser.getUsername());
         repository.save(newUser);
     }

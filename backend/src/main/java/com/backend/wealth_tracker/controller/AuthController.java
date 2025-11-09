@@ -2,7 +2,7 @@ package com.backend.wealth_tracker.controller;
 
 import com.backend.wealth_tracker.config.TokenProvider;
 import com.backend.wealth_tracker.dto.JwtDto;
-import com.backend.wealth_tracker.dto.SignInDto;
+import com.backend.wealth_tracker.dto.LogInDto;
 import com.backend.wealth_tracker.dto.SignUpDto;
 import com.backend.wealth_tracker.exception.InvalidJwtException;
 import com.backend.wealth_tracker.model.User;
@@ -41,9 +41,9 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<JwtDto> signIn(@RequestBody @Valid SignInDto signInDto) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(signInDto.getLogin(), signInDto.getPassword());
+    @PostMapping("/login")
+    public ResponseEntity<JwtDto> login(@RequestBody @Valid LogInDto logInDto) throws InterruptedException {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(logInDto.getUsername(), logInDto.getPassword());
         var authUser = authenticationManager.authenticate(usernamePassword);
         var accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
         return ResponseEntity.ok(new JwtDto(accessToken));

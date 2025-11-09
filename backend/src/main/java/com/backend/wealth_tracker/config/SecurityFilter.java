@@ -33,8 +33,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null) {
             logger.info("Processing request with token at: {}", Instant.now());
             try {
-                var login = tokenService.validateToken(token);
-                var user = userRepository.findByLogin(login);
+                var username = tokenService.validateToken(token);
+                var user = userRepository.findByUsername(username);
                 
                 if (user == null) {
                     logger.error("User not found for token");

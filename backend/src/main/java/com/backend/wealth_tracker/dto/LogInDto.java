@@ -3,20 +3,20 @@ package com.backend.wealth_tracker.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class SignInDto {
-    @NotBlank(message = "Login cannot be blank")
-    @Size(min = 4, max = 20, message = "Login must be between 4 and 20 characters")
-    String login;
+public class LogInDto {
+    @NotBlank(message = "Username cannot be blank")
+    @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")
+    String username;
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
     String password;
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

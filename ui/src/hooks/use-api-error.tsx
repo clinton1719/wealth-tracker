@@ -1,5 +1,5 @@
 import ErrorPage from '@/features/error/errorPage';
-import LoginPage from '@/features/login/loginPage';
+import Login from '@/features/auth/login';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { ReactElement } from 'react';
@@ -18,10 +18,15 @@ export const useApiError = (error: ApiError | undefined): ErrorResponse => {
 
     if ('status' in error) {
         switch (error.status) {
+            case 401:
+                return {
+                    isError: true,
+                    errorComponent: <Login isTokenExpired={true} />
+                };
             case 403:
                 return {
                     isError: true,
-                    errorComponent: <LoginPage />
+                    errorComponent: <Login isTokenExpired={false} />
                 };
             case 404:
                 return {
