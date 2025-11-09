@@ -1,3 +1,4 @@
+import { selectAuthToken } from '@/slices/authSlice';
 import { baseAPI } from '@/static-values/constants';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
@@ -17,7 +18,19 @@ export interface SignUpData {
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: baseAPI }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: baseAPI, prepareHeaders: (headers, { getState }) => {
+      const token = selectAuthToken(getState() as any);
+
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`);
+      } else {
+        console.log("No token found in state");
+      }
+
+      return headers;
+    },
+  }),
   tagTypes: ['Auth'],
   endpoints: (builder) => ({
     login: builder.mutation<Auth, LoginData>({

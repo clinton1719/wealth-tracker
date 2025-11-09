@@ -20,10 +20,10 @@ import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useApiError } from "@/hooks/use-api-error";
 import { useLoginMutation } from "@/services/authApi";
 import { setCredentials } from "@/slices/authSlice";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -41,6 +41,8 @@ export function LoginForm({
     ...props
 }: LoginFormProps) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         mode: "onSubmit",
@@ -50,11 +52,9 @@ export function LoginForm({
         },
     });
 
-    const [login, { isLoading, error }] = useLoginMutation();
-    const { isError, errorComponent } = useApiError(error);
+    const [login, { isLoading, isError }] = useLoginMutation();
 
     if (isLoading) return <Spinner />;
-    if (isError) return errorComponent;
 
     async function onSubmit(formData: z.infer<typeof formSchema>) {
         try {
@@ -63,10 +63,15 @@ export function LoginForm({
                 password: formData.password
             }).unwrap();
 
-            setCredentials({
+            if (isError || !result.accessToken) {
+                toast.error("Login failed. Please check your credentials and try again.");
+                return;
+            }
+
+            dispatch(setCredentials({
                 username: formData.username,
                 token: result.accessToken,
-            });
+            }));
 
             toast("Logged in as " + formData.username, {
                 description: (
@@ -91,8 +96,7 @@ export function LoginForm({
                 } as React.CSSProperties,
             });
 
-            navigate("/", { replace: true });
-
+            navigate("/");
         } catch (err) {
             toast.error("Login failed. Please check your credentials and try again.");
         }
@@ -104,7 +108,7 @@ export function LoginForm({
                 <CardHeader>
                     <CardTitle>Login to your account</CardTitle>
                     <CardDescription>
-                        Enter your email below to login to your account
+                        Enter your username and password to access your account.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

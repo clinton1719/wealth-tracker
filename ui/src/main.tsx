@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router'
@@ -12,18 +11,16 @@ import { store } from './store.ts'
 import './styles/index.css'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <NavigationBar />
-        <Routes>
-          <Route index element={<App />} />
-          <Route path="expense" element={<ViewExpenses />} />
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<SignUp />} />
-        </Routes>
-        <Toaster />
-      </BrowserRouter>
-    </Provider>
-  </StrictMode>
+  <Provider store={store}>
+    <BrowserRouter>
+      <NavigationBar />
+      <Routes>
+        <Route index element={<App />} />
+        <Route path="expense" element={<ViewExpenses />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<SignUp />} />
+      </Routes>
+      <Toaster />
+    </BrowserRouter>
+  </Provider>
 )

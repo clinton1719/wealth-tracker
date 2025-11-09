@@ -20,9 +20,9 @@ export function NavigationBar() {
                     <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                         <li className="row-span-3">
                             <NavigationMenuLink asChild>
-                                <a
+                                <Link
                                     className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none focus:shadow-md md:p-6"
-                                    href="/"
+                                    to="/"
                                 >
                                     <div className="mb-2 text-lg font-medium sm:mt-4">
                                         Wealth tracker
@@ -31,7 +31,7 @@ export function NavigationBar() {
                                         Manage your expenses, income, and investments all in one
                                         place.
                                     </p>
-                                </a>
+                                </Link>
                             </NavigationMenuLink>
                         </li>
                         <ListItem to="https://google.com" title="Documentation" _target="_blank">

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import {
     Field,
+    FieldDescription,
     FieldError,
     FieldGroup,
     FieldLabel
@@ -20,10 +21,9 @@ import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useApiError } from "@/hooks/use-api-error";
 import { useSignUpMutation } from "@/services/authApi";
 import React from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
 const formSchema = z.object({
@@ -47,6 +47,7 @@ export function SignUpForm({
     ...props
 }: SignUpFormProps) {
     const navigate = useNavigate();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         mode: "onSubmit",
@@ -57,11 +58,9 @@ export function SignUpForm({
         },
     });
 
-    const [signUp, { isLoading, error }] = useSignUpMutation();
-    const { isError, errorComponent } = useApiError(error);
+    const [signUp, { isLoading, isError }] = useSignUpMutation();
 
     if (isLoading) return <Spinner />;
-    if (isError) return errorComponent;
 
     async function onSubmit(formData: z.infer<typeof formSchema>) {
         try {
@@ -69,6 +68,11 @@ export function SignUpForm({
                 username: formData.username,
                 password: formData.password,
             }).unwrap();
+
+            if (isError) {
+                toast.error("Sign up failed. Please check your credentials and try again.");
+                return;
+            }
 
             toast("Sign up successful for " + formData.username, {
                 description: (
@@ -94,7 +98,6 @@ export function SignUpForm({
             });
 
             navigate("/login", { replace: true });
-
         } catch (err) {
             toast.error("Sign up failed. Please check your credentials and try again.");
         }
@@ -104,9 +107,9 @@ export function SignUpForm({
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader>
-                    <CardTitle>Login to your account</CardTitle>
+                    <CardTitle>Create a new account</CardTitle>
                     <CardDescription>
-                        Enter your email below to login to your account
+                        Enter a username and password to sign up.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -154,7 +157,7 @@ export function SignUpForm({
                                     </Field>
                                 )}
                             />
-                             <Controller
+                            <Controller
                                 name="confirmPassword"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
@@ -179,13 +182,16 @@ export function SignUpForm({
                     </form>
                 </CardContent>
                 <CardFooter>
-                    <Field orientation="horizontal">
+                    <Field orientation="vertical">
                         <Button type="button" variant="outline" onClick={() => form.reset()}>
                             Reset
                         </Button>
                         <Button type="submit" form="form-rhf-demo">
                             Submit
                         </Button>
+                        <FieldDescription className="px-6 text-center">
+                            Already have an account? <Link to="/login">Sign in</Link>
+                        </FieldDescription>
                     </Field>
                 </CardFooter>
             </Card>

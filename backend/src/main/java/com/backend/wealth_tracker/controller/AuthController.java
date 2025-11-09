@@ -44,7 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtDto> login(@RequestBody @Valid LogInDto logInDto) throws InterruptedException {
+    public ResponseEntity<JwtDto> login(@RequestBody @Valid LogInDto logInDto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(logInDto.getUsername(), logInDto.getPassword());
         var authUser = authenticationManager.authenticate(usernamePassword);
         var accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
