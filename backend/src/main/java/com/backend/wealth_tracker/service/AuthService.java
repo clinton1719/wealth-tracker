@@ -1,7 +1,7 @@
 package com.backend.wealth_tracker.service;
 
 import com.backend.wealth_tracker.dto.SignUpDto;
-import com.backend.wealth_tracker.exception.InvalidJwtException;
+import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.UserRepository;
 import org.slf4j.Logger;
@@ -26,9 +26,9 @@ public class AuthService implements UserDetailsService {
         return repository.findByUsername(username);
     }
 
-    public void signUp(SignUpDto signUpDto) throws InvalidJwtException {
+    public void signUp(SignUpDto signUpDto) throws ResourceAlreadyExistsException {
         if (repository.findByUsername(signUpDto.getUsername()) != null) {
-            throw new InvalidJwtException("Username already exists for name: " + signUpDto.getUsername());
+            throw new ResourceAlreadyExistsException("Username already exists for name: " + signUpDto.getUsername());
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(signUpDto.getPassword());
         User newUser = new User(signUpDto.getUsername(), encryptedPassword, signUpDto.getRole());

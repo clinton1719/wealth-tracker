@@ -1,0 +1,220 @@
+HV000001: Hibernate Validator 8.0.3.Final
+Starting WealthTrackerApplication using Java 21.0.7 with PID 19316 (C:\Users\Clinton\Projects\wealth-tracker\backend\target\classes started by Clinton in C:\Users\Clinton\Projects\wealth-tracker\backend)
+No active profile set, falling back to 1 default profile: "default"
+Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+Finished Spring Data repository scanning in 42 ms. Found 2 JPA repository interfaces.
+Tomcat initialized with port 8080 (http)
+Initializing ProtocolHandler ["http-nio-8080"]
+Starting service [Tomcat]
+Starting Servlet engine: [Apache Tomcat/10.1.48]
+Initializing Spring embedded WebApplicationContext
+Root WebApplicationContext: initialization completed in 1484 ms
+HHH000204: Processing PersistenceUnitInfo [name: default]
+HHH000412: Hibernate ORM core version 6.6.33.Final
+HHH000026: Second-level cache disabled
+No LoadTimeWeaver setup: ignoring JPA class transformer
+HikariPool-1 - Starting...
+HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@24944f59
+HikariPool-1 - Start completed.
+HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Initialized JPA EntityManagerFactory for persistence unit 'default'
+Global AuthenticationManager configured with UserDetailsService bean with name authService
+spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+LiveReload server is running on port 35729
+Starting ProtocolHandler ["http-nio-8080"]
+Tomcat started on port 8080 (http) with context path '/'
+Started WealthTrackerApplication in 4.157 seconds (process running for 4.529)
+Initializing Spring DispatcherServlet 'dispatcherServlet'
+Initializing Servlet 'dispatcherServlet'
+Completed initialization in 1 ms
+Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: com.backend.wealth_tracker.exception.ResourceAlreadyExistsException: Username already exists for name: melissa] with root cause
+com.backend.wealth_tracker.exception.ResourceAlreadyExistsException: Username already exists for name: melissa
+	at com.backend.wealth_tracker.service.AuthService.signUp(AuthService.java:31)
+	at com.backend.wealth_tracker.controller.AuthController.signUp(AuthController.java:42)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.backend.wealth_tracker.config.SecurityFilter.doFilterInternal(SecurityFilter.java:54)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Commencing graceful shutdown. Waiting for active requests to complete
+Graceful shutdown complete
+Closing JPA EntityManagerFactory for persistence unit 'default'
+HikariPool-1 - Shutdown initiated...
+HikariPool-1 - Shutdown completed.
+{"@timestamp":"2025-11-09T12:41:21.194095800Z","log":{"level":"INFO","logger":"com.backend.wealth_tracker.WealthTrackerApplication"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Starting WealthTrackerApplication using Java 21.0.7 with PID 23904 (C:\\Users\\Clinton\\Projects\\wealth-tracker\\backend\\target\\classes started by Clinton in C:\\Users\\Clinton\\Projects\\wealth-tracker\\backend)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:21.203097800Z","log":{"level":"INFO","logger":"com.backend.wealth_tracker.WealthTrackerApplication"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"No active profile set, falling back to 1 default profile: \"default\"","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:21.244104300Z","log":{"level":"INFO","logger":"org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:21.244104300Z","log":{"level":"INFO","logger":"org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:21.852031Z","log":{"level":"INFO","logger":"org.springframework.data.repository.config.RepositoryConfigurationDelegate"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Bootstrapping Spring Data JPA repositories in DEFAULT mode.","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:21.912053Z","log":{"level":"INFO","logger":"org.springframework.data.repository.config.RepositoryConfigurationDelegate"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Finished Spring Data repository scanning in 52 ms. Found 2 JPA repository interfaces.","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:22.577937Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.tomcat.TomcatWebServer"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Tomcat initialized with port 8080 (http)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:22.592924200Z","log":{"level":"INFO","logger":"org.apache.catalina.core.StandardService"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Starting service [Tomcat]","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:22.592924200Z","log":{"level":"INFO","logger":"org.apache.catalina.core.StandardEngine"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Starting Servlet engine: [Apache Tomcat/10.1.48]","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:22.637967Z","log":{"level":"INFO","logger":"org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Initializing Spring embedded WebApplicationContext","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:22.638901200Z","log":{"level":"INFO","logger":"org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Root WebApplicationContext: initialization completed in 1392 ms","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:22.811970100Z","log":{"level":"INFO","logger":"org.hibernate.jpa.internal.util.LogHelper"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH000204: Processing PersistenceUnitInfo [name: default]","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:22.860905500Z","log":{"level":"INFO","logger":"org.hibernate.Version"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH000412: Hibernate ORM core version 6.6.33.Final","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:22.895947900Z","log":{"level":"INFO","logger":"org.hibernate.cache.internal.RegionFactoryInitiator"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH000026: Second-level cache disabled","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.147866Z","log":{"level":"INFO","logger":"org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"No LoadTimeWeaver setup: ignoring JPA class transformer","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.171859700Z","log":{"level":"INFO","logger":"com.zaxxer.hikari.HikariDataSource"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HikariPool-1 - Starting...","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.291161100Z","log":{"level":"INFO","logger":"com.zaxxer.hikari.pool.HikariPool"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@609afe24","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.295082400Z","log":{"level":"INFO","logger":"com.zaxxer.hikari.HikariDataSource"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HikariPool-1 - Start completed.","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.330860900Z","log":{"level":"WARN","logger":"org.hibernate.orm.deprecation"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.332871200Z","log":{"level":"WARN","logger":"org.hibernate.orm.deprecation"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.350045600Z","log":{"level":"INFO","logger":"org.hibernate.orm.connections.pooling"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH10001005: Database info:\n\tDatabase JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']\n\tDatabase driver: undefined/unknown\n\tDatabase version: 8.0\n\tAutocommit mode: undefined/unknown\n\tIsolation level: undefined/unknown\n\tMinimum pool size: undefined/unknown\n\tMaximum pool size: undefined/unknown","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.949503700Z","log":{"level":"INFO","logger":"org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:23.988512300Z","log":{"level":"INFO","logger":"org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Initialized JPA EntityManagerFactory for persistence unit 'default'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:24.251795500Z","log":{"level":"INFO","logger":"org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Global AuthenticationManager configured with UserDetailsService bean with name authService","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:24.303035700Z","log":{"level":"WARN","logger":"org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:24.853193800Z","log":{"level":"INFO","logger":"org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"LiveReload server is running on port 35729","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:24.888250800Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.tomcat.TomcatWebServer"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Tomcat started on port 8080 (http) with context path '/'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:41:24.895712600Z","log":{"level":"INFO","logger":"com.backend.wealth_tracker.WealthTrackerApplication"},"process":{"pid":23904,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Started WealthTrackerApplication in 4.096 seconds (process running for 4.436)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:44:54.396043700Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.tomcat.GracefulShutdown"},"process":{"pid":23904,"thread":{"name":"SpringApplicationShutdownHook"}},"service":{"name":"wealth-tracker","node":{}},"message":"Commencing graceful shutdown. Waiting for active requests to complete","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:44:54.405973700Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.tomcat.GracefulShutdown"},"process":{"pid":23904,"thread":{"name":"tomcat-shutdown"}},"service":{"name":"wealth-tracker","node":{}},"message":"Graceful shutdown complete","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:44:54.411976600Z","log":{"level":"INFO","logger":"org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"},"process":{"pid":23904,"thread":{"name":"SpringApplicationShutdownHook"}},"service":{"name":"wealth-tracker","node":{}},"message":"Closing JPA EntityManagerFactory for persistence unit 'default'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:44:54.414971200Z","log":{"level":"INFO","logger":"com.zaxxer.hikari.HikariDataSource"},"process":{"pid":23904,"thread":{"name":"SpringApplicationShutdownHook"}},"service":{"name":"wealth-tracker","node":{}},"message":"HikariPool-1 - Shutdown initiated...","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T12:44:54.421307Z","log":{"level":"INFO","logger":"com.zaxxer.hikari.HikariDataSource"},"process":{"pid":23904,"thread":{"name":"SpringApplicationShutdownHook"}},"service":{"name":"wealth-tracker","node":{}},"message":"HikariPool-1 - Shutdown completed.","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:31.021100200Z","log":{"level":"INFO","logger":"com.backend.wealth_tracker.WealthTrackerApplication"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Starting WealthTrackerApplication using Java 21.0.7 with PID 26156 (C:\\Users\\Clinton\\Projects\\wealth-tracker\\backend\\target\\classes started by Clinton in C:\\Users\\Clinton\\Projects\\wealth-tracker\\backend)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:31.031098800Z","log":{"level":"INFO","logger":"com.backend.wealth_tracker.WealthTrackerApplication"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"No active profile set, falling back to 1 default profile: \"default\"","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:31.081100700Z","log":{"level":"INFO","logger":"org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:31.081100700Z","log":{"level":"INFO","logger":"org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:31.748508600Z","log":{"level":"INFO","logger":"org.springframework.data.repository.config.RepositoryConfigurationDelegate"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Bootstrapping Spring Data JPA repositories in DEFAULT mode.","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:31.820506100Z","log":{"level":"INFO","logger":"org.springframework.data.repository.config.RepositoryConfigurationDelegate"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Finished Spring Data repository scanning in 61 ms. Found 2 JPA repository interfaces.","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:32.653252300Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.tomcat.TomcatWebServer"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Tomcat initialized with port 8080 (http)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:32.670252100Z","log":{"level":"INFO","logger":"org.apache.catalina.core.StandardService"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Starting service [Tomcat]","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:32.671252200Z","log":{"level":"INFO","logger":"org.apache.catalina.core.StandardEngine"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Starting Servlet engine: [Apache Tomcat/10.1.48]","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:32.732504200Z","log":{"level":"INFO","logger":"org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Initializing Spring embedded WebApplicationContext","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:32.733497500Z","log":{"level":"INFO","logger":"org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Root WebApplicationContext: initialization completed in 1650 ms","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:32.969009500Z","log":{"level":"INFO","logger":"org.hibernate.jpa.internal.util.LogHelper"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH000204: Processing PersistenceUnitInfo [name: default]","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.026468200Z","log":{"level":"INFO","logger":"org.hibernate.Version"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH000412: Hibernate ORM core version 6.6.33.Final","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.064599900Z","log":{"level":"INFO","logger":"org.hibernate.cache.internal.RegionFactoryInitiator"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH000026: Second-level cache disabled","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.338569800Z","log":{"level":"INFO","logger":"org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"No LoadTimeWeaver setup: ignoring JPA class transformer","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.368135800Z","log":{"level":"INFO","logger":"com.zaxxer.hikari.HikariDataSource"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HikariPool-1 - Starting...","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.493269100Z","log":{"level":"INFO","logger":"com.zaxxer.hikari.pool.HikariPool"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@8ba045b","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.499269500Z","log":{"level":"INFO","logger":"com.zaxxer.hikari.HikariDataSource"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HikariPool-1 - Start completed.","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.540275400Z","log":{"level":"WARN","logger":"org.hibernate.orm.deprecation"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.542271600Z","log":{"level":"WARN","logger":"org.hibernate.orm.deprecation"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:33.563270500Z","log":{"level":"INFO","logger":"org.hibernate.orm.connections.pooling"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH10001005: Database info:\n\tDatabase JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']\n\tDatabase driver: undefined/unknown\n\tDatabase version: 8.0\n\tAutocommit mode: undefined/unknown\n\tIsolation level: undefined/unknown\n\tMinimum pool size: undefined/unknown\n\tMaximum pool size: undefined/unknown","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:34.241816200Z","log":{"level":"INFO","logger":"org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:34.286864100Z","log":{"level":"INFO","logger":"org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Initialized JPA EntityManagerFactory for persistence unit 'default'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:34.714365900Z","log":{"level":"INFO","logger":"org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Global AuthenticationManager configured with UserDetailsService bean with name authService","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:34.806207800Z","log":{"level":"WARN","logger":"org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:35.712236200Z","log":{"level":"INFO","logger":"org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"LiveReload server is running on port 35729","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:35.831286600Z","log":{"level":"INFO","logger":"org.springframework.boot.web.embedded.tomcat.TomcatWebServer"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Tomcat started on port 8080 (http) with context path '/'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:35.850298800Z","log":{"level":"INFO","logger":"com.backend.wealth_tracker.WealthTrackerApplication"},"process":{"pid":26156,"thread":{"name":"restartedMain"}},"service":{"name":"wealth-tracker","node":{}},"message":"Started WealthTrackerApplication in 5.261 seconds (process running for 5.615)","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:42.379623500Z","log":{"level":"INFO","logger":"org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]"},"process":{"pid":26156,"thread":{"name":"http-nio-8080-exec-1"}},"service":{"name":"wealth-tracker","node":{}},"message":"Initializing Spring DispatcherServlet 'dispatcherServlet'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:42.379623500Z","log":{"level":"INFO","logger":"org.springframework.web.servlet.DispatcherServlet"},"process":{"pid":26156,"thread":{"name":"http-nio-8080-exec-1"}},"service":{"name":"wealth-tracker","node":{}},"message":"Initializing Servlet 'dispatcherServlet'","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:12:42.381633100Z","log":{"level":"INFO","logger":"org.springframework.web.servlet.DispatcherServlet"},"process":{"pid":26156,"thread":{"name":"http-nio-8080-exec-1"}},"service":{"name":"wealth-tracker","node":{}},"message":"Completed initialization in 2 ms","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:14:39.112501400Z","log":{"level":"INFO","logger":"com.backend.wealth_tracker.config.SecurityFilter"},"process":{"pid":26156,"thread":{"name":"http-nio-8080-exec-3"}},"service":{"name":"wealth-tracker","node":{}},"message":"Processing request with token at: 2025-11-09T13:14:39.112501400Z","ecs":{"version":"8.11"}}
+{"@timestamp":"2025-11-09T13:14:39.176008700Z","log":{"level":"ERROR","logger":"com.backend.wealth_tracker.config.SecurityFilter"},"process":{"pid":26156,"thread":{"name":"http-nio-8080-exec-3"}},"service":{"name":"wealth-tracker","node":{}},"message":"Token validation failed: Error while validating token","ecs":{"version":"8.11"}}

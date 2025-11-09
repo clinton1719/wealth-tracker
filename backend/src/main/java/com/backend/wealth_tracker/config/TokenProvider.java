@@ -14,7 +14,7 @@ import java.time.Instant;
 
 @Service
 public class TokenProvider {
-    private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenProvider.class);
     
     @Value("${security.jwt.token.secret-key}")
     private String JWT_SECRET;
@@ -42,7 +42,7 @@ public class TokenProvider {
             
             Instant expiresAt = decodedToken.getExpiresAt().toInstant();
             if (Instant.now().isAfter(expiresAt)) {
-                throw new JWTVerificationException("Token has expired");
+                throw new JWTVerificationException("Token has expired at " + expiresAt);
             }
             
             return decodedToken.getSubject();
@@ -51,10 +51,23 @@ public class TokenProvider {
         }
     }
 
+    public String extractUsername(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+            var decodedToken = JWT.require(algorithm)
+                    .acceptExpiresAt(0)
+                    .build()
+                    .verify(token);
+            return decodedToken.getClaim("username").asString();
+        } catch (JWTVerificationException exception) {
+            throw new JWTVerificationException("Error while extracting username from token", exception);
+        }
+    }
+
     private Instant genAccessExpirationDate() {
         Instant now = Instant.now();
         Instant expiresAt = now.plusSeconds(60 * 60);
-        logger.info("Token generated at: {}, expires at: {}", now, expiresAt);
+        LOGGER.info("Token generated at: {}, expires at: {}", now, expiresAt);
         return expiresAt;
     }
 }

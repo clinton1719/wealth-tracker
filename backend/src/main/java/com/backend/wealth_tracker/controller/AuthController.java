@@ -5,7 +5,7 @@ import com.backend.wealth_tracker.dto.JwtDto;
 import com.backend.wealth_tracker.dto.LogInDto;
 import com.backend.wealth_tracker.dto.SignUpDto;
 import com.backend.wealth_tracker.enums.UserRole;
-import com.backend.wealth_tracker.exception.InvalidJwtException;
+import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.service.AuthService;
 import jakarta.validation.Valid;
@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDto data) throws InvalidJwtException {
+    public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDto data) throws ResourceAlreadyExistsException {
         data.setRole(UserRole.USER);
         service.signUp(data);
         return ResponseEntity.status(HttpStatus.CREATED).build();
