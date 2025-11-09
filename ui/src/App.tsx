@@ -1,7 +1,7 @@
 
 function App() {
   return (
-    <p>Homepage</p>
+    <p className=" flex items-center justify-center z-50">Homepage</p>
   )
 }
 

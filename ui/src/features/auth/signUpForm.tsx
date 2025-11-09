@@ -21,8 +21,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
-import { useLoginMutation } from "@/services/authApi";
-import { setCredentials } from "@/slices/authSlice";
+import { useSignUpMutation } from "@/services/authApi";
 import React from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -30,16 +29,23 @@ import { toast } from "sonner";
 const formSchema = z.object({
     username: z.string().min(4, "Username must be at least 4 characters long").max(20, "Username must be at most 20 characters long"),
     password: z.string().min(6, "Password must be at least 6 characters long").max(20, "Password must be at most 20 characters long"),
-});
+    confirmPassword: z.string().min(6, "Password must be at least 6 characters long").max(20, "Password must be at most 20 characters long"),
+}).refine(
+    (data) => data.password === data.confirmPassword,
+    {
+        message: "Passwords must match",
+        path: ["confirmPassword"],
+    }
+);
 
-type LoginFormProps = {
+type SignUpFormProps = {
     className?: string
 } & React.HTMLAttributes<HTMLDivElement>
 
-export function LoginForm({
+export function SignUpForm({
     className,
     ...props
-}: LoginFormProps) {
+}: SignUpFormProps) {
     const navigate = useNavigate();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -47,10 +53,11 @@ export function LoginForm({
         defaultValues: {
             username: "",
             password: "",
+            confirmPassword: "",
         },
     });
 
-    const [login, { isLoading, error }] = useLoginMutation();
+    const [signUp, { isLoading, error }] = useSignUpMutation();
     const { isError, errorComponent } = useApiError(error);
 
     if (isLoading) return <Spinner />;
@@ -58,17 +65,12 @@ export function LoginForm({
 
     async function onSubmit(formData: z.infer<typeof formSchema>) {
         try {
-            const result = await login({
+            await signUp({
                 username: formData.username,
-                password: formData.password
+                password: formData.password,
             }).unwrap();
 
-            setCredentials({
-                username: formData.username,
-                token: result.accessToken,
-            });
-
-            toast("Logged in as " + formData.username, {
+            toast("Sign up successful for " + formData.username, {
                 description: (
                     <pre
                         className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
@@ -91,10 +93,10 @@ export function LoginForm({
                 } as React.CSSProperties,
             });
 
-            navigate("/", { replace: true });
+            navigate("/login", { replace: true });
 
         } catch (err) {
-            toast.error("Login failed. Please check your credentials and try again.");
+            toast.error("Sign up failed. Please check your credentials and try again.");
         }
     }
 
@@ -142,6 +144,27 @@ export function LoginForm({
                                         <Input
                                             {...field}
                                             id="form-rhf-demo-password"
+                                            aria-invalid={fieldState.invalid}
+                                            placeholder="Enter your password"
+                                            type="password"
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} />
+                                        )}
+                                    </Field>
+                                )}
+                            />
+                             <Controller
+                                name="confirmPassword"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel htmlFor="form-rhf-demo-confirm-password">
+                                            Confirm Password
+                                        </FieldLabel>
+                                        <Input
+                                            {...field}
+                                            id="form-rhf-demo-confirm-password"
                                             aria-invalid={fieldState.invalid}
                                             placeholder="Enter your password"
                                             type="password"
