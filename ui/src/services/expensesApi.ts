@@ -20,7 +20,7 @@ export const expensesApi = createApi({
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       } else {
-        console.log("No token found in state");
+        console.log("No token found in expense state");
       }
       return headers;
     },

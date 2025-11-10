@@ -91,7 +91,7 @@ export function SignUpForm({
                     color: "var(--foreground, #000)",
                 } as React.CSSProperties,
             });
-
+            toast.success("Your account has been created successfully. Please log in.");
             navigate("/login", { replace: true });
         } catch (error: any) {
             if (error?.status === 409) {

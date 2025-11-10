@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.service;
 
 import com.backend.wealth_tracker.dto.SignUpDto;
 import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
+import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.UserRepository;
 import org.slf4j.Logger;
@@ -34,5 +35,14 @@ public class AuthService implements UserDetailsService {
         User newUser = new User(signUpDto.getUsername(), encryptedPassword, signUpDto.getRole());
         LOGGER.info("New user registered: {}", newUser.getUsername());
         repository.save(newUser);
+    }
+
+    public User getUserByUsername(String username) throws ResourceNotFoundException {
+        User user = (User) repository.findByUsername(username);
+        if (user != null) {
+            return user;
+        } else {
+            throw new ResourceNotFoundException("User not found with username: " + username);
+        }
     }
 }

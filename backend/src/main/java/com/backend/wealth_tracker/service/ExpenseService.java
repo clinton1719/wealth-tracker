@@ -19,12 +19,15 @@ public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
 
-    public ExpenseService(ExpenseRepository expenseRepository) {
+    private final AuthService authService;
+
+    public ExpenseService(ExpenseRepository expenseRepository, AuthService authService) {
+        this.authService = authService;
         this.expenseRepository = expenseRepository;
     }
 
     public ResponseExpenseDTO getExpense(Long id) throws ResourceNotFoundException {
-        Optional<Expense> expenseOptional =  this.expenseRepository.findById(id);
+        Optional<Expense> expenseOptional = this.expenseRepository.findById(id);
         if (expenseOptional.isEmpty()) {
             throw new ResourceNotFoundException("Expense not found for id: " + id);
         }
@@ -32,14 +35,16 @@ public class ExpenseService {
         return ExpenseMapper.toResponseDto(expenseOptional.get());
     }
 
-    public ResponseExpenseDTO saveExpense(CreateExpenseDTO createExpenseDTO) {
-        Expense expense = this.expenseRepository.save(ExpenseMapper.createDTOtoEntity(createExpenseDTO));
-        LOGGER.info("Expense created with id: {}", expense.getId());
-        return ExpenseMapper.toResponseDto(expense);
+    public ResponseExpenseDTO saveExpense(CreateExpenseDTO createExpenseDTO, String userName) throws ResourceNotFoundException {
+        Expense expense = ExpenseMapper.createDTOtoEntity(createExpenseDTO);
+        expense.setUser(this.authService.getUserByUsername(userName));
+        Expense savedExpense = this.expenseRepository.save(expense);
+        LOGGER.info("Expense created with id: {}", savedExpense.getId());
+        return ExpenseMapper.toResponseDto(savedExpense);
     }
 
     public ResponseExpenseDTO updateExpense(UpdateExpenseDTO updateExpenseDTO) throws ResourceNotFoundException {
-        Optional<Expense> expenseOptional =  this.expenseRepository.findById(updateExpenseDTO.getId());
+        Optional<Expense> expenseOptional = this.expenseRepository.findById(updateExpenseDTO.getId());
         if (expenseOptional.isEmpty()) {
             throw new ResourceNotFoundException("Expense not found for id: " + updateExpenseDTO.getId());
         }
@@ -60,7 +65,7 @@ public class ExpenseService {
     }
 
     public void deleteExpense(Long id) throws ResourceNotFoundException {
-        Optional<Expense> expenseOptional =  this.expenseRepository.findById(id);
+        Optional<Expense> expenseOptional = this.expenseRepository.findById(id);
         if (expenseOptional.isEmpty()) {
             throw new ResourceNotFoundException("Expense not found for id: " + id);
         }

@@ -12,6 +12,13 @@ public class GlobalExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @ExceptionHandler(UnAuthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleAllUnAuthorizedExceptions(UnAuthorizedException ex) {
+        LOGGER.error("Unauthorized exception: {}", ex.getMessage());
+        return "Unauthorized access";
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleAllResourceNotFoundExceptions(ResourceNotFoundException ex) {
@@ -23,6 +30,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public String handleAllResourceAlreadyExistsExceptions(ResourceAlreadyExistsException ex) {
         LOGGER.error("Resource already exists exception: {}", ex.getMessage());
-        return "Resource not found";
+        return "Resource already exists";
     }
 }

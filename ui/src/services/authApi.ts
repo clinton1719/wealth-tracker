@@ -25,7 +25,7 @@ export const authApi = createApi({
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       } else {
-        console.log("No token found in state");
+        console.log("No token found in auth state");
       }
 
       return headers;

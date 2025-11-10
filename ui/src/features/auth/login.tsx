@@ -5,8 +5,6 @@ import { LoginForm } from "./loginForm";
 export default function Login({ isTokenExpired }: LoginProps) {
     if (isTokenExpired) {
         toast.warning("Your session has expired. Please log in again.");
-    } else {
-        toast.info("Please log in to continue.");
     }
 
     return (

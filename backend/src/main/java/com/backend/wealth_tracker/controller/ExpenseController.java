@@ -4,9 +4,12 @@ import com.backend.wealth_tracker.dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.ResponseExpenseDTO;
 import com.backend.wealth_tracker.dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
+import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,8 +27,8 @@ public class ExpenseController {
     }
 
     @PostMapping(path = "/save")
-    public ResponseExpenseDTO saveExpense(@Valid @RequestBody CreateExpenseDTO createExpenseDTO) {
-        return expenseService.saveExpense(createExpenseDTO);
+    public ResponseExpenseDTO saveExpense(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody CreateExpenseDTO createExpenseDTO) throws UnAuthorizedException, ResourceNotFoundException {
+        return expenseService.saveExpense(createExpenseDTO, userDetails.getUsername());
     }
 
     @PutMapping(path = "/update")

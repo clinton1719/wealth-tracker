@@ -7,8 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "expenses")
+@Entity(name = "expenses")
 @EntityListeners(AuditingEntityListener.class)
 public class Expense {
     @Id
@@ -26,6 +25,10 @@ public class Expense {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDate updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -73,6 +76,14 @@ public class Expense {
 
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
 
