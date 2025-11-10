@@ -9,14 +9,22 @@ import SignUp from './features/auth/signUp.tsx'
 import ViewExpenses from './features/expense/viewExpenses.tsx'
 import { store } from './store.ts'
 import './styles/index.css'
+import { ProtectedRoute } from './features/auth/protectedRoute.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     <BrowserRouter>
       <NavigationBar />
       <Routes>
-        <Route index element={<App />} />
-        <Route path="expense" element={<ViewExpenses />} />
+       <Route index element={<App />} />
+        <Route
+          path="expense"
+          element={
+            <ProtectedRoute>
+              <ViewExpenses />
+            </ProtectedRoute>
+          }
+        />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
       </Routes>

@@ -92,7 +92,7 @@ export function SignUpForm({
                 } as React.CSSProperties,
             });
             toast.success("Your account has been created successfully. Please log in.");
-            navigate("/login", { replace: true });
+            navigate("/login");
         } catch (error: any) {
             if (error?.status === 409) {
                 toast.error("Username already exists. Please try another one.");
