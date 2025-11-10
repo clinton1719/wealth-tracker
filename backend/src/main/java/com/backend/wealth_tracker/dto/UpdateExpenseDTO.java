@@ -1,9 +1,9 @@
 package com.backend.wealth_tracker.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class UpdateExpenseDTO {
-    @NotBlank
+    @NotNull
     private Long id;
     private String category;
     private Double amount;

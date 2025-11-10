@@ -4,8 +4,10 @@ import com.backend.wealth_tracker.dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.ResponseExpenseDTO;
 import com.backend.wealth_tracker.model.Expense;
 
+import java.util.List;
+
 public class ExpenseMapper {
-    public static ResponseExpenseDTO toResponseDto(Expense expense) {
+    public static ResponseExpenseDTO expenseToResponseExpenseDTO(Expense expense) {
         ResponseExpenseDTO dto = new ResponseExpenseDTO();
         dto.setDescription(expense.getDescription());
         dto.setAmount(expense.getAmount());
@@ -16,11 +18,17 @@ public class ExpenseMapper {
         return dto;
     }
 
-    public static Expense createDTOtoEntity(CreateExpenseDTO dto) {
+    public static Expense createDTOtoExpense(CreateExpenseDTO dto) {
         Expense expense = new Expense();
         expense.setDescription(dto.getDescription());
         expense.setAmount(dto.getAmount());
         expense.setCategory(dto.getCategory());
         return expense;
+    }
+
+    public static List<ResponseExpenseDTO> expensesToResponseExpenseDTOs(List<Expense> expenses) {
+        return expenses.stream()
+                .map(ExpenseMapper::expenseToResponseExpenseDTO)
+                .toList();
     }
 }

@@ -43,6 +43,10 @@ export const expensesApi = createApi({
       }),
       invalidatesTags: ['Expenses'],
     }),
+    getAllExpensesInRange: builder.query<Expense[], { startDate: string; endDate: string; pageNumber: number; pageSize: number }>({
+      query: ({ startDate, endDate, pageNumber, pageSize }) => `/expenses/range/${pageNumber}/${pageSize}?startDate=${startDate}&endDate=${endDate}`,
+      providesTags: ['Expenses'],
+    }),
   }),
 });
 
@@ -50,4 +54,5 @@ export const {
   useGetExpenseQuery,
   useAddExpenseMutation,
   useDeleteExpenseMutation,
+  useGetAllExpensesInRangeQuery,
 } = expensesApi;

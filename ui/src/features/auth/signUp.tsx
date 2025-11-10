@@ -1,9 +1,12 @@
 
 import { toast } from "sonner";
 import { SignUpForm } from "./signUpForm";
+import { useEffect } from "react";
 
 export default function SignUp() {
-   toast.info("Please fill in the form to create a new account.");
+   useEffect(() => {
+       toast.info("Please fill in the form to create a new account.");
+   }, []);
 
     return (
         <div className="flex min-h-svh w-full justify-center p-6 md:p-10 mt-8">

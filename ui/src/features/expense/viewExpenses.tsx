@@ -2,14 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
-import { useGetExpenseQuery } from "@/services/expensesApi";
-import { selectAuthToken } from "@/slices/authSlice";
-import { useSelector } from "react-redux";
+import { useGetAllExpensesInRangeQuery } from "@/services/expensesApi";
+import { formatDate } from "@/utilities/helper";
 
 export default function ViewExpenses() {
-    const token = useSelector(selectAuthToken);
-  const skip = !token;
-    const { data, isLoading, error } = useGetExpenseQuery(1, { skip });
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    const startDate = formatDate(startOfMonth);
+    const endDate = formatDate(endOfMonth);
+    const { data, isLoading, error } = useGetAllExpensesInRangeQuery({ startDate, endDate, pageNumber: 0, pageSize: 100 });
     const { isError, errorComponent } = useApiError(error);
 
     if (isLoading) { return <Spinner /> }
@@ -28,21 +31,69 @@ export default function ViewExpenses() {
                 </div>
                 <Button>Add Expense</Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-6">
                 <Card className="mt-4 w-full max-w-sm">
                     <CardHeader>
                         <CardTitle className="font-bold">Total Expenses</CardTitle>
                         <CardDescription>
-                            Summary of your expenses
+                            Summary of your expenses for this month
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <p className="leading-7 not-first:mt-6 font-bold">
-                            ₹{data?.amount ?? 0}
+                            ₹{data.reduce((total, expense) => total + expense.amount, 0)}
                         </p>
                     </CardContent>
                     <CardFooter>
-                        <p className="text-muted-foreground text-sm">{1} transactions</p>
+                        <p className="text-muted-foreground text-sm">{data.length} transactions this month</p>
+                    </CardFooter>
+                </Card>
+                <Card className="mt-4 w-full max-w-sm">
+                    <CardHeader>
+                        <CardTitle className="font-bold">Total Expenses</CardTitle>
+                        <CardDescription>
+                            Summary of your expenses for this month
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="leading-7 not-first:mt-6 font-bold">
+                            ₹{data.reduce((total, expense) => total + expense.amount, 0)}
+                        </p>
+                    </CardContent>
+                    <CardFooter>
+                        <p className="text-muted-foreground text-sm">{data.length} transactions this month</p>
+                    </CardFooter>
+                </Card>
+                <Card className="mt-4 w-full max-w-sm">
+                    <CardHeader>
+                        <CardTitle className="font-bold">Total Expenses</CardTitle>
+                        <CardDescription>
+                            Summary of your expenses for this month
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="leading-7 not-first:mt-6 font-bold">
+                            ₹{data.reduce((total, expense) => total + expense.amount, 0)}
+                        </p>
+                    </CardContent>
+                    <CardFooter>
+                        <p className="text-muted-foreground text-sm">{data.length} transactions this month</p>
+                    </CardFooter>
+                </Card>
+                <Card className="mt-4 w-full max-w-sm">
+                    <CardHeader>
+                        <CardTitle className="font-bold">Total Expenses</CardTitle>
+                        <CardDescription>
+                            Summary of your expenses for this month
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="leading-7 not-first:mt-6 font-bold">
+                            ₹{data.reduce((total, expense) => total + expense.amount, 0)}
+                        </p>
+                    </CardContent>
+                    <CardFooter>
+                        <p className="text-muted-foreground text-sm">{data.length} transactions this month</p>
                     </CardFooter>
                 </Card>
             </div>
