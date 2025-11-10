@@ -3,9 +3,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
 import { useGetExpenseQuery } from "@/services/expensesApi";
+import { selectAuthToken } from "@/slices/authSlice";
+import { useSelector } from "react-redux";
 
 export default function ViewExpenses() {
-    const { data, isLoading, error } = useGetExpenseQuery(1);
+    const token = useSelector(selectAuthToken);
+    const { data, isLoading, error, } = useGetExpenseQuery(1, {
+        skip: !token,
+    });
     const { isError, errorComponent } = useApiError(error);
 
     if (isLoading) return <Spinner />;

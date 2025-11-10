@@ -16,11 +16,8 @@ export const expensesApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI, prepareHeaders: (headers, { getState }) => {
       const token = selectAuthToken(getState() as any);
-
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
-      } else {
-        console.log("No token found in expense state");
       }
       return headers;
     },
