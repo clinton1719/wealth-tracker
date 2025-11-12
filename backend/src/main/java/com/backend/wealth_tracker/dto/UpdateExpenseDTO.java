@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 public class UpdateExpenseDTO {
     @NotNull
     private Long id;
-    private String category;
+    private Long categoryId;
     private Double amount;
     private String description;
 
@@ -17,12 +17,12 @@ public class UpdateExpenseDTO {
         this.id = id;
     }
 
-    public String getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Double getAmount() {

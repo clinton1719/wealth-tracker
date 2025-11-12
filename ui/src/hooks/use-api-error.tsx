@@ -35,6 +35,7 @@ export const useApiError = (error: ApiError | undefined): ErrorResponse => {
                     errorComponent: <ErrorPage errorCode={404} />
                 };
             default:
+                console.error("Unhandled API error:", error);
                 return {
                     isError: true,
                     errorComponent: <ErrorPage errorCode={500} />

@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.mapper;
 
 import com.backend.wealth_tracker.dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.ResponseExpenseDTO;
+import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 
 import java.util.List;
@@ -18,11 +19,11 @@ public class ExpenseMapper {
         return dto;
     }
 
-    public static Expense createDTOtoExpense(CreateExpenseDTO dto) {
+    public static Expense createDTOtoExpense(CreateExpenseDTO dto, Category category) {
         Expense expense = new Expense();
         expense.setDescription(dto.getDescription());
         expense.setAmount(dto.getAmount());
-        expense.setCategory(dto.getCategory());
+        expense.setCategory(category);
         return expense;
     }
 

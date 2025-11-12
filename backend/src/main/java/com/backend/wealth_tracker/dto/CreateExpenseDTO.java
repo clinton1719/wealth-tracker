@@ -1,22 +1,22 @@
 package com.backend.wealth_tracker.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class CreateExpenseDTO {
 
-    @NotBlank
-    private String category;
+    @NotNull
+    private Long categoryId;
     @Positive
     private Double amount;
     private String description;
 
-    public String getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Double getAmount() {

@@ -32,4 +32,11 @@ public class GlobalExceptionHandler {
         LOGGER.error("Resource already exists exception: {}", ex.getMessage());
         return "Resource already exists";
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleAllResourceAlreadyExistsExceptions(RuntimeException ex) {
+        LOGGER.error("Server error: {}", ex.getMessage());
+        return "Something went wrong on server, kindly try again later";
+    }
 }

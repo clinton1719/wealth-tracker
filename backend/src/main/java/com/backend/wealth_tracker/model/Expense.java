@@ -15,20 +15,25 @@ public class Expense {
     private Long id;
 
     private String description;
-    @Column(nullable = false)
-    private String category;
+
     @Column(nullable = false)
     private Double amount;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDate createdAt;
+
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDate updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Long getId() {
         return id;
@@ -46,11 +51,11 @@ public class Expense {
         this.description = description;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

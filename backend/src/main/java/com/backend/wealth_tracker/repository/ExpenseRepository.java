@@ -10,6 +10,5 @@ import java.util.List;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
-
     List<Expense> findByCreatedAtBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
 }

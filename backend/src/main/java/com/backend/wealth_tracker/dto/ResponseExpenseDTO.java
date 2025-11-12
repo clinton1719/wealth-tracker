@@ -1,5 +1,6 @@
 package com.backend.wealth_tracker.dto;
 
+import com.backend.wealth_tracker.model.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,7 +10,7 @@ public class ResponseExpenseDTO {
     @NotNull
     private Long id;
     @NotBlank
-    private String category;
+    private Category category;
     @NotNull
     private Double amount;
     @NotBlank
@@ -27,11 +28,11 @@ public class ResponseExpenseDTO {
         this.id = id;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

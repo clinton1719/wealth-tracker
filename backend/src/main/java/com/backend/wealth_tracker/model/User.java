@@ -28,6 +28,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Expense> expenses = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Category> categories = new HashSet<>();
+
     public User(String username, String password, UserRole role) {
         this.username = username;
         this.password = password;
@@ -97,5 +100,13 @@ public class User implements UserDetails {
 
     public void setExpenses(Set<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }

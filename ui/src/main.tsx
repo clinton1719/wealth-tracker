@@ -10,6 +10,7 @@ import ViewExpenses from './features/expense/viewExpenses.tsx'
 import { store } from './store.ts'
 import './styles/index.css'
 import { ProtectedRoute } from './features/auth/protectedRoute.tsx'
+import Category from './features/category/category.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
@@ -22,6 +23,14 @@ createRoot(document.getElementById('root')!).render(
           element={
             <ProtectedRoute>
               <ViewExpenses />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="category"
+          element={
+            <ProtectedRoute>
+              <Category />
             </ProtectedRoute>
           }
         />

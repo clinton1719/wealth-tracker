@@ -4,13 +4,16 @@ import com.backend.wealth_tracker.dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
+import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
+import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,13 +28,20 @@ public class ExpenseService {
 
     private final AuthService authService;
 
-    public ExpenseService(ExpenseRepository expenseRepository, AuthService authService) {
+    private final CategoryRepository categoryRepository;
+
+    public ExpenseService(ExpenseRepository expenseRepository, AuthService authService, CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
         this.authService = authService;
         this.expenseRepository = expenseRepository;
     }
 
     public Expense saveExpense(CreateExpenseDTO createExpenseDTO, String userName) throws ResourceNotFoundException {
-        Expense expense = ExpenseMapper.createDTOtoExpense(createExpenseDTO);
+        Optional<Category> categoryOptional  = this.categoryRepository.findById(createExpenseDTO.getCategoryId());
+        if (categoryOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Category not found for id: " + createExpenseDTO.getCategoryId());
+        }
+        Expense expense = ExpenseMapper.createDTOtoExpense(createExpenseDTO, categoryOptional.get());
         expense.setUser(this.authService.getUserByUsername(userName));
         Expense savedExpense = this.expenseRepository.save(expense);
         LOGGER.info("Expense created with id: {}", savedExpense.getId());
@@ -47,8 +57,12 @@ public class ExpenseService {
         if (updateExpenseDTO.getDescription() != null) {
             expense.setDescription(updateExpenseDTO.getDescription());
         }
-        if (updateExpenseDTO.getCategory() != null) {
-            expense.setCategory(updateExpenseDTO.getCategory());
+        if (updateExpenseDTO.getCategoryId() != null) {
+            Optional<Category> categoryOptional  = this.categoryRepository.findById(updateExpenseDTO.getCategoryId());
+            if (categoryOptional.isEmpty()) {
+                throw new ResourceNotFoundException("Category not found for id: " + updateExpenseDTO.getCategoryId());
+            }
+            expense.setCategory(categoryOptional.get());
         }
         if (updateExpenseDTO.getAmount() != null) {
             expense.setAmount(updateExpenseDTO.getAmount());
@@ -68,7 +82,7 @@ public class ExpenseService {
         LOGGER.info("Expense deleted for id: {}", id);
     }
 
-    public List<Expense> getExpensesInRange(String startDate, String endDate, Integer pageNumber, Integer pageSize) {
+    public List<Expense> getExpensesInRange(UserDetails userDetails, String startDate, String endDate, Integer pageNumber, Integer pageSize) {
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createdAt").descending());
