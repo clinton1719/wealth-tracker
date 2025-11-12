@@ -16,14 +16,14 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { icons } from "lucide-react"
+import { DynamicIcon, iconNames } from "lucide-react/dynamic"
 import type { ControllerFieldState, ControllerRenderProps, UseFormReturn } from "react-hook-form"
-
-const iconsMap = Object.entries(icons);
 
 export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
+
+    console.log(iconNames);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -35,7 +35,7 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
                     className="w-[200px] justify-between"
                 >
                     {field.value
-                        ? iconsMap.find(([icon]) => icon === field.value)?.[0]
+                        ? iconNames.find(([iconName]) => iconName === field.value)
                         : "Select an icon"}
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
@@ -46,10 +46,10 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
                     <CommandList>
                         <CommandEmpty>No icon found.</CommandEmpty>
                         <CommandGroup>
-                            {iconsMap.map(([key, Icon]) => (
+                            {iconNames.map(([iconName]) => (
                                 <CommandItem
-                                    key={key}
-                                    value={key}
+                                    key={iconName}
+                                    value={iconName}
                                     onChange={field.onChange}
                                     aria-invalid={fieldState.invalid}
                                     onSelect={(currentValue) => {
@@ -58,12 +58,12 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
                                         form.setValue("icon", currentValue)
                                     }}
                                 >
-                                    <Icon className="mr-2 h-4 w-4" />
-                                    {key}
+                                    <DynamicIcon name={iconName as unknown as any} />
+                                    {iconName}
                                     <Check
                                         className={cn(
                                             "ml-auto",
-                                            value === key ? "opacity-100" : "opacity-0"
+                                            value === iconName ? "opacity-100" : "opacity-0"
                                         )}
                                     />
                                 </CommandItem>
@@ -82,7 +82,7 @@ interface IconsComboBoxProps {
         colorCode: string;
         description?: string | undefined;
         icon?: string | undefined;
-        tags?: string | undefined;
+        tags?: string[] | undefined;
     }, "icon">;
     fieldState: ControllerFieldState;
     form: UseFormReturn<{
@@ -90,12 +90,12 @@ interface IconsComboBoxProps {
         colorCode: string;
         description?: string | undefined;
         icon?: string | undefined;
-        tags?: string | undefined;
+        tags?: string[] | undefined;
     }, any, {
         name: string;
         colorCode: string;
         description?: string | undefined;
         icon?: string | undefined;
-        tags?: string | undefined;
+        tags?: string[] | undefined;
     }>
 }

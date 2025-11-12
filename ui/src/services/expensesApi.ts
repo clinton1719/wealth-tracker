@@ -24,11 +24,7 @@ export const expensesApi = createApi({
   }),
   tagTypes: ['Expenses'],
   endpoints: (builder) => ({
-    getExpense: builder.query<Expense, number>({
-      query: (id: number) => `/expenses/${id}`,
-      providesTags: ['Expenses'],
-    }),
-    addExpense: builder.mutation<Expense, Partial<Expense>>({
+    saveExpense: builder.mutation<Expense, Partial<Expense>>({
       query: (newExpense) => ({
         url: '/expenses',
         method: 'POST',
@@ -51,8 +47,7 @@ export const expensesApi = createApi({
 });
 
 export const {
-  useGetExpenseQuery,
-  useAddExpenseMutation,
+  useSaveExpenseMutation,
   useDeleteExpenseMutation,
   useGetAllExpensesInRangeQuery,
 } = expensesApi;
