@@ -9,6 +9,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { useApiError } from "@/hooks/use-api-error"
 import { useGetAllCategoriesQuery, useSaveCategoryMutation } from "@/services/categoriesApi"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { DialogDescription } from "@radix-ui/react-dialog"
 import { PlusCircle, XIcon } from "lucide-react"
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { useState } from "react"
@@ -39,18 +40,22 @@ export default function Category() {
             tags: []
         },
     });
-    const [saveCategory, { isLoading: saveCategoryLoading }] = useSaveCategoryMutation();
-    if (saveCategoryLoading) { return <Spinner /> }
 
+    const [saveCategory, { isLoading: saveCategoryLoading }] = useSaveCategoryMutation();
     const { error, isLoading: getAllCategoriesLoading, data } = useGetAllCategoriesQuery();
     const { isError, errorComponent } = useApiError(error);
 
-    if (getAllCategoriesLoading) { return <Spinner /> }
-    if (isError) { return errorComponent };
+    if (saveCategoryLoading || getAllCategoriesLoading) {
+        return <Spinner />;
+    }
+
+    if (isError) {
+        return errorComponent;
+    }
 
     async function onSubmit(formData: z.infer<typeof formSchema>) {
         try {
-            const result = await saveCategory({ ...formData }).unwrap();
+            const result = await saveCategory({ ...formData, tags }).unwrap();
 
             if (!result) {
                 toast.error("Failed to save category, please try again later");
@@ -92,6 +97,10 @@ export default function Category() {
         }
     }
 
+    const checkKeyDown = (e: any) => {
+        if (e.key === 'Enter') e.preventDefault();
+    };
+
     if (data) {
         return (
             <div className="container mx-auto px-4 py-6">
@@ -108,7 +117,10 @@ export default function Category() {
                             <DialogHeader>
                                 <DialogTitle>Create Category</DialogTitle>
                             </DialogHeader>
-                            <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
+                            <DialogDescription>
+                                Use this form to create categories
+                            </DialogDescription>
+                            <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)}>
                                 <FieldGroup>
                                     <Controller
                                         name="name"
@@ -266,7 +278,7 @@ export default function Category() {
                         <Card key={category.id} className="hover:shadow-md transition">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <DynamicIcon name={"shopping-bag"} color="red" size={48} />
+                                    <DynamicIcon name={category.icon ?? "section" as unknown as any} color={category.colorCode} size={48} />
                                     <div className="w-4 h-4 rounded-full" style={{ backgroundColor: category.colorCode }} />
                                     {category.name}
                                 </CardTitle>

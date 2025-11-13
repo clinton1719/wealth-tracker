@@ -23,8 +23,6 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
 
-    console.log(iconNames);
-
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -35,7 +33,7 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
                     className="w-[200px] justify-between"
                 >
                     {field.value
-                        ? iconNames.find(([iconName]) => iconName === field.value)
+                        ? iconNames.find((iconName) => iconName === field.value)
                         : "Select an icon"}
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
@@ -46,7 +44,7 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
                     <CommandList>
                         <CommandEmpty>No icon found.</CommandEmpty>
                         <CommandGroup>
-                            {iconNames.map(([iconName]) => (
+                            {iconNames.map((iconName) => (
                                 <CommandItem
                                     key={iconName}
                                     value={iconName}
@@ -58,8 +56,9 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
                                         form.setValue("icon", currentValue)
                                     }}
                                 >
-                                    <DynamicIcon name={iconName as unknown as any} />
+                                    <DynamicIcon name={iconName} />
                                     {iconName}
+                                    ''
                                     <Check
                                         className={cn(
                                             "ml-auto",
