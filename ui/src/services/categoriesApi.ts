@@ -28,6 +28,14 @@ export const categoriesApi = createApi({
             }),
             invalidatesTags: ['Categories'],
         }),
+        updateCategory: builder.mutation<Category, Partial<Category>>({
+            query: (existingCategory) => ({
+                url: `/categories/update`,
+                method: 'PUT',
+                body: existingCategory
+            }),
+            invalidatesTags: ['Categories'],
+        }),
         deleteCategory: builder.mutation<void, number>({
             query: (id: number) => ({
                 url: `/categories/delete/${id}`,
@@ -39,7 +47,8 @@ export const categoriesApi = createApi({
 });
 
 export const {
-   useGetAllCategoriesQuery,
-   useSaveCategoryMutation,
-   useDeleteCategoryMutation
+    useGetAllCategoriesQuery,
+    useSaveCategoryMutation,
+    useUpdateCategoryMutation,
+    useDeleteCategoryMutation
 } = categoriesApi;

@@ -3,6 +3,7 @@ package com.backend.wealth_tracker.controller;
 import com.backend.wealth_tracker.dto.CreateCategoryDTO;
 import com.backend.wealth_tracker.dto.ResponseCategoryDTO;
 import com.backend.wealth_tracker.dto.UpdateCategoryDTO;
+import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.CategoryMapper;
 import com.backend.wealth_tracker.service.CategoryService;
@@ -32,7 +33,7 @@ public class CategoryController {
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseCategoryDTO saveCategory(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody CreateCategoryDTO createCategoryDTO) throws ResourceNotFoundException {
+    public ResponseCategoryDTO saveCategory(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody CreateCategoryDTO createCategoryDTO) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         return CategoryMapper.categoryToResponseCategoryDTO(this.categoryService.saveCategory(createCategoryDTO, userDetails.getUsername()));
     }
 

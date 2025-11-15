@@ -94,9 +94,9 @@ export function SignUpForm({
             toast.success("Your account has been created successfully. Please log in.");
             navigate("/login");
         } catch (error: any) {
-            if (error?.status === 409) {
+            if (error?.originalStatus === 409) {
                 toast.error("Username already exists. Please try another one.");
-            } else if (error?.status === 400) {
+            } else if (error?.originalStatus === 400) {
                 toast.error("Invalid input. Please check your details.");
             } else {
                 toast.error("Sign up failed. Please try again later.");

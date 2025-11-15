@@ -98,11 +98,11 @@ export function LoginForm({
 
             navigate("/");
         } catch (error: any) {
-            if (error?.status === 401) {
+            if (error?.originalStatus === 401) {
                 toast.error("Invalid username or password.");
-            } else if (error?.status === 400) {
+            } else if (error?.originalStatus === 400) {
                 toast.error("Invalid input. Please check your details.");
-            } else if (error?.status === 403) {
+            } else if (error?.originalStatus === 403) {
                 toast.error("Access denied. You do not have permission to access this resource.");
             } else {
                 toast.error("Login failed. Please try again later.");

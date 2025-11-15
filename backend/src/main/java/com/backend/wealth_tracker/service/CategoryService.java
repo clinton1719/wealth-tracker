@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.service;
 
 import com.backend.wealth_tracker.dto.CreateCategoryDTO;
 import com.backend.wealth_tracker.dto.UpdateCategoryDTO;
+import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.CategoryMapper;
 import com.backend.wealth_tracker.model.Category;
@@ -34,9 +35,13 @@ public class CategoryService {
         return categories;
     }
 
-    public Category saveCategory(CreateCategoryDTO createCategoryDTO, String userName) throws ResourceNotFoundException {
+    public Category saveCategory(CreateCategoryDTO createCategoryDTO, String userName) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         User user = this.authService.getUserByUsername(userName);
         Category category = CategoryMapper.createCategoryDTOtoCategory(createCategoryDTO, user);
+        Optional<Category> similarCategory = this.categoryRepository.findByNameAndUserId(category.getName(), user.getId());
+        if (similarCategory.isPresent()) {
+            throw new ResourceAlreadyExistsException("Category already present with name: " + category.getName() + " for user: " + user.getId());
+        }
         Category savedCategory = this.categoryRepository.save(category);
         LOGGER.info("Category to be saved created with id: {}", savedCategory.getId());
         return savedCategory;

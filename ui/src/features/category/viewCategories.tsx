@@ -7,7 +7,8 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/c
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { useApiError } from "@/hooks/use-api-error"
-import { useGetAllCategoriesQuery, useSaveCategoryMutation } from "@/services/categoriesApi"
+import { useGetAllCategoriesQuery, useSaveCategoryMutation, useUpdateCategoryMutation } from "@/services/categoriesApi"
+import type { Category } from "@/types/Category"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DialogDescription } from "@radix-ui/react-dialog"
 import { PlusCircle, XIcon } from "lucide-react"
@@ -18,6 +19,7 @@ import { toast } from "sonner"
 import * as z from "zod"
 
 const formSchema = z.object({
+    id: z.number().optional(),
     name: z.string().min(1, "Name is required"),
     description: z.string().max(100, "Description must be at most 100 characters long").optional(),
     colorCode: z.string().min(4, "Color code must be valid").max(7, "Color code must be valid"),
@@ -25,9 +27,11 @@ const formSchema = z.object({
     tags: z.array(z.string()).optional(),
 });
 
-export default function Category() {
+export default function ViewCategories() {
     const [tags, setTags] = useState<string[]>([]);
+    const [isUpdate, setIsUpdate] = useState(false);
     const [inputValue, setInputValue] = useState('');
+    const [formDialogOpen, setFormDialogOpen] = useState<boolean>(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -42,10 +46,11 @@ export default function Category() {
     });
 
     const [saveCategory, { isLoading: saveCategoryLoading }] = useSaveCategoryMutation();
+    const [updateCategory, { isLoading: updateCategoryLoading }] = useUpdateCategoryMutation();
     const { error, isLoading: getAllCategoriesLoading, data } = useGetAllCategoriesQuery();
     const { isError, errorComponent } = useApiError(error);
 
-    if (saveCategoryLoading || getAllCategoriesLoading) {
+    if (saveCategoryLoading || getAllCategoriesLoading || updateCategoryLoading) {
         return <Spinner />;
     }
 
@@ -54,13 +59,19 @@ export default function Category() {
     }
 
     async function onSubmit(formData: z.infer<typeof formSchema>) {
+        console.log(formData);
+        if (isUpdate) {
+            await updateExistingCategory(formData);
+        } else if (!isUpdate) {
+            await saveNewCategory(formData);
+        } else {
+            toast.error("Unknown action, try again");
+        }
+    }
+
+    async function saveNewCategory(formData: z.infer<typeof formSchema>) {
         try {
             const result = await saveCategory({ ...formData, tags }).unwrap();
-
-            if (!result) {
-                toast.error("Failed to save category, please try again later");
-                return;
-            }
 
             toast("Category saved!", {
                 description: (
@@ -84,15 +95,69 @@ export default function Category() {
                     color: "var(--foreground, #000)",
                 } as React.CSSProperties,
             });
+
+            setFormDialogOpen(false);
         } catch (error: any) {
-            if (error?.status === 401) {
-                toast.error("Invalid username or password.");
-            } else if (error?.status === 400) {
+            console.log(error)
+            if (error?.originalStatus === 409) {
+                toast.error("Category already exists with name: " + formData.name);
+            } else if (error?.originalStatus === 400) {
                 toast.error("Invalid input. Please check your details.");
-            } else if (error?.status === 403) {
+            } else if (error?.originalStatus === 404) {
+                toast.error("This resource does not exist, kindly refresh your page.");
+            } else if (error?.originalStatus === 403) {
                 toast.error("Access denied. You do not have permission to access this resource.");
             } else {
-                toast.error("Login failed. Please try again later.");
+                toast.error("Failed to create category, please try again");
+            }
+        }
+    }
+
+    async function updateExistingCategory(formData: z.infer<typeof formSchema>) {
+        try {
+            const result = await updateCategory({ ...formData, tags }).unwrap();
+
+            if (!result) {
+                toast.error("Failed to update category, please try again later");
+                return;
+            }
+
+            toast("Category updated!", {
+                description: (
+                    <pre
+                        className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
+                        style={{
+                            background: "var(--background-code, #1a1a1a)",
+                            color: "var(--foreground-code, #f5f5f5)",
+                        }}
+                    >
+                        <code>Category name: {result.name}</code>
+                    </pre>
+                ),
+                position: "bottom-right",
+                classNames: {
+                    content: "flex flex-col gap-2",
+                },
+                style: {
+                    "--border-radius": "calc(var(--radius)  + 4px)",
+                    background: "var(--background, #fff)",
+                    color: "var(--foreground, #000)",
+                } as React.CSSProperties,
+            });
+
+            setIsUpdate(false);
+            setFormDialogOpen(false);
+        } catch (error: any) {
+            if (error?.originalStatus === 409) {
+                toast.error("Category already exists with name: " + formData.name);
+            } else if (error?.originalStatus === 400) {
+                toast.error("Invalid input. Please check your details.");
+            } else if (error?.originalStatus === 403) {
+                toast.error("Access denied. You do not have permission to access this resource.");
+            } else if (error?.originalStatus === 404) {
+                toast.error("This resource does not exist, kindly refresh your page.");
+            } else {
+                toast.error("Failed to create category, please try again");
             }
         }
     }
@@ -101,19 +166,26 @@ export default function Category() {
         if (e.key === 'Enter') e.preventDefault();
     };
 
+    const handleUpdateCategory = (category: Category) => {
+        form.reset(category);
+        console.log(category);
+        setFormDialogOpen(true);
+        setIsUpdate(true);
+    }
+
     if (data) {
         return (
             <div className="container mx-auto px-4 py-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold">Categories</h1>
-                    <Dialog>
+                    <Dialog open={formDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button>
+                            <Button onClick={() => {setFormDialogOpen(true)}}>
                                 <PlusCircle className="mr-2 h-5 w-5" />
                                 New Category
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="max-w-md">
+                        <DialogContent className="max-w-md" onClickMethod={() => setFormDialogOpen(false)}>
                             <DialogHeader>
                                 <DialogTitle>Create Category</DialogTitle>
                             </DialogHeader>
@@ -232,6 +304,7 @@ export default function Category() {
                                                     onKeyDown={(e) => {
                                                         if (e.key === 'Enter' && inputValue.trim() !== '') {
                                                             setTags([...tags, inputValue.trim()]);
+                                                            form.setValue("tags", [...tags, inputValue.trim()])
                                                             setInputValue('');
                                                         }
                                                     }}
@@ -240,7 +313,21 @@ export default function Category() {
                                                     <FieldError errors={[fieldState.error]} />
                                                 )}
                                                 <div className="flex flex-wrap gap-2 mt-2">
-                                                    {tags.map((tag, index) => (
+                                                    {form.getValues("tags") ? form.getValues("tags")?.map((tag, index) => (
+                                                        <Badge key={index} variant="secondary">
+                                                            {tag}
+                                                            <button
+                                                                type="button"
+                                                                className="ml-2 text-destructive"
+                                                                onClick={() => {
+                                                                    const newTags = tags.filter(_tag => _tag !== tag)
+                                                                    setTags(newTags);
+                                                                }}
+                                                            >
+                                                                <XIcon className="w-3 h-3" />
+                                                            </button>
+                                                        </Badge>
+                                                    )) : tags.map((tag, index) => (
                                                         <Badge key={index} variant="secondary">
                                                             {tag}
                                                             <button
@@ -275,25 +362,33 @@ export default function Category() {
 
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {data.map((category) => (
-                        <Card key={category.id} className="hover:shadow-md transition">
+                        <Card key={category.id} className="hover:shadow-md transition flex justify-between">
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <DynamicIcon name={category.icon ?? "section" as unknown as any} color={category.colorCode} size={48} />
+                                <CardTitle className="flex items-center gap-2 break-all">
+                                    <DynamicIcon name={category.icon ?? "badge-check" as unknown as any} color={category.colorCode} />
                                     <div className="w-4 h-4 rounded-full" style={{ backgroundColor: category.colorCode }} />
                                     {category.name}
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                <p className="text-sm text-muted-foreground mb-2 break-all">{category.description}</p>
-                            </CardContent>
-                            <CardFooter>
-                                <div className="flex flex-wrap gap-2 mt-2">
+                            <CardContent className="mb-2">
+                                <p className="text-sm text-muted-foreground mb-4 break-all">{category.description}</p>
+                                <div className="flex flex-wrap gap-2 mt-4">
                                     {category.tags?.map((tag, index) => (
-                                        <Badge key={index} variant="secondary">
+                                        <Badge key={index} variant="outline" style={{ color: category.colorCode }}>
                                             {tag}
                                         </Badge>
                                     ))}
                                 </div>
+                            </CardContent>
+                            <CardFooter className="flex-row gap-2 justify-between">
+                                <Button variant={"ghost"} onClick={() => handleUpdateCategory(category)}>
+                                    <DynamicIcon name="edit" color={category.colorCode} className="h-4 w-4" />
+                                    Edit
+                                </Button>
+                                <Button variant={"ghost"}>
+                                    <DynamicIcon name="trash" color={category.colorCode} className="h-4 w-4" />
+                                    Delete
+                                </Button>
                             </CardFooter>
                         </Card>
                     ))}

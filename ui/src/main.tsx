@@ -5,12 +5,12 @@ import App from './App.tsx'
 import { NavigationBar } from './components/layout/navigationBar.tsx'
 import { Toaster } from './components/ui/sonner.tsx'
 import Login from './features/auth/login.tsx'
+import { ProtectedRoute } from './features/auth/protectedRoute.tsx'
 import SignUp from './features/auth/signUp.tsx'
+import ViewCategories from './features/category/viewCategories.tsx'
 import ViewExpenses from './features/expense/viewExpenses.tsx'
 import { store } from './store.ts'
 import './styles/index.css'
-import { ProtectedRoute } from './features/auth/protectedRoute.tsx'
-import Category from './features/category/category.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
@@ -30,7 +30,7 @@ createRoot(document.getElementById('root')!).render(
           path="category"
           element={
             <ProtectedRoute>
-              <Category />
+              <ViewCategories />
             </ProtectedRoute>
           }
         />
