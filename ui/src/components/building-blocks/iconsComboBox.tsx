@@ -56,9 +56,8 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
                                         form.setValue("icon", currentValue)
                                     }}
                                 >
-                                    <DynamicIcon name={iconName} />
+                                    <DynamicIcon name={iconName ?? 'badge-check'} />
                                     {iconName}
-                                    ''
                                     <Check
                                         className={cn(
                                             "ml-auto",

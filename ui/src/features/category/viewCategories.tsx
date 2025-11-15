@@ -1,3 +1,4 @@
+import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent"
 import { IconsComboBox } from "@/components/building-blocks/iconsComboBox"
 import { Badge } from '@/components/ui/badge'
 import { Button } from "@/components/ui/button"
@@ -7,7 +8,7 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/c
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { useApiError } from "@/hooks/use-api-error"
-import { useGetAllCategoriesQuery, useSaveCategoryMutation, useUpdateCategoryMutation } from "@/services/categoriesApi"
+import { useDeleteCategoryMutation, useGetAllCategoriesQuery, useSaveCategoryMutation, useUpdateCategoryMutation } from "@/services/categoriesApi"
 import type { Category } from "@/types/Category"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DialogDescription } from "@radix-ui/react-dialog"
@@ -30,7 +31,9 @@ const formSchema = z.object({
 export default function ViewCategories() {
     const [isUpdate, setIsUpdate] = useState(false);
     const [inputValue, setInputValue] = useState('');
-    const [formDialogOpen, setFormDialogOpen] = useState<boolean>(false);
+    const [editCategoryDialogOpen, setEditCategoryDialogOpen] = useState<boolean>(false);
+    const [deleteCategoryDialogOpen, setDeleteCategoryDialogOpen] = useState<boolean>(false);
+    const [currentCategory, setCurrentCategory] = useState<Category | undefined>();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -46,10 +49,11 @@ export default function ViewCategories() {
 
     const [saveCategory, { isLoading: saveCategoryLoading }] = useSaveCategoryMutation();
     const [updateCategory, { isLoading: updateCategoryLoading }] = useUpdateCategoryMutation();
+    const [deleteCategory, { isLoading: deleteCategoryLoading }] = useDeleteCategoryMutation();
     const { error, isLoading: getAllCategoriesLoading, data } = useGetAllCategoriesQuery();
     const { isError, errorComponent } = useApiError(error);
 
-    if (saveCategoryLoading || getAllCategoriesLoading || updateCategoryLoading) {
+    if (saveCategoryLoading || getAllCategoriesLoading || updateCategoryLoading || deleteCategoryLoading) {
         return <Spinner />;
     }
 
@@ -58,7 +62,6 @@ export default function ViewCategories() {
     }
 
     async function onSubmit(formData: z.infer<typeof formSchema>) {
-        console.log(formData);
         if (isUpdate) {
             await updateExistingCategory(formData);
         } else if (!isUpdate) {
@@ -95,9 +98,8 @@ export default function ViewCategories() {
                 } as React.CSSProperties,
             });
 
-            setFormDialogOpen(false);
+            setEditCategoryDialogOpen(false);
         } catch (error: any) {
-            console.log(error)
             if (error?.originalStatus === 409) {
                 toast.error("Category already exists with name: " + formData.name);
             } else if (error?.originalStatus === 400) {
@@ -145,7 +147,7 @@ export default function ViewCategories() {
             });
 
             setIsUpdate(false);
-            setFormDialogOpen(false);
+            setEditCategoryDialogOpen(false);
         } catch (error: any) {
             if (error?.originalStatus === 409) {
                 toast.error("Category already exists with name: " + formData.name);
@@ -167,9 +169,27 @@ export default function ViewCategories() {
 
     const handleUpdateCategory = (category: Category) => {
         form.reset(category);
-        console.log(category);
-        setFormDialogOpen(true);
+        setEditCategoryDialogOpen(true);
         setIsUpdate(true);
+    }
+
+    const handleDeleteCategory = (category: Category) => {
+        setDeleteCategoryDialogOpen(true);
+        setCurrentCategory(category);
+    }
+
+    const cancelDeleteCategory = () => {
+        setDeleteCategoryDialogOpen(false);
+    }
+
+    const deleteCurrentCategory = async () => {
+        if (currentCategory && currentCategory.id) {
+            await deleteCategory(currentCategory.id);
+            toast.info("Category : " + currentCategory.name + " deleted successfully!");
+            setDeleteCategoryDialogOpen(false);
+        } else {
+            toast.error("Invalid category! Please refresh the page");
+        }
     }
 
     if (data) {
@@ -177,14 +197,14 @@ export default function ViewCategories() {
             <div className="container mx-auto px-4 py-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold">Categories</h1>
-                    <Dialog open={formDialogOpen}>
+                    <Dialog open={editCategoryDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button onClick={() => { setFormDialogOpen(true) }}>
+                            <Button onClick={() => { setEditCategoryDialogOpen(true) }}>
                                 <PlusCircle className="mr-2 h-5 w-5" />
                                 New Category
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="max-w-md" onClickMethod={() => setFormDialogOpen(false)}>
+                        <DialogContent className="max-w-md" onClickMethod={() => setEditCategoryDialogOpen(false)}>
                             <DialogHeader>
                                 <DialogTitle>Create Category</DialogTitle>
                             </DialogHeader>
@@ -357,7 +377,7 @@ export default function ViewCategories() {
                         <Card key={category.id} className="hover:shadow-md transition flex justify-between">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 break-all">
-                                    <DynamicIcon name={category.icon ?? "badge-check" as unknown as any} color={category.colorCode} />
+                                    <DynamicIcon name={category.icon ? category.icon : "badge-check" as any} color={category.colorCode} />
                                     <div className="w-4 h-4 rounded-full" style={{ backgroundColor: category.colorCode }} />
                                     {category.name}
                                 </CardTitle>
@@ -377,7 +397,7 @@ export default function ViewCategories() {
                                     <DynamicIcon name="edit" color={category.colorCode} className="h-4 w-4" />
                                     Edit
                                 </Button>
-                                <Button variant={"ghost"}>
+                                <Button variant={"ghost"} onClick={() => handleDeleteCategory(category)}>
                                     <DynamicIcon name="trash" color={category.colorCode} className="h-4 w-4" />
                                     Delete
                                 </Button>
@@ -385,6 +405,8 @@ export default function ViewCategories() {
                         </Card>
                     ))}
                 </div>
+
+                <AlertDialogComponent isDialogOpen={deleteCategoryDialogOpen} alertType="DELETE_CATEGORY" onSecondaryButtonClick={cancelDeleteCategory} onPrimaryButtonClick={deleteCurrentCategory} />
             </div>
         )
     }
