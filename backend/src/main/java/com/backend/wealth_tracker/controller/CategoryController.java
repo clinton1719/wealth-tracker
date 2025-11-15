@@ -39,8 +39,8 @@ public class CategoryController {
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseCategoryDTO updateCategory(@Valid @RequestBody UpdateCategoryDTO updateCategoryDTO) throws ResourceNotFoundException {
-        return CategoryMapper.categoryToResponseCategoryDTO(this.categoryService.updateCategory(updateCategoryDTO));
+    public ResponseCategoryDTO updateCategory(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO) throws ResourceNotFoundException, ResourceAlreadyExistsException {
+        return CategoryMapper.categoryToResponseCategoryDTO(this.categoryService.updateCategory(updateCategoryDTO, userDetails.getUsername()));
     }
 
     @DeleteMapping("/delete/{id}")

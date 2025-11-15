@@ -28,7 +28,6 @@ const formSchema = z.object({
 });
 
 export default function ViewCategories() {
-    const [tags, setTags] = useState<string[]>([]);
     const [isUpdate, setIsUpdate] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [formDialogOpen, setFormDialogOpen] = useState<boolean>(false);
@@ -71,7 +70,7 @@ export default function ViewCategories() {
 
     async function saveNewCategory(formData: z.infer<typeof formSchema>) {
         try {
-            const result = await saveCategory({ ...formData, tags }).unwrap();
+            const result = await saveCategory({ ...formData }).unwrap();
 
             toast("Category saved!", {
                 description: (
@@ -115,7 +114,7 @@ export default function ViewCategories() {
 
     async function updateExistingCategory(formData: z.infer<typeof formSchema>) {
         try {
-            const result = await updateCategory({ ...formData, tags }).unwrap();
+            const result = await updateCategory({ ...formData }).unwrap();
 
             if (!result) {
                 toast.error("Failed to update category, please try again later");
@@ -180,7 +179,7 @@ export default function ViewCategories() {
                     <h1 className="text-2xl font-bold">Categories</h1>
                     <Dialog open={formDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button onClick={() => {setFormDialogOpen(true)}}>
+                            <Button onClick={() => { setFormDialogOpen(true) }}>
                                 <PlusCircle className="mr-2 h-5 w-5" />
                                 New Category
                             </Button>
@@ -303,8 +302,12 @@ export default function ViewCategories() {
                                                     onChange={(e) => setInputValue(e.target.value)}
                                                     onKeyDown={(e) => {
                                                         if (e.key === 'Enter' && inputValue.trim() !== '') {
-                                                            setTags([...tags, inputValue.trim()]);
-                                                            form.setValue("tags", [...tags, inputValue.trim()])
+                                                            const tags = form.getValues("tags");
+                                                            if (tags) {
+                                                                form.setValue("tags", [...tags, inputValue.trim()])
+                                                            } else {
+                                                                form.setValue("tags", [inputValue.trim()])
+                                                            }
                                                             setInputValue('');
                                                         }
                                                     }}
@@ -320,28 +323,17 @@ export default function ViewCategories() {
                                                                 type="button"
                                                                 className="ml-2 text-destructive"
                                                                 onClick={() => {
-                                                                    const newTags = tags.filter(_tag => _tag !== tag)
-                                                                    setTags(newTags);
+                                                                    const tags = form.getValues("tags");
+                                                                    if (tags) {
+                                                                        const newTags = tags.filter(_tag => _tag !== tag)
+                                                                        form.setValue("tags", [...newTags])
+                                                                    }
                                                                 }}
                                                             >
                                                                 <XIcon className="w-3 h-3" />
                                                             </button>
                                                         </Badge>
-                                                    )) : tags.map((tag, index) => (
-                                                        <Badge key={index} variant="secondary">
-                                                            {tag}
-                                                            <button
-                                                                type="button"
-                                                                className="ml-2 text-destructive"
-                                                                onClick={() => {
-                                                                    const newTags = tags.filter(_tag => _tag !== tag)
-                                                                    setTags(newTags);
-                                                                }}
-                                                            >
-                                                                <XIcon className="w-3 h-3" />
-                                                            </button>
-                                                        </Badge>
-                                                    ))}
+                                                    )) : <></>}
                                                 </div>
                                             </Field>
                                         )}

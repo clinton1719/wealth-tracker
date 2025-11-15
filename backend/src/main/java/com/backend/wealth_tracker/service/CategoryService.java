@@ -47,11 +47,18 @@ public class CategoryService {
         return savedCategory;
     }
 
-    public Category updateCategory(UpdateCategoryDTO updateCategoryDTO) throws ResourceNotFoundException {
+    public Category updateCategory(UpdateCategoryDTO updateCategoryDTO, String userName) throws ResourceNotFoundException, ResourceAlreadyExistsException {
+        User user = this.authService.getUserByUsername(userName);
         Optional<Category> categoryOptional = this.categoryRepository.findById(updateCategoryDTO.getId());
         if (categoryOptional.isEmpty()) {
             LOGGER.error("Category to be updated not found with id: {}", updateCategoryDTO.getId());
             throw new ResourceNotFoundException("Category not found");
+        }
+        if (!categoryOptional.get().getName().equals(updateCategoryDTO.getName())) {
+            Optional<Category> similarCategory = this.categoryRepository.findByNameAndUserId(updateCategoryDTO.getName(), user.getId());
+            if (similarCategory.isPresent()) {
+                throw new ResourceAlreadyExistsException("Category already present with name: " + updateCategoryDTO.getName() + " for user: " + user.getId());
+            }
         }
         Category category = updateCategoryValues(updateCategoryDTO, categoryOptional.get());
         Category updatedCategory = this.categoryRepository.save(category);
