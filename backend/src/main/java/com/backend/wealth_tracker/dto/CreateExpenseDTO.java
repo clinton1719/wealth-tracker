@@ -3,12 +3,14 @@ package com.backend.wealth_tracker.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.math.BigDecimal;
+
 public class CreateExpenseDTO {
 
     @NotNull
     private Long categoryId;
     @Positive
-    private Double amount;
+    private BigDecimal amount;
     private String description;
 
     public Long getCategoryId() {
@@ -19,11 +21,11 @@ public class CreateExpenseDTO {
         this.categoryId = categoryId;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

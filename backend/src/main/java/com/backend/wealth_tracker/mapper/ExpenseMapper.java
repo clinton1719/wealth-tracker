@@ -28,7 +28,7 @@ public class ExpenseMapper {
     }
 
     public static List<ResponseExpenseDTO> expensesToResponseExpenseDTOs(List<Expense> expenses) {
-        return expenses.stream()
+        return expenses.parallelStream()
                 .map(ExpenseMapper::expenseToResponseExpenseDTO)
                 .toList();
     }

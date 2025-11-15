@@ -45,7 +45,7 @@ public class CategoryController {
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
-        this.categoryService.deleteCategory(id);
+    public void deleteCategory(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) throws ResourceNotFoundException {
+        this.categoryService.deleteCategory(id, userDetails.getUsername());
     }
 }

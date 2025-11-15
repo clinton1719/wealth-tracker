@@ -6,7 +6,7 @@ export function AlertDialogComponent({ isDialogOpen, alertType, onSecondaryButto
         case 'DELETE_CATEGORY':
             alert = {
                 title: 'Do you really want to delete this category?',
-                description: 'Deleting this category will move all current assigned expenses/items to the unassigned category and you will have to create another category for the same',
+                description: 'Deleting this category will move all current assigned expenses/items to the default category.',
                 primaryButton: "Delete this category",
                 secondaryButton: "Cancel"
             }

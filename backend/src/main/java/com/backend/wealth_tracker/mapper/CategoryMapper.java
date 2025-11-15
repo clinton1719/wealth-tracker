@@ -32,7 +32,7 @@ public class CategoryMapper {
     }
 
     public static List<ResponseCategoryDTO> categoriesToResponseCategoryDTOs(List<Category> categories) {
-        return categories.stream()
+        return categories.parallelStream()
                 .map(CategoryMapper::categoryToResponseCategoryDTO)
                 .toList();
     }

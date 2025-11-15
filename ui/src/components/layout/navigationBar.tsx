@@ -34,8 +34,8 @@ export function NavigationBar() {
                                 </Link>
                             </NavigationMenuLink>
                         </li>
-                        <ListItem to="https://google.com" title="Documentation" _target="_blank">
-                            Read how to use wealth tracker to manage your finances effectively.
+                        <ListItem to="#" title="Raise issue" _target="_blank">
+                            Encountered a bug? Raise an issue here.
                         </ListItem>
                     </ul>
                 </NavigationMenuContent>

@@ -2,11 +2,13 @@ package com.backend.wealth_tracker.dto;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
+
 public class UpdateExpenseDTO {
     @NotNull
     private Long id;
     private Long categoryId;
-    private Double amount;
+    private BigDecimal amount;
     private String description;
 
     public Long getId() {
@@ -25,11 +27,11 @@ public class UpdateExpenseDTO {
         this.categoryId = categoryId;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

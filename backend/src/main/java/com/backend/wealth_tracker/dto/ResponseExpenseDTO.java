@@ -4,6 +4,7 @@ import com.backend.wealth_tracker.model.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ResponseExpenseDTO {
@@ -12,7 +13,7 @@ public class ResponseExpenseDTO {
     @NotBlank
     private Category category;
     @NotNull
-    private Double amount;
+    private BigDecimal amount;
     @NotBlank
     private String description;
     @NotNull
@@ -36,11 +37,11 @@ public class ResponseExpenseDTO {
         this.category = category;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

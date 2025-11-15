@@ -6,6 +6,7 @@ import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
+import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class ExpenseService {
     }
 
     public Expense saveExpense(CreateExpenseDTO createExpenseDTO, String userName) throws ResourceNotFoundException {
-        Optional<Category> categoryOptional  = this.categoryRepository.findById(createExpenseDTO.getCategoryId());
+        Optional<Category> categoryOptional = this.categoryRepository.findById(createExpenseDTO.getCategoryId());
         if (categoryOptional.isEmpty()) {
             throw new ResourceNotFoundException("Category not found for id: " + createExpenseDTO.getCategoryId());
         }
@@ -58,7 +59,7 @@ public class ExpenseService {
             expense.setDescription(updateExpenseDTO.getDescription());
         }
         if (updateExpenseDTO.getCategoryId() != null) {
-            Optional<Category> categoryOptional  = this.categoryRepository.findById(updateExpenseDTO.getCategoryId());
+            Optional<Category> categoryOptional = this.categoryRepository.findById(updateExpenseDTO.getCategoryId());
             if (categoryOptional.isEmpty()) {
                 throw new ResourceNotFoundException("Category not found for id: " + updateExpenseDTO.getCategoryId());
             }
@@ -89,5 +90,11 @@ public class ExpenseService {
         List<Expense> expenses = this.expenseRepository.findByCreatedAtBetween(start, end, pageable);
         LOGGER.info("Found {} expenses between {} and {}", expenses.size(), startDate, endDate);
         return expenses;
+    }
+
+    public void updateCategoryInExpenses(Category existingCategory, Category newCategory, User user) {
+        List<Expense> existingExpenses = this.expenseRepository.findByCategoryId(existingCategory.getId());
+        List<Expense> updatedExpenses = existingExpenses.parallelStream().peek(expense -> expense.setCategory(newCategory)).toList();
+        this.expenseRepository.saveAll(updatedExpenses);
     }
 }

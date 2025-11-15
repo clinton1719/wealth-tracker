@@ -1,10 +1,12 @@
 package com.backend.wealth_tracker.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity(name = "expenses")
@@ -17,7 +19,8 @@ public class Expense {
     private String description;
 
     @Column(nullable = false)
-    private Double amount;
+    @Positive()
+    private BigDecimal amount;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -59,11 +62,11 @@ public class Expense {
         this.category = category;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

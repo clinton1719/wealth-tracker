@@ -10,6 +10,7 @@ import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,21 +19,25 @@ import java.util.Optional;
 @Service
 public class CategoryService {
     private final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
-
     private final CategoryRepository categoryRepository;
-
     private final AuthService authService;
+    private final ExpenseService expenseService;
+    @Value("${default.category.name}")
+    private String DEFAULT_CATEGORY_NAME;
 
-    public CategoryService(CategoryRepository categoryRepository, AuthService authService) {
+    public CategoryService(CategoryRepository categoryRepository, AuthService authService,ExpenseService expenseService) {
         this.categoryRepository = categoryRepository;
         this.authService = authService;
+        this.expenseService = expenseService;
     }
 
     public List<Category> getAllCategories(String userName) throws ResourceNotFoundException {
         User user = this.authService.getUserByUsername(userName);
         List<Category> categories = this.categoryRepository.findAllCategoriesByUserId(user.getId());
         LOGGER.info("Fetched {} categories for user: {}", categories.size(), userName);
-        return categories;
+        return categories.parallelStream().filter(category ->
+                !category.getName().equals(DEFAULT_CATEGORY_NAME)
+        ).toList();
     }
 
     public Category saveCategory(CreateCategoryDTO createCategoryDTO, String userName) throws ResourceNotFoundException, ResourceAlreadyExistsException {
@@ -85,12 +90,20 @@ public class CategoryService {
         return category;
     }
 
-    public void deleteCategory(Long id) throws ResourceNotFoundException {
+    public void deleteCategory(Long id, String userName) throws ResourceNotFoundException {
+        User user = this.authService.getUserByUsername(userName);
         Optional<Category> categoryOptional = this.categoryRepository.findById(id);
         if (categoryOptional.isEmpty()) {
             LOGGER.error("Category to be deleted not found with id: {}", id);
             throw new ResourceNotFoundException("Category not found");
         }
+        Category category = categoryOptional.get();
+        Optional<Category> defaultCategoryOptional = this.categoryRepository.findByNameAndUserId(DEFAULT_CATEGORY_NAME, id);
+        if (defaultCategoryOptional.isEmpty()) {
+            LOGGER.error("Default category not found with id: {}", id);
+            throw new RuntimeException("Default category not found");
+        }
+        this.expenseService.updateCategoryInExpenses(category, defaultCategoryOptional.get(), user);
         this.categoryRepository.delete(categoryOptional.get());
         LOGGER.info("Category deleted with id: {}", id);
     }
