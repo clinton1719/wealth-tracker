@@ -49,9 +49,9 @@ public class AuthService implements UserDetailsService {
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(signUpDto.getPassword());
         User newUser = new User(signUpDto.getUsername(), encryptedPassword, signUpDto.getRole());
-        saveDefaults(newUser);
-        LOGGER.info("New user registered: {}", newUser.getUsername());
-        repository.save(newUser);
+        User savedUser = repository.save(newUser);
+        LOGGER.info("New user registered: {}", savedUser.getUsername());
+        saveDefaults(savedUser);
     }
 
     public User getUserByUsername(String username) throws ResourceNotFoundException {
@@ -63,9 +63,9 @@ public class AuthService implements UserDetailsService {
         }
     }
 
-    public void saveDefaults(User newUser) {
+    public void saveDefaults(User savedUser) {
         Category defaultCategory = new Category();
-        defaultCategory.setUser(newUser);
+        defaultCategory.setUser(savedUser);
         defaultCategory.setCategoryName(DEFAULT_CATEGORY_NAME);
         defaultCategory.setDescription("This is your default category. Unassigned items will be seen here.");
         defaultCategory.setColorCode("#000000");
@@ -76,7 +76,7 @@ public class AuthService implements UserDetailsService {
         account.setAccountType(AccountType.SAVINGS);
         account.setAccountName(DEFAULT_ACCOUNT_NAME);
         account.setAccountBalance(BigDecimal.ZERO);
-        account.setUser(newUser);
+        account.setUser(savedUser);
         account.setDescription("This is your default account. You will not be able to delete this account");
         this.accountRepository.save(account);
     }

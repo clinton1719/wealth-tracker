@@ -1,6 +1,7 @@
 package com.backend.wealth_tracker.dto.response_dto;
 
 import com.backend.wealth_tracker.enums.AccountType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 public class ResponseAccountDTO {
     @NotNull
     private Long id;
-    @NotNull
+    @NotBlank
     private String accountName;
     private String description;
     @NotNull

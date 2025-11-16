@@ -19,7 +19,7 @@ public class Account {
     @Column(nullable = false)
     private AccountType accountType;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 
