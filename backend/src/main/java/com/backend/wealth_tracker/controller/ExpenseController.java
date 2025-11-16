@@ -1,8 +1,8 @@
 package com.backend.wealth_tracker.controller;
 
-import com.backend.wealth_tracker.dto.CreateExpenseDTO;
-import com.backend.wealth_tracker.dto.ResponseExpenseDTO;
-import com.backend.wealth_tracker.dto.UpdateExpenseDTO;
+import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
+import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.service.ExpenseService;

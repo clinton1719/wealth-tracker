@@ -1,7 +1,7 @@
 package com.backend.wealth_tracker.mapper;
 
-import com.backend.wealth_tracker.dto.CreateCategoryDTO;
-import com.backend.wealth_tracker.dto.ResponseCategoryDTO;
+import com.backend.wealth_tracker.dto.request_dto.CreateCategoryDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryDTO;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.User;
 
@@ -11,7 +11,7 @@ public class CategoryMapper {
 
     public static Category createCategoryDTOtoCategory(CreateCategoryDTO createCategoryDTO, User user) {
         Category category = new Category();
-        category.setName(createCategoryDTO.getName());
+        category.setCategoryName(createCategoryDTO.getName());
         category.setDescription(createCategoryDTO.getDescription());
         category.setColorCode(createCategoryDTO.getColorCode());
         category.setIcon(createCategoryDTO.getIcon());
@@ -23,7 +23,7 @@ public class CategoryMapper {
     public static ResponseCategoryDTO categoryToResponseCategoryDTO(Category category) {
         ResponseCategoryDTO responseCategoryDTO = new ResponseCategoryDTO();
         responseCategoryDTO.setId(category.getId());
-        responseCategoryDTO.setName(category.getName());
+        responseCategoryDTO.setName(category.getCategoryName());
         responseCategoryDTO.setDescription(category.getDescription());
         responseCategoryDTO.setColorCode(category.getColorCode());
         responseCategoryDTO.setIcon(category.getIcon());

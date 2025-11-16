@@ -1,7 +1,7 @@
 package com.backend.wealth_tracker.service;
 
-import com.backend.wealth_tracker.dto.CreateCategoryDTO;
-import com.backend.wealth_tracker.dto.UpdateCategoryDTO;
+import com.backend.wealth_tracker.dto.request_dto.CreateCategoryDTO;
+import com.backend.wealth_tracker.dto.update_dto.UpdateCategoryDTO;
 import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.CategoryMapper;
@@ -36,16 +36,16 @@ public class CategoryService {
         List<Category> categories = this.categoryRepository.findAllCategoriesByUserId(user.getId());
         LOGGER.info("Fetched {} categories for user: {}", categories.size(), userName);
         return categories.parallelStream().filter(category ->
-                !category.getName().equals(DEFAULT_CATEGORY_NAME)
+                !category.getCategoryName().equals(DEFAULT_CATEGORY_NAME)
         ).toList();
     }
 
     public Category saveCategory(CreateCategoryDTO createCategoryDTO, String userName) throws ResourceNotFoundException, ResourceAlreadyExistsException {
         User user = this.authService.getUserByUsername(userName);
         Category category = CategoryMapper.createCategoryDTOtoCategory(createCategoryDTO, user);
-        Optional<Category> similarCategory = this.categoryRepository.findByNameAndUserId(category.getName(), user.getId());
+        Optional<Category> similarCategory = this.categoryRepository.findByCategoryNameAndUserId(category.getCategoryName(), user.getId());
         if (similarCategory.isPresent()) {
-            throw new ResourceAlreadyExistsException("Category already present with name: " + category.getName() + " for user: " + user.getId());
+            throw new ResourceAlreadyExistsException("Category already present with name: " + category.getCategoryName() + " for user: " + user.getId());
         }
         Category savedCategory = this.categoryRepository.save(category);
         LOGGER.info("Category to be saved created with id: {}", savedCategory.getId());
@@ -59,8 +59,8 @@ public class CategoryService {
             LOGGER.error("Category to be updated not found with id: {}", updateCategoryDTO.getId());
             throw new ResourceNotFoundException("Category not found");
         }
-        if (!categoryOptional.get().getName().equals(updateCategoryDTO.getName())) {
-            Optional<Category> similarCategory = this.categoryRepository.findByNameAndUserId(updateCategoryDTO.getName(), user.getId());
+        if (!categoryOptional.get().getCategoryName().equals(updateCategoryDTO.getName())) {
+            Optional<Category> similarCategory = this.categoryRepository.findByCategoryNameAndUserId(updateCategoryDTO.getName(), user.getId());
             if (similarCategory.isPresent()) {
                 throw new ResourceAlreadyExistsException("Category already present with name: " + updateCategoryDTO.getName() + " for user: " + user.getId());
             }
@@ -73,7 +73,7 @@ public class CategoryService {
 
     private Category updateCategoryValues(UpdateCategoryDTO updateCategoryDTO, Category category) {
         if (updateCategoryDTO.getName() != null) {
-            category.setName(updateCategoryDTO.getName());
+            category.setCategoryName(updateCategoryDTO.getName());
         }
         if (updateCategoryDTO.getDescription() != null) {
             category.setDescription(updateCategoryDTO.getDescription());
@@ -98,13 +98,13 @@ public class CategoryService {
             throw new ResourceNotFoundException("Category not found");
         }
         Category category = categoryOptional.get();
-        Optional<Category> defaultCategoryOptional = this.categoryRepository.findByNameAndUserId(DEFAULT_CATEGORY_NAME, id);
+        Optional<Category> defaultCategoryOptional = this.categoryRepository.findByCategoryNameAndUserId(DEFAULT_CATEGORY_NAME, id);
         if (defaultCategoryOptional.isEmpty()) {
             LOGGER.error("Default category not found with id: {}", id);
             throw new RuntimeException("Default category not found");
         }
         this.expenseService.updateCategoryInExpenses(category, defaultCategoryOptional.get(), user);
-        this.categoryRepository.delete(categoryOptional.get());
+        this.categoryRepository.delete(category);
         LOGGER.info("Category deleted with id: {}", id);
     }
 }

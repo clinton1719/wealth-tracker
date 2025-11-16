@@ -1,8 +1,8 @@
 package com.backend.wealth_tracker.controller;
 
-import com.backend.wealth_tracker.dto.CreateCategoryDTO;
-import com.backend.wealth_tracker.dto.ResponseCategoryDTO;
-import com.backend.wealth_tracker.dto.UpdateCategoryDTO;
+import com.backend.wealth_tracker.dto.request_dto.CreateCategoryDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryDTO;
+import com.backend.wealth_tracker.dto.update_dto.UpdateCategoryDTO;
 import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.CategoryMapper;

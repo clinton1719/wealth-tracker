@@ -1,4 +1,4 @@
-package com.backend.wealth_tracker.dto;
+package com.backend.wealth_tracker.dto.response_dto;
 
 import com.backend.wealth_tracker.model.Category;
 import jakarta.validation.constraints.NotBlank;

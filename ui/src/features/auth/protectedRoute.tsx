@@ -1,10 +1,9 @@
-import { useSelector } from "react-redux";
-import { Navigate, useLocation } from "react-router";
-import { selectAuthToken } from "@/slices/authSlice";
 import { Spinner } from "@/components/ui/spinner";
-import type { JSX } from "react";
+import { selectAuthToken } from "@/slices/authSlice";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation } from "react-router";
 
-export function ProtectedRoute({ children }: { children: JSX.Element }) {
+export function ProtectedRoute() {
   const token = useSelector(selectAuthToken);
   const location = useLocation();
 
@@ -15,6 +14,6 @@ export function ProtectedRoute({ children }: { children: JSX.Element }) {
   if (!token) {
     return <Navigate to="/signup" state={{ from: location }} replace />;
   }
-  
-  return children;
+
+  return <Outlet />;
 }

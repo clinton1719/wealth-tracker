@@ -66,11 +66,11 @@ public class AuthService implements UserDetailsService {
     public void saveDefaults(User newUser) {
         Category defaultCategory = new Category();
         defaultCategory.setUser(newUser);
-        defaultCategory.setName(DEFAULT_CATEGORY_NAME);
+        defaultCategory.setCategoryName(DEFAULT_CATEGORY_NAME);
         defaultCategory.setDescription("This is your default category. Unassigned items will be seen here.");
         defaultCategory.setColorCode("#000000");
         defaultCategory.setTags(List.of("default"));
-        categoryRepository.save(defaultCategory);
+        this.categoryRepository.save(defaultCategory);
 
         Account account = new Account();
         account.setAccountType(AccountType.SAVINGS);

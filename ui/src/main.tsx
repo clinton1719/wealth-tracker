@@ -12,32 +12,25 @@ import ViewExpenses from './features/expense/viewExpenses.tsx'
 import { store } from './store.ts'
 import './styles/index.css'
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <BrowserRouter>
       <NavigationBar />
+
       <Routes>
-       <Route index element={<App />} />
-        <Route
-          path="expense"
-          element={
-            <ProtectedRoute>
-              <ViewExpenses />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="category"
-          element={
-            <ProtectedRoute>
-              <ViewCategories />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<SignUp />} />
+        {/* PUBLIC ROUTES */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+
+        {/* PROTECTED ROUTES */}
+        <Route element={<ProtectedRoute />}>
+          <Route index element={<App />} />
+          <Route path="expense" element={<ViewExpenses />} />
+          <Route path="category" element={<ViewCategories />} />
+        </Route>
       </Routes>
+
       <Toaster />
     </BrowserRouter>
   </Provider>
-)
+);

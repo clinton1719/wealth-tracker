@@ -1,9 +1,10 @@
 package com.backend.wealth_tracker.service;
 
-import com.backend.wealth_tracker.dto.CreateExpenseDTO;
-import com.backend.wealth_tracker.dto.UpdateExpenseDTO;
+import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
+import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
+import com.backend.wealth_tracker.model.Account;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.model.User;
@@ -95,6 +96,12 @@ public class ExpenseService {
     public void updateCategoryInExpenses(Category existingCategory, Category newCategory, User user) {
         List<Expense> existingExpenses = this.expenseRepository.findByCategoryId(existingCategory.getId());
         List<Expense> updatedExpenses = existingExpenses.parallelStream().peek(expense -> expense.setCategory(newCategory)).toList();
+        this.expenseRepository.saveAll(updatedExpenses);
+    }
+
+    public void updateAccountInExpenses(Account existingAccount, Account newAccount, User user) {
+        List<Expense> existingExpenses = this.expenseRepository.findByAccountId(existingAccount.getId());
+        List<Expense> updatedExpenses = existingExpenses.parallelStream().peek(expense -> expense.setAccount(newAccount)).toList();
         this.expenseRepository.saveAll(updatedExpenses);
     }
 }

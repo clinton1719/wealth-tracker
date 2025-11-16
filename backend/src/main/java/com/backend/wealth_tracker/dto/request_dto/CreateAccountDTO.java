@@ -1,38 +1,18 @@
-package com.backend.wealth_tracker.model;
+package com.backend.wealth_tracker.dto.request_dto;
 
 import com.backend.wealth_tracker.enums.AccountType;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-@Entity
-public class Account {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false)
+public class CreateAccountDTO {
+    @NotNull
     private String accountName;
     private String description;
-    @Column(nullable = false)
+    @NotNull
     private BigDecimal accountBalance;
-    @Column(nullable = false)
+    @NotNull
     private AccountType accountType;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private List<Expense> expense;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getAccountName() {
         return accountName;
@@ -64,21 +44,5 @@ public class Account {
 
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<Expense> getExpense() {
-        return expense;
-    }
-
-    public void setExpense(List<Expense> expense) {
-        this.expense = expense;
     }
 }

@@ -1,30 +1,23 @@
-package com.backend.wealth_tracker.dto;
+package com.backend.wealth_tracker.dto.request_dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
-public class UpdateCategoryDTO {
-    @NotNull
-    private Long id;
-
+public class CreateCategoryDTO {
+    @NotBlank
     private String name;
 
     private String description;
 
+    @NotBlank
+    @Length(min = 4, max = 7, message = "Color code must be between 4 and 7 characters long, inclusive.")
     private String colorCode;
 
     private String icon;
 
     private List<String> tags;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

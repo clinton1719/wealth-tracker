@@ -13,7 +13,7 @@ public class Category {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String categoryName;
 
     private String description;
 
@@ -30,7 +30,7 @@ public class Category {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private Set<Expense> expense = new HashSet<>();
 
     public Long getId() {
@@ -41,12 +41,12 @@ public class Category {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getDescription() {

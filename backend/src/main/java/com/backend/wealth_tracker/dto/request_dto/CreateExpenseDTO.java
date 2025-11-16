@@ -1,23 +1,17 @@
-package com.backend.wealth_tracker.dto;
+package com.backend.wealth_tracker.dto.request_dto;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
-public class UpdateExpenseDTO {
+public class CreateExpenseDTO {
+
     @NotNull
-    private Long id;
     private Long categoryId;
+    @Positive
     private BigDecimal amount;
     private String description;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getCategoryId() {
         return categoryId;
