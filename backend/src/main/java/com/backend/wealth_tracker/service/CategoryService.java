@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,7 @@ public class CategoryService {
     @Value("${default.category.name}")
     private String DEFAULT_CATEGORY_NAME;
 
-    public CategoryService(CategoryRepository categoryRepository, AuthService authService,ExpenseService expenseService) {
+    public CategoryService(CategoryRepository categoryRepository, AuthService authService, ExpenseService expenseService) {
         this.categoryRepository = categoryRepository;
         this.authService = authService;
         this.expenseService = expenseService;
@@ -34,10 +35,11 @@ public class CategoryService {
     public List<Category> getAllCategories(String userName) throws ResourceNotFoundException {
         User user = this.authService.getUserByUsername(userName);
         List<Category> categories = this.categoryRepository.findAllCategoriesByUserId(user.getId());
-        LOGGER.info("Fetched {} categories for user: {}", categories.size(), userName);
-        return categories.parallelStream().filter(category ->
-                !category.getCategoryName().equals(DEFAULT_CATEGORY_NAME)
-        ).toList();
+        List<Category> filteredCategories = categories.parallelStream()
+                .filter(category -> category.getCategoryName().equals(DEFAULT_CATEGORY_NAME))
+                .toList();
+        LOGGER.info("Fetched {} categories for user: {}", filteredCategories.size(), userName);
+        return filteredCategories;
     }
 
     public Category saveCategory(CreateCategoryDTO createCategoryDTO, String userName) throws ResourceNotFoundException, ResourceAlreadyExistsException {
@@ -102,6 +104,9 @@ public class CategoryService {
         if (defaultCategoryOptional.isEmpty()) {
             LOGGER.error("Default category not found with id: {}", id);
             throw new RuntimeException("Default category not found");
+        }
+        if (Objects.equals(category.getId(), defaultCategoryOptional.get().getId())) {
+            throw new RuntimeException("Default category cannot be deleted");
         }
         this.expenseService.updateCategoryInExpenses(category, defaultCategoryOptional.get(), user);
         this.categoryRepository.delete(category);

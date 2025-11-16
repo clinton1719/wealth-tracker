@@ -42,6 +42,10 @@ public class Expense {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
+
     public Long getId() {
         return id;
     }
@@ -104,6 +108,14 @@ public class Expense {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }
 

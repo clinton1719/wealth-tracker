@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -82,6 +83,9 @@ public class AccountService {
         if (defaultAccountOptional.isEmpty()) {
             LOGGER.error("Default account not found with id: {}", id);
             throw new RuntimeException("Default account not found");
+        }
+        if (Objects.equals(account.getId(), defaultAccountOptional.get().getId())) {
+            throw new RuntimeException("Default account cannot be deleted");
         }
         this.expenseService.updateAccountInExpenses(account, defaultAccountOptional.get(), user);
         this.accountRepository.delete(account);

@@ -33,6 +33,10 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private Set<Expense> expense = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
+
     public Long getId() {
         return id;
     }
@@ -95,5 +99,13 @@ public class Category {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }

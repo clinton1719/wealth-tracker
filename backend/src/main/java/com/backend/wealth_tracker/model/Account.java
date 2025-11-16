@@ -4,9 +4,9 @@ import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
-@Entity
+@Entity(name = "accounts")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,11 @@ public class Account {
     private User user;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private List<Expense> expense;
+    private Set<Expense> expense;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
     public Long getId() {
         return id;
@@ -74,11 +78,19 @@ public class Account {
         this.user = user;
     }
 
-    public List<Expense> getExpense() {
+    public Set<Expense> getExpense() {
         return expense;
     }
 
-    public void setExpense(List<Expense> expense) {
+    public void setExpense(Set<Expense> expense) {
         this.expense = expense;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }
