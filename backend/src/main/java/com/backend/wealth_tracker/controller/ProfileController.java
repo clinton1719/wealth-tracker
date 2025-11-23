@@ -9,8 +9,6 @@ import com.backend.wealth_tracker.mapper.ProfileMapper;
 import com.backend.wealth_tracker.service.ProfileService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/v1/profiles")
 public class ProfileController {
-  private final Logger LOGGER = LoggerFactory.getLogger(ProfileController.class);
 
   private final ProfileService profileService;
 
@@ -41,13 +38,8 @@ public class ProfileController {
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateProfileDTO createProfileDTO)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
-    try {
-      return ProfileMapper.profileToResponseProfileDTO(
-          this.profileService.saveProfile(createProfileDTO, userDetails.getUsername()));
-    } catch (Exception e) {
-      LOGGER.error("Failed to save profile!", e);
-      throw e;
-    }
+    return ProfileMapper.profileToResponseProfileDTO(
+        this.profileService.saveProfile(createProfileDTO, userDetails.getUsername()));
   }
 
   @PutMapping("/update")
@@ -56,23 +48,13 @@ public class ProfileController {
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateProfileDTO updateProfileDTO)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
-    try {
-      return ProfileMapper.profileToResponseProfileDTO(
-          this.profileService.updateProfile(updateProfileDTO, userDetails.getUsername()));
-    } catch (Exception e) {
-      LOGGER.error("Failed to update profile!", e);
-      throw e;
-    }
+    return ProfileMapper.profileToResponseProfileDTO(
+        this.profileService.updateProfile(updateProfileDTO, userDetails.getUsername()));
   }
 
   @DeleteMapping("/delete/{id}")
   @ResponseStatus(HttpStatus.OK)
   public void deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
-    try {
-      this.profileService.deleteProfile(id);
-    } catch (Exception e) {
-      LOGGER.error("Failed to delete profile!", e);
-      throw e;
-    }
+    this.profileService.deleteProfile(id);
   }
 }

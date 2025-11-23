@@ -4,6 +4,7 @@ import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@SuppressWarnings("PMD.DataClass")
 public class UpdateAccountDTO {
   @NotNull(message = "Account ID cannot be null")
   private Long id;

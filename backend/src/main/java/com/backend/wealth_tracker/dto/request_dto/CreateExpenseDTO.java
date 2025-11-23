@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
+@SuppressWarnings("PMD.DataClass")
 public class CreateExpenseDTO {
 
   @NotNull(message = "Category ID cannot be null")

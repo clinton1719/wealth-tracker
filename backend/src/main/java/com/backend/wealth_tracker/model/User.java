@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.enums.UserRole;
 import jakarta.persistence.*;
+import java.io.Serial;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +12,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "users")
+@SuppressWarnings({"PMD.DataClass", "PMD.AvoidDuplicateLiterals"})
 public class User implements UserDetails {
+  @Serial private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

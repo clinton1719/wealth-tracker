@@ -6,7 +6,10 @@ import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import java.util.List;
 
-public class ExpenseMapper {
+public final class ExpenseMapper {
+  private ExpenseMapper() {}
+  ;
+
   public static ResponseExpenseDTO expenseToResponseExpenseDTO(Expense expense) {
     ResponseExpenseDTO dto = new ResponseExpenseDTO();
     dto.setDescription(expense.getDescription());

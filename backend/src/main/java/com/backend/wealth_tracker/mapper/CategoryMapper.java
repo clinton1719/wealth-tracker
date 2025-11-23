@@ -6,7 +6,10 @@ import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.User;
 import java.util.List;
 
-public class CategoryMapper {
+public final class CategoryMapper {
+
+  private CategoryMapper() {}
+  ;
 
   public static Category createCategoryDTOtoCategory(
       CreateCategoryDTO createCategoryDTO, User user) {

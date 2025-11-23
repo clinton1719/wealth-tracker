@@ -42,7 +42,7 @@ public class ProfileService {
     }
     profile.setUser(this.authService.getUserByUsername(userName));
     Profile savedProfile = this.profileRepository.save(profile);
-    LOGGER.info("Profile created with id: {}", savedProfile.getId());
+    LOGGER.atInfo().log("Profile created with id: {}", savedProfile.getId());
     return savedProfile;
   }
 
@@ -68,7 +68,7 @@ public class ProfileService {
     }
     Profile updatedProfile = updateProfileValues(updateProfileDTO, profile);
     Profile savedProfile = this.profileRepository.save(updatedProfile);
-    LOGGER.info("Profile updated with id: {}", savedProfile.getId());
+    LOGGER.atInfo().log("Profile updated with id: {}", savedProfile.getId());
     return savedProfile;
   }
 
@@ -91,18 +91,18 @@ public class ProfileService {
   public void deleteProfile(Long id) throws ResourceNotFoundException {
     Optional<Profile> profileOptional = this.profileRepository.findById(id);
     if (profileOptional.isEmpty()) {
-      LOGGER.error("Profile to be deleted not found with id: {}", id);
+      LOGGER.atError().log("Profile to be deleted not found with id: {}", id);
       throw new ResourceNotFoundException("Profile not found");
     }
     Profile profile = profileOptional.get();
     this.profileRepository.delete(profile);
-    LOGGER.info("Category deleted with id: {}", id);
+    LOGGER.atInfo().log("Category deleted with id: {}", id);
   }
 
   public List<Profile> getAllProfilesForUser(String userName) throws ResourceNotFoundException {
     User user = this.authService.getUserByUsername(userName);
     List<Profile> profiles = this.profileRepository.findAllByUserId(user.getId());
-    LOGGER.info("Fetched {} profiles for user: {}", profiles.size(), userName);
+    LOGGER.atInfo().log("Fetched {} profiles for user: {}", profiles.size(), userName);
     return profiles;
   }
 }

@@ -36,7 +36,7 @@ public class CategoryService {
   public List<Category> getAllCategories(String userName) throws ResourceNotFoundException {
     User user = this.authService.getUserByUsername(userName);
     List<Category> categories = this.categoryRepository.findAllCategoriesByUserId(user.getId());
-    LOGGER.info("Fetched {} categories for user: {}", categories.size(), userName);
+    LOGGER.atInfo().log("Fetched {} categories for user: {}", categories.size(), userName);
     return categories;
   }
 
@@ -55,7 +55,7 @@ public class CategoryService {
               + user.getId());
     }
     Category savedCategory = this.categoryRepository.save(category);
-    LOGGER.info("Category to be saved created with id: {}", savedCategory.getId());
+    LOGGER.atInfo().log("Category to be saved created with id: {}", savedCategory.getId());
     return savedCategory;
   }
 
@@ -65,7 +65,9 @@ public class CategoryService {
     Optional<Category> categoryOptional =
         this.categoryRepository.findById(updateCategoryDTO.getId());
     if (categoryOptional.isEmpty()) {
-      LOGGER.error("Category to be updated not found with id: {}", updateCategoryDTO.getId());
+      LOGGER
+          .atError()
+          .log("Category to be updated not found with id: {}", updateCategoryDTO.getId());
       throw new ResourceNotFoundException("Category not found");
     }
     if (!categoryOptional.get().getCategoryName().equals(updateCategoryDTO.getName())) {
@@ -82,7 +84,7 @@ public class CategoryService {
     }
     Category category = updateCategoryValues(updateCategoryDTO, categoryOptional.get());
     Category updatedCategory = this.categoryRepository.save(category);
-    LOGGER.info("Category updated with id: {}", updatedCategory.getId());
+    LOGGER.atInfo().log("Category updated with id: {}", updatedCategory.getId());
     return updatedCategory;
   }
 
@@ -118,11 +120,11 @@ public class CategoryService {
   public void deleteCategory(Long id) throws ResourceNotFoundException {
     Optional<Category> categoryOptional = this.categoryRepository.findById(id);
     if (categoryOptional.isEmpty()) {
-      LOGGER.error("Category to be deleted not found with id: {}", id);
+      LOGGER.atError().log("Category to be deleted not found with id: {}", id);
       throw new ResourceNotFoundException("Category not found");
     }
     Category category = categoryOptional.get();
     this.categoryRepository.delete(category);
-    LOGGER.info("Category deleted with id: {}", id);
+    LOGGER.atInfo().log("Category deleted with id: {}", id);
   }
 }

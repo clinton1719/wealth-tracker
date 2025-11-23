@@ -35,7 +35,7 @@ public class AccountService {
   public List<Account> getAllAccounts(String userName) throws ResourceNotFoundException {
     User user = this.authService.getUserByUsername(userName);
     List<Account> accountList = this.accountRepository.findByUserId(user.getId());
-    LOGGER.info("Fetched {} categories for user: {}", accountList.size(), userName);
+    LOGGER.atInfo().log("Fetched {} categories for user: {}", accountList.size(), userName);
     return accountList;
   }
 
@@ -54,7 +54,7 @@ public class AccountService {
     }
     Account account = AccountMapper.createAccountDTOToAccount(createAccountDTO, user);
     Account savedAccount = this.accountRepository.save(account);
-    LOGGER.info("Account to be saved created with id: {}", savedAccount.getId());
+    LOGGER.atInfo().log("Account to be saved created with id: {}", savedAccount.getId());
     return savedAccount;
   }
 
@@ -63,7 +63,7 @@ public class AccountService {
     User user = this.authService.getUserByUsername(userName);
     Optional<Account> accountOptional = this.accountRepository.findById(updateAccountDTO.getId());
     if (accountOptional.isEmpty()) {
-      LOGGER.error("Account to be updated not found with id: {}", updateAccountDTO.getId());
+      LOGGER.atError().log("Account to be updated not found with id: {}", updateAccountDTO.getId());
       throw new ResourceNotFoundException("Account not found");
     }
     if (!accountOptional.get().getAccountName().equals(accountOptional.get().getAccountName())) {
@@ -80,19 +80,19 @@ public class AccountService {
     }
     Account account = updateAccountValues(updateAccountDTO, accountOptional.get());
     Account updatedAccount = this.accountRepository.save(account);
-    LOGGER.info("Category updated with id: {}", updatedAccount.getId());
+    LOGGER.atInfo().log("Category updated with id: {}", updatedAccount.getId());
     return updatedAccount;
   }
 
   public void deleteAccount(Long id) throws ResourceNotFoundException {
     Optional<Account> accountOptional = this.accountRepository.findById(id);
     if (accountOptional.isEmpty()) {
-      LOGGER.error("Account to be deleted not found with id: {}", id);
+      LOGGER.atError().log("Account to be deleted not found with id: {}", id);
       throw new ResourceNotFoundException("Account not found");
     }
     Account account = accountOptional.get();
     this.accountRepository.delete(account);
-    LOGGER.info("Account deleted with id: {}", id);
+    LOGGER.atInfo().log("Account deleted with id: {}", id);
   }
 
   public Account updateAccountValues(UpdateAccountDTO updateAccountDTO, Account account)

@@ -34,7 +34,7 @@ public class AuthService implements UserDetailsService {
     String encryptedPassword = new BCryptPasswordEncoder().encode(signUpDto.getPassword());
     User newUser = new User(signUpDto.getUsername(), encryptedPassword, signUpDto.getRole());
     User savedUser = userRepository.save(newUser);
-    LOGGER.info("New user registered: {}", savedUser.getUsername());
+    LOGGER.atInfo().log("New user registered: {}", savedUser.getUsername());
   }
 
   public User getUserByUsername(String username) throws ResourceNotFoundException {

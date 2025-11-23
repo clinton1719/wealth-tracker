@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.dto.request_dto;
 
 import jakarta.validation.constraints.NotBlank;
 
+@SuppressWarnings("PMD.DataClass")
 public class CreateProfileDTO {
   @NotBlank(message = "Profile name cannot be blank")
   private String profileName;

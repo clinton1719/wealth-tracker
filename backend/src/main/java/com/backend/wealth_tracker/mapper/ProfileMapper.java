@@ -9,7 +9,10 @@ import com.backend.wealth_tracker.model.Profile;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProfileMapper {
+public final class ProfileMapper {
+  private ProfileMapper() {}
+  ;
+
   public static Profile createProfileDTOToProfile(CreateProfileDTO createProfileDTO) {
     Profile profile = new Profile();
     profile.setProfileName(createProfileDTO.getProfileName());

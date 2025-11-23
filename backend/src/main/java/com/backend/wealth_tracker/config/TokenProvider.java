@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.backend.wealth_tracker.exception.SecurityConfigurationException;
 import com.backend.wealth_tracker.model.User;
 import java.time.Instant;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ public class TokenProvider {
     }
   }
 
+  @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.ExceptionAsFlowControl"})
   public String validateToken(String token) {
     try {
       Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
@@ -42,8 +44,8 @@ public class TokenProvider {
       }
 
       return decodedToken.getSubject();
-    } catch (JWTVerificationException exception) {
-      throw new JWTVerificationException("Error while validating token", exception);
+    } catch (Exception exception) {
+      throw new SecurityConfigurationException("Error while validating token", exception);
     }
   }
 
@@ -52,15 +54,16 @@ public class TokenProvider {
       Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
       var decodedToken = JWT.require(algorithm).acceptExpiresAt(0).build().verify(token);
       return decodedToken.getClaim("username").asString();
-    } catch (JWTVerificationException exception) {
-      throw new JWTVerificationException("Error while extracting username from token", exception);
+    } catch (JWTVerificationException jwtVerificationException) {
+      throw new JWTVerificationException(
+          "Error while extracting username from token", jwtVerificationException);
     }
   }
 
   private Instant genAccessExpirationDate() {
     Instant now = Instant.now();
     Instant expiresAt = now.plusSeconds(60 * 60);
-    LOGGER.info("Token generated at: {}, expires at: {}", now, expiresAt);
+    LOGGER.atInfo().log("Token generated at: {}, expires at: {}", now, expiresAt);
     return expiresAt;
   }
 }

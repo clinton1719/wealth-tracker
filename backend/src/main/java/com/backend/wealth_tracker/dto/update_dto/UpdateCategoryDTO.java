@@ -3,6 +3,7 @@ package com.backend.wealth_tracker.dto.update_dto;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings("PMD.DataClass")
 public class UpdateCategoryDTO {
   @NotNull(message = "Category ID cannot be null")
   private Long id;

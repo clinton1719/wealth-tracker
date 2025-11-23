@@ -30,35 +30,35 @@ public class GlobalExceptionHandler {
               String errorMessage = error.getDefaultMessage();
               errors.put(fieldName, errorMessage);
             });
-    LOGGER.error(errors.toString(), ex);
+    LOGGER.atError().log(errors.toString(), ex);
     return ResponseEntity.badRequest().body(errors);
   }
 
   @ExceptionHandler(UnAuthorizedException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public String handleAllUnAuthorizedExceptions(UnAuthorizedException ex) {
-    LOGGER.error("Unauthorized exception: {}", ex.getMessage());
+    LOGGER.atError().log("Unauthorized exception: {}", ex.getMessage());
     return "Unauthorized access";
   }
 
   @ExceptionHandler(ResourceNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public String handleAllResourceNotFoundExceptions(ResourceNotFoundException ex) {
-    LOGGER.error("Resource not found exception: {}", ex.getMessage());
+    LOGGER.atError().log("Resource not found exception: {}", ex.getMessage());
     return "Resource not found";
   }
 
   @ExceptionHandler(ResourceAlreadyExistsException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
   public String handleAllResourceAlreadyExistsExceptions(ResourceAlreadyExistsException ex) {
-    LOGGER.error("Resource already exists exception: {}", ex.getMessage());
+    LOGGER.atError().log("Resource already exists exception: {}", ex.getMessage());
     return "Resource already exists";
   }
 
   @ExceptionHandler(RuntimeException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public String handleAllResourceAlreadyExistsExceptions(RuntimeException ex) {
-    LOGGER.error("Server error: {}", ex.getMessage());
+    LOGGER.atError().log("Server error: {}", ex.getMessage());
     return "Something went wrong on server, kindly try again later";
   }
 }

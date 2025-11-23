@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@SuppressWarnings("PMD.DataClass")
 public class ResponseAccountDTO {
   @NotNull private Long id;
   @NotBlank private String accountName;

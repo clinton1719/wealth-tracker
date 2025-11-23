@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
-  private static final Logger logger = LoggerFactory.getLogger(SecurityFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityFilter.class);
 
   @Autowired TokenProvider tokenService;
   @Autowired UserRepository userRepository;
@@ -29,13 +30,13 @@ public class SecurityFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     var token = this.recoverToken(request);
     if (token != null) {
-      logger.info("Processing request with token at: {}", Instant.now());
+      LOGGER.atInfo().log("Processing request with token at: {}", Instant.now());
       try {
         var username = tokenService.validateToken(token);
         var user = userRepository.findByUsername(username);
 
         if (user == null) {
-          logger.error("User not found for token");
+          LOGGER.atError().log("User not found for token");
           sendUnauthorizedResponse(response, "User not found");
           return;
         }
@@ -43,9 +44,9 @@ public class SecurityFilter extends OncePerRequestFilter {
         var authentication =
             new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        logger.info("Token validated successfully for user: {}", user.getUsername());
+        LOGGER.atInfo().log("Token validated successfully for user: {}", user.getUsername());
       } catch (JWTVerificationException e) {
-        logger.error("Token validation failed: {}", e.getMessage());
+        LOGGER.atError().log("Token validation failed: {}", e.getMessage());
         sendUnauthorizedResponse(response, "Token expired or invalid: " + e.getMessage());
         return;
       }
@@ -53,11 +54,14 @@ public class SecurityFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
+  @SuppressWarnings({"PMD.CloseResource", "PMD.LawOfDemeter"})
   private void sendUnauthorizedResponse(HttpServletResponse response, String message)
       throws IOException {
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setContentType("application/json");
-    response.getWriter().write("{\"error\": \"" + message + "\"}");
+    PrintWriter writer = response.getWriter();
+    writer.write("{\"error\": \"" + message + "\"}");
+    writer.flush();
   }
 
   private String recoverToken(HttpServletRequest request) {

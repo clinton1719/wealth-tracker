@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.dto.update_dto;
 
 import jakarta.validation.constraints.NotNull;
 
+@SuppressWarnings("PMD.DataClass")
 public class UpdateProfileDTO {
   @NotNull(message = "Profile ID cannot be null")
   private Long id;

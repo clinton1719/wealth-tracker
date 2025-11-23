@@ -9,8 +9,6 @@ import com.backend.wealth_tracker.mapper.AccountMapper;
 import com.backend.wealth_tracker.service.AccountService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/v1/accounts")
 public class AccountController {
-
-  private final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 
   private final AccountService accountService;
 
@@ -32,13 +28,8 @@ public class AccountController {
   @ResponseStatus(HttpStatus.OK)
   public List<ResponseAccountDTO> getAllAccounts(@AuthenticationPrincipal UserDetails userDetails)
       throws ResourceNotFoundException {
-    try {
-      return AccountMapper.accountsToResponseAccountDTOs(
-          this.accountService.getAllAccounts(userDetails.getUsername()));
-    } catch (Exception e) {
-      LOGGER.error("Failed to get all accounts!", e);
-      throw e;
-    }
+    return AccountMapper.accountsToResponseAccountDTOs(
+        this.accountService.getAllAccounts(userDetails.getUsername()));
   }
 
   @PostMapping("/save")
@@ -47,13 +38,8 @@ public class AccountController {
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateAccountDTO createAccountDTO)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
-    try {
-      return AccountMapper.accountToResponseAccountDTO(
-          this.accountService.saveAccount(createAccountDTO, userDetails.getUsername()));
-    } catch (Exception e) {
-      LOGGER.error("Failed to save account!", e);
-      throw e;
-    }
+    return AccountMapper.accountToResponseAccountDTO(
+        this.accountService.saveAccount(createAccountDTO, userDetails.getUsername()));
   }
 
   @PutMapping("/update")
@@ -62,23 +48,13 @@ public class AccountController {
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateAccountDTO updateAccountDTO)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
-    try {
-      return AccountMapper.accountToResponseAccountDTO(
-          this.accountService.updateAccount(updateAccountDTO, userDetails.getUsername()));
-    } catch (Exception e) {
-      LOGGER.error("Failed to update account!", e);
-      throw e;
-    }
+    return AccountMapper.accountToResponseAccountDTO(
+        this.accountService.updateAccount(updateAccountDTO, userDetails.getUsername()));
   }
 
   @DeleteMapping("/delete/{id}")
   @ResponseStatus(HttpStatus.OK)
   public void deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
-    try {
-      this.accountService.deleteAccount(id);
-    } catch (Exception e) {
-      LOGGER.error("Failed to delete account!", e);
-      throw e;
-    }
+    this.accountService.deleteAccount(id);
   }
 }

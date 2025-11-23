@@ -8,8 +8,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing
 @PropertySource(value = "file:${user.dir}/.env")
-public class WealthTrackerApplication {
+public final class WealthTrackerApplication {
+  private WealthTrackerApplication() {}
+
   public static void main(String[] args) {
     SpringApplication.run(WealthTrackerApplication.class, args);
   }
+  ;
 }

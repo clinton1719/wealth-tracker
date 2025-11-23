@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import org.hibernate.validator.constraints.Length;
 
+@SuppressWarnings("PMD.DataClass")
 public class CreateCategoryDTO {
   @NotBlank(message = "Category name cannot be blank")
   private String name;

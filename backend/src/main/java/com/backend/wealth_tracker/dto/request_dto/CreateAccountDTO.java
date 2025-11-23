@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@SuppressWarnings("PMD.DataClass")
 public class CreateAccountDTO {
   @NotBlank(message = "Account name cannot be blank")
   private String accountName;

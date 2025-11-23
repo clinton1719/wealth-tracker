@@ -6,7 +6,10 @@ import com.backend.wealth_tracker.model.Account;
 import com.backend.wealth_tracker.model.User;
 import java.util.List;
 
-public class AccountMapper {
+public final class AccountMapper {
+
+  private AccountMapper() {}
+  ;
 
   public static Account createAccountDTOToAccount(CreateAccountDTO createAccountDTO, User user) {
     Account account = new Account();

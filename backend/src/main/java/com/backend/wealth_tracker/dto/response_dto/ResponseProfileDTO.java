@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.dto.response_dto;
 
 import java.util.Set;
 
+@SuppressWarnings("PMD.DataClass")
 public class ResponseProfileDTO {
   private Long id;
   private String profileName;

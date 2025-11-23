@@ -1,11 +1,16 @@
 package com.backend.wealth_tracker.model;
 
 import jakarta.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "profiles")
-public class Profile {
+@SuppressWarnings("PMD.DataClass")
+public class Profile implements Serializable {
+  @Serial private static final long serialVersionUID = 1L;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
