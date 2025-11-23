@@ -2,70 +2,70 @@ package com.backend.wealth_tracker.dto.response_dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.List;
 
 public class ResponseCategoryDTO {
-    @NotNull
-    private Long id;
+  @NotNull private Long id;
+  @NotBlank private String name;
+  private String description;
+  @NotNull private String colorCode;
+  private String icon;
+  private List<String> tags;
+  @NotNull private Long profileId;
 
-    @NotBlank
-    private String name;
+  public Long getId() {
+    return id;
+  }
 
-    private String description;
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    @NotNull
-    private String colorCode;
+  public String getName() {
+    return name;
+  }
 
-    private String icon;
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    private List<String> tags;
+  public String getDescription() {
+    return description;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getColorCode() {
+    return colorCode;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setColorCode(String colorCode) {
+    this.colorCode = colorCode;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getIcon() {
+    return icon;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public List<String> getTags() {
+    return tags;
+  }
 
-    public String getColorCode() {
-        return colorCode;
-    }
+  public void setTags(List<String> tags) {
+    this.tags = tags;
+  }
 
-    public void setColorCode(String colorCode) {
-        this.colorCode = colorCode;
-    }
+  public Long getProfileId() {
+    return profileId;
+  }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
+  public void setProfileId(Long profileId) {
+    this.profileId = profileId;
+  }
 }

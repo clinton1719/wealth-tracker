@@ -23,7 +23,7 @@ function App() {
             </TabsList>
 
             <TabsContent value="profiles">
-              <div className="space-y-4 mt-2">
+              <div className="space-y-4 mt-2"> 
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-3">
                     <Avatar>

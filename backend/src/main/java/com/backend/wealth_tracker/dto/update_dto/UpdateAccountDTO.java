@@ -2,54 +2,63 @@ package com.backend.wealth_tracker.dto.update_dto;
 
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 
 public class UpdateAccountDTO {
-    @NotNull
-    private Long id;
-    private String accountName;
-    private String description;
-    private BigDecimal accountBalance;
-    private AccountType accountType;
+  @NotNull(message = "Account ID cannot be null")
+  private Long id;
 
-    public Long getId() {
-        return id;
-    }
+  private String accountName;
+  private String description;
+  private BigDecimal accountBalance;
+  private AccountType accountType;
+  private Long profileId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getAccountName() {
-        return accountName;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
+  public String getAccountName() {
+    return accountName;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setAccountName(String accountName) {
+    this.accountName = accountName;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public BigDecimal getAccountBalance() {
-        return accountBalance;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setAccountBalance(BigDecimal accountBalance) {
-        this.accountBalance = accountBalance;
-    }
+  public BigDecimal getAccountBalance() {
+    return accountBalance;
+  }
 
-    public AccountType getAccountType() {
-        return accountType;
-    }
+  public void setAccountBalance(BigDecimal accountBalance) {
+    this.accountBalance = accountBalance;
+  }
 
-    public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
-    }
+  public AccountType getAccountType() {
+    return accountType;
+  }
+
+  public void setAccountType(AccountType accountType) {
+    this.accountType = accountType;
+  }
+
+  public Long getProfileId() {
+    return profileId;
+  }
+
+  public void setProfileId(Long profileId) {
+    this.profileId = profileId;
+  }
 }

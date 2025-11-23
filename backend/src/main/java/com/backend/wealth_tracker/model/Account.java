@@ -2,95 +2,98 @@ package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity(name = "accounts")
 public class Account {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false)
-    private String accountName;
-    private String description;
-    @Column(nullable = false)
-    private BigDecimal accountBalance;
-    @Column(nullable = false)
-    private AccountType accountType;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id")
-    private User user;
+  @Column(nullable = false)
+  private String accountName;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private Set<Expense> expense;
+  private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+  @Column(nullable = false)
+  private BigDecimal accountBalance;
 
-    public Long getId() {
-        return id;
-    }
+  @Column(nullable = false)
+  private AccountType accountType;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    public String getAccountName() {
-        return accountName;
-    }
+  @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+  private Set<Expense> expense;
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @JoinColumn(name = "profile_id")
+  private Profile profile;
 
-    public String getDescription() {
-        return description;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public BigDecimal getAccountBalance() {
-        return accountBalance;
-    }
+  public String getAccountName() {
+    return accountName;
+  }
 
-    public void setAccountBalance(BigDecimal accountBalance) {
-        this.accountBalance = accountBalance;
-    }
+  public void setAccountName(String accountName) {
+    this.accountName = accountName;
+  }
 
-    public AccountType getAccountType() {
-        return accountType;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public BigDecimal getAccountBalance() {
+    return accountBalance;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setAccountBalance(BigDecimal accountBalance) {
+    this.accountBalance = accountBalance;
+  }
 
-    public Set<Expense> getExpense() {
-        return expense;
-    }
+  public AccountType getAccountType() {
+    return accountType;
+  }
 
-    public void setExpense(Set<Expense> expense) {
-        this.expense = expense;
-    }
+  public void setAccountType(AccountType accountType) {
+    this.accountType = accountType;
+  }
 
-    public Profile getProfile() {
-        return profile;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public Set<Expense> getExpense() {
+    return expense;
+  }
+
+  public void setExpense(Set<Expense> expense) {
+    this.expense = expense;
+  }
+
+  public Profile getProfile() {
+    return profile;
+  }
+
+  public void setProfile(Profile profile) {
+    this.profile = profile;
+  }
 }

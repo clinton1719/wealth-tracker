@@ -1,68 +1,72 @@
 package com.backend.wealth_tracker.dto.update_dto;
 
 import jakarta.validation.constraints.NotNull;
-
 import java.util.List;
 
 public class UpdateCategoryDTO {
-    @NotNull
-    private Long id;
+  @NotNull(message = "Category ID cannot be null")
+  private Long id;
 
-    private String name;
+  private String name;
+  private String description;
+  private String colorCode;
+  private String icon;
+  private List<String> tags;
+  private Long profileId;
 
-    private String description;
+  public Long getId() {
+    return id;
+  }
 
-    private String colorCode;
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    private String icon;
+  public String getName() {
+    return name;
+  }
 
-    private List<String> tags;
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getColorCode() {
+    return colorCode;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setColorCode(String colorCode) {
+    this.colorCode = colorCode;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getIcon() {
+    return icon;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
 
-    public String getColorCode() {
-        return colorCode;
-    }
+  public List<String> getTags() {
+    return tags;
+  }
 
-    public void setColorCode(String colorCode) {
-        this.colorCode = colorCode;
-    }
+  public void setTags(List<String> tags) {
+    this.tags = tags;
+  }
 
-    public String getIcon() {
-        return icon;
-    }
+  public Long getProfileId() {
+    return profileId;
+  }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
+  public void setProfileId(Long profileId) {
+    this.profileId = profileId;
+  }
 }

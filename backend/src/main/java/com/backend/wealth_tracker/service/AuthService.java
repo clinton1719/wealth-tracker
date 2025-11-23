@@ -14,39 +14,35 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService implements UserDetailsService {
-    private final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
-    private final UserRepository userRepository;
-    private final HelperService helperService;
+  private final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
+  private final UserRepository userRepository;
 
-    public AuthService(UserRepository repository, HelperService helperService) {
-        this.userRepository = repository;
-        this.helperService = helperService;
+  public AuthService(UserRepository repository) {
+    this.userRepository = repository;
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) {
+    return userRepository.findByUsername(username);
+  }
+
+  public void signUp(SignUpDto signUpDto) throws ResourceAlreadyExistsException {
+    if (userRepository.findByUsername(signUpDto.getUsername()) != null) {
+      throw new ResourceAlreadyExistsException(
+          "Username already exists for name: " + signUpDto.getUsername());
     }
+    String encryptedPassword = new BCryptPasswordEncoder().encode(signUpDto.getPassword());
+    User newUser = new User(signUpDto.getUsername(), encryptedPassword, signUpDto.getRole());
+    User savedUser = userRepository.save(newUser);
+    LOGGER.info("New user registered: {}", savedUser.getUsername());
+  }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+  public User getUserByUsername(String username) throws ResourceNotFoundException {
+    User user = (User) userRepository.findByUsername(username);
+    if (user != null) {
+      return user;
+    } else {
+      throw new ResourceNotFoundException("User not found with username: " + username);
     }
-
-    public void signUp(SignUpDto signUpDto) throws ResourceAlreadyExistsException {
-        if (userRepository.findByUsername(signUpDto.getUsername()) != null) {
-            throw new ResourceAlreadyExistsException("Username already exists for name: " + signUpDto.getUsername());
-        }
-        String encryptedPassword = new BCryptPasswordEncoder().encode(signUpDto.getPassword());
-        User newUser = new User(signUpDto.getUsername(), encryptedPassword, signUpDto.getRole());
-        User savedUser = userRepository.save(newUser);
-        this.helperService.saveDefaults(savedUser);
-        LOGGER.info("New user registered: {}", savedUser.getUsername());
-    }
-
-    public User getUserByUsername(String username) throws ResourceNotFoundException {
-        User user = (User) userRepository.findByUsername(username);
-        if (user != null) {
-            return user;
-        } else {
-            throw new ResourceNotFoundException("User not found with username: " + username);
-        }
-    }
-
-
+  }
 }
