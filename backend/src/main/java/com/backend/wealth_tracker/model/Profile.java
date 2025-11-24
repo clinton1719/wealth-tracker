@@ -9,6 +9,7 @@ import java.util.Set;
 @Entity(name = "profiles")
 @SuppressWarnings("PMD.DataClass")
 public class Profile implements Serializable {
+
   @Serial private static final long serialVersionUID = 1L;
 
   @Id
@@ -30,13 +31,27 @@ public class Profile implements Serializable {
   private User user;
 
   @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Account> accounts = new HashSet<>();
+  private Set<Account> accounts;
 
   @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Category> categories = new HashSet<>();
+  private Set<Category> categories;
 
   @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Expense> expenses = new HashSet<>();
+  private Set<Expense> expenses;
+
+  public Profile() {}
+
+  public Profile(Profile originalProfile) {
+    this.id = originalProfile.id;
+    this.profileName = originalProfile.profileName;
+    this.description = originalProfile.description;
+    this.colorCode = originalProfile.colorCode;
+    this.profilePicture = originalProfile.profilePicture;
+    this.user = originalProfile.user;
+    this.accounts = originalProfile.accounts;
+    this.categories = originalProfile.categories;
+    this.expenses = originalProfile.expenses;
+  }
 
   public Long getId() {
     return id;
@@ -71,27 +86,39 @@ public class Profile implements Serializable {
   }
 
   public Set<Account> getAccounts() {
-    return accounts;
+    return Set.copyOf(accounts);
   }
 
   public void setAccounts(Set<Account> accounts) {
-    this.accounts = accounts;
+    if (accounts != null) {
+      this.accounts = new HashSet<>(accounts);
+    } else {
+      this.accounts = Set.of();
+    }
   }
 
   public Set<Category> getCategories() {
-    return categories;
+    return Set.copyOf(categories);
   }
 
   public void setCategories(Set<Category> categories) {
-    this.categories = categories;
+    if (categories != null) {
+      this.categories = new HashSet<>(categories);
+    } else {
+      this.categories = Set.of();
+    }
   }
 
   public Set<Expense> getExpenses() {
-    return expenses;
+    return Set.copyOf(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
-    this.expenses = expenses;
+    if (expenses != null) {
+      this.expenses = new HashSet<>(expenses);
+    } else {
+      this.expenses = Set.of();
+    }
   }
 
   public String getDescription() {
@@ -103,10 +130,17 @@ public class Profile implements Serializable {
   }
 
   public User getUser() {
-    return user;
+    if (user == null) {
+      return null;
+    }
+    return new User(user);
   }
 
   public void setUser(User user) {
-    this.user = user;
+    if (user != null) {
+      this.user = new User(user);
+    } else {
+      throw new IllegalArgumentException("User cannot be null for profile");
+    }
   }
 }

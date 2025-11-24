@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.dto.request_dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.validator.constraints.Length;
 
@@ -58,11 +59,15 @@ public class CreateCategoryDTO {
   }
 
   public List<String> getTags() {
-    return tags;
+    return List.copyOf(tags);
   }
 
   public void setTags(List<String> tags) {
-    this.tags = tags;
+    if (tags != null) {
+      this.tags = new ArrayList<>(tags);
+    } else {
+      this.tags = List.of();
+    }
   }
 
   public Long getProfileId() {

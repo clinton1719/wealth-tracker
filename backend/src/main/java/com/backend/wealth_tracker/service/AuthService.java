@@ -5,6 +5,7 @@ import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.UserRepository;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ public class AuthService implements UserDetailsService {
   private final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
   private final UserRepository userRepository;
 
+  @SuppressFBWarnings("EI_EXPOSE_REP2")
   public AuthService(UserRepository repository) {
     this.userRepository = repository;
   }

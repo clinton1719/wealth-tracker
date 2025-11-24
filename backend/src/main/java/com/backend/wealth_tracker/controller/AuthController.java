@@ -8,6 +8,7 @@ import com.backend.wealth_tracker.enums.UserRole;
 import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.service.AuthService;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class AuthController {
 
   private final TokenProvider tokenService;
 
+  @SuppressFBWarnings("EI_EXPOSE_REP2")
   public AuthController(
       AuthenticationManager authenticationManager,
       AuthService service,

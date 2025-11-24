@@ -67,11 +67,18 @@ public class Expense implements Serializable {
   }
 
   public Category getCategory() {
-    return category;
+    if (category == null) {
+      return null;
+    }
+    return new Category(category);
   }
 
   public void setCategory(Category category) {
-    this.category = category;
+    if (category != null) {
+      this.category = new Category(category);
+    } else {
+      throw new IllegalArgumentException("Category cannot be null for expense");
+    }
   }
 
   public BigDecimal getAmount() {
@@ -99,26 +106,47 @@ public class Expense implements Serializable {
   }
 
   public User getUser() {
-    return user;
+    if (user == null) {
+      return null;
+    }
+    return new User(user);
   }
 
   public void setUser(User user) {
-    this.user = user;
+    if (user != null) {
+      this.user = new User(user);
+    } else {
+      throw new IllegalArgumentException("User cannot be null for expense");
+    }
   }
 
   public Account getAccount() {
-    return account;
+    if (account == null) {
+      return null;
+    }
+    return new Account(account);
   }
 
   public void setAccount(Account account) {
-    this.account = account;
+    if (account != null) {
+      this.account = new Account(account);
+    } else {
+      throw new IllegalArgumentException("Account cannot be null for expense");
+    }
   }
 
   public Profile getProfile() {
-    return profile;
+    if (profile == null) {
+      return null;
+    }
+    return new Profile(profile);
   }
 
   public void setProfile(Profile profile) {
-    this.profile = profile;
+    if (profile != null) {
+      this.profile = new Profile(profile);
+    } else {
+      throw new IllegalArgumentException("Profile cannot be null for expense");
+    }
   }
 }

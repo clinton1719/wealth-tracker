@@ -10,6 +10,7 @@ import com.backend.wealth_tracker.model.Profile;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.AccountRepository;
 import com.backend.wealth_tracker.repository.ProfileRepository;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -23,7 +24,8 @@ public class AccountService {
   private final AuthService authService;
   private final ProfileRepository profileRepository;
 
-  AccountService(
+  @SuppressFBWarnings("EI_EXPOSE_REP2")
+  public AccountService(
       AccountRepository accountRepository,
       AuthService authService,
       ProfileRepository profileRepository) {

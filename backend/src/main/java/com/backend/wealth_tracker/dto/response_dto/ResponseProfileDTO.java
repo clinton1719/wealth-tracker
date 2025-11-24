@@ -1,5 +1,6 @@
 package com.backend.wealth_tracker.dto.response_dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("PMD.DataClass")
@@ -54,26 +55,38 @@ public class ResponseProfileDTO {
   }
 
   public Set<Long> getAccountIds() {
-    return accountIds;
+    return Set.copyOf(accountIds);
   }
 
   public void setAccountIds(Set<Long> accountIds) {
-    this.accountIds = accountIds;
+    if (accountIds != null) {
+      this.accountIds = new HashSet<>(accountIds);
+    } else {
+      this.accountIds = Set.of();
+    }
   }
 
   public Set<Long> getCategoryIds() {
-    return categoryIds;
+    return Set.copyOf(categoryIds);
   }
 
   public void setCategoryIds(Set<Long> categoryIds) {
-    this.categoryIds = categoryIds;
+    if (categoryIds != null) {
+      this.categoryIds = new HashSet<>(categoryIds);
+    } else {
+      this.categoryIds = Set.of();
+    }
   }
 
   public Set<Long> getExpenseIds() {
-    return expenseIds;
+    return Set.copyOf(expenseIds);
   }
 
   public void setExpenseIds(Set<Long> expenseIds) {
-    this.expenseIds = expenseIds;
+    if (expenseIds != null) {
+      this.expenseIds = new HashSet<>(expenseIds);
+    } else {
+      this.expenseIds = Set.of();
+    }
   }
 }

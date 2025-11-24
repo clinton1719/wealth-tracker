@@ -7,6 +7,7 @@ import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.AccountMapper;
 import com.backend.wealth_tracker.service.AccountService;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class AccountController {
 
   private final AccountService accountService;
 
+  @SuppressFBWarnings("EI_EXPOSE_REP2")
   public AccountController(AccountService accountService) {
     this.accountService = accountService;
   }

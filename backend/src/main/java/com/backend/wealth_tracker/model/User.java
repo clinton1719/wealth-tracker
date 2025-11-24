@@ -21,7 +21,6 @@ public class User implements UserDetails {
   private Long id;
 
   private String username;
-
   private String password;
 
   @Enumerated(EnumType.STRING)
@@ -38,6 +37,17 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Profile> profiles = new HashSet<>();
+
+  public User(User originalUser) {
+    this.id = originalUser.id;
+    this.username = originalUser.username;
+    this.password = originalUser.password;
+    this.role = originalUser.role;
+    this.expenses = originalUser.expenses;
+    this.categories = originalUser.categories;
+    this.accounts = originalUser.accounts;
+    this.profiles = originalUser.profiles;
+  }
 
   public User(String username, String password, UserRole role) {
     this.username = username;
@@ -103,34 +113,50 @@ public class User implements UserDetails {
   }
 
   public Set<Expense> getExpenses() {
-    return expenses;
+    return Set.copyOf(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
-    this.expenses = expenses;
+    if (expenses != null) {
+      this.expenses = new HashSet<>(expenses);
+    } else {
+      this.expenses = Set.of();
+    }
   }
 
   public Set<Category> getCategories() {
-    return categories;
+    return Set.copyOf(categories);
   }
 
   public void setCategories(Set<Category> categories) {
-    this.categories = categories;
+    if (categories != null) {
+      this.categories = new HashSet<>(categories);
+    } else {
+      this.categories = Set.of();
+    }
   }
 
   public Set<Account> getAccounts() {
-    return accounts;
+    return Set.copyOf(accounts);
   }
 
   public void setAccounts(Set<Account> accounts) {
-    this.accounts = accounts;
+    if (accounts != null) {
+      this.accounts = new HashSet<>(accounts);
+    } else {
+      this.accounts = Set.of();
+    }
   }
 
   public Set<Profile> getProfiles() {
-    return profiles;
+    return Set.copyOf(profiles);
   }
 
   public void setProfiles(Set<Profile> profiles) {
-    this.profiles = profiles;
+    if (profiles != null) {
+      this.profiles = new HashSet<>(profiles);
+    } else {
+      this.profiles = Set.of();
+    }
   }
 }

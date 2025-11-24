@@ -7,6 +7,7 @@ import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.ProfileMapper;
 import com.backend.wealth_tracker.service.ProfileService;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class ProfileController {
 
   private final ProfileService profileService;
 
+  @SuppressFBWarnings("EI_EXPOSE_REP2")
   public ProfileController(ProfileService profileService) {
     this.profileService = profileService;
   }

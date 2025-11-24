@@ -3,6 +3,7 @@ package com.backend.wealth_tracker.model;
 import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Entity(name = "categories")
 @SuppressWarnings("PMD.DataClass")
 public class Category implements Serializable {
+
   @Serial private static final long serialVersionUID = 1L;
 
   @Id
@@ -25,7 +27,6 @@ public class Category implements Serializable {
   private String colorCode;
 
   @Column private String icon;
-
   @Column private List<String> tags;
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -33,11 +34,25 @@ public class Category implements Serializable {
   private User user;
 
   @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-  private Set<Expense> expense = new HashSet<>();
+  private Set<Expense> expenses = new HashSet<>();
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   @JoinColumn(name = "profile_id")
   private Profile profile;
+
+  public Category() {}
+
+  public Category(Category originalCategory) {
+    this.id = originalCategory.id;
+    this.categoryName = originalCategory.categoryName;
+    this.description = originalCategory.description;
+    this.colorCode = originalCategory.colorCode;
+    this.icon = originalCategory.icon;
+    this.tags = originalCategory.tags;
+    this.user = originalCategory.user;
+    this.expenses = originalCategory.expenses;
+    this.profile = originalCategory.profile;
+  }
 
   public Long getId() {
     return id;
@@ -72,19 +87,30 @@ public class Category implements Serializable {
   }
 
   public User getUser() {
-    return user;
+    if (user == null) {
+      return null;
+    }
+    return new User(user);
   }
 
   public void setUser(User user) {
-    this.user = user;
+    if (user != null) {
+      this.user = new User(user);
+    } else {
+      throw new IllegalArgumentException("User cannot be null for category");
+    }
   }
 
-  public Set<Expense> getExpense() {
-    return expense;
+  public Set<Expense> getExpenses() {
+    return Set.copyOf(expenses);
   }
 
-  public void setExpense(Set<Expense> expense) {
-    this.expense = expense;
+  public void setExpenses(Set<Expense> expenses) {
+    if (expenses != null) {
+      this.expenses = new HashSet<>(expenses);
+    } else {
+      this.expenses = Set.of();
+    }
   }
 
   public String getIcon() {
@@ -96,18 +122,29 @@ public class Category implements Serializable {
   }
 
   public List<String> getTags() {
-    return tags;
+    return List.copyOf(tags);
   }
 
   public void setTags(List<String> tags) {
-    this.tags = tags;
+    if (tags != null) {
+      this.tags = new ArrayList<>(tags);
+    } else {
+      this.tags = List.of();
+    }
   }
 
   public Profile getProfile() {
-    return profile;
+    if (profile == null) {
+      return null;
+    }
+    return new Profile(profile);
   }
 
   public void setProfile(Profile profile) {
-    this.profile = profile;
+    if (profile != null) {
+      this.profile = new Profile(profile);
+    } else {
+      throw new IllegalArgumentException("Profile cannot be null for category");
+    }
   }
 }

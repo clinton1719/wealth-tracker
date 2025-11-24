@@ -26,11 +26,18 @@ public class ResponseExpenseDTO {
   }
 
   public Category getCategory() {
-    return category;
+    if (category == null) {
+      return null;
+    }
+    return new Category(category);
   }
 
   public void setCategory(Category category) {
-    this.category = category;
+    if (category != null) {
+      this.category = new Category(category);
+    } else {
+      throw new IllegalArgumentException("Category cannot be null for expense response.");
+    }
   }
 
   public BigDecimal getAmount() {

@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "accounts")
 @SuppressWarnings("PMD.DataClass")
 public class Account implements Serializable {
+
   @Serial private static final long serialVersionUID = 1L;
 
   @Id
@@ -32,11 +34,24 @@ public class Account implements Serializable {
   private User user;
 
   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-  private Set<Expense> expense;
+  private Set<Expense> expenses;
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   @JoinColumn(name = "profile_id")
   private Profile profile;
+
+  public Account() {}
+
+  public Account(Account originalAccount) {
+    this.id = originalAccount.id;
+    this.accountName = originalAccount.accountName;
+    this.description = originalAccount.description;
+    this.accountBalance = originalAccount.accountBalance;
+    this.accountType = originalAccount.accountType;
+    this.user = originalAccount.user;
+    this.expenses = originalAccount.expenses;
+    this.profile = originalAccount.profile;
+  }
 
   public Long getId() {
     return id;
@@ -79,26 +94,44 @@ public class Account implements Serializable {
   }
 
   public User getUser() {
-    return user;
+    if (user == null) {
+      return null;
+    }
+    return new User(user);
   }
 
   public void setUser(User user) {
-    this.user = user;
+    if (user != null) {
+      this.user = new User(user);
+    } else {
+      throw new IllegalArgumentException("User cannot be null for account");
+    }
   }
 
-  public Set<Expense> getExpense() {
-    return expense;
+  public Set<Expense> getExpenses() {
+    return Set.copyOf(expenses);
   }
 
-  public void setExpense(Set<Expense> expense) {
-    this.expense = expense;
+  public void setExpenses(Set<Expense> expenses) {
+    if (expenses != null) {
+      this.expenses = new HashSet<>(expenses);
+    } else {
+      this.expenses = Set.of();
+    }
   }
 
   public Profile getProfile() {
-    return profile;
+    if (profile == null) {
+      return null;
+    }
+    return new Profile(profile);
   }
 
   public void setProfile(Profile profile) {
-    this.profile = profile;
+    if (profile != null) {
+      this.profile = new Profile(profile);
+    } else {
+      throw new IllegalArgumentException("Profile cannot be null for account");
+    }
   }
 }

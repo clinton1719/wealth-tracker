@@ -1,6 +1,7 @@
 package com.backend.wealth_tracker.dto.update_dto;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("PMD.DataClass")
@@ -56,11 +57,15 @@ public class UpdateCategoryDTO {
   }
 
   public List<String> getTags() {
-    return tags;
+    return List.copyOf(tags);
   }
 
   public void setTags(List<String> tags) {
-    this.tags = tags;
+    if (tags != null) {
+      this.tags = new ArrayList<>(tags);
+    } else {
+      this.tags = List.of();
+    }
   }
 
   public Long getProfileId() {

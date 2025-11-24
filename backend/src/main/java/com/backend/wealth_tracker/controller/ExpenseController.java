@@ -6,6 +6,7 @@ import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.service.ExpenseService;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public class ExpenseController {
 
   private final ExpenseService expenseService;
 
+  @SuppressFBWarnings("EI_EXPOSE_REP2")
   public ExpenseController(ExpenseService expenseService) {
     this.expenseService = expenseService;
   }
