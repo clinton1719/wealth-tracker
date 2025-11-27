@@ -16,22 +16,15 @@ export const expensesApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI, prepareHeaders: (headers, { getState }) => {
       const token = selectAuthToken(getState() as any);
-
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
-      } else {
-        console.log("No token found in state");
       }
       return headers;
     },
   }),
   tagTypes: ['Expenses'],
   endpoints: (builder) => ({
-    getExpense: builder.query<Expense, number>({
-      query: (id: number) => `/expenses/${id}`,
-      providesTags: ['Expenses'],
-    }),
-    addExpense: builder.mutation<Expense, Partial<Expense>>({
+    saveExpense: builder.mutation<Expense, Partial<Expense>>({
       query: (newExpense) => ({
         url: '/expenses',
         method: 'POST',
@@ -46,11 +39,15 @@ export const expensesApi = createApi({
       }),
       invalidatesTags: ['Expenses'],
     }),
+    getAllExpensesInRange: builder.query<Expense[], { startDate: string; endDate: string; pageNumber: number; pageSize: number }>({
+      query: ({ startDate, endDate, pageNumber, pageSize }) => `/expenses/range/${pageNumber}/${pageSize}?startDate=${startDate}&endDate=${endDate}`,
+      providesTags: ['Expenses'],
+    }),
   }),
 });
 
 export const {
-  useGetExpenseQuery,
-  useAddExpenseMutation,
+  useSaveExpenseMutation,
   useDeleteExpenseMutation,
+  useGetAllExpensesInRangeQuery,
 } = expensesApi;

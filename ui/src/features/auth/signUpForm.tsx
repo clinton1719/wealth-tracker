@@ -58,7 +58,7 @@ export function SignUpForm({
         },
     });
 
-    const [signUp, { isLoading, isError }] = useSignUpMutation();
+    const [signUp, { isLoading }] = useSignUpMutation();
 
     if (isLoading) return <Spinner />;
 
@@ -68,11 +68,6 @@ export function SignUpForm({
                 username: formData.username,
                 password: formData.password,
             }).unwrap();
-
-            if (isError) {
-                toast.error("Sign up failed. Please check your credentials and try again.");
-                return;
-            }
 
             toast("Sign up successful for " + formData.username, {
                 description: (
@@ -96,10 +91,16 @@ export function SignUpForm({
                     color: "var(--foreground, #000)",
                 } as React.CSSProperties,
             });
-
-            navigate("/login", { replace: true });
-        } catch (err) {
-            toast.error("Sign up failed. Please check your credentials and try again.");
+            toast.success("Your account has been created successfully. Please log in.");
+            navigate("/login");
+        } catch (error: any) {
+            if (error?.originalStatus === 409) {
+                toast.error("Username already exists. Please try another one.");
+            } else if (error?.originalStatus === 400) {
+                toast.error("Invalid input. Please check your details.");
+            } else {
+                toast.error("Sign up failed. Please try again later.");
+            }
         }
     }
 

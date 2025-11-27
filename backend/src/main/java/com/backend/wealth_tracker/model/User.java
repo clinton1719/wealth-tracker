@@ -2,88 +2,161 @@ package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.enums.UserRole;
 import jakarta.persistence.*;
+import java.io.Serial;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-
-@Table()
 @Entity(name = "users")
+@SuppressWarnings({"PMD.DataClass", "PMD.AvoidDuplicateLiterals"})
 public class User implements UserDetails {
+  @Serial private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String username;
+  private String username;
+  private String password;
 
-    private String password;
+  @Enumerated(EnumType.STRING)
+  private UserRole role;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Expense> expenses = new HashSet<>();
 
-    public User(String username, String password, UserRole role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Category> categories = new HashSet<>();
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Account> accounts = new HashSet<>();
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Profile> profiles = new HashSet<>();
+
+  public User(User originalUser) {
+    this.id = originalUser.id;
+    this.username = originalUser.username;
+    this.password = originalUser.password;
+    this.role = originalUser.role;
+    this.expenses = originalUser.expenses;
+    this.categories = originalUser.categories;
+    this.accounts = originalUser.accounts;
+    this.profiles = originalUser.profiles;
+  }
+
+  public User(String username, String password, UserRole role) {
+    this.username = username;
+    this.password = password;
+    this.role = role;
+  }
+
+  public User() {}
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    if (this.role == UserRole.ADMIN) {
+      return List.of(
+          new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
     }
+    return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+  }
 
-    public User() {
-    }
+  @Override
+  public String getPassword() {
+    return password;
+  }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == UserRole.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        }
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
+  @Override
+  public String getUsername() {
+    return username;
+  }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public UserRole getRole() {
+    return role;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setRole(UserRole role) {
+    this.role = role;
+  }
 
-    public UserRole getRole() {
-        return role;
-    }
+  public Set<Expense> getExpenses() {
+    return Set.copyOf(expenses);
+  }
 
-    public void setRole(UserRole role) {
-        this.role = role;
+  public void setExpenses(Set<Expense> expenses) {
+    if (expenses != null) {
+      this.expenses = new HashSet<>(expenses);
+    } else {
+      this.expenses = Set.of();
     }
+  }
+
+  public Set<Category> getCategories() {
+    return Set.copyOf(categories);
+  }
+
+  public void setCategories(Set<Category> categories) {
+    if (categories != null) {
+      this.categories = new HashSet<>(categories);
+    } else {
+      this.categories = Set.of();
+    }
+  }
+
+  public Set<Account> getAccounts() {
+    return Set.copyOf(accounts);
+  }
+
+  public void setAccounts(Set<Account> accounts) {
+    if (accounts != null) {
+      this.accounts = new HashSet<>(accounts);
+    } else {
+      this.accounts = Set.of();
+    }
+  }
+
+  public Set<Profile> getProfiles() {
+    return Set.copyOf(profiles);
+  }
+
+  public void setProfiles(Set<Profile> profiles) {
+    if (profiles != null) {
+      this.profiles = new HashSet<>(profiles);
+    } else {
+      this.profiles = Set.of();
+    }
+  }
 }

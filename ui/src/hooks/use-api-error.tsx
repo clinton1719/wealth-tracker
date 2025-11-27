@@ -1,5 +1,5 @@
 import Login from '@/features/auth/login';
-import SignUp from '@/features/auth/signup';
+import SignUp from '@/features/auth/signUp';
 import ErrorPage from '@/features/error/errorPage';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
@@ -35,6 +35,7 @@ export const useApiError = (error: ApiError | undefined): ErrorResponse => {
                     errorComponent: <ErrorPage errorCode={404} />
                 };
             default:
+                console.error("Unhandled API error:", error);
                 return {
                     isError: true,
                     errorComponent: <ErrorPage errorCode={500} />

@@ -52,7 +52,7 @@ export function LoginForm({
         },
     });
 
-    const [login, { isLoading, isError }] = useLoginMutation();
+    const [login, { isLoading }] = useLoginMutation();
 
     if (isLoading) return <Spinner />;
 
@@ -63,7 +63,7 @@ export function LoginForm({
                 password: formData.password
             }).unwrap();
 
-            if (isError || !result.accessToken) {
+            if (!result.accessToken) {
                 toast.error("Login failed. Please check your credentials and try again.");
                 return;
             }
@@ -97,8 +97,16 @@ export function LoginForm({
             });
 
             navigate("/");
-        } catch (err) {
-            toast.error("Login failed. Please check your credentials and try again.");
+        } catch (error: any) {
+            if (error?.originalStatus === 401) {
+                toast.error("Invalid username or password.");
+            } else if (error?.originalStatus === 400) {
+                toast.error("Invalid input. Please check your details.");
+            } else if (error?.originalStatus === 403) {
+                toast.error("Access denied. You do not have permission to access this resource.");
+            } else {
+                toast.error("Login failed. Please try again later.");
+            }
         }
     }
 

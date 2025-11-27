@@ -4,36 +4,39 @@ import com.backend.wealth_tracker.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@SuppressWarnings("PMD.DataClass")
 public class SignUpDto {
-    @NotBlank(message = "Username cannot be blank")
-    @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")
-    String username;
-    @NotBlank(message = "Password cannot be blank")
-    @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
-    String password;
-    UserRole role;
+  @NotBlank(message = "Username cannot be blank")
+  @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")
+  String username;
 
-    public String getUsername() {
-        return username;
-    }
+  @NotBlank(message = "Password cannot be blank")
+  @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
+  String password;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  UserRole role;
 
-    public String getPassword() {
-        return password;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public UserRole getRole() {
-        return role;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public UserRole getRole() {
+    return role;
+  }
+
+  public void setRole(UserRole role) {
+    this.role = role;
+  }
 }
