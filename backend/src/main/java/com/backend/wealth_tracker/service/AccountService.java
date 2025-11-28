@@ -16,6 +16,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
@@ -34,6 +37,7 @@ public class AccountService {
     this.profileRepository = profileRepository;
   }
 
+  @Transactional(isolation = Isolation.READ_UNCOMMITTED, propagation = Propagation.SUPPORTS)
   public List<Account> getAllAccounts(String userName) throws ResourceNotFoundException {
     User user = this.authService.getUserByUsername(userName);
     List<Account> accountList = this.accountRepository.findByUserId(user.getId());
@@ -41,6 +45,7 @@ public class AccountService {
     return accountList;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Account saveAccount(CreateAccountDTO createAccountDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
     User user = this.authService.getUserByUsername(userName);
@@ -60,6 +65,7 @@ public class AccountService {
     return savedAccount;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Account updateAccount(UpdateAccountDTO updateAccountDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
     User user = this.authService.getUserByUsername(userName);
@@ -86,6 +92,7 @@ public class AccountService {
     return updatedAccount;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteAccount(Long id) throws ResourceNotFoundException {
     Optional<Account> accountOptional = this.accountRepository.findById(id);
     if (accountOptional.isEmpty()) {

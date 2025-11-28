@@ -16,6 +16,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryService {
@@ -35,6 +38,7 @@ public class CategoryService {
     this.profileRepository = profileRepository;
   }
 
+  @Transactional(isolation = Isolation.READ_UNCOMMITTED, propagation = Propagation.SUPPORTS)
   public List<Category> getAllCategories(String userName) throws ResourceNotFoundException {
     User user = this.authService.getUserByUsername(userName);
     List<Category> categories = this.categoryRepository.findAllCategoriesByUserId(user.getId());
@@ -42,6 +46,7 @@ public class CategoryService {
     return categories;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Category saveCategory(CreateCategoryDTO createCategoryDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
     User user = this.authService.getUserByUsername(userName);
@@ -61,6 +66,7 @@ public class CategoryService {
     return savedCategory;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Category updateCategory(UpdateCategoryDTO updateCategoryDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
     User user = this.authService.getUserByUsername(userName);
@@ -119,6 +125,7 @@ public class CategoryService {
     return category;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteCategory(Long id) throws ResourceNotFoundException {
     Optional<Category> categoryOptional = this.categoryRepository.findById(id);
     if (categoryOptional.isEmpty()) {

@@ -23,6 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ExpenseService {
@@ -48,6 +51,7 @@ public class ExpenseService {
     this.accountRepository = accountRepository;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Expense saveExpense(CreateExpenseDTO createExpenseDTO, String userName)
       throws ResourceNotFoundException {
     Optional<Category> categoryOptional =
@@ -63,6 +67,7 @@ public class ExpenseService {
     return savedExpense;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Expense updateExpense(UpdateExpenseDTO updateExpenseDTO) throws ResourceNotFoundException {
     Optional<Expense> expenseOptional = this.expenseRepository.findById(updateExpenseDTO.getId());
     if (expenseOptional.isEmpty()) {
@@ -129,6 +134,7 @@ public class ExpenseService {
     }
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteExpense(Long id) throws ResourceNotFoundException {
     Optional<Expense> expenseOptional = this.expenseRepository.findById(id);
     if (expenseOptional.isEmpty()) {
@@ -138,6 +144,7 @@ public class ExpenseService {
     LOGGER.atInfo().log("Expense deleted for id: {}", id);
   }
 
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS)
   public List<Expense> getExpensesInRange(
       UserDetails userDetails,
       String startDate,

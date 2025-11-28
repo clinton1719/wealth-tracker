@@ -14,6 +14,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProfileService {
@@ -29,6 +32,7 @@ public class ProfileService {
     this.authService = authService;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Profile saveProfile(CreateProfileDTO createProfileDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
     User user = this.authService.getUserByUsername(userName);
@@ -48,6 +52,7 @@ public class ProfileService {
     return savedProfile;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Profile updateProfile(UpdateProfileDTO updateProfileDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
     User user = this.authService.getUserByUsername(userName);
@@ -90,6 +95,7 @@ public class ProfileService {
     return profile;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteProfile(Long id) throws ResourceNotFoundException {
     Optional<Profile> profileOptional = this.profileRepository.findById(id);
     if (profileOptional.isEmpty()) {
@@ -101,6 +107,7 @@ public class ProfileService {
     LOGGER.atInfo().log("Category deleted with id: {}", id);
   }
 
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS)
   public List<Profile> getAllProfilesForUser(String userName) throws ResourceNotFoundException {
     User user = this.authService.getUserByUsername(userName);
     List<Profile> profiles = this.profileRepository.findAllByUserId(user.getId());
