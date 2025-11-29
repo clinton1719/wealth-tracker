@@ -1,8 +1,5 @@
-import type { ControllerFieldState, ControllerRenderProps, UseFormReturn } from 'react-hook-form'
 import { Check, ChevronsUpDown } from 'lucide-react'
 
-import { DynamicIcon, iconNames } from 'lucide-react/dynamic'
-import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -18,6 +15,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
+import type { IconsComboBoxProps } from '@/types/IconsComboBoxProps'
+import { DynamicIcon, iconNames } from 'lucide-react/dynamic'
+import * as React from 'react'
 
 export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
   const [open, setOpen] = React.useState(false)
@@ -74,26 +74,3 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
   )
 }
 
-interface IconsComboBoxProps {
-  field: ControllerRenderProps<{
-    name: string
-    colorCode: string
-    description?: string | undefined
-    icon?: string | undefined
-    tags?: string[] | undefined
-  }, 'icon'>
-  fieldState: ControllerFieldState
-  form: UseFormReturn<{
-    name: string
-    colorCode: string
-    description?: string | undefined
-    icon?: string | undefined
-    tags?: string[] | undefined
-  }, any, {
-    name: string
-    colorCode: string
-    description?: string | undefined
-    icon?: string | undefined
-    tags?: string[] | undefined
-  }>
-}

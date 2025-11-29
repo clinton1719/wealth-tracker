@@ -1,24 +1,19 @@
-import type { SubmitHandler, UseFormReturn } from 'react-hook-form'
-import type { Category } from '@/types/Category'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { DialogDescription } from '@radix-ui/react-dialog'
-import { PlusCircle, XIcon } from 'lucide-react'
-import { DynamicIcon } from 'lucide-react/dynamic'
-import { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import * as z from 'zod'
+
+import { AddCategoryForm } from '@/components/building-blocks/AddCategoryForm'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
-import { IconsComboBox } from '@/components/building-blocks/iconsComboBox'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { useApiError } from '@/hooks/use-api-error'
 import { useDeleteCategoryMutation, useGetAllCategoriesQuery, useSaveCategoryMutation, useUpdateCategoryMutation } from '@/services/categoriesApi'
+import type { Category } from '@/types/Category'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { DynamicIcon } from 'lucide-react/dynamic'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import * as z from 'zod'
 
 const formSchema = z.object({
   id: z.number().optional(),
@@ -29,214 +24,6 @@ const formSchema = z.object({
   tags: z.array(z.string()).optional(),
 })
 
-function AddCategoryForm({ form, categoryDialogOpen, setCategoryDialogOpen, onSubmit }: AddCategoryFormProps) {
-  const [inputValue, setInputValue] = useState('')
-
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
-
-  return (
-    <Dialog open={categoryDialogOpen}>
-      <DialogTrigger asChild>
-        <Button onClick={() => { setCategoryDialogOpen(true) }}>
-          <PlusCircle className="mr-2 h-5 w-5" />
-          New Category
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-md" onClickMethod={() => setCategoryDialogOpen(false)}>
-        <DialogHeader>
-          <DialogTitle>Create Category</DialogTitle>
-        </DialogHeader>
-        <DialogDescription>
-          Use this form to create categories
-        </DialogDescription>
-        <form id="form-rhf-category" onSubmit={form.handleSubmit(onSubmit)} onKeyDown={e => checkKeyDown(e)}>
-          <FieldGroup>
-            <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-category-name">
-                    Name
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-rhf-category-name"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Enter category name"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="description"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-category-description">
-                    Description
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-rhf-category-description"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Enter category description"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="colorCode"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-category-color">
-                    Color
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-rhf-category-color"
-                    aria-invalid={fieldState.invalid}
-                    type="color"
-                    className="w-12 h-10 p-1 cursor-pointer"
-                  />
-                  <Input
-                    {...field}
-                    id="form-rhf-category-colorCode"
-                    aria-invalid={fieldState.invalid}
-                    className="flex-1"
-                    placeholder="#FF5733"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="icon"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  orientation="responsive"
-                  data-invalid={fieldState.invalid}
-                >
-                  <FieldLabel htmlFor="form-rhf-category-icon">
-                    Icon
-                  </FieldLabel>
-                  <FieldDescription>
-                    Select an icon for the category
-                  </FieldDescription>
-                  <IconsComboBox field={field} fieldState={fieldState} form={form} />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="tags"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-category-tags">
-                    Tags
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-rhf-category-tags"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Press 'ENTER' after adding each tag"
-                    autoComplete="off"
-                    value={inputValue}
-                    onChange={e => setInputValue(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && inputValue.trim() !== '') {
-                        const tags = form.getValues('tags')
-                        if (tags) {
-                          form.setValue('tags', [...tags, inputValue.trim()])
-                        }
-                        else {
-                          form.setValue('tags', [inputValue.trim()])
-                        }
-                        setInputValue('')
-                      }
-                    }}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {form.getValues('tags')
-                      ? form.getValues('tags')?.map(tag => (
-                          <Badge key={tag} variant="secondary">
-                            {tag}
-                            <button
-                              type="button"
-                              className="ml-2 text-destructive"
-                              onClick={() => {
-                                const tags = form.getValues('tags')
-                                if (tags) {
-                                  const newTags = tags.filter(_tag => _tag !== tag)
-                                  form.setValue('tags', [...newTags])
-                                }
-                              }}
-                            >
-                              <XIcon className="w-3 h-3" />
-                            </button>
-                          </Badge>
-                        ))
-                      : <></>}
-                  </div>
-                </Field>
-              )}
-            />
-            <Field orientation="horizontal">
-              <Button type="button" variant="outline" onClick={() => form.reset()}>
-                Reset
-              </Button>
-              <Button form="form-rhf-category">
-                Submit
-              </Button>
-            </Field>
-          </FieldGroup>
-        </form>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-interface AddCategoryFormProps {
-  form: UseFormReturn<{
-    name: string
-    colorCode: string
-    id?: number | undefined
-    description?: string | undefined
-    icon?: string | undefined
-    tags?: string[] | undefined
-  }, any, {
-    name: string
-    colorCode: string
-    id?: number | undefined
-    description?: string | undefined
-    icon?: string | undefined
-    tags?: string[] | undefined
-  }>
-  categoryDialogOpen: boolean
-  setCategoryDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
-  onSubmit: SubmitHandler<{ name: string, colorCode: string, id?: number | undefined, description?: string | undefined, icon?: string | undefined, tags?: string[] | undefined }>
-}
 
 export default function ViewCategories() {
   const [isUpdate, setIsUpdate] = useState(false)
@@ -318,13 +105,13 @@ export default function ViewCategories() {
       if (error?.originalStatus === 409) {
         toast.error(`Category already exists with name: ${formData.name}`)
       }
-      else if (error?.originalStatus === 400) {
+      else if (error.originalStatus === 400) {
         toast.error('Invalid input. Please check your details.')
       }
-      else if (error?.originalStatus === 404) {
+      else if (error.originalStatus === 404) {
         toast.error('This resource does not exist, kindly refresh your page.')
       }
-      else if (error?.originalStatus === 403) {
+      else if (error.originalStatus === 403) {
         toast.error('Access denied. You do not have permission to access this resource.')
       }
       else {
@@ -375,13 +162,13 @@ export default function ViewCategories() {
       if (error?.originalStatus === 409) {
         toast.error(`Category already exists with name: ${formData.name}`)
       }
-      else if (error?.originalStatus === 400) {
+      else if (error.originalStatus === 400) {
         toast.error('Invalid input. Please check your details.')
       }
-      else if (error?.originalStatus === 403) {
+      else if (error.originalStatus === 403) {
         toast.error('Access denied. You do not have permission to access this resource.')
       }
-      else if (error?.originalStatus === 404) {
+      else if (error.originalStatus === 404) {
         toast.error('This resource does not exist, kindly refresh your page.')
       }
       else {

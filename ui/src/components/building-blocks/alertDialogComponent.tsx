@@ -1,4 +1,6 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
+import type { AlertDialogProps } from '@/types/AlertDialogProps'
+import type { AlertType } from '@/types/AlertType'
 
 export function AlertDialogComponent({ isDialogOpen, alertType, onSecondaryButtonClick, onPrimaryButtonClick }: AlertDialogProps) {
   let alert: AlertType | undefined
@@ -27,18 +29,4 @@ export function AlertDialogComponent({ isDialogOpen, alertType, onSecondaryButto
       </AlertDialogContent>
     </AlertDialog>
   )
-}
-
-interface AlertDialogProps {
-  isDialogOpen: boolean
-  alertType: string
-  onSecondaryButtonClick: () => void
-  onPrimaryButtonClick: () => void
-}
-
-interface AlertType {
-  title: string
-  description: string
-  primaryButton: string
-  secondaryButton: string
 }
