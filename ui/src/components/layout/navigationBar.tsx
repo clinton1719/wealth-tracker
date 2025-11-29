@@ -25,7 +25,7 @@ export function NavigationBar() {
                                     to="/"
                                 >
                                     <div className="mb-2 text-lg font-medium sm:mt-4">
-                                        Wealth tracker
+                                        Desi Wealth tracker
                                     </div>
                                     <p className="text-muted-foreground text-sm leading-tight">
                                         Manage your expenses, income, and investments all in one

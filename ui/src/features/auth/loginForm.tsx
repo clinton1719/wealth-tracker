@@ -82,7 +82,7 @@ export function LoginForm({
                             color: "var(--foreground-code, #f5f5f5)",
                         }}
                     >
-                        <code>Welcome to wealth tracker!</code>
+                        <code>Welcome to Desi wealth tracker!</code>
                     </pre>
                 ),
                 position: "bottom-right",
