@@ -1,10 +1,9 @@
-import { AccountsSection } from "./components/building-blocks/accountsSection"
-import { ProfilesSection } from "./components/building-blocks/profilesSection"
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card"
-import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs"
+import { AccountsSection } from './components/building-blocks/accountsSection'
+import { ProfilesSection } from './components/building-blocks/profilesSection'
+import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
+import { Tabs, TabsList, TabsTrigger } from './components/ui/tabs'
 
 function App() {
-
   return (
     <div className="flex justify-center">
       <Card className="hover:shadow-md transition flex justify-between sm:min-w-lg">
@@ -22,7 +21,7 @@ function App() {
 
             <ProfilesSection />
             <AccountsSection />
-            
+
           </Tabs>
         </CardContent>
 

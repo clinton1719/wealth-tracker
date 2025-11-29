@@ -1,13 +1,14 @@
 {
   "name": "ui",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
+  "private": true,
   "proxy": "http://localhost:8080",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix",
     "preview": "vite preview",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
@@ -44,6 +45,8 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^6.2.0",
+    "@eslint-react/eslint-plugin": "^2.3.9",
     "@eslint/js": "^9.36.0",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",

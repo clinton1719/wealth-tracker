@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { authApi } from './services/authApi';
-import { expensesApi } from './services/expensesApi';
-import authReducer from './slices/authSlice';
-import { categoriesApi } from './services/categoriesApi';
-import { accountApi } from './services/accountsApi';
-import { profileApi } from './services/profilesApi';
+import { configureStore } from '@reduxjs/toolkit'
+import { accountApi } from './services/accountsApi'
+import { authApi } from './services/authApi'
+import { categoriesApi } from './services/categoriesApi'
+import { expensesApi } from './services/expensesApi'
+import { profileApi } from './services/profilesApi'
+import authReducer from './slices/authSlice'
 
 export const store = configureStore({
   reducer: {
@@ -13,9 +13,9 @@ export const store = configureStore({
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [accountApi.reducerPath]: accountApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,
-    auth: authReducer,  
+    auth: authReducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(expensesApi.middleware).concat(authApi.middleware).concat(categoriesApi.middleware).concat(accountApi.middleware).concat(profileApi.middleware),
 })
 

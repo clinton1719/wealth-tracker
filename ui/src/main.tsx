@@ -12,7 +12,7 @@ import ViewExpenses from './features/expense/viewExpenses.tsx'
 import { store } from './store.ts'
 import './styles/index.css'
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     <BrowserRouter>
       <NavigationBar />
@@ -32,5 +32,5 @@ createRoot(document.getElementById("root")!).render(
 
       <Toaster />
     </BrowserRouter>
-  </Provider>
-);
+  </Provider>,
+)
