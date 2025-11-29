@@ -1,15 +1,8 @@
 import { selectAuthToken } from '@/slices/authSlice';
 import { baseAPI } from '@/static-values/constants';
+import type { Expense } from '@/types/Expense';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export interface Expense {
-  id: number;
-  amount: number;
-  category: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export const expensesApi = createApi({
   reducerPath: 'expensesApi',

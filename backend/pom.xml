@@ -11,7 +11,7 @@
     <groupId>com.backend</groupId>
     <artifactId>wealth-tracker</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>wealth-tracker</name>
+    <name>desi-wealth-tracker-backend</name>
     <description>Backend code for wealth tracker</description>
     <url>https://github.com/your-username/wealth-tracker-repo</url>
     <licenses>
