@@ -52,7 +52,7 @@ function DialogContent({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
-  onClickMethod: any
+  onClickMethod: () => void
 }) {
   return (
     <DialogPortal data-slot="dialog-portal">

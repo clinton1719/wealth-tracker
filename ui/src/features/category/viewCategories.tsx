@@ -32,7 +32,7 @@ const formSchema = z.object({
 function AddCategoryForm({ form, categoryDialogOpen, setCategoryDialogOpen, onSubmit }: AddCategoryFormProps) {
   const [inputValue, setInputValue] = useState('')
 
-  const checkKeyDown = (e: any) => {
+  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter')
       e.preventDefault()
   }

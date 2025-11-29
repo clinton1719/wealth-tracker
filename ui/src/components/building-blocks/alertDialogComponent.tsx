@@ -32,8 +32,8 @@ export function AlertDialogComponent({ isDialogOpen, alertType, onSecondaryButto
 interface AlertDialogProps {
   isDialogOpen: boolean
   alertType: string
-  onSecondaryButtonClick: any
-  onPrimaryButtonClick: any
+  onSecondaryButtonClick: () => void
+  onPrimaryButtonClick: () => void
 }
 
 interface AlertType {
