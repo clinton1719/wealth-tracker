@@ -26,66 +26,6 @@ const formSchema = z.object({
   profilePicture: z.string().optional(),
 })
 
-export function ProfilesSection() {
-  const { error, isLoading: getAllProfilesLoading, data } = useGetAllProfilesForUserQuery()
-  const { isError, errorComponent } = useApiError(error)
-
-  if (getAllProfilesLoading) {
-    return <Spinner />
-  }
-
-  if (isError) {
-    return errorComponent
-  }
-
-  return (
-    <TabsContent value="profiles">
-      <div className="space-y-4 mt-2">
-        {data ? data.map(profile => <ProfileSection profile={profile} />) : <></>}
-        <AddProfileForm />
-      </div>
-    </TabsContent>
-  )
-}
-
-function ProfileSection({ profile }: ProfileSectionProps) {
-  return (
-    <div className="flex items-center justify-between p-3 border rounded-lg">
-      <div className="flex items-center gap-3">
-        <Avatar className="h-10 w-10">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" className="rounded-full h-full w-full object-cover" />
-          <AvatarFallback
-            style={{ color: 'white' }}
-            className="rounded-full h-full w-full text-lg"
-          >
-            {profile.profileName.charAt(0)}
-          </AvatarFallback>
-        </Avatar>
-        <span>{profile.profileName}</span>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <Switch checked={true} />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <DynamicIcon name="shield-x" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
-  )
-}
-
-interface ProfileSectionProps {
-  profile: Profile
-}
-
 function AddProfileForm() {
   const [isUpdate, setIsUpdate] = useState(false)
   const [profileDialogOpen, setProfileDialogOpen] = useState<boolean>(false)
@@ -104,6 +44,8 @@ function AddProfileForm() {
   async function onSubmit(formData: z.infer<typeof formSchema>) {
     if (isUpdate) {
       // await updateExistingprofile(formData);
+      console.error(formData)
+      setIsUpdate(true)
     }
     else if (!isUpdate) {
       // await saveNewProfile(formData);
@@ -233,4 +175,64 @@ function AddProfileForm() {
       </DialogContent>
     </Dialog>
   )
+}
+
+export function ProfilesSection() {
+  const { error, isLoading: getAllProfilesLoading, data } = useGetAllProfilesForUserQuery()
+  const { isError, errorComponent } = useApiError(error)
+
+  if (getAllProfilesLoading) {
+    return <Spinner />
+  }
+
+  if (isError) {
+    return errorComponent
+  }
+
+  return (
+    <TabsContent value="profiles">
+      <div className="space-y-4 mt-2">
+        {data ? data.map(profile => <ProfileSection profile={profile} key={profile.id} />) : <></>}
+        <AddProfileForm />
+      </div>
+    </TabsContent>
+  )
+}
+
+function ProfileSection({ profile }: ProfileSectionProps) {
+  return (
+    <div className="flex items-center justify-between p-3 border rounded-lg">
+      <div className="flex items-center gap-3">
+        <Avatar className="h-10 w-10">
+          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" className="rounded-full h-full w-full object-cover" />
+          <AvatarFallback
+            style={{ color: 'white' }}
+            className="rounded-full h-full w-full text-lg"
+          >
+            {profile.profileName.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
+        <span>{profile.profileName}</span>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Switch checked={true} />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <DynamicIcon name="shield-x" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem>Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  )
+}
+
+interface ProfileSectionProps {
+  profile: Profile
 }
