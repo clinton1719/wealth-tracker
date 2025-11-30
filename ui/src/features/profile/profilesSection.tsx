@@ -1,3 +1,5 @@
+import { AddProfileForm } from '@/components/building-blocks/addProfileForm'
+import { ProfilePicture } from '@/components/building-blocks/profilePicture'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { useApiError } from '@/hooks/use-api-error'
@@ -12,15 +14,13 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import * as z from 'zod'
-import { AddProfileForm } from './addProfileForm'
-import { ProfilePicture } from './profilePicture'
 
 const formSchema = z.object({
   id: z.number().optional(),
   profileName: z.string().min(1, 'Profile name is required'),
   description: z.string().max(100, 'Description must be at most 100 characters long').optional(),
   colorCode: z.string().min(4, 'Color code must be valid').max(7, 'Color code must be valid'),
-  profilePicture: z.string().optional(),
+  profilePicture: z.instanceof(File).optional(),
 })
 
 export function ProfilesSection() {
@@ -34,7 +34,7 @@ export function ProfilesSection() {
       profileName: '',
       colorCode: '#000000',
       description: '',
-      profilePicture: '',
+      profilePicture: undefined
     },
   })
 

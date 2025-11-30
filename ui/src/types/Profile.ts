@@ -3,7 +3,7 @@ export interface Profile {
   profileName: string
   colorCode: string
   description: string
-  profilePicture: string
+  profilePicture: File | undefined
   ProfileIds: Array<number>
   categoryIds: Array<number>
   expenseIds: Array<number>

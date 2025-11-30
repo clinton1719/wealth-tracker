@@ -107,7 +107,17 @@ export function AddProfileForm({ profileDialogOpen, setProfileDialogOpen, form, 
                                     <FieldLabel htmlFor="form-rhf-profile-picture">
                                         Picture
                                     </FieldLabel>
-                                    <Input id="form-rhf-profilePicture" type="file" {...field} />
+                                    <Input
+                                        id="form-rhf-profile-picture"
+                                        type="file"
+                                        onBlur={field.onBlur}
+                                        name={field.name}
+                                        ref={field.ref}
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            field.onChange(file);
+                                        }}
+                                    />
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]} />
                                     )}
