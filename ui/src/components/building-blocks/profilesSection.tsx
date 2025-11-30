@@ -1,8 +1,9 @@
+import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { useApiError } from '@/hooks/use-api-error'
 import { useGetAllProfilesForUserQuery, useSaveProfileMutation, useUpdateProfileMutation } from '@/services/profilesApi'
 import type { Profile } from '@/types/Profile'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { Switch } from '@radix-ui/react-switch'
 import { TabsContent } from '@radix-ui/react-tabs'
@@ -11,9 +12,8 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import * as z from 'zod'
-import { Button } from '../ui/button'
-import { Spinner } from '../ui/spinner'
-import { AddProfileForm } from './AddProfileForm'
+import { AddProfileForm } from './addProfileForm'
+import { ProfilePicture } from './profilePicture'
 
 const formSchema = z.object({
   id: z.number().optional(),
@@ -23,23 +23,9 @@ const formSchema = z.object({
   profilePicture: z.string().optional(),
 })
 
-
-
 export function ProfilesSection() {
-  const { error, isLoading: getAllProfilesLoading, data } = useGetAllProfilesForUserQuery()
-  const [saveProfile, { isLoading: saveProfileLoading }] = useSaveProfileMutation()
-  const [updateProfile, { isLoading: updateProfileLoading }] = useUpdateProfileMutation()
-  const { isError, errorComponent } = useApiError(error)
   const [isUpdate, setIsUpdate] = useState(false)
   const [profileDialogOpen, setProfileDialogOpen] = useState<boolean>(false)
-
-  if (getAllProfilesLoading || saveProfileLoading || updateProfileLoading) {
-    return <Spinner />
-  }
-
-  if (isError) {
-    return errorComponent
-  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,6 +37,19 @@ export function ProfilesSection() {
       profilePicture: '',
     },
   })
+
+  const { error, isLoading: getAllProfilesLoading, data } = useGetAllProfilesForUserQuery()
+  const [saveProfile, { isLoading: saveProfileLoading }] = useSaveProfileMutation()
+  const [updateProfile, { isLoading: updateProfileLoading }] = useUpdateProfileMutation()
+  const { isError, errorComponent } = useApiError(error)
+
+  if (getAllProfilesLoading || saveProfileLoading || updateProfileLoading) {
+    return <Spinner />
+  }
+
+  if (isError) {
+    return errorComponent
+  }
 
   async function onSubmit(formData: z.infer<typeof formSchema>) {
     if (isUpdate) {
@@ -186,15 +185,7 @@ function ProfileSection({ profile }: ProfileSectionProps) {
   return (
     <div className="flex items-center justify-between p-3 border rounded-lg">
       <div className="flex items-center gap-3">
-        <Avatar className="h-10 w-10">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" className="rounded-full h-full w-full object-cover" />
-          <AvatarFallback
-            style={{ color: 'white' }}
-            className="rounded-full h-full w-full text-lg"
-          >
-            {profile.profileName.charAt(0)}
-          </AvatarFallback>
-        </Avatar>
+        <ProfilePicture imageSource={profile.profilePicture} fallbackName={profile.profileName.charAt(0)} imageColor={profile.colorCode} />
         <span>{profile.profileName}</span>
       </div>
 

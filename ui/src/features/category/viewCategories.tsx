@@ -1,6 +1,7 @@
 
-import { AddCategoryForm } from '@/components/building-blocks/AddCategoryForm'
+import { AddCategoryForm } from '@/components/building-blocks/addCategoryForm'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
+import { ProfilePicture } from '@/components/building-blocks/profilePicture'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -220,6 +221,7 @@ export default function ViewCategories() {
                   <div className="w-4 h-4 rounded-full" style={{ backgroundColor: category.colorCode }} />
                   {category.name}
                 </CardTitle>
+                <ProfilePicture imageSource={""} fallbackName={""} imageColor={""} />
               </CardHeader>
               <CardContent className="mb-2">
                 <p className="text-sm text-muted-foreground mb-4 break-all">{category.description}</p>

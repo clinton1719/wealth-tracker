@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Switch } from '@radix-ui/react-switch'
 import { TabsContent } from '@radix-ui/react-tabs'
 import { DynamicIcon } from 'lucide-react/dynamic'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 
 export function AccountsSection() {
   return (

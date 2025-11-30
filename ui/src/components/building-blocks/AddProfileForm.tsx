@@ -1,10 +1,10 @@
+import type { AddProfileFormProps } from '@/types/AddProfileFormProps'
 import { PlusCircle } from 'lucide-react'
 import { Controller } from 'react-hook-form'
-import { Button } from '../ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
-import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field'
-import { Input } from '../ui/input'
-import type { AddProfileFormProps } from '@/types/AddProfileFormProps'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 
 export function AddProfileForm({ profileDialogOpen, setProfileDialogOpen, form, onSubmit }: AddProfileFormProps) {
     const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {

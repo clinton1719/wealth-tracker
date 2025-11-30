@@ -6,8 +6,8 @@ import { DialogDescription } from '@radix-ui/react-dialog'
 import { PlusCircle, XIcon } from 'lucide-react'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import type { AddCategoryFormProps } from '@/types/AddCategoryFormProps'
 
 export function AddCategoryForm({ form, categoryDialogOpen, setCategoryDialogOpen, onSubmit }: AddCategoryFormProps) {
