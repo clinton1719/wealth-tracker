@@ -144,7 +144,7 @@ public class ExpenseService {
     LOGGER.atInfo().log("Expense deleted for id: {}", id);
   }
 
-  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS)
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public List<Expense> getExpensesInRange(
       UserDetails userDetails,
       String startDate,

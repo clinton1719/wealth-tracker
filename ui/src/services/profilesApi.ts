@@ -22,11 +22,21 @@ export const profileApi = createApi({
       providesTags: ['Profiles'],
     }),
     saveProfile: builder.mutation<Profile, Partial<Profile>>({
-      query: newProfile => ({
-        url: '/profiles',
-        method: 'POST',
-        body: newProfile,
-      }),
+      query: (newProfile) => {
+        const formData = new FormData();
+        Object.entries(newProfile).forEach(([key, value]) => {
+          if (value !== undefined) {
+            formData.append(key, value as any);
+          }
+        });
+
+        return {
+          url: '/profiles/save',
+          method: 'POST',
+          body: formData,
+          formData: true,
+        };
+      },
       invalidatesTags: ['Profiles'],
     }),
     updateProfile: builder.mutation<Profile, Partial<Profile>>({

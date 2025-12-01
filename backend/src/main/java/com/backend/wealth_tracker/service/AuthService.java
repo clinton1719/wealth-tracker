@@ -43,7 +43,7 @@ public class AuthService implements UserDetailsService {
     LOGGER.atInfo().log("New user registered: {}", savedUser.getUsername());
   }
 
-  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS)
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public User getUserByUsername(String username) throws ResourceNotFoundException {
     User user = (User) userRepository.findByUsername(username);
     if (user != null) {

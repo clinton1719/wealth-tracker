@@ -11,14 +11,15 @@ import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ProfileRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -38,10 +39,10 @@ public class CategoryService {
     this.profileRepository = profileRepository;
   }
 
-  @Transactional(isolation = Isolation.READ_UNCOMMITTED, propagation = Propagation.SUPPORTS)
+  @Transactional(isolation = Isolation.READ_UNCOMMITTED, propagation = Propagation.REQUIRED)
   public List<Category> getAllCategories(String userName) throws ResourceNotFoundException {
     User user = this.authService.getUserByUsername(userName);
-    List<Category> categories = this.categoryRepository.findAllCategoriesByUserId(user.getId());
+    List<Category> categories = this.categoryRepository.findAllWithRelations(user.getId());
     LOGGER.atInfo().log("Fetched {} categories for user: {}", categories.size(), userName);
     return categories;
   }

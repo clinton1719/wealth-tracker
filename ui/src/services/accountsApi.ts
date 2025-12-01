@@ -23,7 +23,7 @@ export const accountApi = createApi({
     }),
     saveAccount: builder.mutation<Account, Partial<Account>>({
       query: newAccount => ({
-        url: '/accounts',
+        url: '/accounts/save',
         method: 'POST',
         body: newAccount,
       }),

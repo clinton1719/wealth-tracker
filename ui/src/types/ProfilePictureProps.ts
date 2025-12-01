@@ -1,5 +1,5 @@
 export interface ProfilePictureProps {
-    imageSource: File | undefined;
+    imageSource: string | undefined;
     fallbackName: string;
     imageColor: string;
 }

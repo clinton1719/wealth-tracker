@@ -8,13 +8,15 @@ export interface AddProfileFormProps {
         colorCode: string;
         id?: number | undefined;
         description?: string | undefined;
-        profilePicture?: File | undefined
+        profilePicture?: string;
+        profilePictureFile?: File;
     }, any, {
         profileName: string;
         colorCode: string;
         id?: number | undefined;
         description?: string | undefined;
-        profilePicture?: File | undefined
+        profilePicture?: string;
+        profilePictureFile?: File;
     }>
     onSubmit: any
 }

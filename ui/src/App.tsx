@@ -1,5 +1,5 @@
-import { AccountsSection } from './components/building-blocks/accountsSection'
-import { ProfilesSection } from './components/building-blocks/profilesSection'
+import { AccountsSection } from '@/components/building-blocks/accountsSection'
+import { ProfilesSection } from '@/features/profile/profilesSection'
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
 import { Tabs, TabsList, TabsTrigger } from './components/ui/tabs'
 

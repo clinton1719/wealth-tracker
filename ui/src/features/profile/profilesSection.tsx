@@ -20,7 +20,8 @@ const formSchema = z.object({
   profileName: z.string().min(1, 'Profile name is required'),
   description: z.string().max(100, 'Description must be at most 100 characters long').optional(),
   colorCode: z.string().min(4, 'Color code must be valid').max(7, 'Color code must be valid'),
-  profilePicture: z.instanceof(File).optional(),
+  profilePicture: z.string().optional(),
+  profilePictureFile: z.instanceof(File).optional()
 })
 
 export function ProfilesSection() {

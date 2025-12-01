@@ -100,7 +100,7 @@ export function AddProfileForm({ profileDialogOpen, setProfileDialogOpen, form, 
                             )}
                         />
                         <Controller
-                            name="profilePicture"
+                            name="profilePictureFile"
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>

@@ -29,14 +29,14 @@ public class Account implements Serializable {
   @Column(nullable = false)
   private AccountType accountType;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "user_id")
   private User user;
 
   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
   private Set<Expense> expenses;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "profile_id")
   private Profile profile;
 
@@ -109,15 +109,22 @@ public class Account implements Serializable {
   }
 
   public Set<Expense> getExpenses() {
-    return Set.copyOf(expenses);
+      if (expenses == null) {
+          return Set.of();
+      }
+      return new HashSet<>(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
-    if (expenses != null) {
-      this.expenses = new HashSet<>(expenses);
-    } else {
-      this.expenses = Set.of();
-    }
+      if (this.expenses == null) {
+          this.expenses = new HashSet<>();
+      }
+      if(expenses != null) {
+          this.expenses.clear();
+          this.expenses.addAll(expenses);
+      } else {
+          this.expenses.clear();
+      }
   }
 
   public Profile getProfile() {
