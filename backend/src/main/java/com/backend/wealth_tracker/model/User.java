@@ -2,15 +2,14 @@ package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.enums.UserRole;
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.io.Serial;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "users")
 @SuppressWarnings({"PMD.DataClass", "PMD.AvoidDuplicateLiterals"})
@@ -114,60 +113,60 @@ public class User implements UserDetails {
   }
 
   public Set<Expense> getExpenses() {
-      if (expenses == null) {
-          return Set.of();
-      }
-      return new HashSet<>(expenses);
+    if (expenses == null) {
+      return Set.of();
+    }
+    return new HashSet<>(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
-      if (this.expenses == null) {
-          this.expenses = new HashSet<>();
-      }
-      if(expenses != null) {
-          this.expenses.clear();
-          this.expenses.addAll(expenses);
-      } else {
-          this.expenses.clear();
-      }
+    if (this.expenses == null) {
+      this.expenses = new HashSet<>();
+    }
+    if (expenses != null) {
+      this.expenses.clear();
+      this.expenses.addAll(expenses);
+    } else {
+      this.expenses.clear();
+    }
   }
 
   public Set<Category> getCategories() {
-      if (categories == null) {
-          return Set.of();
-      }
-      return new HashSet<>(categories);
+    if (categories == null) {
+      return Set.of();
+    }
+    return new HashSet<>(categories);
   }
 
   public void setCategories(Set<Category> categories) {
-      if (this.categories == null) {
-          this.categories = new HashSet<>();
-      }
-      if(categories != null) {
-          this.categories.clear();
-          this.categories.addAll(categories);
-      } else {
-          this.categories.clear();
-      }
+    if (this.categories == null) {
+      this.categories = new HashSet<>();
+    }
+    if (categories != null) {
+      this.categories.clear();
+      this.categories.addAll(categories);
+    } else {
+      this.categories.clear();
+    }
   }
 
   public Set<Account> getAccounts() {
-      if (accounts == null) {
-          return Set.of();
-      }
-      return new HashSet<>(accounts);
+    if (accounts == null) {
+      return Set.of();
+    }
+    return new HashSet<>(accounts);
   }
 
   public void setAccounts(Set<Account> accounts) {
-      if (this.accounts == null) {
-          this.accounts = new HashSet<>();
-      }
-      if(accounts != null) {
-          this.accounts.clear();
-          this.accounts.addAll(accounts);
-      } else {
-          this.accounts.clear();
-      }
+    if (this.accounts == null) {
+      this.accounts = new HashSet<>();
+    }
+    if (accounts != null) {
+      this.accounts.clear();
+      this.accounts.addAll(accounts);
+    } else {
+      this.accounts.clear();
+    }
   }
 
   public Set<Profile> getProfiles() {

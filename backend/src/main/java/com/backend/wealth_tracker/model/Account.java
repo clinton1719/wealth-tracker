@@ -109,22 +109,22 @@ public class Account implements Serializable {
   }
 
   public Set<Expense> getExpenses() {
-      if (expenses == null) {
-          return Set.of();
-      }
-      return new HashSet<>(expenses);
+    if (expenses == null) {
+      return Set.of();
+    }
+    return new HashSet<>(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
-      if (this.expenses == null) {
-          this.expenses = new HashSet<>();
-      }
-      if(expenses != null) {
-          this.expenses.clear();
-          this.expenses.addAll(expenses);
-      } else {
-          this.expenses.clear();
-      }
+    if (this.expenses == null) {
+      this.expenses = new HashSet<>();
+    }
+    if (expenses != null) {
+      this.expenses.clear();
+      this.expenses.addAll(expenses);
+    } else {
+      this.expenses.clear();
+    }
   }
 
   public Profile getProfile() {

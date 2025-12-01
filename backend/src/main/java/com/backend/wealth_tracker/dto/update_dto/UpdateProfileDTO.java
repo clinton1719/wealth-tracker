@@ -54,11 +54,11 @@ public class UpdateProfileDTO {
     this.profilePicture = profilePicture;
   }
 
-    public MultipartFile getProfilePictureFile() {
-        return profilePictureFile;
-    }
+  public MultipartFile getProfilePictureFile() {
+    return profilePictureFile;
+  }
 
-    public void setProfilePictureFile(MultipartFile profilePictureFile) {
-        this.profilePictureFile = profilePictureFile;
-    }
+  public void setProfilePictureFile(MultipartFile profilePictureFile) {
+    this.profilePictureFile = profilePictureFile;
+  }
 }

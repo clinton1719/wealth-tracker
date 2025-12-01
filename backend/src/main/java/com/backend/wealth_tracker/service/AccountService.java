@@ -11,15 +11,14 @@ import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.AccountRepository;
 import com.backend.wealth_tracker.repository.ProfileRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccountService {

@@ -10,16 +10,15 @@ import com.backend.wealth_tracker.model.Profile;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.ProfileRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProfileService {
@@ -37,12 +36,10 @@ public class ProfileService {
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Profile saveProfile(CreateProfileDTO createProfileDTO, String userName)
-          throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
+      throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
     User user = this.authService.getUserByUsername(userName);
     Profile profile = ProfileMapper.createProfileDTOToProfile(createProfileDTO);
-      System.out.println(profile.getProfilePicture().getClass());
-
-      Optional<Profile> similarCategory =
+    Optional<Profile> similarCategory =
         this.profileRepository.findByProfileNameAndUserId(profile.getProfileName(), user.getId());
     if (similarCategory.isPresent()) {
       throw new ResourceAlreadyExistsException(
@@ -52,7 +49,6 @@ public class ProfileService {
               + user.getId());
     }
     profile.setUser(this.authService.getUserByUsername(userName));
-      System.out.println(profile.getProfilePicture().getClass());
     Profile savedProfile = this.profileRepository.save(profile);
     LOGGER.atInfo().log("Profile created with id: {}", savedProfile.getId());
     return savedProfile;
@@ -60,7 +56,7 @@ public class ProfileService {
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Profile updateProfile(UpdateProfileDTO updateProfileDTO, String userName)
-          throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
+      throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
     User user = this.authService.getUserByUsername(userName);
     Optional<Profile> profileOptional = this.profileRepository.findById(updateProfileDTO.getId());
     if (profileOptional.isEmpty()) {
@@ -85,7 +81,8 @@ public class ProfileService {
     return savedProfile;
   }
 
-  private Profile updateProfileValues(UpdateProfileDTO updateProfileDTO, Profile profile) throws IOException {
+  private Profile updateProfileValues(UpdateProfileDTO updateProfileDTO, Profile profile)
+      throws IOException {
     if (updateProfileDTO.getProfileName() != null) {
       profile.setProfileName(updateProfileDTO.getProfileName());
     }
@@ -95,14 +92,15 @@ public class ProfileService {
     if (updateProfileDTO.getColorCode() != null) {
       profile.setColorCode(updateProfileDTO.getColorCode());
     }
-      if (updateProfileDTO.getProfilePictureFile() != null && !updateProfileDTO.getProfilePictureFile().isEmpty()) {
-          profile.setProfilePicture(updateProfileDTO.getProfilePictureFile().getBytes());
-          String extension = Helper.getExtension(updateProfileDTO.getProfilePictureFile());
-          profile.setProfilePictureExtension(extension);
-          profile.setProfilePicture(updateProfileDTO.getProfilePictureFile().getBytes());
-      }
+    if (updateProfileDTO.getProfilePictureFile() != null
+        && !updateProfileDTO.getProfilePictureFile().isEmpty()) {
+      profile.setProfilePicture(updateProfileDTO.getProfilePictureFile().getBytes());
+      String extension = Helper.getExtension(updateProfileDTO.getProfilePictureFile());
+      profile.setProfilePictureExtension(extension);
+      profile.setProfilePicture(updateProfileDTO.getProfilePictureFile().getBytes());
+    }
 
-      return profile;
+    return profile;
   }
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
