@@ -21,7 +21,6 @@ function App() {
 
             <ProfilesSection />
             <AccountsSection />
-
           </Tabs>
         </CardContent>
 

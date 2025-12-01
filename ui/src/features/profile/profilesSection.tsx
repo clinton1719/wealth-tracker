@@ -6,9 +6,9 @@ import { useApiError } from '@/hooks/use-api-error'
 import { useGetAllProfilesForUserQuery, useSaveProfileMutation, useUpdateProfileMutation } from '@/services/profilesApi'
 import type { Profile } from '@/types/Profile'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
-import { Switch } from '@radix-ui/react-switch'
-import { TabsContent } from '@radix-ui/react-tabs'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Switch } from '@/components/ui/switch'
+import { TabsContent } from '@/components/ui/tabs'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -187,20 +187,27 @@ function ProfileSection({ profile }: ProfileSectionProps) {
     <div className="flex items-center justify-between p-3 border rounded-lg">
       <div className="flex items-center gap-3">
         <ProfilePicture imageSource={profile.profilePicture} fallbackName={profile.profileName.charAt(0)} imageColor={profile.colorCode} />
-        <span>{profile.profileName}</span>
+        <div className="flex flex-col">
+          <span className="text-muted-foreground text-xl">{profile.profileName}</span>
+          <span className="text-sm text-muted-foreground mb-4 break-all">{profile.description}</span>
+        </div>
       </div>
 
       <div className="flex items-center gap-2">
         <Switch checked={true} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <DynamicIcon name="shield-x" />
+            <Button variant="default" size="icon">
+              <DynamicIcon name="edit" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+          <DropdownMenuContent className="w-56 bg-white shadow-md" align="start">
+            <DropdownMenuItem>
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              Keyboard shortcuts
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

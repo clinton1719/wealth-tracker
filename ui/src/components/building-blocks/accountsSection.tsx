@@ -4,7 +4,7 @@ import { Switch } from '@radix-ui/react-switch'
 import { TabsContent } from '@radix-ui/react-tabs'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { Button } from '@/components/ui/button'
-
+//CHANGE FROM RADIX TO SHADECN
 export function AccountsSection() {
   return (
     <TabsContent value="accounts">
