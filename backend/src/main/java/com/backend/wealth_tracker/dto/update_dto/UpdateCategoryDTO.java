@@ -14,7 +14,6 @@ public class UpdateCategoryDTO {
   private String colorCode;
   private String icon;
   private List<String> tags;
-  private Long profileId;
 
   public Long getId() {
     return id;
@@ -66,13 +65,5 @@ public class UpdateCategoryDTO {
     } else {
       this.tags = List.of();
     }
-  }
-
-  public Long getProfileId() {
-    return profileId;
-  }
-
-  public void setProfileId(Long profileId) {
-    this.profileId = profileId;
   }
 }

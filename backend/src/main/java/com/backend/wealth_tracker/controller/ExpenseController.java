@@ -4,6 +4,7 @@ import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
+import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.service.ExpenseService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -43,7 +44,7 @@ public class ExpenseController {
   public ResponseExpenseDTO saveExpense(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateExpenseDTO createExpenseDTO)
-      throws ResourceNotFoundException {
+          throws ResourceNotFoundException, UnAuthorizedException {
     return ExpenseMapper.expenseToResponseExpenseDTO(
         this.expenseService.saveExpense(createExpenseDTO, userDetails.getUsername()));
   }

@@ -21,7 +21,7 @@ public final class ExpenseMapper {
     return dto;
   }
 
-  public static Expense createDTOtoExpense(CreateExpenseDTO dto, Category category) {
+  public static Expense createExpenseDTOtoExpense(CreateExpenseDTO dto, Category category) {
     Expense expense = new Expense();
     expense.setDescription(dto.getDescription());
     expense.setAmount(dto.getAmount());

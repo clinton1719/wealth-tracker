@@ -5,15 +5,17 @@ import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateCategoryDTO;
 import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
+import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.CategoryMapper;
 import com.backend.wealth_tracker.service.CategoryService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -39,7 +41,7 @@ public class CategoryController {
   public ResponseCategoryDTO saveCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateCategoryDTO createCategoryDTO)
-      throws ResourceNotFoundException, ResourceAlreadyExistsException {
+          throws ResourceNotFoundException, ResourceAlreadyExistsException, UnAuthorizedException {
     return CategoryMapper.categoryToResponseCategoryDTO(
         this.categoryService.saveCategory(createCategoryDTO, userDetails.getUsername()));
   }
@@ -49,14 +51,14 @@ public class CategoryController {
   public ResponseCategoryDTO updateCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO)
-      throws ResourceNotFoundException, ResourceAlreadyExistsException {
+          throws ResourceNotFoundException, ResourceAlreadyExistsException, UnAuthorizedException {
     return CategoryMapper.categoryToResponseCategoryDTO(
         this.categoryService.updateCategory(updateCategoryDTO, userDetails.getUsername()));
   }
 
   @DeleteMapping("/delete/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public void deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
-    this.categoryService.deleteCategory(id);
+  public void deleteCategory(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) throws ResourceNotFoundException {
+    this.categoryService.deleteCategory(id, userDetails.getUsername());
   }
 }

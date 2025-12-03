@@ -7,6 +7,8 @@ import com.backend.wealth_tracker.model.Account;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.model.Profile;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -21,14 +23,18 @@ public final class ProfileMapper {
     profile.setProfileName(createProfileDTO.getProfileName());
     profile.setDescription(createProfileDTO.getDescription());
     profile.setColorCode(createProfileDTO.getColorCode());
-    profile.setProfilePicture(createProfileDTO.getProfilePictureFile().getBytes());
-    String extension = Helper.getExtension(createProfileDTO.getProfilePictureFile());
-    profile.setProfilePictureExtension(extension);
+      MultipartFile multipartFile = createProfileDTO.getProfilePictureFile();
+    if (multipartFile != null) {
+        profile.setProfilePicture(multipartFile.getBytes());
+        String extension = Helper.getExtension(multipartFile);
+        profile.setProfilePictureExtension(extension);
+    }
     return profile;
   }
 
   public static ResponseProfileDTO profileToResponseProfileDTO(Profile profile) {
     ResponseProfileDTO responseProfileDTO = new ResponseProfileDTO();
+    responseProfileDTO.setId(profile.getId());
     responseProfileDTO.setProfileName(profile.getProfileName());
     responseProfileDTO.setDescription(profile.getDescription());
     responseProfileDTO.setColorCode(profile.getColorCode());

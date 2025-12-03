@@ -29,14 +29,14 @@ public class Category implements Serializable {
   @Column private String icon;
   @Column private List<String> tags;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
   private User user;
 
   @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
   private Set<Expense> expenses = new HashSet<>();
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "profile_id")
   private Profile profile;
 
@@ -161,4 +161,19 @@ public class Category implements Serializable {
       throw new IllegalArgumentException("Profile cannot be null for category");
     }
   }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", categoryName='" + categoryName + '\'' +
+                ", description='" + description + '\'' +
+                ", colorCode='" + colorCode + '\'' +
+                ", icon='" + icon + '\'' +
+                ", tags=" + tags +
+                ", user=" + user +
+                ", expenses=" + expenses +
+                ", profile=" + profile +
+                '}';
+    }
 }

@@ -30,7 +30,7 @@ public class Profile implements Serializable {
 
   @Column private String profilePictureExtension;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
   private User user;
 
@@ -187,4 +187,20 @@ public class Profile implements Serializable {
   public void setProfilePictureExtension(String profilePictureExtension) {
     this.profilePictureExtension = profilePictureExtension;
   }
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "id=" + id +
+                ", profileName='" + profileName + '\'' +
+                ", description='" + description + '\'' +
+                ", colorCode='" + colorCode + '\'' +
+                ", profilePicture=" + Arrays.toString(profilePicture) +
+                ", profilePictureExtension='" + profilePictureExtension + '\'' +
+                ", user=" + user +
+                ", accounts=" + accounts +
+                ", categories=" + categories +
+                ", expenses=" + expenses +
+                '}';
+    }
 }

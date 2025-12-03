@@ -31,6 +31,7 @@ public final class CategoryMapper {
     responseCategoryDTO.setColorCode(category.getColorCode());
     responseCategoryDTO.setIcon(category.getIcon());
     responseCategoryDTO.setTags(category.getTags());
+    responseCategoryDTO.setProfileId(category.getProfile().getId());
     return responseCategoryDTO;
   }
 

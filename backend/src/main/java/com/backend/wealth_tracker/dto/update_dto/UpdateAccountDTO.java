@@ -13,7 +13,6 @@ public class UpdateAccountDTO {
   private String description;
   private BigDecimal accountBalance;
   private AccountType accountType;
-  private Long profileId;
 
   public Long getId() {
     return id;
@@ -53,13 +52,5 @@ public class UpdateAccountDTO {
 
   public void setAccountType(AccountType accountType) {
     this.accountType = accountType;
-  }
-
-  public Long getProfileId() {
-    return profileId;
-  }
-
-  public void setProfileId(Long profileId) {
-    this.profileId = profileId;
   }
 }
