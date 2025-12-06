@@ -36,7 +36,7 @@ export function AddCategoryForm({ form, categoryDialogOpen, setCategoryDialogOpe
         <form id="form-rhf-category" onSubmit={form.handleSubmit(onSubmit)} onKeyDown={e => checkKeyDown(e)}>
           <FieldGroup>
             <Controller
-              name="name"
+              name="categoryName"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>

@@ -1,3 +1,4 @@
+import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddProfileForm } from '@/components/building-blocks/forms/addProfileForm'
 import { ProfilePicture } from '@/components/building-blocks/profilePicture'
 import { Button } from '@/components/ui/button'
@@ -6,7 +7,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { Switch } from '@/components/ui/switch'
 import { TabsContent } from '@/components/ui/tabs'
 import { useApiError } from '@/hooks/use-api-error'
-import { useGetAllProfilesForUserQuery, useSaveProfileMutation, useUpdateProfileMutation } from '@/services/profilesApi'
+import { useDeleteProfileMutation, useGetAllProfilesForUserQuery, useSaveProfileMutation, useUpdateProfileMutation } from '@/services/profilesApi'
 import type { Profile } from '@/types/Profile'
 import type { ProfileSectionProps } from '@/types/ProfileSectionProps'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -28,6 +29,8 @@ const formSchema = z.object({
 export function ProfilesSection() {
   const [isUpdate, setIsUpdate] = useState(false)
   const [profileDialogOpen, setProfileDialogOpen] = useState<boolean>(false)
+  const [deleteProfileDialogOpen, setDeleteProfileDialogOpen] = useState<boolean>(false)
+  const [currentProfile, setCurrentProfile] = useState<Profile | undefined>()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,9 +46,10 @@ export function ProfilesSection() {
   const { error, isLoading: getAllProfilesLoading, data } = useGetAllProfilesForUserQuery()
   const [saveProfile, { isLoading: saveProfileLoading }] = useSaveProfileMutation()
   const [updateProfile, { isLoading: updateProfileLoading }] = useUpdateProfileMutation()
+  const [deleteProfile, { isLoading: deleteProfileLoading }] = useDeleteProfileMutation()
   const { isError, errorComponent } = useApiError(error)
 
-  if (getAllProfilesLoading || saveProfileLoading || updateProfileLoading) {
+  if (getAllProfilesLoading || saveProfileLoading || updateProfileLoading || deleteProfileLoading) {
     return <Spinner />
   }
 
@@ -173,17 +177,38 @@ export function ProfilesSection() {
     }
   }
 
+  const cancelProfileCategory = () => {
+    setDeleteProfileDialogOpen(false)
+  }
+
+  const deleteCurrentCategory = async () => {
+    if (currentProfile && currentProfile.id) {
+      await deleteProfile(currentProfile.id)
+      toast.info(`Profile : ${currentProfile.profileName} deleted successfully!`)
+      setDeleteProfileDialogOpen(false)
+    }
+    else {
+      toast.error('Invalid category! Please refresh the page')
+    }
+  }
+
+  const handleDeleteProfile = (profile: Profile) => {
+    setDeleteProfileDialogOpen(true)
+    setCurrentProfile(profile)
+  }
+
   return (
     <TabsContent value="profiles">
       <div className="space-y-4 mt-2">
-        {data ? data.map(profile => <ProfileSection profile={profile} key={profile.id} form={form} setIsUpdate={setIsUpdate} setProfileDialogOpen={setProfileDialogOpen} />) : <p className="text-muted-foreground text-sm">Create a new profile here</p>}
+        {data ? data.map(profile => <ProfileSection profile={profile} key={profile.id} form={form} setIsUpdate={setIsUpdate} setProfileDialogOpen={setProfileDialogOpen} handleDeleteProfile={handleDeleteProfile} />) : <p className="text-muted-foreground text-sm">Create a new profile here</p>}
         <AddProfileForm form={form} onSubmit={onSubmit} profileDialogOpen={profileDialogOpen} setProfileDialogOpen={setProfileDialogOpen} />
       </div>
+      <AlertDialogComponent isDialogOpen={deleteProfileDialogOpen} alertType="DELETE_PROFILE" onSecondaryButtonClick={cancelProfileCategory} onPrimaryButtonClick={deleteCurrentCategory} />
     </TabsContent>
   )
 }
 
-function ProfileSection({ profile, form, setProfileDialogOpen, setIsUpdate }: ProfileSectionProps) {
+function ProfileSection({ profile, form, setProfileDialogOpen, setIsUpdate, handleDeleteProfile }: ProfileSectionProps) {
   const handleUpdateProfile = (profile: Profile) => {
     form.reset(profile)
     setProfileDialogOpen(true)
@@ -212,7 +237,7 @@ function ProfileSection({ profile, form, setProfileDialogOpen, setIsUpdate }: Pr
             <DropdownMenuItem onClick={() => handleUpdateProfile(profile)}>
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDeleteProfile(profile)}>
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

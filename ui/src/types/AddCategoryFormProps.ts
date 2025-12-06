@@ -2,14 +2,14 @@ import type { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 export interface AddCategoryFormProps {
   form: UseFormReturn<{
-    name: string
+    categoryName: string
     colorCode: string
     id?: number | undefined
     description?: string | undefined
     icon?: string | undefined
     tags?: string[] | undefined
   }, any, {
-    name: string
+    categoryName: string
     colorCode: string
     id?: number | undefined
     description?: string | undefined
@@ -18,5 +18,5 @@ export interface AddCategoryFormProps {
   }>
   categoryDialogOpen: boolean
   setCategoryDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
-  onSubmit: SubmitHandler<{ name: string, colorCode: string, id?: number | undefined, description?: string | undefined, icon?: string | undefined, tags?: string[] | undefined }>
+  onSubmit: SubmitHandler<{ categoryName: string, colorCode: string, id?: number | undefined, description?: string | undefined, icon?: string | undefined, tags?: string[] | undefined }>
 }

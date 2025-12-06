@@ -20,4 +20,5 @@ export interface ProfileSectionProps {
 }>;
   setProfileDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>
+  handleDeleteProfile: (profile: Profile) => void;
 }

@@ -14,7 +14,7 @@ public final class CategoryMapper {
   public static Category createCategoryDTOtoCategory(
       CreateCategoryDTO createCategoryDTO, User user) {
     Category category = new Category();
-    category.setCategoryName(createCategoryDTO.getName());
+    category.setCategoryName(createCategoryDTO.getCategoryName());
     category.setDescription(createCategoryDTO.getDescription());
     category.setColorCode(createCategoryDTO.getColorCode());
     category.setIcon(createCategoryDTO.getIcon());
@@ -26,7 +26,7 @@ public final class CategoryMapper {
   public static ResponseCategoryDTO categoryToResponseCategoryDTO(Category category) {
     ResponseCategoryDTO responseCategoryDTO = new ResponseCategoryDTO();
     responseCategoryDTO.setId(category.getId());
-    responseCategoryDTO.setName(category.getCategoryName());
+    responseCategoryDTO.setCategoryName(category.getCategoryName());
     responseCategoryDTO.setDescription(category.getDescription());
     responseCategoryDTO.setColorCode(category.getColorCode());
     responseCategoryDTO.setIcon(category.getIcon());

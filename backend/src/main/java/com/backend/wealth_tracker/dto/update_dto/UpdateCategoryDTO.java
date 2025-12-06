@@ -9,7 +9,7 @@ public class UpdateCategoryDTO {
   @NotNull(message = "Category ID cannot be null")
   private Long id;
 
-  private String name;
+  private String categoryName;
   private String description;
   private String colorCode;
   private String icon;
@@ -23,12 +23,12 @@ public class UpdateCategoryDTO {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getCategoryName() {
+    return categoryName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
   }
 
   public String getDescription() {

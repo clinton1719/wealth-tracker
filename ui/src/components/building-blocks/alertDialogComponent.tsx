@@ -8,10 +8,19 @@ export function AlertDialogComponent({ isDialogOpen, alertType, onSecondaryButto
     case 'DELETE_CATEGORY':
       alert = {
         title: 'Do you really want to delete this category?',
-        description: 'Deleting this category will move all current assigned expenses/items to the default category.',
-        primaryButton: 'Delete this category',
+        description: 'Deleting this category will delete all expenses and other associated entities related to it',
+        primaryButton: 'I acknowledge. Delete this category',
+        secondaryButton: 'Cancel',
+      };
+      return;
+    case 'DELETE_PROFILE':
+      alert = {
+        title: 'Do you really want to delete this profile?',
+        description: 'Deleting this profile will delete all expenses, accounts, expenses and associated entities related to it',
+        primaryButton: 'I acknowledge. Delete this profile',
         secondaryButton: 'Cancel',
       }
+      return;
   }
   return (
     <AlertDialog open={isDialogOpen}>

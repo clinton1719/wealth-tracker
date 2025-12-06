@@ -2,7 +2,7 @@ import type { ControllerFieldState, ControllerRenderProps, UseFormReturn } from 
 
 export interface IconsComboBoxProps {
     field: ControllerRenderProps<{
-        name: string
+        categoryName: string
         colorCode: string
         description?: string | undefined
         icon?: string | undefined
@@ -10,13 +10,13 @@ export interface IconsComboBoxProps {
     }, 'icon'>
     fieldState: ControllerFieldState
     form: UseFormReturn<{
-        name: string
+        categoryName: string
         colorCode: string
         description?: string | undefined
         icon?: string | undefined
         tags?: string[] | undefined
     }, any, {
-        name: string
+        categoryName: string
         colorCode: string
         description?: string | undefined
         icon?: string | undefined

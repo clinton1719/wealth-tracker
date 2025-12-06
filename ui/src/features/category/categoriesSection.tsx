@@ -18,7 +18,7 @@ import * as z from 'zod'
 
 const formSchema = z.object({
   id: z.number().optional(),
-  name: z.string().min(1, 'Category name is required'),
+  categoryName: z.string().min(1, 'Category name is required'),
   description: z.string().max(100, 'Description must be at most 100 characters long').optional(),
   colorCode: z.string().min(4, 'Color code must be valid').max(7, 'Color code must be valid'),
   icon: z.string().optional(),
@@ -36,7 +36,7 @@ export default function CategoriesSection() {
     resolver: zodResolver(formSchema),
     mode: 'onSubmit',
     defaultValues: {
-      name: '',
+      categoryName: '',
       description: '',
       colorCode: '#000000',
       icon: '',
@@ -85,7 +85,7 @@ export default function CategoriesSection() {
           >
             <code>
               Category name:
-              {result.name}
+              {result.categoryName}
             </code>
           </pre>
         ),
@@ -104,7 +104,7 @@ export default function CategoriesSection() {
     }
     catch (error: any) {
       if (error?.originalStatus === 409) {
-        toast.error(`Category already exists with name: ${formData.name}`)
+        toast.error(`Category already exists with name: ${formData.categoryName}`)
       }
       else if (error.originalStatus === 400) {
         toast.error('Invalid input. Please check your details.')
@@ -141,7 +141,7 @@ export default function CategoriesSection() {
           >
             <code>
               Category name:
-              {result.name}
+              {result.categoryName}
             </code>
           </pre>
         ),
@@ -161,7 +161,7 @@ export default function CategoriesSection() {
     }
     catch (error: any) {
       if (error?.originalStatus === 409) {
-        toast.error(`Category already exists with name: ${formData.name}`)
+        toast.error(`Category already exists with name: ${formData.categoryName}`)
       }
       else if (error.originalStatus === 400) {
         toast.error('Invalid input. Please check your details.')
@@ -196,7 +196,7 @@ export default function CategoriesSection() {
   const deleteCurrentCategory = async () => {
     if (currentCategory && currentCategory.id) {
       await deleteCategory(currentCategory.id)
-      toast.info(`Category : ${currentCategory.name} deleted successfully!`)
+      toast.info(`Category : ${currentCategory.categoryName} deleted successfully!`)
       setDeleteCategoryDialogOpen(false)
     }
     else {
@@ -219,7 +219,7 @@ export default function CategoriesSection() {
                 <CardTitle className="flex items-center gap-2 break-all">
                   <DynamicIcon name={category.icon ? category.icon : 'badge-check' as any} color={category.colorCode} />
                   <div className="w-4 h-4 rounded-full" style={{ backgroundColor: category.colorCode }} />
-                  {category.name}
+                  {category.categoryName}
                 </CardTitle>
                 <ProfilePicture imageSource={""} fallbackName={""} imageColor={""} />
               </CardHeader>

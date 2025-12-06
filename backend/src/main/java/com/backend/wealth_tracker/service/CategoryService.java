@@ -82,14 +82,14 @@ public class CategoryService {
       LOGGER.atError().log("Category to be updated not found : {}", updateCategoryDTO);
       throw new ResourceNotFoundException("Category not found");
     }
-    if (!categoryOptional.get().getCategoryName().equals(updateCategoryDTO.getName())) {
+    if (!categoryOptional.get().getCategoryName().equals(updateCategoryDTO.getCategoryName())) {
       Optional<Category> similarCategory =
           this.categoryRepository.findByCategoryNameAndUserId(
-              updateCategoryDTO.getName(), user.getId());
+              updateCategoryDTO.getCategoryName(), user.getId());
       if (similarCategory.isPresent()) {
         throw new ResourceAlreadyExistsException(
             "Category already present with name: "
-                + updateCategoryDTO.getName()
+                + updateCategoryDTO.getCategoryName()
                 + " for user: "
                 + user.getId());
       }
@@ -101,8 +101,8 @@ public class CategoryService {
   }
 
   private Category updateCategoryValues(UpdateCategoryDTO updateCategoryDTO, Category category) {
-    if (updateCategoryDTO.getName() != null) {
-      category.setCategoryName(updateCategoryDTO.getName());
+    if (updateCategoryDTO.getCategoryName() != null) {
+      category.setCategoryName(updateCategoryDTO.getCategoryName());
     }
     if (updateCategoryDTO.getDescription() != null) {
       category.setDescription(updateCategoryDTO.getDescription());
