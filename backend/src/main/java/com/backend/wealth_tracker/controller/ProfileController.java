@@ -8,6 +8,7 @@ import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.ProfileMapper;
 import com.backend.wealth_tracker.service.ProfileService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles")
+@Tag(name = "Profile", description = "API methods to manipulate Profile data")
 public class ProfileController {
 
   private final ProfileService profileService;
@@ -30,6 +32,7 @@ public class ProfileController {
 
   @GetMapping(value = "/all")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
   public List<ResponseProfileDTO> getAllProfilesForUser(
       @AuthenticationPrincipal UserDetails userDetails) throws ResourceNotFoundException {
     return ProfileMapper.profilesToResponseProfileDTOs(
@@ -38,6 +41,7 @@ public class ProfileController {
 
   @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
+  @Tag(name = "SAVE")
   public ResponseProfileDTO saveProfile(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @ModelAttribute CreateProfileDTO createProfileDTO)
@@ -48,6 +52,7 @@ public class ProfileController {
 
   @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "UPDATE")
   public ResponseProfileDTO updateCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateProfileDTO updateProfileDTO)
@@ -58,6 +63,7 @@ public class ProfileController {
 
   @DeleteMapping("/delete/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "DELETE")
   public void deleteCategory(
       @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id)
       throws ResourceNotFoundException {

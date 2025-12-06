@@ -9,6 +9,7 @@ import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.AccountMapper;
 import com.backend.wealth_tracker.service.AccountService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/accounts")
+@Tag(name = "Account", description = "API methods to manipulate Account data")
 public class AccountController {
 
   private final AccountService accountService;
@@ -29,6 +31,7 @@ public class AccountController {
 
   @GetMapping("/all")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
   public List<ResponseAccountDTO> getAllAccounts(@AuthenticationPrincipal UserDetails userDetails)
       throws ResourceNotFoundException {
     return AccountMapper.accountsToResponseAccountDTOs(
@@ -37,6 +40,7 @@ public class AccountController {
 
   @PostMapping("/save")
   @ResponseStatus(HttpStatus.CREATED)
+  @Tag(name = "SAVE")
   public ResponseAccountDTO saveAccount(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateAccountDTO createAccountDTO)
@@ -47,6 +51,7 @@ public class AccountController {
 
   @PutMapping("/update")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "UPDATE")
   public ResponseAccountDTO updateAccount(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateAccountDTO updateAccountDTO)
@@ -56,6 +61,7 @@ public class AccountController {
   }
 
   @DeleteMapping("/delete/{id}")
+  @Tag(name = "DELETE")
   @ResponseStatus(HttpStatus.OK)
   public void deleteCategory(
       @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id)

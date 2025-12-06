@@ -94,15 +94,13 @@ public class CategoryService {
                 + user.getId());
       }
     }
-    Category category =
-        updateCategoryValues(updateCategoryDTO, categoryOptional.get(), user.getId());
+    Category category = updateCategoryValues(updateCategoryDTO, categoryOptional.get());
     Category updatedCategory = this.categoryRepository.save(category);
     LOGGER.atInfo().log("Category updated : {}", updatedCategory);
     return updatedCategory;
   }
 
-  private Category updateCategoryValues(
-      UpdateCategoryDTO updateCategoryDTO, Category category, Long userId) {
+  private Category updateCategoryValues(UpdateCategoryDTO updateCategoryDTO, Category category) {
     if (updateCategoryDTO.getName() != null) {
       category.setCategoryName(updateCategoryDTO.getName());
     }

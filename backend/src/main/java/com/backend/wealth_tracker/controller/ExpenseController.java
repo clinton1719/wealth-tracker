@@ -8,6 +8,7 @@ import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.service.ExpenseService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/expenses")
+@Tag(name = "Expense", description = "API methods to manipulate Expense data")
 public class ExpenseController {
 
   private final ExpenseService expenseService;
@@ -28,6 +30,7 @@ public class ExpenseController {
 
   @GetMapping("/range/{pageNumber}/{pageSize}")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
   public List<ResponseExpenseDTO> getExpensesInRange(
       @AuthenticationPrincipal UserDetails userDetails,
       @RequestParam String startDate,
@@ -41,6 +44,7 @@ public class ExpenseController {
 
   @PostMapping(path = "/save")
   @ResponseStatus(HttpStatus.CREATED)
+  @Tag(name = "SAVE")
   public ResponseExpenseDTO saveExpense(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateExpenseDTO createExpenseDTO)
@@ -51,6 +55,7 @@ public class ExpenseController {
 
   @PutMapping(path = "/update")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "UPDATE")
   public ResponseExpenseDTO updateExpense(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateExpenseDTO updateExpenseDTO)
@@ -61,6 +66,7 @@ public class ExpenseController {
 
   @DeleteMapping(path = "/delete/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "DELETE")
   public void updateExpense(@PathVariable Long id) throws ResourceNotFoundException {
     this.expenseService.deleteExpense(id);
   }

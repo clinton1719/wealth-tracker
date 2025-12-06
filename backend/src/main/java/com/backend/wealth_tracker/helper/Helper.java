@@ -7,14 +7,11 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 import org.apache.tika.Tika;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 public final class Helper {
-  private static final Logger LOGGER = LoggerFactory.getLogger(Helper.class);
   private static final String pngType = "image/png";
   private static final String jpegType = "image/jpeg";
 

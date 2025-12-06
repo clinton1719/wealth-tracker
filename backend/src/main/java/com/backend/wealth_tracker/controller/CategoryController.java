@@ -9,6 +9,7 @@ import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.CategoryMapper;
 import com.backend.wealth_tracker.service.CategoryService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/categories")
+@Tag(name = "Category", description = "API methods to manipulate Category data")
 public class CategoryController {
 
   private final CategoryService categoryService;
@@ -29,6 +31,7 @@ public class CategoryController {
 
   @GetMapping("/all")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
   public List<ResponseCategoryDTO> getAllCategories(
       @AuthenticationPrincipal UserDetails userDetails) throws ResourceNotFoundException {
     return CategoryMapper.categoriesToResponseCategoryDTOs(
@@ -36,6 +39,7 @@ public class CategoryController {
   }
 
   @PostMapping("/save")
+  @Tag(name = "SAVE")
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseCategoryDTO saveCategory(
       @AuthenticationPrincipal UserDetails userDetails,
@@ -47,6 +51,7 @@ public class CategoryController {
 
   @PutMapping("/update")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "UPDATE")
   public ResponseCategoryDTO updateCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO)
@@ -56,6 +61,7 @@ public class CategoryController {
   }
 
   @DeleteMapping("/delete/{id}")
+  @Tag(name = "DELETE")
   @ResponseStatus(HttpStatus.OK)
   public void deleteCategory(
       @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id)
