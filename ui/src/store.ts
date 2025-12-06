@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { accountApi } from './services/accountsApi'
-import { authApi } from './services/authApi'
-import { categoriesApi } from './services/categoriesApi'
-import { expensesApi } from './services/expensesApi'
-import { profileApi } from './services/profilesApi'
-import authReducer from './slices/authSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import { accountApi } from "./services/accountsApi";
+import { authApi } from "./services/authApi";
+import { categoriesApi } from "./services/categoriesApi";
+import { expensesApi } from "./services/expensesApi";
+import { profileApi } from "./services/profilesApi";
+import authReducer from "./slices/authSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,9 +15,14 @@ export const store = configureStore({
     [profileApi.reducerPath]: profileApi.reducer,
     auth: authReducer,
   },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(expensesApi.middleware).concat(authApi.middleware).concat(categoriesApi.middleware).concat(accountApi.middleware).concat(profileApi.middleware),
-})
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(expensesApi.middleware)
+      .concat(authApi.middleware)
+      .concat(categoriesApi.middleware)
+      .concat(accountApi.middleware)
+      .concat(profileApi.middleware),
+});
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

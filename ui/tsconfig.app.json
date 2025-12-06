@@ -13,9 +13,7 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "types": ["vite/client"],
     "allowImportingTsExtensions": true,

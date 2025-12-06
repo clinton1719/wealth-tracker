@@ -1,6 +1,6 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
-@import './theme.css';
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./theme.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -24,7 +24,7 @@
 
   /* Cursor pointer for buttons */
   button:not(:disabled),
-  [role='button']:not(:disabled) {
+  [role="button"]:not(:disabled) {
     cursor: pointer;
   }
 
@@ -61,10 +61,10 @@
 .CollapsibleContent {
   overflow: hidden;
 }
-.CollapsibleContent[data-state='open'] {
+.CollapsibleContent[data-state="open"] {
   animation: slideDown 300ms ease-out;
 }
-.CollapsibleContent[data-state='closed'] {
+.CollapsibleContent[data-state="closed"] {
   animation: slideUp 300ms ease-out;
 }
 
@@ -88,25 +88,25 @@
 
 :root {
   /* Sidebar colors mapped to palette */
-  --sidebar: #FAF3DD;
-  --sidebar-foreground: #5E6472;
-  --sidebar-primary: #FFA69E;
-  --sidebar-primary-foreground: #5E6472;
-  --sidebar-accent: #AED9E0;
-  --sidebar-accent-foreground: #5E6472;
-  --sidebar-border: rgba(94,100,114,0.06);
-  --sidebar-ring: rgba(255,166,158,0.18);
+  --sidebar: #faf3dd;
+  --sidebar-foreground: #5e6472;
+  --sidebar-primary: #ffa69e;
+  --sidebar-primary-foreground: #5e6472;
+  --sidebar-accent: #aed9e0;
+  --sidebar-accent-foreground: #5e6472;
+  --sidebar-border: rgba(94, 100, 114, 0.06);
+  --sidebar-ring: rgba(255, 166, 158, 0.18);
 }
 
 .dark {
-  --sidebar: #5E6472;
-  --sidebar-foreground: #FAF3DD;
-  --sidebar-primary: #FFA69E;
-  --sidebar-primary-foreground: #FAF3DD;
+  --sidebar: #5e6472;
+  --sidebar-foreground: #faf3dd;
+  --sidebar-primary: #ffa69e;
+  --sidebar-primary-foreground: #faf3dd;
   --sidebar-accent: #4a5057;
-  --sidebar-accent-foreground: #FAF3DD;
-  --sidebar-border: rgba(250,243,221,0.06);
-  --sidebar-ring: rgba(255,166,158,0.12);
+  --sidebar-accent-foreground: #faf3dd;
+  --sidebar-border: rgba(250, 243, 221, 0.06);
+  --sidebar-ring: rgba(255, 166, 158, 0.12);
 }
 
 @theme inline {

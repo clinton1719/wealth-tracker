@@ -1,6 +1,6 @@
 export interface AlertType {
-  title: string
-  description: string
-  primaryButton: string
-  secondaryButton: string
+  title: string;
+  description: string;
+  primaryButton: string;
+  secondaryButton: string;
 }

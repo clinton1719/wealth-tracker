@@ -1,11 +1,13 @@
-import { Link } from 'react-router'
+import { Link } from "react-router";
 
 export default function ErrorPage({ errorCode }: ErrorPageProps) {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-md text-center">
         <div className="mx-auto h-12 w-12 text-primary" />
-        <h1 className="mt-4 text-6xl font-bold tracking-tight text-foreground sm:text-7xl">{errorCode}</h1>
+        <h1 className="mt-4 text-6xl font-bold tracking-tight text-foreground sm:text-7xl">
+          {errorCode}
+        </h1>
         <p className="mt-4 text-lg text-muted-foreground">
           {errorCodeToMessage(errorCode)}
         </p>
@@ -19,20 +21,20 @@ export default function ErrorPage({ errorCode }: ErrorPageProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 interface ErrorPageProps {
-  errorCode: number
+  errorCode: number;
 }
 
 function errorCodeToMessage(code: number): string {
   switch (code) {
     case 404:
-      return 'Oops, it looks like the page you\'re looking for doesn\'t exist.'
+      return "Oops, it looks like the page you're looking for doesn't exist.";
     case 500:
-      return 'Oops, something went wrong on our end.'
+      return "Oops, something went wrong on our end.";
     default:
-      return 'Oops, an unexpected error occurred.'
+      return "Oops, an unexpected error occurred.";
   }
 }

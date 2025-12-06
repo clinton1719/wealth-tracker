@@ -1,13 +1,12 @@
-import { AccountsSection } from '@/components/building-blocks/accountsSection'
-import { ProfilesSection } from '@/features/profile/profilesSection'
-import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
-import { Tabs, TabsList, TabsTrigger } from './components/ui/tabs'
+import { AccountsSection } from "@/components/building-blocks/accountsSection";
+import { ProfilesSection } from "@/features/profile/profilesSection";
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs";
 
 function App() {
   return (
     <div className="flex justify-center">
       <Card className="hover:shadow-md transition flex justify-between sm:min-w-lg">
-
         <CardHeader>
           <CardTitle>Manage Profiles & Accounts</CardTitle>
         </CardHeader>
@@ -23,10 +22,9 @@ function App() {
             <AccountsSection />
           </Tabs>
         </CardContent>
-
       </Card>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
