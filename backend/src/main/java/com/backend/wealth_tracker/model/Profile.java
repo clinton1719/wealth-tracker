@@ -188,19 +188,33 @@ public class Profile implements Serializable {
     this.profilePictureExtension = profilePictureExtension;
   }
 
-    @Override
-    public String toString() {
-        return "Profile{" +
-                "id=" + id +
-                ", profileName='" + profileName + '\'' +
-                ", description='" + description + '\'' +
-                ", colorCode='" + colorCode + '\'' +
-                ", profilePicture=" + Arrays.toString(profilePicture) +
-                ", profilePictureExtension='" + profilePictureExtension + '\'' +
-                ", user=" + user +
-                ", accounts=" + accounts +
-                ", categories=" + categories +
-                ", expenses=" + expenses +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Profile{"
+        + "id="
+        + id
+        + ", profileName='"
+        + profileName
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", colorCode='"
+        + colorCode
+        + '\''
+        + ", profilePicture="
+        + Arrays.toString(profilePicture)
+        + ", profilePictureExtension='"
+        + profilePictureExtension
+        + '\''
+        + ", user="
+        + user
+        + ", accounts="
+        + accounts
+        + ", categories="
+        + categories
+        + ", expenses="
+        + expenses
+        + '}';
+  }
 }

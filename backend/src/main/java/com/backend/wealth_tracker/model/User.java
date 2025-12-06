@@ -2,15 +2,14 @@ package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.enums.UserRole;
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.io.Serial;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "users")
 @SuppressWarnings({"PMD.DataClass", "PMD.AvoidDuplicateLiterals"})

@@ -162,18 +162,31 @@ public class Category implements Serializable {
     }
   }
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", categoryName='" + categoryName + '\'' +
-                ", description='" + description + '\'' +
-                ", colorCode='" + colorCode + '\'' +
-                ", icon='" + icon + '\'' +
-                ", tags=" + tags +
-                ", user=" + user +
-                ", expenses=" + expenses +
-                ", profile=" + profile +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Category{"
+        + "id="
+        + id
+        + ", categoryName='"
+        + categoryName
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", colorCode='"
+        + colorCode
+        + '\''
+        + ", icon='"
+        + icon
+        + '\''
+        + ", tags="
+        + tags
+        + ", user="
+        + user
+        + ", expenses="
+        + expenses
+        + ", profile="
+        + profile
+        + '}';
+  }
 }

@@ -2,14 +2,13 @@ package com.backend.wealth_tracker.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity(name = "expenses")
 @EntityListeners(AuditingEntityListener.class)
@@ -151,18 +150,28 @@ public class Expense implements Serializable {
     }
   }
 
-    @Override
-    public String toString() {
-        return "Expense{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", amount=" + amount +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", user=" + user +
-                ", category=" + category +
-                ", account=" + account +
-                ", profile=" + profile +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Expense{"
+        + "id="
+        + id
+        + ", description='"
+        + description
+        + '\''
+        + ", amount="
+        + amount
+        + ", createdAt="
+        + createdAt
+        + ", updatedAt="
+        + updatedAt
+        + ", user="
+        + user
+        + ", category="
+        + category
+        + ", account="
+        + account
+        + ", profile="
+        + profile
+        + '}';
+  }
 }

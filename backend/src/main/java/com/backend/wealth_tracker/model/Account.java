@@ -142,17 +142,27 @@ public class Account implements Serializable {
     }
   }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", accountName='" + accountName + '\'' +
-                ", description='" + description + '\'' +
-                ", accountBalance=" + accountBalance +
-                ", accountType=" + accountType +
-                ", user=" + user +
-                ", expenses=" + expenses +
-                ", profile=" + profile +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Account{"
+        + "id="
+        + id
+        + ", accountName='"
+        + accountName
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", accountBalance="
+        + accountBalance
+        + ", accountType="
+        + accountType
+        + ", user="
+        + user
+        + ", expenses="
+        + expenses
+        + ", profile="
+        + profile
+        + '}';
+  }
 }

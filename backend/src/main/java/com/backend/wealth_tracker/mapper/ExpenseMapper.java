@@ -3,7 +3,6 @@ package com.backend.wealth_tracker.mapper;
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
 import com.backend.wealth_tracker.model.Expense;
-
 import java.util.List;
 
 public final class ExpenseMapper {
