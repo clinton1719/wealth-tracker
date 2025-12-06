@@ -1,5 +1,8 @@
-import { Check, ChevronsUpDown } from 'lucide-react'
+import type { IconsComboBoxProps } from '@/types/IconsComboBoxProps'
 
+import { Check, ChevronsUpDown } from 'lucide-react'
+import { DynamicIcon, iconNames } from 'lucide-react/dynamic'
+import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -15,9 +18,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import type { IconsComboBoxProps } from '@/types/IconsComboBoxProps'
-import { DynamicIcon, iconNames } from 'lucide-react/dynamic'
-import * as React from 'react'
 
 export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
   const [open, setOpen] = React.useState(false)
@@ -73,4 +73,3 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
     </Popover>
   )
 }
-

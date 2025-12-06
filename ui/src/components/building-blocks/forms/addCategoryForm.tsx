@@ -1,14 +1,14 @@
-import { IconsComboBox } from '@/components/building-blocks/iconsComboBox'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { DialogDescription } from '@/components/ui/dialog'
+import type { AddCategoryFormProps } from '@/types/AddCategoryFormProps'
 import { PlusCircle, XIcon } from 'lucide-react'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
+import { IconsComboBox } from '@/components/building-blocks/iconsComboBox'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import type { AddCategoryFormProps } from '@/types/AddCategoryFormProps'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 
 export function AddCategoryForm({ form, categoryDialogOpen, setCategoryDialogOpen, onSubmit }: AddCategoryFormProps) {
   const [inputValue, setInputValue] = useState('')
@@ -161,23 +161,23 @@ export function AddCategoryForm({ form, categoryDialogOpen, setCategoryDialogOpe
                   <div className="flex flex-wrap gap-2 mt-2">
                     {form.getValues('tags')
                       ? form.getValues('tags')?.map(tag => (
-                        <Badge key={tag} variant="secondary">
-                          {tag}
-                          <button
-                            type="button"
-                            className="ml-2 text-destructive"
-                            onClick={() => {
-                              const tags = form.getValues('tags')
-                              if (tags) {
-                                const newTags = tags.filter(_tag => _tag !== tag)
-                                form.setValue('tags', [...newTags])
-                              }
-                            }}
-                          >
-                            <XIcon className="w-3 h-3" />
-                          </button>
-                        </Badge>
-                      ))
+                          <Badge key={tag} variant="secondary">
+                            {tag}
+                            <button
+                              type="button"
+                              className="ml-2 text-destructive"
+                              onClick={() => {
+                                const tags = form.getValues('tags')
+                                if (tags) {
+                                  const newTags = tags.filter(_tag => _tag !== tag)
+                                  form.setValue('tags', [...newTags])
+                                }
+                              }}
+                            >
+                              <XIcon className="w-3 h-3" />
+                            </button>
+                          </Badge>
+                        ))
                       : <></>}
                   </div>
                 </Field>

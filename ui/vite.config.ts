@@ -18,10 +18,10 @@ export default defineConfig({
           if (id.includes('node_modules') && (
             id.includes('lucide-react')
           )) {
-            return 'lucide-react';
+            return 'lucide-react'
           }
           if (id.includes('node_modules')) {
-            return 'vendor-common';
+            return 'vendor-common'
           }
         },
       },

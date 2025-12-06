@@ -5,5 +5,5 @@ export interface Category {
   colorCode: string
   icon?: string
   tags?: string[]
-  profileId: number;
+  profileId: number
 }

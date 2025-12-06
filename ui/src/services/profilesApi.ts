@@ -23,19 +23,19 @@ export const profileApi = createApi({
     }),
     saveProfile: builder.mutation<Profile, Partial<Profile>>({
       query: (newProfile) => {
-        const formData = new FormData();
+        const formData = new FormData()
         Object.entries(newProfile).forEach(([key, value]) => {
           if (value !== undefined) {
-            formData.append(key, value as any);
+            formData.append(key, value as any)
           }
-        });
+        })
 
         return {
           url: '/profiles/save',
           method: 'POST',
           body: formData,
           formData: true,
-        };
+        }
       },
       invalidatesTags: ['Profiles'],
     }),

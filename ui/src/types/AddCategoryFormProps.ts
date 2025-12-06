@@ -1,4 +1,4 @@
-import type { SubmitHandler, UseFormReturn } from "react-hook-form"
+import type { SubmitHandler, UseFormReturn } from 'react-hook-form'
 
 export interface AddCategoryFormProps {
   form: UseFormReturn<{

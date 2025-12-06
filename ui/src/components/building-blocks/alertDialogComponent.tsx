@@ -1,6 +1,6 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import type { AlertDialogProps } from '@/types/AlertDialogProps'
 import type { AlertType } from '@/types/AlertType'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 
 export function AlertDialogComponent({ isDialogOpen, alertType, onSecondaryButtonClick, onPrimaryButtonClick }: AlertDialogProps) {
   let alert: AlertType | undefined
@@ -11,8 +11,8 @@ export function AlertDialogComponent({ isDialogOpen, alertType, onSecondaryButto
         description: 'Deleting this category will delete all expenses and other associated entities related to it',
         primaryButton: 'I acknowledge. Delete this category',
         secondaryButton: 'Cancel',
-      };
-      return;
+      }
+      return
     case 'DELETE_PROFILE':
       alert = {
         title: 'Do you really want to delete this profile?',
@@ -20,7 +20,7 @@ export function AlertDialogComponent({ isDialogOpen, alertType, onSecondaryButto
         primaryButton: 'I acknowledge. Delete this profile',
         secondaryButton: 'Cancel',
       }
-      return;
+      return
   }
   return (
     <AlertDialog open={isDialogOpen}>
