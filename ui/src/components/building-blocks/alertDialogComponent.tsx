@@ -27,7 +27,7 @@ export function AlertDialogComponent({
         primaryButton: "I acknowledge. Delete this category",
         secondaryButton: "Cancel",
       };
-      return;
+      break;
     case "DELETE_PROFILE":
       alert = {
         title: "Do you really want to delete this profile?",
@@ -36,7 +36,7 @@ export function AlertDialogComponent({
         primaryButton: "I acknowledge. Delete this profile",
         secondaryButton: "Cancel",
       };
-      return;
+      break;
   }
   return (
     <AlertDialog open={isDialogOpen}>

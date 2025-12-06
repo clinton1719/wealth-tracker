@@ -1,7 +1,7 @@
-import type { Profile } from "@/types/Profile";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { selectAuthToken } from "@/slices/authSlice";
 import { baseAPI } from "@/static-values/constants";
+import type { Profile } from "@/types/Profile";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const profileApi = createApi({
   reducerPath: "Profile",
@@ -40,16 +40,25 @@ export const profileApi = createApi({
       invalidatesTags: ["Profiles"],
     }),
     updateProfile: builder.mutation<Profile, Partial<Profile>>({
-      query: (existingProfile) => ({
-        url: `/profiles/update`,
-        method: "PUT",
-        body: existingProfile,
-      }),
+      query: (updatedProfile) => {
+        const formData = new FormData();
+        Object.entries(updatedProfile).forEach(([key, value]) => {
+          if (value !== undefined) {
+            formData.append(key, value as any);
+          }
+        });
+
+        return {
+          url: "/profiles/update",
+          method: "PUT",
+          body: formData,
+        };
+      },
       invalidatesTags: ["Profiles"],
     }),
     deleteProfile: builder.mutation<void, number>({
       query: (id: number) => ({
-        url: `/profiles/${id}`,
+        url: `/profiles/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Profiles"],

@@ -98,8 +98,7 @@ export default function CategoriesSection() {
             }}
           >
             <code>
-              Category name:
-              {result.categoryName}
+              Category name: {result.categoryName}
             </code>
           </pre>
         ),
@@ -187,7 +186,7 @@ export default function CategoriesSection() {
       } else if (error.originalStatus === 404) {
         toast.error("This resource does not exist, kindly refresh your page.");
       } else {
-        toast.error("Failed to create category, please try again");
+        toast.error("Failed to update category, please try again");
       }
     }
   }

@@ -202,8 +202,6 @@ public class Profile implements Serializable {
         + ", colorCode='"
         + colorCode
         + '\''
-        + ", profilePicture="
-        + Arrays.toString(profilePicture)
         + ", profilePictureExtension='"
         + profilePictureExtension
         + '\''

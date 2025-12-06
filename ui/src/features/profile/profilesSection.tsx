@@ -126,7 +126,11 @@ export function ProfilesSection() {
     formData: z.infer<typeof profileFormSchema>,
   ) {
     try {
-      const result = await updateProfile({ ...formData }).unwrap();
+      const formDataa = {
+        ...formData,
+        profilePicture: undefined
+      }
+      const result = await updateProfile({ ...formDataa }).unwrap();
 
       if (!result) {
         toast.error("Failed to update profile, please try again later");
@@ -143,8 +147,7 @@ export function ProfilesSection() {
             }}
           >
             <code>
-              Profile name:
-              {result.profileName}
+              Profile name: {result.profileName}
             </code>
           </pre>
         ),
@@ -175,16 +178,16 @@ export function ProfilesSection() {
       } else if (error.originalStatus === 404) {
         toast.error("This resource does not exist, kindly refresh your page.");
       } else {
-        toast.error("Failed to create profile, please try again");
+        toast.error("Failed to update profile, please try again");
       }
     }
   }
 
-  const cancelProfileCategory = () => {
+  const cancelDeleteProfile = () => {
     setDeleteProfileDialogOpen(false);
   };
 
-  const deleteCurrentCategory = async () => {
+  const deleteCurrentProfile = async () => {
     if (currentProfile && currentProfile.id) {
       await deleteProfile(currentProfile.id);
       toast.info(
@@ -230,8 +233,8 @@ export function ProfilesSection() {
       <AlertDialogComponent
         isDialogOpen={deleteProfileDialogOpen}
         alertType="DELETE_PROFILE"
-        onSecondaryButtonClick={cancelProfileCategory}
-        onPrimaryButtonClick={deleteCurrentCategory}
+        onSecondaryButtonClick={cancelDeleteProfile}
+        onPrimaryButtonClick={deleteCurrentProfile}
       />
     </TabsContent>
   );

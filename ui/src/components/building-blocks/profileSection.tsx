@@ -25,7 +25,7 @@ export function ProfileSection({
   };
 
   return (
-    <div className="flex items-center justify-between p-3 border rounded-lg">
+    <div className="flex items-center justify-between p-3 border rounded-lg" style={{ backgroundColor: `${profile.colorCode}33` }}>
       <div className="flex items-center gap-3">
         <ProfilePicture
           imageSource={profile.profilePicture}
@@ -33,7 +33,9 @@ export function ProfileSection({
           imageColor={profile.colorCode}
         />
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xl">
+          <span
+            className="text-muted-foreground text-xl"
+          >
             {profile.profileName}
           </span>
           <span className="text-sm text-muted-foreground mb-4 break-all">
@@ -54,10 +56,10 @@ export function ProfileSection({
             className="w-56 bg-white shadow-md"
             align="start"
           >
-            <DropdownMenuItem onClick={() => handleUpdateProfile(profile)}>
+            <DropdownMenuItem onClick={() => handleUpdateProfile(profile)} style={{ cursor: 'pointer' }}>
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDeleteProfile(profile)}>
+            <DropdownMenuItem onClick={() => handleDeleteProfile(profile)} style={{ cursor: 'pointer' }}>
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
