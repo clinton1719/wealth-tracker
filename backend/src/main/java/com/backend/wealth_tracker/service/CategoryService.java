@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Service
 public class CategoryService {
-    private final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
     private final CategoryRepository categoryRepository;
     private final AuthService authService;
 

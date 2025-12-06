@@ -35,19 +35,19 @@ public class Expense implements Serializable {
   @Column(nullable = false)
   private LocalDate updatedAt;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "category_id")
   private Category category;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "account_id")
   private Account account;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "profile_id")
   private Profile profile;
 

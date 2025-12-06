@@ -29,14 +29,14 @@ public class Account implements Serializable {
   @Column(nullable = false)
   private AccountType accountType;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "account")
   private Set<Expense> expenses;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "profile_id")
   private Profile profile;
 

@@ -9,11 +9,12 @@ import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.service.ExpenseService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/expenses")
@@ -51,10 +52,10 @@ public class ExpenseController {
 
   @PutMapping(path = "/update")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseExpenseDTO updateExpense(@Valid @RequestBody UpdateExpenseDTO updateExpenseDTO)
-      throws ResourceNotFoundException {
+  public ResponseExpenseDTO updateExpense(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UpdateExpenseDTO updateExpenseDTO)
+          throws ResourceNotFoundException, UnAuthorizedException {
     return ExpenseMapper.expenseToResponseExpenseDTO(
-        this.expenseService.updateExpense(updateExpenseDTO));
+        this.expenseService.updateExpense(updateExpenseDTO, userDetails.getUsername()));
   }
 
   @DeleteMapping(path = "/delete/{id}")

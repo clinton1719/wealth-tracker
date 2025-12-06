@@ -30,17 +30,17 @@ public class Profile implements Serializable {
 
   @Column private String profilePictureExtension;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "profile", orphanRemoval = true)
   private Set<Account> accounts;
 
-  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "profile", orphanRemoval = true)
   private Set<Category> categories;
 
-  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "profile", orphanRemoval = true)
   private Set<Expense> expenses;
 
   public Profile() {}

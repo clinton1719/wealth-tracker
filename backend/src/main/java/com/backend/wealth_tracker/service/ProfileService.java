@@ -25,7 +25,7 @@ import java.util.Optional;
 @Transactional
 public class ProfileService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ProfileService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileService.class);
 
     private final ProfileRepository profileRepository;
     private final AuthService authService;

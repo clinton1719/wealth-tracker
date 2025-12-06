@@ -2,11 +2,9 @@ package com.backend.wealth_tracker.service;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
-import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.helper.Helper;
-import com.backend.wealth_tracker.mapper.AccountMapper;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.model.*;
 import com.backend.wealth_tracker.repository.AccountRepository;
@@ -31,7 +29,7 @@ import java.util.Optional;
 
 @Service
 public class ExpenseService {
-    private final Logger LOGGER = LoggerFactory.getLogger(ExpenseService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseService.class);
 
     private final ExpenseRepository expenseRepository;
     private final AuthService authService;
@@ -61,16 +59,24 @@ public class ExpenseService {
             LOGGER.atError().log("Expense to be saved had illegal profile ID: {} | category ID: {} | account ID: {}", createExpenseDTO.getProfileId(), createExpenseDTO.getCategoryId(), createExpenseDTO.getAccountId());
             throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
         }
-        Expense expense = ExpenseMapper.createExpenseDTOtoExpense(createExpenseDTO, user);
-        Account savedAccount = this.accountRepository.save(account);
-        LOGGER.atInfo().log("Account to be saved created : {}", savedAccount);
-        return savedAccount;
+        Expense expense = setRequiredFieldsInExpense(createExpenseDTO);
+        Expense savedExpense = this.expenseRepository.save(expense);
+        LOGGER.atInfo().log("Expense to be saved created : {}", savedExpense);
+        return savedExpense;
+    }
+
+    private Expense setRequiredFieldsInExpense(CreateExpenseDTO createExpenseDTO) throws ResourceNotFoundException {
+        Expense expense = ExpenseMapper.createExpenseDTOtoExpense(createExpenseDTO);
+        setCategoryIfPresent(createExpenseDTO.getCategoryId(), expense);
+        setAccountIfPresent(createExpenseDTO.getAccountId(), expense);
+        setProfileIfPresent(createExpenseDTO.getProfileId(), expense);
+        return expense;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
-    public Expense updateExpense(UpdateExpenseDTO updateExpenseDTO) throws ResourceNotFoundException, UnAuthorizedException {
+    public Expense updateExpense(UpdateExpenseDTO updateExpenseDTO, String userName) throws ResourceNotFoundException, UnAuthorizedException {
         User user = this.authService.getUserByUsername(userName);
-        if (!Helper.isCategoryIdProfileIdAndAccountIdValid(user.getCategories(), createExpenseDTO.getCategoryId(), user.getProfiles(), updateExpenseDTO.getProfileId(), user.getAccounts(), updateExpenseDTO.getAccountId())) {
+        if (!Helper.isCategoryIdProfileIdAndAccountIdValid(user.getCategories(), updateExpenseDTO.getCategoryId(), user.getProfiles(), updateExpenseDTO.getProfileId(), user.getAccounts(), updateExpenseDTO.getAccountId())) {
             LOGGER.atError().log("Expense to be updated had illegal profile ID: {} | category ID: {} | account ID: {}", updateExpenseDTO.getProfileId(), updateExpenseDTO.getCategoryId(), updateExpenseDTO.getAccountId());
             throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
         }
@@ -90,15 +96,11 @@ public class ExpenseService {
         if (updateExpenseDTO.getDescription() != null) {
             expense.setDescription(updateExpenseDTO.getDescription());
         }
-
-        setCategoryIfPresent(updateExpenseDTO.getCategoryId(), expense);
-
         if (updateExpenseDTO.getAmount() != null) {
             expense.setAmount(updateExpenseDTO.getAmount());
         }
-
+        setCategoryIfPresent(updateExpenseDTO.getCategoryId(), expense);
         setProfileIfPresent(updateExpenseDTO.getProfileId(), expense);
-
         setAccountIfPresent(updateExpenseDTO.getAccountId(), expense);
     }
 

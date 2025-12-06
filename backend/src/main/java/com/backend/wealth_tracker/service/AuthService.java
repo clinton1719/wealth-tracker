@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService implements UserDetailsService {
-  private final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
   private final UserRepository userRepository;
 
   @SuppressFBWarnings("EI_EXPOSE_REP2")

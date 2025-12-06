@@ -29,14 +29,14 @@ public class Category implements Serializable {
   @Column private String icon;
   @Column private List<String> tags;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "category")
   private Set<Expense> expenses = new HashSet<>();
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "profile_id")
   private Profile profile;
 
