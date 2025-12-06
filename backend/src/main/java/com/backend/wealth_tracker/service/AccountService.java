@@ -11,6 +11,7 @@ import com.backend.wealth_tracker.model.Account;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.AccountRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -125,5 +126,31 @@ public class AccountService {
       account.setAccountBalance(updateAccountDTO.getAccountBalance());
     }
     return account;
+  }
+
+  public void debitAccount(Long accountId, BigDecimal debitAmount)
+      throws ResourceNotFoundException {
+    Account account =
+        accountRepository
+            .findById(accountId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Account not found for id: " + accountId));
+    BigDecimal accountBalance = account.getAccountBalance();
+    account.setAccountBalance(accountBalance.subtract(debitAmount));
+    Account savedAccount = this.accountRepository.save(account);
+    LOGGER.atInfo().log("Account debited: {} with: {}", savedAccount, debitAmount);
+  }
+
+  public void creditAccount(Long accountId, BigDecimal creditAmount)
+      throws ResourceNotFoundException {
+    Account account =
+        accountRepository
+            .findById(accountId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Account not found for id: " + accountId));
+    BigDecimal accountBalance = account.getAccountBalance();
+    account.setAccountBalance(accountBalance.add(creditAmount));
+    Account savedAccount = this.accountRepository.save(account);
+    LOGGER.atInfo().log("Account credited: {} with: {}", savedAccount, creditAmount);
   }
 }

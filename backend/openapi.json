@@ -78,13 +78,13 @@
                                 "schema": {
                                     "oneOf": [
                                         {
-                                            "type": "string"
-                                        },
-                                        {
                                             "type": "object",
                                             "additionalProperties": {
                                                 "type": "string"
                                             }
+                                        },
+                                        {
+                                            "type": "string"
                                         }
                                     ]
                                 }
@@ -321,13 +321,13 @@
                                 "schema": {
                                     "oneOf": [
                                         {
-                                            "type": "string"
-                                        },
-                                        {
                                             "type": "object",
                                             "additionalProperties": {
                                                 "type": "string"
                                             }
+                                        },
+                                        {
+                                            "type": "string"
                                         }
                                     ]
                                 }
@@ -1014,14 +1014,6 @@
                     },
                     "description": {
                         "type": "string"
-                    },
-                    "profileId": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "accountId": {
-                        "type": "integer",
-                        "format": "int64"
                     }
                 },
                 "required": [
@@ -1299,14 +1291,14 @@
                     "accountNonExpired": {
                         "type": "boolean"
                     },
+                    "accountNonLocked": {
+                        "type": "boolean"
+                    },
                     "authorities": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/GrantedAuthority"
                         }
-                    },
-                    "accountNonLocked": {
-                        "type": "boolean"
                     }
                 }
             },

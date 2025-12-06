@@ -32,6 +32,7 @@ public class ExpenseService {
 
   private final ExpenseRepository expenseRepository;
   private final AuthService authService;
+  private final AccountService accountService;
   private final CategoryRepository categoryRepository;
   private final ProfileRepository profileRepository;
   private final AccountRepository accountRepository;
@@ -40,11 +41,13 @@ public class ExpenseService {
   public ExpenseService(
       ExpenseRepository expenseRepository,
       AuthService authService,
+      AccountService accountService,
       CategoryRepository categoryRepository,
       ProfileRepository profileRepository,
       AccountRepository accountRepository) {
     this.categoryRepository = categoryRepository;
     this.authService = authService;
+    this.accountService = accountService;
     this.expenseRepository = expenseRepository;
     this.profileRepository = profileRepository;
     this.accountRepository = accountRepository;
@@ -72,6 +75,7 @@ public class ExpenseService {
     }
     Expense expense = setRequiredFieldsInExpense(createExpenseDTO);
     Expense savedExpense = this.expenseRepository.save(expense);
+    this.accountService.debitAccount(createExpenseDTO.getAccountId(), savedExpense.getAmount());
     LOGGER.atInfo().log("Expense to be saved created : {}", savedExpense);
     return savedExpense;
   }
@@ -89,20 +93,12 @@ public class ExpenseService {
   public Expense updateExpense(UpdateExpenseDTO updateExpenseDTO, String userName)
       throws ResourceNotFoundException, UnAuthorizedException {
     User user = this.authService.getUserByUsername(userName);
-    if (!Helper.isCategoryIdProfileIdAndAccountIdValid(
-        user.getCategories(),
-        updateExpenseDTO.getCategoryId(),
-        user.getProfiles(),
-        updateExpenseDTO.getProfileId(),
-        user.getAccounts(),
-        updateExpenseDTO.getAccountId())) {
+    if (!Helper.isCategoryIdValid(user.getCategories(), updateExpenseDTO.getCategoryId())) {
       LOGGER
           .atError()
           .log(
-              "Expense to be updated had illegal profile ID: {} | category ID: {} | account ID: {}",
-              updateExpenseDTO.getProfileId(),
-              updateExpenseDTO.getCategoryId(),
-              updateExpenseDTO.getAccountId());
+              "Expense to be updated had illegal category ID: {}",
+              updateExpenseDTO.getCategoryId());
       throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
     }
     Optional<Expense> expenseOptional = this.expenseRepository.findById(updateExpenseDTO.getId());
@@ -125,8 +121,6 @@ public class ExpenseService {
       expense.setAmount(updateExpenseDTO.getAmount());
     }
     setCategoryIfPresent(updateExpenseDTO.getCategoryId(), expense);
-    setProfileIfPresent(updateExpenseDTO.getProfileId(), expense);
-    setAccountIfPresent(updateExpenseDTO.getAccountId(), expense);
   }
 
   private void setAccountIfPresent(Long accountId, Expense expense)
@@ -171,6 +165,8 @@ public class ExpenseService {
     if (expenseOptional.isEmpty()) {
       throw new ResourceNotFoundException("Expense not found for id: " + id);
     }
+    this.accountService.creditAccount(
+        expenseOptional.get().getAccount().getId(), expenseOptional.get().getAmount());
     this.expenseRepository.delete(expenseOptional.get());
     LOGGER.atInfo().log("Expense deleted for id: {}", id);
   }

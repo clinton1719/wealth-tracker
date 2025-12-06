@@ -11,8 +11,6 @@ public class UpdateExpenseDTO {
   private Long categoryId;
   private BigDecimal amount;
   private String description;
-  private Long profileId;
-  private Long accountId;
 
   public Long getId() {
     return id;
@@ -44,21 +42,5 @@ public class UpdateExpenseDTO {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public Long getProfileId() {
-    return profileId;
-  }
-
-  public void setProfileId(Long profileId) {
-    this.profileId = profileId;
-  }
-
-  public Long getAccountId() {
-    return accountId;
-  }
-
-  public void setAccountId(Long accountId) {
-    this.accountId = accountId;
   }
 }
