@@ -5,7 +5,7 @@ import { useApiError } from '@/hooks/use-api-error'
 import { useGetAllExpensesInRangeQuery } from '@/services/expensesApi'
 import { formatDate } from '@/utilities/helper'
 
-export default function ViewExpenses() {
+export default function ExpensesSection() {
   const now = new Date()
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)

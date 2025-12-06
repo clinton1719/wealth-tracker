@@ -12,8 +12,8 @@ import './styles/index.css'
 import { Spinner } from './components/ui/spinner.tsx'
 
 const App = lazy(() => import('./App.tsx'));
-const ViewCategories = lazy(() => import('./features/category/viewCategories.tsx'));
-const ViewExpenses = lazy(() => import('./features/expense/viewExpenses.tsx'));
+const CategoriesSection = lazy(() => import('./features/category/categoriesSection.tsx'));
+const ExpensesSection = lazy(() => import('./features/expense/expensesSection.tsx'));
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
@@ -28,8 +28,8 @@ createRoot(document.getElementById('root')!).render(
           {/* PROTECTED ROUTES */}
           <Route element={<ProtectedRoute />}>
             <Route index element={<App />} />
-            <Route path="expense" element={<ViewExpenses />} />
-            <Route path="category" element={<ViewCategories />} />
+            <Route path="expense" element={<ExpensesSection />} />
+            <Route path="category" element={<CategoriesSection />} />
           </Route>
         </Routes>
       </Suspense>

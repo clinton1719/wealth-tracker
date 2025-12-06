@@ -1,14 +1,15 @@
-import { AddProfileForm } from '@/components/building-blocks/addProfileForm'
+import { AddProfileForm } from '@/components/building-blocks/forms/addProfileForm'
 import { ProfilePicture } from '@/components/building-blocks/profilePicture'
 import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
+import { Switch } from '@/components/ui/switch'
+import { TabsContent } from '@/components/ui/tabs'
 import { useApiError } from '@/hooks/use-api-error'
 import { useGetAllProfilesForUserQuery, useSaveProfileMutation, useUpdateProfileMutation } from '@/services/profilesApi'
 import type { Profile } from '@/types/Profile'
+import type { ProfileSectionProps } from '@/types/ProfileSectionProps'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Switch } from '@/components/ui/switch'
-import { TabsContent } from '@/components/ui/tabs'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -175,14 +176,20 @@ export function ProfilesSection() {
   return (
     <TabsContent value="profiles">
       <div className="space-y-4 mt-2">
-        {data ? data.map(profile => <ProfileSection profile={profile} key={profile.id} />) : <></>}
+        {data ? data.map(profile => <ProfileSection profile={profile} key={profile.id} form={form} setIsUpdate={setIsUpdate} setProfileDialogOpen={setProfileDialogOpen} />) : <p className="text-muted-foreground text-sm">Create a new profile here</p>}
         <AddProfileForm form={form} onSubmit={onSubmit} profileDialogOpen={profileDialogOpen} setProfileDialogOpen={setProfileDialogOpen} />
       </div>
     </TabsContent>
   )
 }
 
-function ProfileSection({ profile }: ProfileSectionProps) {
+function ProfileSection({ profile, form, setProfileDialogOpen, setIsUpdate }: ProfileSectionProps) {
+  const handleUpdateProfile = (profile: Profile) => {
+    form.reset(profile)
+    setProfileDialogOpen(true)
+    setIsUpdate(true)
+  }
+
   return (
     <div className="flex items-center justify-between p-3 border rounded-lg">
       <div className="flex items-center gap-3">
@@ -202,11 +209,11 @@ function ProfileSection({ profile }: ProfileSectionProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 bg-white shadow-md" align="start">
-            <DropdownMenuItem>
-              Settings
+            <DropdownMenuItem onClick={() => handleUpdateProfile(profile)}>
+              Edit
             </DropdownMenuItem>
             <DropdownMenuItem>
-              Keyboard shortcuts
+              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -215,6 +222,4 @@ function ProfileSection({ profile }: ProfileSectionProps) {
   )
 }
 
-interface ProfileSectionProps {
-  profile: Profile
-}
+

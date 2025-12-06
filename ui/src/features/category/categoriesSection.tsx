@@ -1,5 +1,5 @@
 
-import { AddCategoryForm } from '@/components/building-blocks/addCategoryForm'
+import { AddCategoryForm } from '@/components/building-blocks/forms/addCategoryForm'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { ProfilePicture } from '@/components/building-blocks/profilePicture'
 import { Badge } from '@/components/ui/badge'
@@ -26,7 +26,7 @@ const formSchema = z.object({
 })
 
 
-export default function ViewCategories() {
+export default function CategoriesSection() {
   const [isUpdate, setIsUpdate] = useState(false)
   const [deleteCategoryDialogOpen, setDeleteCategoryDialogOpen] = useState<boolean>(false)
   const [currentCategory, setCurrentCategory] = useState<Category | undefined>()
