@@ -25,21 +25,7 @@ import {
   useSaveCategoryMutation,
   useUpdateCategoryMutation,
 } from "@/services/categoriesApi";
-
-const formSchema = z.object({
-  id: z.number().optional(),
-  categoryName: z.string().min(1, "Category name is required"),
-  description: z
-    .string()
-    .max(100, "Description must be at most 100 characters long")
-    .optional(),
-  colorCode: z
-    .string()
-    .min(4, "Color code must be valid")
-    .max(7, "Color code must be valid"),
-  icon: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-});
+import { categoryFormSchema } from "@/utilities/zodSchemas";
 
 export default function CategoriesSection() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -50,8 +36,8 @@ export default function CategoriesSection() {
   >();
   const [categoryDialogOpen, setCategoryDialogOpen] = useState<boolean>(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof categoryFormSchema>>({
+    resolver: zodResolver(categoryFormSchema),
     mode: "onSubmit",
     defaultValues: {
       categoryName: "",
@@ -88,7 +74,7 @@ export default function CategoriesSection() {
     return errorComponent;
   }
 
-  async function onSubmit(formData: z.infer<typeof formSchema>) {
+  async function onSubmit(formData: z.infer<typeof categoryFormSchema>) {
     if (isUpdate) {
       await updateExistingCategory(formData);
     } else if (!isUpdate) {
@@ -98,7 +84,7 @@ export default function CategoriesSection() {
     }
   }
 
-  async function saveNewCategory(formData: z.infer<typeof formSchema>) {
+  async function saveNewCategory(formData: z.infer<typeof categoryFormSchema>) {
     try {
       const result = await saveCategory({ ...formData }).unwrap();
 
@@ -148,7 +134,9 @@ export default function CategoriesSection() {
     }
   }
 
-  async function updateExistingCategory(formData: z.infer<typeof formSchema>) {
+  async function updateExistingCategory(
+    formData: z.infer<typeof categoryFormSchema>,
+  ) {
     try {
       const result = await updateCategory({ ...formData }).unwrap();
 

@@ -26,17 +26,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/services/authApi";
 import { setCredentials } from "@/slices/authSlice";
-
-const formSchema = z.object({
-  username: z
-    .string()
-    .min(4, "Username must be at least 4 characters long")
-    .max(20, "Username must be at most 20 characters long"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters long")
-    .max(20, "Password must be at most 20 characters long"),
-});
+import { loginFormSchema } from "@/utilities/zodSchemas";
 
 type LoginFormProps = {
   className?: string;
@@ -46,8 +36,8 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     mode: "onSubmit",
     defaultValues: {
       username: "",
@@ -59,7 +49,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 
   if (isLoading) return <Spinner />;
 
-  async function onSubmit(formData: z.infer<typeof formSchema>) {
+  async function onSubmit(formData: z.infer<typeof loginFormSchema>) {
     try {
       const result = await login({
         username: formData.username,
