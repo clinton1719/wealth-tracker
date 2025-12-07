@@ -9,7 +9,7 @@ import {
 import type { Account } from "@/types/Account";
 import type { AccountSectionProps } from "@/types/AccountSectionProps";
 import { DynamicIcon } from "lucide-react/dynamic";
-import { Card } from "../ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 
 export function AccountSection({
   account,
@@ -27,62 +27,65 @@ export function AccountSection({
   };
 
   return (
-    <Card
-      className="flex flex-row items-center justify-between p-4 shadow-sm border rounded-xl"
-      style={{ backgroundColor: `${profile.colorCode}15` }}
-    >
-      <div className="flex items-center gap-4 flex-1 w-40 md:w-96 min-w-0">
-        <ProfilePicture
-          imageSource={profile.profilePicture}
-          fallbackName={profile.profileName.charAt(0)}
-          imageColor={profile.colorCode}
-        />
+    <Card className="w-full max-w-sm" style={{ backgroundColor: `${profile.colorCode}40` }}>
+      <CardHeader>
+        <CardTitle>
+          <ProfilePicture
+            imageSource={profile.profilePicture}
+            fallbackName={profile.profileName.charAt(0)}
+            imageColor={profile.colorCode}
+          />
+        </CardTitle>
+        <CardDescription>
+          <div className="flex flex-col">
+            <span className="text-lg font-medium text-muted-foreground">{account.accountName}</span>
+            <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
+              {account.description}
+            </span>
+          </div>
+        </CardDescription>
+        <CardAction>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-muted rounded-full shrink-0"
+              >
+                <DynamicIcon name="ellipsis-vertical" />
+              </Button>
+            </DropdownMenuTrigger>
 
-        <div className="flex flex-col min-w-full">
-          <span className="text-lg font-semibold leading-none tracking-tight wrap-break-word">
-            {account.accountName}
-          </span>
-
-          <span className="text-foreground/70 text-sm mt-1 whitespace-normal wrap-break-word">
-            {account.description}
-          </span>
-
-          <dl className="mt-3 text-sm space-y-1 mr-8">
-            <div className="flex justify-between">
-              <dt className="font-medium text-foreground">Account balance:</dt>
-              <dd className="font-semibold">
-                ₹{account.accountBalance.toLocaleString()}
-              </dd>
-            </div>
-
-            <div className="flex justify-between">
-              <dt className="font-medium text-foreground">Account type:</dt>
-              <dd className="font-semibold">{account.accountType}</dd>
-            </div>
-          </dl>
+            <DropdownMenuContent align="end" className="bg-white">
+              <DropdownMenuItem onClick={() => handleUpdateAccount(account)}>
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDeleteAccount(account)}>
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col gap-6">
+          <div className="flex justify-between">
+            <span className="text-lg font-medium text-muted-foreground">Account balance:</span>
+            <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
+              ₹{account.accountBalance.toLocaleString()}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-lg font-medium text-muted-foreground">Account type:</span>
+            <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
+              {account.accountType}
+            </span>
+          </div>
         </div>
-      </div>
+      </CardContent>
+      <CardFooter className="flex-col gap-2">
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hover:bg-muted rounded-full shrink-0"
-          >
-            <DynamicIcon name="ellipsis-vertical" />
-          </Button>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent align="end" className="bg-white">
-          <DropdownMenuItem onClick={() => handleUpdateAccount(account)}>
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDeleteAccount(account)}>
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      </CardFooter>
     </Card>
   );
 }
