@@ -1,7 +1,7 @@
-import { AccountsSection } from "@/components/building-blocks/accountsSection";
+import { AccountsSection } from "@/features/account/accountsSection";
 import { ProfilesSection } from "@/features/profile/profilesSection";
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui//tabs";
 
 function App() {
   return (
