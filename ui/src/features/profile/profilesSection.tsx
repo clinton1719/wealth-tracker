@@ -191,7 +191,7 @@ export function ProfilesSection() {
       );
       setDeleteProfileDialogOpen(false);
     } else {
-      toast.error("Invalid category! Please refresh the page");
+      toast.error("Invalid profile! Please refresh the page");
     }
   };
 

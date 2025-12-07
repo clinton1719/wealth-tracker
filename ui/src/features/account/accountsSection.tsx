@@ -1,78 +1,101 @@
+import { AccountSection } from "@/components/building-blocks/accountSection";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
-import { AddProfileForm } from "@/components/building-blocks/forms/addProfileForm";
-import { ProfileSection } from "@/components/building-blocks/profileSection";
+import { AddAccountForm } from "@/components/building-blocks/forms/addAccountForm";
 import { Spinner } from "@/components/ui/spinner";
 import { TabsContent } from "@/components/ui/tabs";
 import { useApiError } from "@/hooks/use-api-error";
 import {
-  useDeleteProfileMutation,
-  useGetAllProfilesForUserQuery,
-  useSaveProfileMutation,
-  useUpdateProfileMutation,
-} from "@/services/profilesApi";
-import type { Profile } from "@/types/Profile";
-import { defaultProfile } from "@/utilities/constants";
-import { profileFormSchema } from "@/utilities/zodSchemas";
+  useDeleteAccountMutation,
+  useGetAllAccountsQuery,
+  useSaveAccountMutation,
+  useUpdateAccountMutation
+} from "@/services/accountsApi";
+import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
+import { selectProfileSlice } from "@/slices/profileSlice";
+import type { Account } from "@/types/Account";
+import { defaultAccount } from "@/utilities/constants";
+import { accountFormSchema } from "@/utilities/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import * as z from "zod";
 
 export function AccountsSection() {
   const [isUpdate, setIsUpdate] = useState(false);
-  const [profileDialogOpen, setProfileDialogOpen] = useState<boolean>(false);
-  const [deleteProfileDialogOpen, setDeleteProfileDialogOpen] =
+  const [accountDialogOpen, setAccountDialogOpen] = useState<boolean>(false);
+  const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] =
     useState<boolean>(false);
-  const [currentProfile, setCurrentProfile] = useState<Profile | undefined>();
+  const [currentAccount, setCurrentAccount] = useState<Account | undefined>();
 
-  const form = useForm<z.infer<typeof profileFormSchema>>({
-    resolver: zodResolver(profileFormSchema),
+  const form = useForm<z.infer<typeof accountFormSchema>>({
+    resolver: zodResolver(accountFormSchema),
     mode: "onSubmit",
-    defaultValues: defaultProfile,
+    defaultValues: defaultAccount,
   });
 
   const {
-    error,
+    error: accountsError,
+    isLoading: getAllAccountsLoading,
+    data: accountsData,
+  } = useGetAllAccountsQuery();
+  const {
+    error: profilesError,
     isLoading: getAllProfilesLoading,
-    data,
+    data: profilesData,
   } = useGetAllProfilesForUserQuery();
-  const [saveProfile, { isLoading: saveProfileLoading }] =
-    useSaveProfileMutation();
-  const [updateProfile, { isLoading: updateProfileLoading }] =
-    useUpdateProfileMutation();
-  const [deleteProfile, { isLoading: deleteProfileLoading }] =
-    useDeleteProfileMutation();
-  const { isError, errorComponent } = useApiError(error);
+  const [saveAccount, { isLoading: saveAccountLoading }] =
+    useSaveAccountMutation();
+  const [updateAccount, { isLoading: updateAccountLoading }] =
+    useUpdateAccountMutation();
+  const [deleteAccount, { isLoading: deleteAccountLoading }] =
+    useDeleteAccountMutation();
+  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
+  const { isError: isAccountsError, errorComponent: accountsErrorComponent } = useApiError(accountsError);
+  const { isError: isProfilesError, errorComponent: profilesErrorComponent } = useApiError(profilesError);
 
   if (
-    getAllProfilesLoading ||
-    saveProfileLoading ||
-    updateProfileLoading ||
-    deleteProfileLoading
+    getAllAccountsLoading ||
+    saveAccountLoading ||
+    updateAccountLoading ||
+    deleteAccountLoading ||
+    getAllProfilesLoading
   ) {
     return <Spinner />;
   }
 
-  if (isError) {
-    return errorComponent;
+  if (isAccountsError) {
+    return accountsErrorComponent;
+  }
+  if (isProfilesError) {
+    return profilesErrorComponent;
   }
 
-  async function onSubmit(formData: z.infer<typeof profileFormSchema>) {
+  const filteredData = accountsData?.filter(
+    account => enabledMap[account.profileId]
+  );
+
+  async function onSubmit(formData: z.infer<typeof accountFormSchema>) {
     if (isUpdate) {
-      await updateExistingProfile(formData);
+      await updateExistingAccount(formData);
     } else if (!isUpdate) {
-      await saveNewProfile(formData);
+      await saveNewAccount(formData);
     } else {
       toast.error("Unknown action, try again");
     }
   }
 
-  async function saveNewProfile(formData: z.infer<typeof profileFormSchema>) {
+  async function saveNewAccount(formData: z.infer<typeof accountFormSchema>) {
     try {
-      const result = await saveProfile({ ...formData }).unwrap();
+      const profile = profilesData?.find(profile => profile.profileName === formData.profileName);
+      if (!profile) {
+        toast.error("Invalid data found, refresh and try again");
+        return;
+      }
+      const result = await saveAccount({ ...formData, profileId: profile.id }).unwrap();
 
-      toast("Profile saved!", {
+      toast("Account saved!", {
         description: (
           <pre
             className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
@@ -82,8 +105,8 @@ export function AccountsSection() {
             }}
           >
             <code>
-              Profile name:
-              {result.profileName}
+              Account name:
+              {result.accountName}
             </code>
           </pre>
         ),
@@ -98,11 +121,11 @@ export function AccountsSection() {
         } as React.CSSProperties,
       });
 
-      setProfileDialogOpen(false);
+      setAccountDialogOpen(false);
     } catch (error: any) {
       if (error?.originalStatus === 409) {
         toast.error(
-          `Profile already exists with name: ${formData.profileName}`,
+          `Account already exists with name: ${formData.accountName}`,
         );
       } else if (error.originalStatus === 400) {
         toast.error("Invalid input. Please check your details.");
@@ -113,27 +136,32 @@ export function AccountsSection() {
           "Access denied. You do not have permission to access this resource.",
         );
       } else {
-        toast.error("Failed to create profile, please try again");
+        toast.error("Failed to create account, please try again");
       }
     }
   }
 
-  async function updateExistingProfile(
-    formData: z.infer<typeof profileFormSchema>,
+  async function updateExistingAccount(
+    formData: z.infer<typeof accountFormSchema>,
   ) {
     try {
-      const formDataa = {
+      const updatedFormData = {
         ...formData,
-        profilePicture: undefined
+        accountPicture: undefined
       }
-      const result = await updateProfile({ ...formDataa }).unwrap();
+      const profile = profilesData?.find(profile => profile.profileName === updatedFormData.profileName);
+      if (!profile) {
+        toast.error("Invalid data found, refresh and try again");
+        return;
+      }
+      const result = await updateAccount({ ...updatedFormData, profileId: profile.id }).unwrap();
 
       if (!result) {
-        toast.error("Failed to update profile, please try again later");
+        toast.error("Failed to update account, please try again later");
         return;
       }
 
-      toast("Profile updated!", {
+      toast("Account updated!", {
         description: (
           <pre
             className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
@@ -143,7 +171,7 @@ export function AccountsSection() {
             }}
           >
             <code>
-              Profile name: {result.profileName}
+              Account name: {result.accountName}
             </code>
           </pre>
         ),
@@ -159,11 +187,11 @@ export function AccountsSection() {
       });
 
       setIsUpdate(false);
-      setProfileDialogOpen(false);
+      setAccountDialogOpen(false);
     } catch (error: any) {
       if (error?.originalStatus === 409) {
         toast.error(
-          `Profile already exists with name: ${formData.profileName}`,
+          `Account already exists with name: ${formData.accountName}`,
         );
       } else if (error.originalStatus === 400) {
         toast.error("Invalid input. Please check your details.");
@@ -174,64 +202,71 @@ export function AccountsSection() {
       } else if (error.originalStatus === 404) {
         toast.error("This resource does not exist, kindly refresh your page.");
       } else {
-        toast.error("Failed to update profile, please try again");
+        toast.error("Failed to update account, please try again");
       }
     }
   }
 
-  const cancelDeleteProfile = () => {
-    setDeleteProfileDialogOpen(false);
+  const cancelDeleteAccount = () => {
+    setDeleteAccountDialogOpen(false);
   };
 
-  const deleteCurrentProfile = async () => {
-    if (currentProfile && currentProfile.id) {
-      await deleteProfile(currentProfile.id);
+  const deleteCurrentAccount = async () => {
+    if (currentAccount && currentAccount.id) {
+      await deleteAccount(currentAccount.id);
       toast.info(
-        `Profile : ${currentProfile.profileName} deleted successfully!`,
+        `Account : ${currentAccount.accountName} deleted successfully!`,
       );
-      setDeleteProfileDialogOpen(false);
+      setDeleteAccountDialogOpen(false);
     } else {
-      toast.error("Invalid category! Please refresh the page");
+      toast.error("Invalid account! Please refresh the page");
     }
   };
 
-  const handleDeleteProfile = (profile: Profile) => {
-    setDeleteProfileDialogOpen(true);
-    setCurrentProfile(profile);
+  const handleDeleteAccount = (account: Account) => {
+    setDeleteAccountDialogOpen(true);
+    setCurrentAccount(account);
   };
 
-  return (
-    <TabsContent value="profiles">
+  if (profilesData) {
+    return (<TabsContent value="accounts">
       <div className="space-y-4 mt-2">
-        {data ? (
-          data.map((profile) => (
-            <ProfileSection
-              profile={profile}
-              key={profile.id}
-              form={form}
-              setIsUpdate={setIsUpdate}
-              setProfileDialogOpen={setProfileDialogOpen}
-              handleDeleteProfile={handleDeleteProfile}
-            />
-          ))
+        {filteredData ? (
+          filteredData.map((account) => {
+            const profile = profilesData.find(profile => profile.id === account.profileId)
+            if (profile) {
+              return (<AccountSection
+                account={account}
+                profile={profile}
+                key={account.id}
+                form={form}
+                setIsUpdate={setIsUpdate}
+                setAccountDialogOpen={setAccountDialogOpen}
+                handleDeleteAccount={handleDeleteAccount}
+              />);
+            }
+          })
         ) : (
           <p className="text-muted-foreground text-sm">
-            Create a new profile here
+            Create a new account here
           </p>
         )}
-        <AddProfileForm
+        {profilesData ? (<AddAccountForm
+          profiles={profilesData}
           form={form}
           onSubmit={onSubmit}
-          profileDialogOpen={profileDialogOpen}
-          setProfileDialogOpen={setProfileDialogOpen}
-        />
+          accountDialogOpen={accountDialogOpen}
+          setAccountDialogOpen={setAccountDialogOpen}
+        />) : <p>Something went wrong with enabling creating accounts</p>}
+
       </div>
       <AlertDialogComponent
-        isDialogOpen={deleteProfileDialogOpen}
-        alertType="DELETE_PROFILE"
-        onSecondaryButtonClick={cancelDeleteProfile}
-        onPrimaryButtonClick={deleteCurrentProfile}
+        isDialogOpen={deleteAccountDialogOpen}
+        alertType="DELETE_ACCOUNT"
+        onSecondaryButtonClick={cancelDeleteAccount}
+        onPrimaryButtonClick={deleteCurrentAccount}
       />
-    </TabsContent>
-  );
+    </TabsContent>);
+  }
+
 }

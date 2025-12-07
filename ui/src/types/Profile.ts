@@ -5,7 +5,6 @@ export interface Profile {
   description?: string;
   profilePicture?: string;
   profilePictureFile?: File;
-  ProfileIds: Array<number>;
   categoryIds: Array<number>;
   expenseIds: Array<number>;
 }

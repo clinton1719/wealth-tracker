@@ -3,6 +3,7 @@ package com.backend.wealth_tracker.controller;
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
+import com.backend.wealth_tracker.exception.AccountCannotHaveNegativeBalanceException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
@@ -10,11 +11,12 @@ import com.backend.wealth_tracker.service.ExpenseService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/expenses")
@@ -48,7 +50,7 @@ public class ExpenseController {
   public ResponseExpenseDTO saveExpense(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateExpenseDTO createExpenseDTO)
-      throws ResourceNotFoundException, UnAuthorizedException {
+          throws ResourceNotFoundException, UnAuthorizedException, AccountCannotHaveNegativeBalanceException {
     return ExpenseMapper.expenseToResponseExpenseDTO(
         this.expenseService.saveExpense(createExpenseDTO, userDetails.getUsername()));
   }

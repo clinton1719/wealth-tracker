@@ -2,6 +2,8 @@ package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,6 +26,7 @@ public class Account implements Serializable {
   private String description;
 
   @Column(nullable = false)
+  @PositiveOrZero(message = "Account balance cannot be negative")
   private BigDecimal accountBalance;
 
   @Column(nullable = false)

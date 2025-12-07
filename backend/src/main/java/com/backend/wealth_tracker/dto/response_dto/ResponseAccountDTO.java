@@ -3,6 +3,8 @@ package com.backend.wealth_tracker.dto.response_dto;
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.math.BigDecimal;
 
 @SuppressWarnings("PMD.DataClass")
@@ -10,7 +12,7 @@ public class ResponseAccountDTO {
   @NotNull private Long id;
   @NotBlank private String accountName;
   private String description;
-  @NotNull private BigDecimal accountBalance;
+  @NotNull   @PositiveOrZero(message = "Account balance cannot be negative") private BigDecimal accountBalance;
   @NotNull private AccountType accountType;
   @NotNull private Long profileId;
 

@@ -40,3 +40,16 @@ export const categoryFormSchema = z.object({
   icon: z.string().optional(),
   tags: z.array(z.string()).optional(),
 });
+
+export const accountFormSchema = z.object({
+  id: z.number().optional(),
+  accountName: z.string().min(1, "Account name is required"),
+  description: z
+    .string()
+    .max(100, "Description must be at most 100 characters long")
+    .optional(),
+  accountBalance: z
+  .number({error: "Invalid input, please enter only numbers"}),
+  accountType: z.string(),
+  profileName: z.string()
+});

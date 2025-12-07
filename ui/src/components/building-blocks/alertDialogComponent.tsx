@@ -32,8 +32,17 @@ export function AlertDialogComponent({
       alert = {
         title: "Do you really want to delete this profile?",
         description:
-          "Deleting this profile will delete all expenses, accounts, expenses and associated entities related to it",
+          "Deleting this profile will delete all expenses, accounts, and associated entities related to it",
         primaryButton: "I acknowledge. Delete this profile",
+        secondaryButton: "Cancel",
+      };
+      break;
+      case "DELETE_ACCOUNT":
+      alert = {
+        title: "Do you really want to delete this account?",
+        description:
+          "Deleting this account will delete all expenses, accounts and associated entities related to it",
+        primaryButton: "I acknowledge. Delete this account",
         secondaryButton: "Cancel",
       };
       break;

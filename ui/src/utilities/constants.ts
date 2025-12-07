@@ -23,3 +23,10 @@ export const defaultSignUp = {
     password: "",
     confirmPassword: "",
 }
+
+export const defaultAccount = {
+    accountName: "",
+    accountBalance: 0,
+    description: "",
+    accountType: "",
+}
