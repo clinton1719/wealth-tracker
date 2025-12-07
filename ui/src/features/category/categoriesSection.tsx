@@ -219,6 +219,7 @@ export default function CategoriesSection() {
           <AddCategoryForm
             form={form}
             categoryDialogOpen={categoryDialogOpen}
+            setIsUpdate={setIsUpdate}
             setCategoryDialogOpen={setCategoryDialogOpen}
             onSubmit={onSubmit}
           />

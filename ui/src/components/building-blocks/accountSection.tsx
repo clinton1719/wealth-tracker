@@ -1,6 +1,3 @@
-import type { Account } from "@/types/Account";
-import type { AccountSectionProps } from "@/types/AccountSectionProps";
-import { DynamicIcon } from "lucide-react/dynamic";
 import { ProfilePicture } from "@/components/building-blocks/profilePicture";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "../ui/badge";
+import type { Account } from "@/types/Account";
+import type { AccountSectionProps } from "@/types/AccountSectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
 import { Card } from "../ui/card";
 
 export function AccountSection({
@@ -32,37 +31,35 @@ export function AccountSection({
       className="flex flex-row items-center justify-between p-4 shadow-sm border rounded-xl"
       style={{ backgroundColor: `${profile.colorCode}15` }}
     >
-      <div className="flex items-center gap-4 flex-1 min-w-0">
+      <div className="flex items-center gap-4 flex-1 w-40 md:w-96 min-w-0">
         <ProfilePicture
           imageSource={profile.profilePicture}
           fallbackName={profile.profileName.charAt(0)}
           imageColor={profile.colorCode}
         />
 
-        <div className="flex flex-col min-w-0">
-          <span className="text-lg font-semibold leading-none tracking-tight truncate">
+        <div className="flex flex-col min-w-full">
+          <span className="text-lg font-semibold leading-none tracking-tight wrap-break-word">
             {account.accountName}
           </span>
 
-          <span className="text-foreground/80 text-sm truncate">
+          <span className="text-foreground/70 text-sm mt-1 whitespace-normal wrap-break-word">
             {account.description}
           </span>
 
-          <div className="flex gap-2 mt-2">
-            <Badge
-              variant="default"
-              className="px-2 py-1 text-sm whitespace-nowrap"
-            >
-              ₹{account.accountBalance.toLocaleString()}
-            </Badge>
+          <dl className="mt-3 text-sm space-y-1 mr-8">
+            <div className="flex justify-between">
+              <dt className="font-medium text-foreground">Account balance:</dt>
+              <dd className="font-semibold">
+                ₹{account.accountBalance.toLocaleString()}
+              </dd>
+            </div>
 
-            <Badge
-              variant="secondary"
-              className="px-2 py-1 text-sm whitespace-nowrap"
-            >
-              {account.accountType}
-            </Badge>
-          </div>
+            <div className="flex justify-between">
+              <dt className="font-medium text-foreground">Account type:</dt>
+              <dd className="font-semibold">{account.accountType}</dd>
+            </div>
+          </dl>
         </div>
       </div>
 

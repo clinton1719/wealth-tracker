@@ -36,7 +36,7 @@ export function ProfileSection({
       className="flex flex-row items-center justify-between p-4 shadow-sm border rounded-xl"
       style={{ backgroundColor: `${profile.colorCode}15` }}
     >
-      <div className="flex items-center gap-4 flex-1 min-w-0">
+      <div className="flex items-center gap-4 w-40 md:w-96 min-w-0">
         <ProfilePicture
           imageSource={profile.profilePicture}
           fallbackName={profile.profileName.charAt(0)}
@@ -44,11 +44,11 @@ export function ProfileSection({
         />
 
         <div className="flex flex-col min-w-0">
-          <span className="text-lg font-semibold leading-none tracking-tight truncate">
+          <span className="text-lg font-semibold leading-none tracking-tight wrap-break-word">
             {profile.profileName}
           </span>
 
-          <span className="text-muted-foreground text-sm truncate">
+          <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
             {profile.description}
           </span>
         </div>
