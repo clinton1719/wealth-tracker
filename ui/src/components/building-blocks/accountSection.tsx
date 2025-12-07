@@ -68,15 +68,15 @@ export function AccountSection({
         </CardAction>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
           <div className="flex justify-between">
-            <span className="text-lg font-medium text-muted-foreground">Account balance:</span>
+            <span className="text-md font-medium text-muted-foreground">Account balance:</span>
             <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
               ₹{account.accountBalance.toLocaleString()}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-lg font-medium text-muted-foreground">Account type:</span>
+            <span className="text-md font-medium text-muted-foreground">Account type:</span>
             <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
               {account.accountType}
             </span>

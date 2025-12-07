@@ -1,15 +1,7 @@
-import type * as z from "zod";
-import type { Account } from "@/types/Account";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
 import { AccountSection } from "@/components/building-blocks/accountSection";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddAccountForm } from "@/components/building-blocks/forms/addAccountForm";
 import { Spinner } from "@/components/ui/spinner";
-import { TabsContent } from "@/components/ui/tabs";
 import { useApiError } from "@/hooks/use-api-error";
 import {
   useDeleteAccountMutation,
@@ -19,8 +11,15 @@ import {
 } from "@/services/accountsApi";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { selectProfileSlice } from "@/slices/profileSlice";
+import type { Account } from "@/types/Account";
 import { defaultAccount } from "@/utilities/constants";
 import { accountFormSchema } from "@/utilities/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import type * as z from "zod";
 
 export function AccountsSection() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -240,8 +239,20 @@ export function AccountsSection() {
 
   if (profilesData) {
     return (
-      <TabsContent value="accounts">
-        <div className="space-y-4 mt-2">
+      <div id="accountsSection">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Accounts</h1>
+          <AddAccountForm
+            profiles={profilesData}
+            form={form}
+            onSubmit={onSubmit}
+            isUpdate={isUpdate}
+            setIsUpdate={setIsUpdate}
+            accountDialogOpen={accountDialogOpen}
+            setAccountDialogOpen={setAccountDialogOpen}
+          />
+        </div>
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filteredData ? (
             filteredData.map((account) => {
               const profile = profilesData.find(
@@ -276,19 +287,6 @@ export function AccountsSection() {
               Create a new account here
             </p>
           )}
-          {profilesData ? (
-            <AddAccountForm
-              profiles={profilesData}
-              form={form}
-              onSubmit={onSubmit}
-              isUpdate={isUpdate}
-              setIsUpdate={setIsUpdate}
-              accountDialogOpen={accountDialogOpen}
-              setAccountDialogOpen={setAccountDialogOpen}
-            />
-          ) : (
-            <p>Something went wrong with enabling creating accounts</p>
-          )}
         </div>
         <AlertDialogComponent
           isDialogOpen={deleteAccountDialogOpen}
@@ -296,7 +294,7 @@ export function AccountsSection() {
           onSecondaryButtonClick={cancelDeleteAccount}
           onPrimaryButtonClick={deleteCurrentAccount}
         />
-      </TabsContent>
+      </div>
     );
   }
 }

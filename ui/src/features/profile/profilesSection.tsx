@@ -1,14 +1,7 @@
-import type * as z from "zod";
-import type { Profile } from "@/types/Profile";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddProfileForm } from "@/components/building-blocks/forms/addProfileForm";
 import { ProfileSection } from "@/components/building-blocks/profileSection";
 import { Spinner } from "@/components/ui/spinner";
-import { TabsContent } from "@/components/ui/tabs";
 import { useApiError } from "@/hooks/use-api-error";
 import {
   useDeleteProfileMutation,
@@ -16,8 +9,14 @@ import {
   useSaveProfileMutation,
   useUpdateProfileMutation,
 } from "@/services/profilesApi";
+import type { Profile } from "@/types/Profile";
 import { defaultProfile } from "@/utilities/constants";
 import { profileFormSchema } from "@/utilities/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type * as z from "zod";
 
 export function ProfilesSection() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -199,8 +198,17 @@ export function ProfilesSection() {
   };
 
   return (
-    <TabsContent value="profiles">
-      <div className="space-y-4 mt-2">
+    <div id="profilesSection">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Profiles</h1>
+        <AddProfileForm
+          form={form}
+          onSubmit={onSubmit}
+          profileDialogOpen={profileDialogOpen}
+          setProfileDialogOpen={setProfileDialogOpen}
+        />
+      </div>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {data ? (
           data.map((profile) => (
             <ProfileSection
@@ -217,12 +225,6 @@ export function ProfilesSection() {
             Create a new profile here
           </p>
         )}
-        <AddProfileForm
-          form={form}
-          onSubmit={onSubmit}
-          profileDialogOpen={profileDialogOpen}
-          setProfileDialogOpen={setProfileDialogOpen}
-        />
       </div>
       <AlertDialogComponent
         isDialogOpen={deleteProfileDialogOpen}
@@ -230,6 +232,6 @@ export function ProfilesSection() {
         onSecondaryButtonClick={cancelDeleteProfile}
         onPrimaryButtonClick={deleteCurrentProfile}
       />
-    </TabsContent>
+    </div>
   );
 }
