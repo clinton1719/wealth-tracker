@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import type { Profile } from "@/types/Profile";
 import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
 import { DynamicIcon } from "lucide-react/dynamic";
+import { Label } from "../ui/label";
 
 export function ProfileSection({
   profile,
@@ -45,7 +46,10 @@ export function ProfileSection({
       </div>
 
       <div className="flex items-center gap-2">
-        <Switch checked={true} />
+        <div className="flex flex-col items-center space-x-2 gap-4 mr-4">
+          <Switch id="airplane-mode"/>
+          <Label htmlFor="airplane-mode">Enabled</Label>
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="default" size="icon">

@@ -1,5 +1,7 @@
 import { selectAuthToken } from "@/slices/authSlice";
+import { enableProfile } from "@/slices/profileSlice";
 import { baseAPI } from "@/static-values/constants";
+import type { RootState } from "@/store";
 import type { Profile } from "@/types/Profile";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -19,6 +21,22 @@ export const profileApi = createApi({
   endpoints: (builder) => ({
     getAllProfilesForUser: builder.query<Profile[], void>({
       query: () => `/profiles/all`,
+      async onQueryStarted(_, { dispatch, queryFulfilled, getState }) {
+        try {
+          const { data: profiles } = await queryFulfilled
+
+          const state = getState() as RootState
+          const existing = state.profile.enabled
+
+          profiles.forEach(p => {
+            if (!(p.id in existing)) {
+              dispatch(enableProfile(p.id))
+            }
+          })
+        } catch (error) {
+          console.error(error);
+        }
+      },
       providesTags: ["Profiles"],
     }),
     saveProfile: builder.mutation<Profile, Partial<Profile>>({

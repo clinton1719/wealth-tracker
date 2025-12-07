@@ -5,6 +5,7 @@ import { categoriesApi } from "./services/categoriesApi";
 import { expensesApi } from "./services/expensesApi";
 import { profileApi } from "./services/profilesApi";
 import authReducer from "./slices/authSlice";
+import profileReducer from "./slices/profileSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     [accountApi.reducerPath]: accountApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,
     auth: authReducer,
+    profile: profileReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
