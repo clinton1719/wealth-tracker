@@ -183,8 +183,6 @@ public class Category implements Serializable {
         + tags
         + ", user="
         + user
-        + ", expenses="
-        + expenses
         + ", profile="
         + profile
         + '}';

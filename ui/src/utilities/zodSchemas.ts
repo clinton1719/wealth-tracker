@@ -49,7 +49,8 @@ export const accountFormSchema = z.object({
     .max(100, "Description must be at most 100 characters long")
     .optional(),
   accountBalance: z
-  .number({error: "Invalid input, please enter only numbers"}),
+  .number({error: "Invalid input, please enter only numbers"})
+  .nonnegative("Balance cannot be negative"),
   accountType: z.string(),
   profileName: z.string()
 });

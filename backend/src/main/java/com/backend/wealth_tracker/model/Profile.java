@@ -207,12 +207,6 @@ public class Profile implements Serializable {
         + '\''
         + ", user="
         + user
-        + ", accounts="
-        + accounts
-        + ", categories="
-        + categories
-        + ", expenses="
-        + expenses
         + '}';
   }
 }

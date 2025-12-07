@@ -28,6 +28,8 @@ export function AddAccountForm({
     setAccountDialogOpen,
     form,
     onSubmit,
+    isUpdate,
+    setIsUpdate
 }: AddAccountFormProps) {
     const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
         if (e.key === "Enter") e.preventDefault();
@@ -47,7 +49,10 @@ export function AddAccountForm({
             </DialogTrigger>
             <DialogContent
                 className="max-w-md"
-                onClickMethod={() => setAccountDialogOpen(false)}
+                onClickMethod={() => {
+                    setAccountDialogOpen(false)
+                    setIsUpdate(false)
+                }}
             >
                 <DialogHeader>
                     <DialogTitle>Create Account</DialogTitle>
@@ -155,10 +160,10 @@ export function AddAccountForm({
                                 >
                                     <FieldContent>
                                         <FieldLabel htmlFor="form-rhf-select-account-type">
-                                            Account type
+                                            Profile
                                         </FieldLabel>
                                         <FieldDescription>
-                                            Choose your bank account type
+                                            Choose your profile
                                         </FieldDescription>
                                         {fieldState.invalid && (
                                             <FieldError errors={[fieldState.error]} />
@@ -168,6 +173,7 @@ export function AddAccountForm({
                                         name={field.name}
                                         value={field.value}
                                         onValueChange={field.onChange}
+                                        disabled={isUpdate === true}
                                     >
                                         <SelectTrigger
                                             id="form-rhf-select-profile"
@@ -202,6 +208,7 @@ export function AddAccountForm({
                                         placeholder="Enter account balance"
                                         autoComplete="off"
                                         min={0}
+                                        step="any"
                                         onChange={e => field.onChange(e.target.valueAsNumber)}
                                     />
                                     {fieldState.invalid && (

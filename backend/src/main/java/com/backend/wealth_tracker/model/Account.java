@@ -162,8 +162,6 @@ public class Account implements Serializable {
         + accountType
         + ", user="
         + user
-        + ", expenses="
-        + expenses
         + ", profile="
         + profile
         + '}';

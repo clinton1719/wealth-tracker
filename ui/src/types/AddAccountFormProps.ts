@@ -21,4 +21,7 @@ export interface AddAccountFormProps {
         description?: string | undefined;
     }>
     onSubmit: any;
+    isUpdate: boolean;
+    setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 }
+

@@ -255,6 +255,8 @@ export function AccountsSection() {
           profiles={profilesData}
           form={form}
           onSubmit={onSubmit}
+          isUpdate={isUpdate}
+          setIsUpdate={setIsUpdate}
           accountDialogOpen={accountDialogOpen}
           setAccountDialogOpen={setAccountDialogOpen}
         />) : <p>Something went wrong with enabling creating accounts</p>}
