@@ -45,8 +45,8 @@ export function AccountSection({
             {account.accountName}
           </span>
 
-          <span className="text-muted-foreground text-sm truncate">
-            {account.description ?? "No description"}
+          <span className="text-foreground/80 text-sm truncate">
+            {account.description}
           </span>
 
           <div className="flex gap-2 mt-2">

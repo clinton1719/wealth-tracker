@@ -50,7 +50,7 @@ export function ProfileSection({
           </span>
 
           <span className="text-muted-foreground text-sm truncate">
-            {profile.description ?? "No description"}
+            {profile.description}
           </span>
         </div>
       </div>

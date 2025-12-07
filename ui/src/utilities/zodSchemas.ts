@@ -51,6 +51,6 @@ export const accountFormSchema = z.object({
   accountBalance: z
   .number({error: "Invalid input, please enter only numbers"})
   .nonnegative("Balance cannot be negative"),
-  accountType: z.string(),
-  profileName: z.string()
+  accountType: z.string().min(1, "Account type is required"),
+  profileName: z.string().min(1, "Profile is required"),
 });

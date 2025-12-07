@@ -2,7 +2,7 @@ export const defaultProfile = {
     profileName: "",
     colorCode: "#000000",
     description: "",
-    profilePicture: undefined,
+    profilePicture: undefined
 };
 
 export const defaultCategory = {
@@ -29,4 +29,5 @@ export const defaultAccount = {
     accountBalance: 0,
     description: "",
     accountType: "",
+    profileName: "",
 }
