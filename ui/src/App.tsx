@@ -1,7 +1,7 @@
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui//tabs'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { AccountsSection } from '@/features/account/accountsSection'
-import { ProfilesSection } from '@/features/profile/profilesSection'
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui//tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AccountsSection } from "@/features/account/accountsSection";
+import { ProfilesSection } from "@/features/profile/profilesSection";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

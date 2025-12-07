@@ -1,7 +1,7 @@
-import type { AddAccountFormProps } from '@/types/AddAccountFormProps'
-import { PlusCircle } from 'lucide-react'
-import { Controller } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
+import type { AddAccountFormProps } from "@/types/AddAccountFormProps";
+import { PlusCircle } from "lucide-react";
+import { Controller } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 import {
   Field,
   FieldContent,
@@ -17,10 +17,17 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { defaultAccount } from '@/utilities/constants'
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { defaultAccount } from "@/utilities/constants";
 
 export function AddAccountForm({
   profiles,
@@ -32,16 +39,15 @@ export function AddAccountForm({
   setIsUpdate,
 }: AddAccountFormProps) {
   const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
+    if (e.key === "Enter") e.preventDefault();
+  };
 
   return (
     <Dialog open={accountDialogOpen}>
       <DialogTrigger asChild>
         <Button
           onClick={() => {
-            setAccountDialogOpen(true)
+            setAccountDialogOpen(true);
           }}
         >
           <PlusCircle className="mr-2 h-5 w-5" />
@@ -51,8 +57,8 @@ export function AddAccountForm({
       <DialogContent
         className="max-w-md"
         onClickMethod={() => {
-          setAccountDialogOpen(false)
-          setIsUpdate(false)
+          setAccountDialogOpen(false);
+          setIsUpdate(false);
         }}
       >
         <DialogHeader>
@@ -62,7 +68,7 @@ export function AddAccountForm({
         <form
           id="form-rhf-account"
           onSubmit={form.handleSubmit(onSubmit)}
-          onKeyDown={e => checkKeyDown(e)}
+          onKeyDown={(e) => checkKeyDown(e)}
         >
           <FieldGroup>
             <Controller
@@ -163,9 +169,7 @@ export function AddAccountForm({
                     <FieldLabel htmlFor="form-rhf-select-account-type">
                       Profile
                     </FieldLabel>
-                    <FieldDescription>
-                      Choose your profile
-                    </FieldDescription>
+                    <FieldDescription>Choose your profile</FieldDescription>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -184,8 +188,11 @@ export function AddAccountForm({
                       <SelectValue placeholder="Select profile" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      {profiles.map(profile => (
-                        <SelectItem key={profile.id} value={profile.profileName}>
+                      {profiles.map((profile) => (
+                        <SelectItem
+                          key={profile.id}
+                          value={profile.profileName}
+                        >
                           {profile.profileName}
                         </SelectItem>
                       ))}
@@ -211,7 +218,7 @@ export function AddAccountForm({
                     autoComplete="off"
                     min={0}
                     step="any"
-                    onChange={e => field.onChange(e.target.valueAsNumber)}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -233,5 +240,5 @@ export function AddAccountForm({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

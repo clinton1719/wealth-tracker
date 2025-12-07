@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -6,31 +6,29 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Spinner } from '@/components/ui/spinner'
-import { useApiError } from '@/hooks/use-api-error'
-import { useGetAllExpensesInRangeQuery } from '@/services/expensesApi'
-import { formatDate } from '@/utilities/helper'
+} from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+import { useApiError } from "@/hooks/use-api-error";
+import { useGetAllExpensesInRangeQuery } from "@/services/expensesApi";
+import { formatDate } from "@/utilities/helper";
 
 export default function ExpensesSection() {
-  const now = new Date()
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-  const startDate = formatDate(startOfMonth)
-  const endDate = formatDate(endOfMonth)
+  const startDate = formatDate(startOfMonth);
+  const endDate = formatDate(endOfMonth);
   const { data, isLoading, error } = useGetAllExpensesInRangeQuery({
     startDate,
     endDate,
     pageNumber: 0,
     pageSize: 100,
-  })
-  const { isError, errorComponent } = useApiError(error)
+  });
+  const { isError, errorComponent } = useApiError(error);
 
-  if (isLoading)
-    return <Spinner />
-  if (isError)
-    return errorComponent
+  if (isLoading) return <Spinner />;
+  if (isError) return errorComponent;
 
   if (data) {
     return (
@@ -56,15 +54,12 @@ export default function ExpensesSection() {
             </CardHeader>
             <CardContent>
               <p className="leading-7 not-first:mt-6 font-bold">
-                ₹
-                {data.reduce((total, expense) => total + expense.amount, 0)}
+                ₹{data.reduce((total, expense) => total + expense.amount, 0)}
               </p>
             </CardContent>
             <CardFooter>
               <p className="text-muted-foreground text-sm">
-                {data.length}
-                {' '}
-                transactions this month
+                {data.length} transactions this month
               </p>
             </CardFooter>
           </Card>
@@ -77,15 +72,12 @@ export default function ExpensesSection() {
             </CardHeader>
             <CardContent>
               <p className="leading-7 not-first:mt-6 font-bold">
-                ₹
-                {data.reduce((total, expense) => total + expense.amount, 0)}
+                ₹{data.reduce((total, expense) => total + expense.amount, 0)}
               </p>
             </CardContent>
             <CardFooter>
               <p className="text-muted-foreground text-sm">
-                {data.length}
-                {' '}
-                transactions this month
+                {data.length} transactions this month
               </p>
             </CardFooter>
           </Card>
@@ -98,15 +90,12 @@ export default function ExpensesSection() {
             </CardHeader>
             <CardContent>
               <p className="leading-7 not-first:mt-6 font-bold">
-                ₹
-                {data.reduce((total, expense) => total + expense.amount, 0)}
+                ₹{data.reduce((total, expense) => total + expense.amount, 0)}
               </p>
             </CardContent>
             <CardFooter>
               <p className="text-muted-foreground text-sm">
-                {data.length}
-                {' '}
-                transactions this month
+                {data.length} transactions this month
               </p>
             </CardFooter>
           </Card>
@@ -119,22 +108,19 @@ export default function ExpensesSection() {
             </CardHeader>
             <CardContent>
               <p className="leading-7 not-first:mt-6 font-bold">
-                ₹
-                {data.reduce((total, expense) => total + expense.amount, 0)}
+                ₹{data.reduce((total, expense) => total + expense.amount, 0)}
               </p>
             </CardContent>
             <CardFooter>
               <p className="text-muted-foreground text-sm">
-                {data.length}
-                {' '}
-                transactions this month
+                {data.length} transactions this month
               </p>
             </CardFooter>
           </Card>
         </div>
       </div>
-    )
+    );
   }
 
-  return null
+  return null;
 }

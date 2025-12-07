@@ -1,25 +1,25 @@
-import { lazy, Suspense } from 'react'
-import { createRoot } from 'react-dom/client'
-import { Provider } from 'react-redux'
-import { BrowserRouter, Route, Routes } from 'react-router'
-import { NavigationBar } from '@/components/layout/navigationBar.tsx'
-import { Toaster } from '@/components/ui/sonner.tsx'
-import { Spinner } from '@/components/ui/spinner.tsx'
-import Login from '@/features/auth/login.tsx'
-import { ProtectedRoute } from '@/features/auth/protectedRoute.tsx'
-import SignUp from '@/features/auth/signUp.tsx'
-import { store } from '@/store.ts'
-import '@/styles/index.css'
+import { lazy, Suspense } from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { NavigationBar } from "@/components/layout/navigationBar.tsx";
+import { Toaster } from "@/components/ui/sonner.tsx";
+import { Spinner } from "@/components/ui/spinner.tsx";
+import Login from "@/features/auth/login.tsx";
+import { ProtectedRoute } from "@/features/auth/protectedRoute.tsx";
+import SignUp from "@/features/auth/signUp.tsx";
+import { store } from "@/store.ts";
+import "@/styles/index.css";
 
-const App = lazy(() => import('@/App.tsx'))
+const App = lazy(() => import("@/App.tsx"));
 const CategoriesSection = lazy(
-  () => import('@/features/category/categoriesSection.tsx'),
-)
+  () => import("@/features/category/categoriesSection.tsx"),
+);
 const ExpensesSection = lazy(
-  () => import('@/features/expense/expensesSection.tsx'),
-)
+  () => import("@/features/expense/expensesSection.tsx"),
+);
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <BrowserRouter>
       <NavigationBar />
@@ -41,4 +41,4 @@ createRoot(document.getElementById('root')!).render(
       <Toaster />
     </BrowserRouter>
   </Provider>,
-)
+);

@@ -1,19 +1,19 @@
-import type { Profile } from '@/types/Profile'
-import type { ProfileSectionProps } from '@/types/ProfileSectionProps'
-import { DynamicIcon } from 'lucide-react/dynamic'
-import { useDispatch, useSelector } from 'react-redux'
-import { ProfilePicture } from '@/components/building-blocks/profilePicture'
-import { Button } from '@/components/ui/button'
+import type { Profile } from "@/types/Profile";
+import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
+import { useDispatch, useSelector } from "react-redux";
+import { ProfilePicture } from "@/components/building-blocks/profilePicture";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Switch } from '@/components/ui/switch'
-import { selectProfileSlice, toggleProfile } from '@/slices/profileSlice'
-import { Card } from '../ui/card'
-import { Label } from '../ui/label'
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { selectProfileSlice, toggleProfile } from "@/slices/profileSlice";
+import { Card } from "../ui/card";
+import { Label } from "../ui/label";
 
 export function ProfileSection({
   profile,
@@ -23,13 +23,13 @@ export function ProfileSection({
   handleDeleteProfile,
 }: ProfileSectionProps) {
   const handleUpdateProfile = (profile: Profile) => {
-    form.reset(profile)
-    setProfileDialogOpen(true)
-    setIsUpdate(true)
-  }
+    form.reset(profile);
+    setProfileDialogOpen(true);
+    setIsUpdate(true);
+  };
 
-  const dispatch = useDispatch()
-  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
+  const dispatch = useDispatch();
+  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
 
   return (
     <Card
@@ -37,7 +37,6 @@ export function ProfileSection({
       style={{ backgroundColor: `${profile.colorCode}15` }}
     >
       <div className="flex items-center gap-4 flex-1 min-w-0">
-
         <ProfilePicture
           imageSource={profile.profilePicture}
           fallbackName={profile.profileName.charAt(0)}
@@ -56,7 +55,6 @@ export function ProfileSection({
       </div>
 
       <div className="flex items-center gap-4 shrink-0">
-
         <div className="flex items-center gap-2">
           <Switch
             id={`profile-${profile.id}`}
@@ -67,13 +65,17 @@ export function ProfileSection({
             htmlFor={`profile-${profile.id}`}
             className="text-sm font-medium whitespace-nowrap"
           >
-            {enabledMap[profile.id] ? 'Enabled' : 'Disabled'}
+            {enabledMap[profile.id] ? "Enabled" : "Disabled"}
           </Label>
         </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="hover:bg-muted rounded-full">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hover:bg-muted rounded-full"
+            >
               <DynamicIcon name="ellipsis-vertical" />
             </Button>
           </DropdownMenuTrigger>
@@ -95,5 +97,5 @@ export function ProfileSection({
         </DropdownMenu>
       </div>
     </Card>
-  )
+  );
 }

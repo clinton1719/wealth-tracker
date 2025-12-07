@@ -1,16 +1,16 @@
-import type { Account } from '@/types/Account'
-import type { AccountSectionProps } from '@/types/AccountSectionProps'
-import { DynamicIcon } from 'lucide-react/dynamic'
-import { ProfilePicture } from '@/components/building-blocks/profilePicture'
-import { Button } from '@/components/ui/button'
+import type { Account } from "@/types/Account";
+import type { AccountSectionProps } from "@/types/AccountSectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
+import { ProfilePicture } from "@/components/building-blocks/profilePicture";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Badge } from '../ui/badge'
-import { Card } from '../ui/card'
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "../ui/badge";
+import { Card } from "../ui/card";
 
 export function AccountSection({
   account,
@@ -21,11 +21,11 @@ export function AccountSection({
   handleDeleteAccount,
 }: AccountSectionProps) {
   const handleUpdateAccount = (account: Account) => {
-    form.reset(account)
-    form.setValue('profileName', profile.profileName)
-    setAccountDialogOpen(true)
-    setIsUpdate(true)
-  }
+    form.reset(account);
+    form.setValue("profileName", profile.profileName);
+    setAccountDialogOpen(true);
+    setIsUpdate(true);
+  };
 
   return (
     <Card
@@ -33,7 +33,6 @@ export function AccountSection({
       style={{ backgroundColor: `${profile.colorCode}15` }}
     >
       <div className="flex items-center gap-4 flex-1 min-w-0">
-
         <ProfilePicture
           imageSource={profile.profilePicture}
           fallbackName={profile.profileName.charAt(0)}
@@ -50,12 +49,17 @@ export function AccountSection({
           </span>
 
           <div className="flex gap-2 mt-2">
-            <Badge variant="default" className="px-2 py-1 text-sm whitespace-nowrap">
-              ₹
-              {account.accountBalance.toLocaleString()}
+            <Badge
+              variant="default"
+              className="px-2 py-1 text-sm whitespace-nowrap"
+            >
+              ₹{account.accountBalance.toLocaleString()}
             </Badge>
 
-            <Badge variant="secondary" className="px-2 py-1 text-sm whitespace-nowrap">
+            <Badge
+              variant="secondary"
+              className="px-2 py-1 text-sm whitespace-nowrap"
+            >
               {account.accountType}
             </Badge>
           </div>
@@ -64,7 +68,11 @@ export function AccountSection({
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="hover:bg-muted rounded-full shrink-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-muted rounded-full shrink-0"
+          >
             <DynamicIcon name="ellipsis-vertical" />
           </Button>
         </DropdownMenuTrigger>
@@ -79,5 +87,5 @@ export function AccountSection({
         </DropdownMenuContent>
       </DropdownMenu>
     </Card>
-  )
+  );
 }
