@@ -1,12 +1,12 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { toast } from "sonner";
-import * as z from "zod";
+import type * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
+import { toast } from 'sonner'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -14,51 +14,52 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import { cn } from "@/lib/utils";
-import { useLoginMutation } from "@/services/authApi";
-import { setCredentials } from "@/slices/authSlice";
-import { loginFormSchema } from "@/utilities/zodSchemas";
-import { defaultLogin } from "@/utilities/constants";
+} from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/ui/spinner'
+import { cn } from '@/lib/utils'
+import { useLoginMutation } from '@/services/authApi'
+import { setCredentials } from '@/slices/authSlice'
+import { defaultLogin } from '@/utilities/constants'
+import { loginFormSchema } from '@/utilities/zodSchemas'
 
 type LoginFormProps = {
-  className?: string;
-} & React.HTMLAttributes<HTMLDivElement>;
+  className?: string
+} & React.HTMLAttributes<HTMLDivElement>
 
 export function LoginForm({ className, ...props }: LoginFormProps) {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: defaultLogin,
-  });
+  })
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation()
 
-  if (isLoading) return <Spinner />;
+  if (isLoading)
+    return <Spinner />
 
   async function onSubmit(formData: z.infer<typeof loginFormSchema>) {
     try {
       const result = await login({
         username: formData.username,
         password: formData.password,
-      }).unwrap();
+      }).unwrap()
 
       if (!result.accessToken) {
         toast.error(
-          "Login failed. Please check your credentials and try again.",
-        );
-        return;
+          'Login failed. Please check your credentials and try again.',
+        )
+        return
       }
 
       dispatch(
@@ -66,49 +67,53 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
           username: formData.username,
           token: result.accessToken,
         }),
-      );
+      )
 
       toast(`Logged in as ${formData.username}`, {
         description: (
           <pre
             className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
             style={{
-              background: "var(--background-code, #1a1a1a)",
-              color: "var(--foreground-code, #f5f5f5)",
+              background: 'var(--background-code, #1a1a1a)',
+              color: 'var(--foreground-code, #f5f5f5)',
             }}
           >
             <code>Welcome to Desi wealth tracker!</code>
           </pre>
         ),
-        position: "bottom-right",
+        position: 'bottom-right',
         classNames: {
-          content: "flex flex-col gap-2",
+          content: 'flex flex-col gap-2',
         },
         style: {
-          "--border-radius": "calc(var(--radius)  + 4px)",
-          background: "var(--background, #fff)",
-          color: "var(--foreground, #000)",
+          '--border-radius': 'calc(var(--radius)  + 4px)',
+          'background': 'var(--background, #fff)',
+          'color': 'var(--foreground, #000)',
         } as React.CSSProperties,
-      });
+      })
 
-      navigate("/");
-    } catch (error: any) {
+      navigate('/')
+    }
+    catch (error: any) {
       if (error.originalStatus === 401) {
-        toast.error("Invalid username or password.");
-      } else if (error.originalStatus === 400) {
-        toast.error("Invalid input. Please check your details.");
-      } else if (error.originalStatus === 403) {
+        toast.error('Invalid username or password.')
+      }
+      else if (error.originalStatus === 400) {
+        toast.error('Invalid input. Please check your details.')
+      }
+      else if (error.originalStatus === 403) {
         toast.error(
-          "Access denied. You do not have permission to access this resource.",
-        );
-      } else {
-        toast.error("Login failed. Please try again later.");
+          'Access denied. You do not have permission to access this resource.',
+        )
+      }
+      else {
+        toast.error('Login failed. Please try again later.')
       }
     }
   }
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
@@ -180,5 +185,5 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }

@@ -1,3 +1,3 @@
 export interface ProfileState {
-    enabled: Record<number, boolean>;
+  enabled: Record<number, boolean>
 }

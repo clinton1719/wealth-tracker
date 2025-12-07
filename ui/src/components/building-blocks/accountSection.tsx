@@ -1,16 +1,16 @@
-import { ProfilePicture } from "@/components/building-blocks/profilePicture";
-import { Button } from "@/components/ui/button";
+import type { Account } from '@/types/Account'
+import type { AccountSectionProps } from '@/types/AccountSectionProps'
+import { DynamicIcon } from 'lucide-react/dynamic'
+import { ProfilePicture } from '@/components/building-blocks/profilePicture'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import type { Account } from "@/types/Account";
-import type { AccountSectionProps } from "@/types/AccountSectionProps";
-import { DynamicIcon } from "lucide-react/dynamic";
-import { Card } from "../ui/card";
-import { Badge } from "../ui/badge";
+} from '@/components/ui/dropdown-menu'
+import { Badge } from '../ui/badge'
+import { Card } from '../ui/card'
 
 export function AccountSection({
   account,
@@ -21,11 +21,11 @@ export function AccountSection({
   handleDeleteAccount,
 }: AccountSectionProps) {
   const handleUpdateAccount = (account: Account) => {
-    form.reset(account);
-    form.setValue("profileName", profile.profileName);
-    setAccountDialogOpen(true);
-    setIsUpdate(true);
-  };
+    form.reset(account)
+    form.setValue('profileName', profile.profileName)
+    setAccountDialogOpen(true)
+    setIsUpdate(true)
+  }
 
   return (
     <Card
@@ -51,7 +51,8 @@ export function AccountSection({
 
           <div className="flex gap-2 mt-2">
             <Badge variant="default" className="px-2 py-1 text-sm whitespace-nowrap">
-              ₹{account.accountBalance.toLocaleString()}
+              ₹
+              {account.accountBalance.toLocaleString()}
             </Badge>
 
             <Badge variant="secondary" className="px-2 py-1 text-sm whitespace-nowrap">
@@ -78,5 +79,5 @@ export function AccountSection({
         </DropdownMenuContent>
       </DropdownMenu>
     </Card>
-  );
+  )
 }

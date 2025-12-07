@@ -1,6 +1,6 @@
-import antfu from "@antfu/eslint-config";
+import antfu from '@antfu/eslint-config'
 
 export default antfu({
   react: true,
-  ignores: ["**/components/ui/**", "**/src/hooks/**"],
-});
+  ignores: ['**/components/ui/**', '**/src/hooks/**'],
+})

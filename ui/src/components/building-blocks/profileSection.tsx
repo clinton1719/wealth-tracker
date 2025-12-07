@@ -1,19 +1,19 @@
-import { ProfilePicture } from "@/components/building-blocks/profilePicture";
-import { Button } from "@/components/ui/button";
+import type { Profile } from '@/types/Profile'
+import type { ProfileSectionProps } from '@/types/ProfileSectionProps'
+import { DynamicIcon } from 'lucide-react/dynamic'
+import { useDispatch, useSelector } from 'react-redux'
+import { ProfilePicture } from '@/components/building-blocks/profilePicture'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
-import { selectProfileSlice, toggleProfile } from "@/slices/profileSlice";
-import type { Profile } from "@/types/Profile";
-import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
-import { DynamicIcon } from "lucide-react/dynamic";
-import { useDispatch, useSelector } from "react-redux";
-import { Label } from "../ui/label";
-import { Card } from "../ui/card";
+} from '@/components/ui/dropdown-menu'
+import { Switch } from '@/components/ui/switch'
+import { selectProfileSlice, toggleProfile } from '@/slices/profileSlice'
+import { Card } from '../ui/card'
+import { Label } from '../ui/label'
 
 export function ProfileSection({
   profile,
@@ -23,13 +23,13 @@ export function ProfileSection({
   handleDeleteProfile,
 }: ProfileSectionProps) {
   const handleUpdateProfile = (profile: Profile) => {
-    form.reset(profile);
-    setProfileDialogOpen(true);
-    setIsUpdate(true);
-  };
+    form.reset(profile)
+    setProfileDialogOpen(true)
+    setIsUpdate(true)
+  }
 
-  const dispatch = useDispatch();
-  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
+  const dispatch = useDispatch()
+  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
 
   return (
     <Card
@@ -67,7 +67,7 @@ export function ProfileSection({
             htmlFor={`profile-${profile.id}`}
             className="text-sm font-medium whitespace-nowrap"
           >
-            {enabledMap[profile.id] ? "Enabled" : "Disabled"}
+            {enabledMap[profile.id] ? 'Enabled' : 'Disabled'}
           </Label>
         </div>
 
@@ -95,5 +95,5 @@ export function ProfileSection({
         </DropdownMenu>
       </div>
     </Card>
-  );
+  )
 }
