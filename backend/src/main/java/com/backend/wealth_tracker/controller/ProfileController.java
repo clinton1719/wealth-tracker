@@ -8,15 +8,20 @@ import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.mapper.ProfileMapper;
 import com.backend.wealth_tracker.service.ProfileService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/v1/profiles")
+@Tag(name = "Profile", description = "API methods to manipulate Profile data")
 public class ProfileController {
 
   private final ProfileService profileService;
@@ -28,35 +33,41 @@ public class ProfileController {
 
   @GetMapping(value = "/all")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
   public List<ResponseProfileDTO> getAllProfilesForUser(
       @AuthenticationPrincipal UserDetails userDetails) throws ResourceNotFoundException {
     return ProfileMapper.profilesToResponseProfileDTOs(
         this.profileService.getAllProfilesForUser(userDetails.getUsername()));
   }
 
-  @PostMapping("/save")
+  @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
+  @Tag(name = "SAVE")
   public ResponseProfileDTO saveProfile(
       @AuthenticationPrincipal UserDetails userDetails,
-      @Valid @RequestBody CreateProfileDTO createProfileDTO)
-      throws ResourceNotFoundException, ResourceAlreadyExistsException {
+      @Valid @ModelAttribute CreateProfileDTO createProfileDTO)
+      throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
     return ProfileMapper.profileToResponseProfileDTO(
         this.profileService.saveProfile(createProfileDTO, userDetails.getUsername()));
   }
 
-  @PutMapping("/update")
+  @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "UPDATE")
   public ResponseProfileDTO updateCategory(
       @AuthenticationPrincipal UserDetails userDetails,
-      @Valid @RequestBody UpdateProfileDTO updateProfileDTO)
-      throws ResourceNotFoundException, ResourceAlreadyExistsException {
+      @Valid @ModelAttribute UpdateProfileDTO updateProfileDTO)
+      throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
     return ProfileMapper.profileToResponseProfileDTO(
         this.profileService.updateProfile(updateProfileDTO, userDetails.getUsername()));
   }
 
   @DeleteMapping("/delete/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public void deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
-    this.profileService.deleteProfile(id);
+  @Tag(name = "DELETE")
+  public void deleteCategory(
+      @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id)
+      throws ResourceNotFoundException {
+    this.profileService.deleteProfile(id, userDetails.getUsername());
   }
 }

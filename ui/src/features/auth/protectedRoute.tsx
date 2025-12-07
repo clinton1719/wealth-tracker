@@ -1,7 +1,7 @@
-import { Spinner } from "@/components/ui/spinner";
-import { selectAuthToken } from "@/slices/authSlice";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router";
+import { Spinner } from "@/components/ui/spinner";
+import { selectAuthToken } from "@/slices/authSlice";
 
 export function ProtectedRoute() {
   const token = useSelector(selectAuthToken);

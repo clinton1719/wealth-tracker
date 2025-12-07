@@ -1,5 +1,6 @@
 package com.backend.wealth_tracker.exception;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -17,6 +18,13 @@ public class GlobalExceptionHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+  @ExceptionHandler(IOException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public String handleAllIOExceptions(IOException ex) {
+    LOGGER.atError().log("IO exception: {}", (Object) ex.getStackTrace());
+    return "Possible issue with file(s), please check";
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Map<String, String>> handleValidationExceptions(
@@ -30,35 +38,28 @@ public class GlobalExceptionHandler {
               String errorMessage = error.getDefaultMessage();
               errors.put(fieldName, errorMessage);
             });
-    LOGGER.atError().log(errors.toString(), ex);
+    LOGGER.atError().log(errors.toString(), (Object) ex.getStackTrace());
     return ResponseEntity.badRequest().body(errors);
   }
 
   @ExceptionHandler(UnAuthorizedException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public String handleAllUnAuthorizedExceptions(UnAuthorizedException ex) {
-    LOGGER.atError().log("Unauthorized exception: {}", ex.getMessage());
+    LOGGER.atError().log("Unauthorized exception: {}", (Object) ex.getStackTrace());
     return "Unauthorized access";
-  }
-
-  @ExceptionHandler(ResourceNotFoundException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public String handleAllResourceNotFoundExceptions(ResourceNotFoundException ex) {
-    LOGGER.atError().log("Resource not found exception: {}", ex.getMessage());
-    return "Resource not found";
   }
 
   @ExceptionHandler(ResourceAlreadyExistsException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
   public String handleAllResourceAlreadyExistsExceptions(ResourceAlreadyExistsException ex) {
-    LOGGER.atError().log("Resource already exists exception: {}", ex.getMessage());
+    LOGGER.atError().log("Resource already exists exception: {}", (Object) ex.getStackTrace());
     return "Resource already exists";
   }
 
   @ExceptionHandler(RuntimeException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public String handleAllResourceAlreadyExistsExceptions(RuntimeException ex) {
-    LOGGER.atError().log("Server error: {}", ex.getMessage());
+    LOGGER.atError().log("Server error: {}", (Object) ex.getStackTrace());
     return "Something went wrong on server, kindly try again later";
   }
 }

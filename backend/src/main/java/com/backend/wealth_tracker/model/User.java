@@ -26,16 +26,16 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private UserRole role;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", orphanRemoval = true)
   private Set<Expense> expenses = new HashSet<>();
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", orphanRemoval = true)
   private Set<Category> categories = new HashSet<>();
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", orphanRemoval = true)
   private Set<Account> accounts = new HashSet<>();
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", orphanRemoval = true)
   private Set<Profile> profiles = new HashSet<>();
 
   public User(User originalUser) {
@@ -113,38 +113,59 @@ public class User implements UserDetails {
   }
 
   public Set<Expense> getExpenses() {
-    return Set.copyOf(expenses);
+    if (expenses == null) {
+      return Set.of();
+    }
+    return new HashSet<>(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
+    if (this.expenses == null) {
+      this.expenses = new HashSet<>();
+    }
     if (expenses != null) {
-      this.expenses = new HashSet<>(expenses);
+      this.expenses.clear();
+      this.expenses.addAll(expenses);
     } else {
-      this.expenses = Set.of();
+      this.expenses.clear();
     }
   }
 
   public Set<Category> getCategories() {
-    return Set.copyOf(categories);
+    if (categories == null) {
+      return Set.of();
+    }
+    return new HashSet<>(categories);
   }
 
   public void setCategories(Set<Category> categories) {
+    if (this.categories == null) {
+      this.categories = new HashSet<>();
+    }
     if (categories != null) {
-      this.categories = new HashSet<>(categories);
+      this.categories.clear();
+      this.categories.addAll(categories);
     } else {
-      this.categories = Set.of();
+      this.categories.clear();
     }
   }
 
   public Set<Account> getAccounts() {
-    return Set.copyOf(accounts);
+    if (accounts == null) {
+      return Set.of();
+    }
+    return new HashSet<>(accounts);
   }
 
   public void setAccounts(Set<Account> accounts) {
+    if (this.accounts == null) {
+      this.accounts = new HashSet<>();
+    }
     if (accounts != null) {
-      this.accounts = new HashSet<>(accounts);
+      this.accounts.clear();
+      this.accounts.addAll(accounts);
     } else {
-      this.accounts = Set.of();
+      this.accounts.clear();
     }
   }
 

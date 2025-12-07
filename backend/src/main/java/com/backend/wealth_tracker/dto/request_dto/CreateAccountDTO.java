@@ -3,6 +3,8 @@ package com.backend.wealth_tracker.dto.request_dto;
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.math.BigDecimal;
 
 @SuppressWarnings("PMD.DataClass")
@@ -13,6 +15,7 @@ public class CreateAccountDTO {
   private String description;
 
   @NotNull(message = "Account balance cannot be null")
+  @PositiveOrZero(message = "Account balance cannot be negative")
   private BigDecimal accountBalance;
 
   @NotNull(message = "Account type cannot be null")

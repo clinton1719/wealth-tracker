@@ -1,0 +1,61 @@
+package com.backend.wealth_tracker.helper;
+
+import com.backend.wealth_tracker.model.Account;
+import com.backend.wealth_tracker.model.Category;
+import com.backend.wealth_tracker.model.Profile;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.Set;
+import org.apache.tika.Tika;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+public final class Helper {
+  private static final String pngType = "image/png";
+  private static final String jpegType = "image/jpeg";
+
+  private Helper() {}
+
+  public static String getExtension(MultipartFile multipartFile) throws IOException {
+    Tika tika = new Tika();
+    String detectedType = tika.detect(multipartFile.getBytes());
+    String extension;
+    if (pngType.equals(detectedType)) {
+      extension = "data:image/png;base64,";
+    } else if (jpegType.equals(detectedType)) {
+      extension = "data:image/jpeg;base64,";
+    } else {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "Invalid image type: " + detectedType);
+    }
+    return extension;
+  }
+
+  public static boolean isProfileIdValid(Set<Profile> profiles, Long profileId) {
+    return profiles.parallelStream()
+        .anyMatch(profile -> Objects.equals(profile.getId(), profileId));
+  }
+
+  public static boolean isAccountIdValid(Set<Account> accounts, Long accountId) {
+    return accounts.parallelStream()
+        .anyMatch(account -> Objects.equals(account.getId(), accountId));
+  }
+
+  public static boolean isCategoryIdValid(Set<Category> categories, Long categoryId) {
+    return categories.parallelStream()
+        .anyMatch(category -> Objects.equals(category.getId(), categoryId));
+  }
+
+  public static boolean isCategoryIdProfileIdAndAccountIdValid(
+      Set<Category> categories,
+      Long categoryId,
+      Set<Profile> profiles,
+      Long profileId,
+      Set<Account> accounts,
+      Long accountId) {
+    return isCategoryIdValid(categories, categoryId)
+        && isProfileIdValid(profiles, profileId)
+        && isAccountIdValid(accounts, accountId);
+  }
+}

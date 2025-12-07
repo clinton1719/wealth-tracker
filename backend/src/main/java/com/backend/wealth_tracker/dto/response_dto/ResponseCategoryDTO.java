@@ -8,7 +8,7 @@ import java.util.List;
 @SuppressWarnings("PMD.DataClass")
 public class ResponseCategoryDTO {
   @NotNull private Long id;
-  @NotBlank private String name;
+  @NotBlank private String categoryName;
   private String description;
   @NotNull private String colorCode;
   private String icon;
@@ -23,12 +23,12 @@ public class ResponseCategoryDTO {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getCategoryName() {
+    return categoryName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
   }
 
   public String getDescription() {

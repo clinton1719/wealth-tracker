@@ -9,12 +9,11 @@ public class UpdateCategoryDTO {
   @NotNull(message = "Category ID cannot be null")
   private Long id;
 
-  private String name;
+  private String categoryName;
   private String description;
   private String colorCode;
   private String icon;
   private List<String> tags;
-  private Long profileId;
 
   public Long getId() {
     return id;
@@ -24,12 +23,12 @@ public class UpdateCategoryDTO {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getCategoryName() {
+    return categoryName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
   }
 
   public String getDescription() {
@@ -66,13 +65,5 @@ public class UpdateCategoryDTO {
     } else {
       this.tags = List.of();
     }
-  }
-
-  public Long getProfileId() {
-    return profileId;
-  }
-
-  public void setProfileId(Long profileId) {
-    this.profileId = profileId;
   }
 }

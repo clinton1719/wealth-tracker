@@ -5,9 +5,11 @@ import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateCategoryDTO;
 import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
+import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.CategoryMapper;
 import com.backend.wealth_tracker.service.CategoryService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/categories")
+@Tag(name = "Category", description = "API methods to manipulate Category data")
 public class CategoryController {
 
   private final CategoryService categoryService;
@@ -28,6 +31,7 @@ public class CategoryController {
 
   @GetMapping("/all")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
   public List<ResponseCategoryDTO> getAllCategories(
       @AuthenticationPrincipal UserDetails userDetails) throws ResourceNotFoundException {
     return CategoryMapper.categoriesToResponseCategoryDTOs(
@@ -35,28 +39,33 @@ public class CategoryController {
   }
 
   @PostMapping("/save")
+  @Tag(name = "SAVE")
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseCategoryDTO saveCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateCategoryDTO createCategoryDTO)
-      throws ResourceNotFoundException, ResourceAlreadyExistsException {
+      throws ResourceNotFoundException, ResourceAlreadyExistsException, UnAuthorizedException {
     return CategoryMapper.categoryToResponseCategoryDTO(
         this.categoryService.saveCategory(createCategoryDTO, userDetails.getUsername()));
   }
 
   @PutMapping("/update")
   @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "UPDATE")
   public ResponseCategoryDTO updateCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO)
-      throws ResourceNotFoundException, ResourceAlreadyExistsException {
+      throws ResourceNotFoundException, ResourceAlreadyExistsException, UnAuthorizedException {
     return CategoryMapper.categoryToResponseCategoryDTO(
         this.categoryService.updateCategory(updateCategoryDTO, userDetails.getUsername()));
   }
 
   @DeleteMapping("/delete/{id}")
+  @Tag(name = "DELETE")
   @ResponseStatus(HttpStatus.OK)
-  public void deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
-    this.categoryService.deleteCategory(id);
+  public void deleteCategory(
+      @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id)
+      throws ResourceNotFoundException {
+    this.categoryService.deleteCategory(id, userDetails.getUsername());
   }
 }

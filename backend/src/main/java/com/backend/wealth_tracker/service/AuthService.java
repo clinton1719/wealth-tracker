@@ -12,10 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService implements UserDetailsService {
-  private final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
   private final UserRepository userRepository;
 
   @SuppressFBWarnings("EI_EXPOSE_REP2")
@@ -28,6 +31,7 @@ public class AuthService implements UserDetailsService {
     return userRepository.findByUsername(username);
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void signUp(SignUpDto signUpDto) throws ResourceAlreadyExistsException {
     if (userRepository.findByUsername(signUpDto.getUsername()) != null) {
       throw new ResourceAlreadyExistsException(
@@ -39,6 +43,7 @@ public class AuthService implements UserDetailsService {
     LOGGER.atInfo().log("New user registered: {}", savedUser.getUsername());
   }
 
+  @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
   public User getUserByUsername(String username) throws ResourceNotFoundException {
     User user = (User) userRepository.findByUsername(username);
     if (user != null) {

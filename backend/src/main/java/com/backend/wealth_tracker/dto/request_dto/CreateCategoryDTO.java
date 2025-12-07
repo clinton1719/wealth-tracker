@@ -2,14 +2,15 @@ package com.backend.wealth_tracker.dto.request_dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.validator.constraints.Length;
 
 @SuppressWarnings("PMD.DataClass")
 public class CreateCategoryDTO {
   @NotBlank(message = "Category name cannot be blank")
-  private String name;
+  private String categoryName;
 
   private String description;
 
@@ -26,12 +27,12 @@ public class CreateCategoryDTO {
   @NotNull(message = "Profile id cannot be null")
   private Long profileId;
 
-  public String getName() {
-    return name;
+  public String getCategoryName() {
+    return categoryName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
   }
 
   public String getDescription() {

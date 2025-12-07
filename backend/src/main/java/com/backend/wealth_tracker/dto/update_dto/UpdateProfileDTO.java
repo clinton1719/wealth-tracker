@@ -1,6 +1,7 @@
 package com.backend.wealth_tracker.dto.update_dto;
 
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 @SuppressWarnings("PMD.DataClass")
 public class UpdateProfileDTO {
@@ -11,6 +12,7 @@ public class UpdateProfileDTO {
   private String description;
   private String colorCode;
   private String profilePicture;
+  private MultipartFile profilePictureFile;
 
   public Long getId() {
     return id;
@@ -50,5 +52,13 @@ public class UpdateProfileDTO {
 
   public void setProfilePicture(String profilePicture) {
     this.profilePicture = profilePicture;
+  }
+
+  public MultipartFile getProfilePictureFile() {
+    return profilePictureFile;
+  }
+
+  public void setProfilePictureFile(MultipartFile profilePictureFile) {
+    this.profilePictureFile = profilePictureFile;
   }
 }

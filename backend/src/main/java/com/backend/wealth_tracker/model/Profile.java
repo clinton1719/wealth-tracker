@@ -3,6 +3,7 @@ package com.backend.wealth_tracker.model;
 import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,19 +25,22 @@ public class Profile implements Serializable {
   @Column(nullable = false)
   private String colorCode;
 
-  private String profilePicture;
+  @Column(columnDefinition = "bytea")
+  private byte[] profilePicture;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @Column private String profilePictureExtension;
+
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "profile", orphanRemoval = true)
   private Set<Account> accounts;
 
-  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "profile", orphanRemoval = true)
   private Set<Category> categories;
 
-  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "profile", orphanRemoval = true)
   private Set<Expense> expenses;
 
   public Profile() {}
@@ -47,6 +51,7 @@ public class Profile implements Serializable {
     this.description = originalProfile.description;
     this.colorCode = originalProfile.colorCode;
     this.profilePicture = originalProfile.profilePicture;
+    this.profilePictureExtension = originalProfile.profilePictureExtension;
     this.user = originalProfile.user;
     this.accounts = originalProfile.accounts;
     this.categories = originalProfile.categories;
@@ -77,47 +82,78 @@ public class Profile implements Serializable {
     this.colorCode = colorCode;
   }
 
-  public String getProfilePicture() {
-    return profilePicture;
+  public byte[] getProfilePicture() {
+    if (profilePicture == null) {
+      return new byte[] {};
+    }
+    return Arrays.copyOf(profilePicture, profilePicture.length);
   }
 
-  public void setProfilePicture(String profilePicture) {
-    this.profilePicture = profilePicture;
+  public void setProfilePicture(byte[] profilePicture) {
+    if (this.profilePicture == null) {
+      this.profilePicture = new byte[] {};
+    }
+    if (profilePicture != null) {
+      this.profilePicture = Arrays.copyOf(profilePicture, profilePicture.length);
+    } else {
+      Arrays.fill(this.profilePicture, (byte) 0);
+    }
   }
 
   public Set<Account> getAccounts() {
-    return Set.copyOf(accounts);
+    if (accounts == null) {
+      return Set.of();
+    }
+    return new HashSet<>(accounts);
   }
 
   public void setAccounts(Set<Account> accounts) {
+    if (this.accounts == null) {
+      this.accounts = new HashSet<>();
+    }
     if (accounts != null) {
-      this.accounts = new HashSet<>(accounts);
+      this.accounts.clear();
+      this.accounts.addAll(accounts);
     } else {
-      this.accounts = Set.of();
+      this.accounts.clear();
     }
   }
 
   public Set<Category> getCategories() {
-    return Set.copyOf(categories);
+    if (categories == null) {
+      return Set.of();
+    }
+    return new HashSet<>(categories);
   }
 
   public void setCategories(Set<Category> categories) {
+    if (this.categories == null) {
+      this.categories = new HashSet<>();
+    }
     if (categories != null) {
-      this.categories = new HashSet<>(categories);
+      this.categories.clear();
+      this.categories.addAll(categories);
     } else {
-      this.categories = Set.of();
+      this.categories.clear();
     }
   }
 
   public Set<Expense> getExpenses() {
-    return Set.copyOf(expenses);
+    if (expenses == null) {
+      return Set.of();
+    }
+    return new HashSet<>(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
+    if (this.expenses == null) {
+      this.expenses = new HashSet<>();
+    }
     if (expenses != null) {
-      this.expenses = new HashSet<>(expenses);
+      this.expenses.clear();
+      this.expenses.addAll(expenses);
     } else {
-      this.expenses = Set.of();
+      this.expenses.clear();
     }
   }
 
@@ -142,5 +178,35 @@ public class Profile implements Serializable {
     } else {
       throw new IllegalArgumentException("User cannot be null for profile");
     }
+  }
+
+  public String getProfilePictureExtension() {
+    return profilePictureExtension;
+  }
+
+  public void setProfilePictureExtension(String profilePictureExtension) {
+    this.profilePictureExtension = profilePictureExtension;
+  }
+
+  @Override
+  public String toString() {
+    return "Profile{"
+        + "id="
+        + id
+        + ", profileName='"
+        + profileName
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", colorCode='"
+        + colorCode
+        + '\''
+        + ", profilePictureExtension='"
+        + profilePictureExtension
+        + '\''
+        + ", user="
+        + user
+        + '}';
   }
 }

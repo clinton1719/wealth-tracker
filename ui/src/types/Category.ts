@@ -1,8 +1,9 @@
 export interface Category {
-    id: number;
-    name: string;
-    description: string;
-    colorCode: string;
-    icon?: string;
-    tags?: string[];
+  id: number;
+  categoryName: string;
+  description: string;
+  colorCode: string;
+  icon?: string;
+  tags?: string[];
+  profileId: number;
 }

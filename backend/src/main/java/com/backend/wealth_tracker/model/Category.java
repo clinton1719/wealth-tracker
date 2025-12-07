@@ -29,14 +29,14 @@ public class Category implements Serializable {
   @Column private String icon;
   @Column private List<String> tags;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "category")
   private Set<Expense> expenses = new HashSet<>();
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToOne
   @JoinColumn(name = "profile_id")
   private Profile profile;
 
@@ -102,14 +102,21 @@ public class Category implements Serializable {
   }
 
   public Set<Expense> getExpenses() {
-    return Set.copyOf(expenses);
+    if (expenses == null) {
+      return Set.of();
+    }
+    return new HashSet<>(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
+    if (this.expenses == null) {
+      this.expenses = new HashSet<>();
+    }
     if (expenses != null) {
-      this.expenses = new HashSet<>(expenses);
+      this.expenses.clear();
+      this.expenses.addAll(expenses);
     } else {
-      this.expenses = Set.of();
+      this.expenses.clear();
     }
   }
 
@@ -122,14 +129,21 @@ public class Category implements Serializable {
   }
 
   public List<String> getTags() {
-    return List.copyOf(tags);
+    if (tags == null) {
+      return List.of();
+    }
+    return new ArrayList<>(tags);
   }
 
   public void setTags(List<String> tags) {
+    if (this.tags == null) {
+      this.tags = new ArrayList<>();
+    }
     if (tags != null) {
-      this.tags = new ArrayList<>(tags);
+      this.tags.clear();
+      this.tags.addAll(tags);
     } else {
-      this.tags = List.of();
+      this.tags.clear();
     }
   }
 
@@ -146,5 +160,31 @@ public class Category implements Serializable {
     } else {
       throw new IllegalArgumentException("Profile cannot be null for category");
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Category{"
+        + "id="
+        + id
+        + ", categoryName='"
+        + categoryName
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", colorCode='"
+        + colorCode
+        + '\''
+        + ", icon='"
+        + icon
+        + '\''
+        + ", tags="
+        + tags
+        + ", user="
+        + user
+        + ", profile="
+        + profile
+        + '}';
   }
 }

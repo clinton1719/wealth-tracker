@@ -1,5 +1,5 @@
-import { baseAPI } from '@/static-values/constants';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseAPI } from "@/static-values/constants";
 
 export interface Auth {
   accessToken: string;
@@ -16,30 +16,27 @@ export interface SignUpData {
 }
 
 export const authApi = createApi({
-  reducerPath: 'authApi',
+  reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI,
   }),
-  tagTypes: ['Auth'],
+  tagTypes: ["Auth"],
   endpoints: (builder) => ({
     login: builder.mutation<Auth, LoginData>({
       query: (credentials) => ({
-        url: '/auth/login',
-        method: 'POST',
+        url: "/auth/login",
+        method: "POST",
         body: credentials,
       }),
     }),
     signUp: builder.mutation<Auth, SignUpData>({
       query: (credentials) => ({
-        url: '/auth/signup',
-        method: 'POST',
+        url: "/auth/signup",
+        method: "POST",
         body: credentials,
       }),
     }),
   }),
 });
 
-export const {
-  useLoginMutation,
-  useSignUpMutation,
-} = authApi;
+export const { useLoginMutation, useSignUpMutation } = authApi;

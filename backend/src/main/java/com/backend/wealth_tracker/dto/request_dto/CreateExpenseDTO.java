@@ -60,4 +60,21 @@ public class CreateExpenseDTO {
   public void setAccountId(Long accountId) {
     this.accountId = accountId;
   }
+
+  @Override
+  public String toString() {
+    return "CreateExpenseDTO{"
+        + "categoryId="
+        + categoryId
+        + ", amount="
+        + amount
+        + ", description='"
+        + description
+        + '\''
+        + ", profileId="
+        + profileId
+        + ", accountId="
+        + accountId
+        + '}';
+  }
 }

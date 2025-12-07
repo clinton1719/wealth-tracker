@@ -2,6 +2,8 @@ package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,19 +26,20 @@ public class Account implements Serializable {
   private String description;
 
   @Column(nullable = false)
+  @PositiveOrZero(message = "Account balance cannot be negative")
   private BigDecimal accountBalance;
 
   @Column(nullable = false)
   private AccountType accountType;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "account")
   private Set<Expense> expenses;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToOne
   @JoinColumn(name = "profile_id")
   private Profile profile;
 
@@ -109,14 +112,21 @@ public class Account implements Serializable {
   }
 
   public Set<Expense> getExpenses() {
-    return Set.copyOf(expenses);
+    if (expenses == null) {
+      return Set.of();
+    }
+    return new HashSet<>(expenses);
   }
 
   public void setExpenses(Set<Expense> expenses) {
+    if (this.expenses == null) {
+      this.expenses = new HashSet<>();
+    }
     if (expenses != null) {
-      this.expenses = new HashSet<>(expenses);
+      this.expenses.clear();
+      this.expenses.addAll(expenses);
     } else {
-      this.expenses = Set.of();
+      this.expenses.clear();
     }
   }
 
@@ -133,5 +143,27 @@ public class Account implements Serializable {
     } else {
       throw new IllegalArgumentException("Profile cannot be null for account");
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Account{"
+        + "id="
+        + id
+        + ", accountName='"
+        + accountName
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", accountBalance="
+        + accountBalance
+        + ", accountType="
+        + accountType
+        + ", user="
+        + user
+        + ", profile="
+        + profile
+        + '}';
   }
 }

@@ -2,32 +2,44 @@ package com.backend.wealth_tracker.mapper;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateProfileDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseProfileDTO;
+import com.backend.wealth_tracker.helper.Helper;
 import com.backend.wealth_tracker.model.Account;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.model.Profile;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.multipart.MultipartFile;
 
 public final class ProfileMapper {
   private ProfileMapper() {}
-  ;
 
-  public static Profile createProfileDTOToProfile(CreateProfileDTO createProfileDTO) {
+  public static Profile createProfileDTOToProfile(CreateProfileDTO createProfileDTO)
+      throws IOException {
     Profile profile = new Profile();
     profile.setProfileName(createProfileDTO.getProfileName());
     profile.setDescription(createProfileDTO.getDescription());
     profile.setColorCode(createProfileDTO.getColorCode());
-    profile.setProfilePicture(createProfileDTO.getProfilePicture());
+    MultipartFile multipartFile = createProfileDTO.getProfilePictureFile();
+    if (multipartFile != null) {
+      profile.setProfilePicture(multipartFile.getBytes());
+      String extension = Helper.getExtension(multipartFile);
+      profile.setProfilePictureExtension(extension);
+    }
     return profile;
   }
 
   public static ResponseProfileDTO profileToResponseProfileDTO(Profile profile) {
     ResponseProfileDTO responseProfileDTO = new ResponseProfileDTO();
+    responseProfileDTO.setId(profile.getId());
     responseProfileDTO.setProfileName(profile.getProfileName());
     responseProfileDTO.setDescription(profile.getDescription());
     responseProfileDTO.setColorCode(profile.getColorCode());
-    responseProfileDTO.setProfilePicture(profile.getProfilePicture());
+    responseProfileDTO.setProfilePicture(
+        profile.getProfilePictureExtension()
+            + Base64.getEncoder().encodeToString(profile.getProfilePicture()));
     responseProfileDTO.setAccountIds(
         profile.getAccounts().parallelStream().map(Account::getId).collect(Collectors.toSet()));
     responseProfileDTO.setCategoryIds(

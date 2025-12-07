@@ -2,20 +2,17 @@ package com.backend.wealth_tracker.service;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
+import com.backend.wealth_tracker.exception.AccountCannotHaveNegativeBalanceException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
+import com.backend.wealth_tracker.exception.UnAuthorizedException;
+import com.backend.wealth_tracker.helper.Helper;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
-import com.backend.wealth_tracker.model.Account;
-import com.backend.wealth_tracker.model.Category;
-import com.backend.wealth_tracker.model.Expense;
-import com.backend.wealth_tracker.model.Profile;
+import com.backend.wealth_tracker.model.*;
 import com.backend.wealth_tracker.repository.AccountRepository;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import com.backend.wealth_tracker.repository.ProfileRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -23,13 +20,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseService {
-  private final Logger LOGGER = LoggerFactory.getLogger(ExpenseService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseService.class);
 
   private final ExpenseRepository expenseRepository;
   private final AuthService authService;
+  private final AccountService accountService;
   private final CategoryRepository categoryRepository;
   private final ProfileRepository profileRepository;
   private final AccountRepository accountRepository;
@@ -38,39 +43,72 @@ public class ExpenseService {
   public ExpenseService(
       ExpenseRepository expenseRepository,
       AuthService authService,
+      AccountService accountService,
       CategoryRepository categoryRepository,
       ProfileRepository profileRepository,
       AccountRepository accountRepository) {
     this.categoryRepository = categoryRepository;
     this.authService = authService;
+    this.accountService = accountService;
     this.expenseRepository = expenseRepository;
     this.profileRepository = profileRepository;
     this.accountRepository = accountRepository;
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Expense saveExpense(CreateExpenseDTO createExpenseDTO, String userName)
-      throws ResourceNotFoundException {
-    Optional<Category> categoryOptional =
-        this.categoryRepository.findById(createExpenseDTO.getCategoryId());
-    if (categoryOptional.isEmpty()) {
-      throw new ResourceNotFoundException(
-          "Category not found for id: " + createExpenseDTO.getCategoryId());
+          throws ResourceNotFoundException, UnAuthorizedException, AccountCannotHaveNegativeBalanceException {
+    User user = this.authService.getUserByUsername(userName);
+    if (!Helper.isCategoryIdProfileIdAndAccountIdValid(
+        user.getCategories(),
+        createExpenseDTO.getCategoryId(),
+        user.getProfiles(),
+        createExpenseDTO.getProfileId(),
+        user.getAccounts(),
+        createExpenseDTO.getAccountId())) {
+      LOGGER
+          .atError()
+          .log(
+              "Expense to be saved had illegal profile ID: {} | category ID: {} | account ID: {}",
+              createExpenseDTO.getProfileId(),
+              createExpenseDTO.getCategoryId(),
+              createExpenseDTO.getAccountId());
+      throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
     }
-    Expense expense = ExpenseMapper.createDTOtoExpense(createExpenseDTO, categoryOptional.get());
-    expense.setUser(this.authService.getUserByUsername(userName));
+    Expense expense = setRequiredFieldsInExpense(createExpenseDTO);
     Expense savedExpense = this.expenseRepository.save(expense);
-    LOGGER.atInfo().log("Expense created with id: {}", savedExpense.getId());
+    this.accountService.debitAccount(createExpenseDTO.getAccountId(), savedExpense.getAmount());
+    LOGGER.atInfo().log("Expense to be saved created : {}", savedExpense);
     return savedExpense;
   }
 
-  public Expense updateExpense(UpdateExpenseDTO updateExpenseDTO) throws ResourceNotFoundException {
+  private Expense setRequiredFieldsInExpense(CreateExpenseDTO createExpenseDTO)
+      throws ResourceNotFoundException {
+    Expense expense = ExpenseMapper.createExpenseDTOtoExpense(createExpenseDTO);
+    setCategoryIfPresent(createExpenseDTO.getCategoryId(), expense);
+    setAccountIfPresent(createExpenseDTO.getAccountId(), expense);
+    setProfileIfPresent(createExpenseDTO.getProfileId(), expense);
+    return expense;
+  }
+
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+  public Expense updateExpense(UpdateExpenseDTO updateExpenseDTO, String userName)
+      throws ResourceNotFoundException, UnAuthorizedException {
+    User user = this.authService.getUserByUsername(userName);
+    if (!Helper.isCategoryIdValid(user.getCategories(), updateExpenseDTO.getCategoryId())) {
+      LOGGER
+          .atError()
+          .log(
+              "Expense to be updated had illegal category ID: {}",
+              updateExpenseDTO.getCategoryId());
+      throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
+    }
     Optional<Expense> expenseOptional = this.expenseRepository.findById(updateExpenseDTO.getId());
     if (expenseOptional.isEmpty()) {
       throw new ResourceNotFoundException("Expense not found for id: " + updateExpenseDTO.getId());
     }
     Expense expense = expenseOptional.get();
     updateExpenseValues(updateExpenseDTO, expense);
-
     Expense updatedExpense = this.expenseRepository.save(expense);
     LOGGER.atInfo().log("Expense updated for id: {}", updatedExpense.getId());
     return updatedExpense;
@@ -81,16 +119,10 @@ public class ExpenseService {
     if (updateExpenseDTO.getDescription() != null) {
       expense.setDescription(updateExpenseDTO.getDescription());
     }
-
-    setCategoryIfPresent(updateExpenseDTO.getCategoryId(), expense);
-
     if (updateExpenseDTO.getAmount() != null) {
       expense.setAmount(updateExpenseDTO.getAmount());
     }
-
-    setProfileIfPresent(updateExpenseDTO.getProfileId(), expense);
-
-    setAccountIfPresent(updateExpenseDTO.getAccountId(), expense);
+    setCategoryIfPresent(updateExpenseDTO.getCategoryId(), expense);
   }
 
   private void setAccountIfPresent(Long accountId, Expense expense)
@@ -129,15 +161,22 @@ public class ExpenseService {
     }
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteExpense(Long id) throws ResourceNotFoundException {
     Optional<Expense> expenseOptional = this.expenseRepository.findById(id);
     if (expenseOptional.isEmpty()) {
       throw new ResourceNotFoundException("Expense not found for id: " + id);
     }
+    this.accountService.creditAccount(
+        expenseOptional.get().getAccount().getId(), expenseOptional.get().getAmount());
     this.expenseRepository.delete(expenseOptional.get());
     LOGGER.atInfo().log("Expense deleted for id: {}", id);
   }
 
+  @Transactional(
+      isolation = Isolation.READ_COMMITTED,
+      propagation = Propagation.REQUIRED,
+      readOnly = true)
   public List<Expense> getExpensesInRange(
       UserDetails userDetails,
       String startDate,
