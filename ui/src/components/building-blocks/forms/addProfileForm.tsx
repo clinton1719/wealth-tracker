@@ -17,6 +17,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { defaultProfile } from "@/utilities/constants";
 
 export function AddProfileForm({
   profileDialogOpen,
@@ -153,7 +154,7 @@ export function AddProfileForm({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => form.reset()}
+                onClick={() => form.reset(defaultProfile)}
               >
                 Reset
               </Button>

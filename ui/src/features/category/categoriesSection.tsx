@@ -26,6 +26,7 @@ import {
   useUpdateCategoryMutation,
 } from "@/services/categoriesApi";
 import { categoryFormSchema } from "@/utilities/zodSchemas";
+import { defaultCategory } from "@/utilities/constants";
 
 export default function CategoriesSection() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -39,13 +40,7 @@ export default function CategoriesSection() {
   const form = useForm<z.infer<typeof categoryFormSchema>>({
     resolver: zodResolver(categoryFormSchema),
     mode: "onSubmit",
-    defaultValues: {
-      categoryName: "",
-      description: "",
-      colorCode: "#000000",
-      icon: "",
-      tags: [],
-    },
+    defaultValues: defaultCategory,
   });
 
   const [saveCategory, { isLoading: saveCategoryLoading }] =

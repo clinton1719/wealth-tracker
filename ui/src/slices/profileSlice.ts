@@ -1,3 +1,4 @@
+import type { RootState } from "@/store";
 import type { ProfileState } from "@/types/ProfileState";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
@@ -13,11 +14,12 @@ const profileSlice = createSlice({
         enableProfile(state, action: PayloadAction<number>) {
             state.enabled[action.payload] = true;
         },
-        disableProfile(state, action: PayloadAction<number>) {
-            state.enabled[action.payload] = false;
-        },
+        toggleProfile(state, action: PayloadAction<number>) {
+            state.enabled[action.payload] = !state.enabled[action.payload];
+        }
     },
 });
 
-export const { disableProfile, enableProfile } = profileSlice.actions;
+export const selectProfileSlice = (state: RootState) => state.profile.enabled;
+export const { enableProfile, toggleProfile } = profileSlice.actions;
 export default profileSlice.reducer;

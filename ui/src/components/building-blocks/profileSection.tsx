@@ -7,9 +7,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
+import { selectProfileSlice, toggleProfile } from "@/slices/profileSlice";
 import type { Profile } from "@/types/Profile";
 import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
 import { DynamicIcon } from "lucide-react/dynamic";
+import { useDispatch, useSelector } from "react-redux";
 import { Label } from "../ui/label";
 
 export function ProfileSection({
@@ -25,6 +27,9 @@ export function ProfileSection({
     setIsUpdate(true);
   };
 
+  const dispatch = useDispatch();
+  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
+
   return (
     <div className="flex items-center justify-between p-3 border rounded-lg" style={{ backgroundColor: `${profile.colorCode}33` }}>
       <div className="flex items-center gap-3">
@@ -35,20 +40,20 @@ export function ProfileSection({
         />
         <div className="flex flex-col">
           <span
-            className="text-muted-foreground text-xl"
+            className="scroll-m-20 text-xl font-semibold tracking-tight"
           >
             {profile.profileName}
           </span>
-          <span className="text-sm text-muted-foreground mb-4 break-all">
+          <span>
             {profile.description}
           </span>
         </div>
       </div>
 
       <div className="flex items-center gap-2">
-        <div className="flex flex-col items-center space-x-2 gap-4 mr-4">
-          <Switch id="airplane-mode"/>
-          <Label htmlFor="airplane-mode">Enabled</Label>
+        <div className="flex flex-col items-center space-x-2 gap-4 mr-4 font-bold">
+          <Switch id="airplane-mode" checked={enabledMap[profile.id]} onClick={() => dispatch(toggleProfile(profile.id))} />
+          <Label htmlFor="airplane-mode">{enabledMap[profile.id] ? 'Enabled' : 'Disabled'}</Label>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

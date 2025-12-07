@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/services/authApi";
 import { setCredentials } from "@/slices/authSlice";
 import { loginFormSchema } from "@/utilities/zodSchemas";
+import { defaultLogin } from "@/utilities/constants";
 
 type LoginFormProps = {
   className?: string;
@@ -39,10 +40,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     mode: "onSubmit",
-    defaultValues: {
-      username: "",
-      password: "",
-    },
+    defaultValues: defaultLogin,
   });
 
   const [login, { isLoading }] = useLoginMutation();
@@ -171,7 +169,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => form.reset()}
+              onClick={() => form.reset(defaultLogin)}
             >
               Reset
             </Button>

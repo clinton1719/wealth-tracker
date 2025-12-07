@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { useSignUpMutation } from "@/services/authApi";
+import { defaultSignUp } from "@/utilities/constants";
 
 const formSchema = z
   .object({
@@ -56,11 +57,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onSubmit",
-    defaultValues: {
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
+    defaultValues: defaultSignUp
   });
 
   const [signUp, { isLoading }] = useSignUpMutation();
@@ -194,7 +191,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => form.reset()}
+              onClick={() => form.reset(defaultSignUp)}
             >
               Reset
             </Button>

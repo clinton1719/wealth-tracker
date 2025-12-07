@@ -11,6 +11,7 @@ import {
   useUpdateProfileMutation,
 } from "@/services/profilesApi";
 import type { Profile } from "@/types/Profile";
+import { defaultProfile } from "@/utilities/constants";
 import { profileFormSchema } from "@/utilities/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -28,12 +29,7 @@ export function ProfilesSection() {
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     mode: "onSubmit",
-    defaultValues: {
-      profileName: "",
-      colorCode: "#000000",
-      description: "",
-      profilePicture: undefined,
-    },
+    defaultValues: defaultProfile,
   });
 
   const {

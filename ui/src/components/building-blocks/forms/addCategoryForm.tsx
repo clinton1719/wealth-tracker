@@ -22,6 +22,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { defaultCategory } from "@/utilities/constants";
 
 export function AddCategoryForm({
   form,
@@ -216,7 +217,7 @@ export function AddCategoryForm({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => form.reset()}
+                onClick={() => form.reset(defaultCategory)}
               >
                 Reset
               </Button>
