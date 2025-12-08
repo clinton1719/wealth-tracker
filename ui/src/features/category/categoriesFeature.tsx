@@ -1,3 +1,10 @@
+import type * as z from "zod";
+import type { Category } from "@/types/Category";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddCategoryForm } from "@/components/building-blocks/forms/addCategoryForm";
 import { CategorySection } from "@/components/building-blocks/sections/categorySection";
@@ -12,15 +19,8 @@ import {
 } from "@/services/categoriesApi";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { selectProfileSlice } from "@/slices/profileSlice";
-import type { Category } from "@/types/Category";
 import { defaultCategory } from "@/utilities/constants";
 import { categoryFormSchema } from "@/utilities/zodSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import type * as z from "zod";
 
 export default function CategoriesFeature() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -113,7 +113,10 @@ export default function CategoriesFeature() {
               color: "var(--foreground-code, #f5f5f5)",
             }}
           >
-            <code>Category name: {result.categoryName}</code>
+            <code>
+              Category name:
+              {result.categoryName}
+            </code>
           </pre>
         ),
         position: "bottom-right",
@@ -282,6 +285,7 @@ export default function CategoriesFeature() {
         <div className="normal-grid">
           {filteredCategoriesData.map((category) => (
             <CategorySection
+              key={category.id}
               category={category}
               handleDeleteCategory={handleDeleteCategory}
               handleUpdateCategory={handleUpdateCategory}

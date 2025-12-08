@@ -1,6 +1,14 @@
-import { AccountSection } from "@/components/building-blocks/sections/accountSection";
+import type * as z from "zod";
+import type { Account } from "@/types/Account";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddAccountForm } from "@/components/building-blocks/forms/addAccountForm";
+import { AccountSection } from "@/components/building-blocks/sections/accountSection";
+import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
 import {
@@ -11,16 +19,8 @@ import {
 } from "@/services/accountsApi";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { selectProfileSlice } from "@/slices/profileSlice";
-import type { Account } from "@/types/Account";
 import { defaultAccount } from "@/utilities/constants";
 import { accountFormSchema } from "@/utilities/zodSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import type * as z from "zod";
-import { Input } from "@/components/ui/input";
 
 export function AccountsFeature() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -179,7 +179,10 @@ export function AccountsFeature() {
               color: "var(--foreground-code, #f5f5f5)",
             }}
           >
-            <code>Account name: {result.accountName}</code>
+            <code>
+              Account name:
+              {result.accountName}
+            </code>
           </pre>
         ),
         position: "bottom-right",

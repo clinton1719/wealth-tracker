@@ -1,3 +1,6 @@
+import type { Account } from "@/types/Account";
+import type { AccountSectionProps } from "@/types/AccountSectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
 import { ProfilePicture } from "@/components/building-blocks/profilePicture";
 import { Button } from "@/components/ui/button";
 import {
@@ -6,9 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Account } from "@/types/Account";
-import type { AccountSectionProps } from "@/types/AccountSectionProps";
-import { DynamicIcon } from "lucide-react/dynamic";
 import {
   Card,
   CardAction,

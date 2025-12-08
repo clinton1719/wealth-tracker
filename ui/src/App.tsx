@@ -1,6 +1,6 @@
+import { Separator } from "@/components/ui/separator";
 import { AccountsFeature } from "@/features/account/accountsFeature";
 import { ProfilesFeature } from "@/features/profile/profilesFeature";
-import { Separator } from "@/components/ui/separator";
 
 function App() {
   return (

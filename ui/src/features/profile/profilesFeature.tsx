@@ -1,3 +1,9 @@
+import type * as z from "zod";
+import type { Profile } from "@/types/Profile";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddProfileForm } from "@/components/building-blocks/forms/addProfileForm";
 import { ProfileSection } from "@/components/building-blocks/sections/profileSection";
@@ -10,14 +16,8 @@ import {
   useSaveProfileMutation,
   useUpdateProfileMutation,
 } from "@/services/profilesApi";
-import type { Profile } from "@/types/Profile";
 import { defaultProfile } from "@/utilities/constants";
 import { profileFormSchema } from "@/utilities/zodSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import type * as z from "zod";
 
 export function ProfilesFeature() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -143,7 +143,10 @@ export function ProfilesFeature() {
               color: "var(--foreground-code, #f5f5f5)",
             }}
           >
-            <code>Profile name: {result.profileName}</code>
+            <code>
+              Profile name:
+              {result.profileName}
+            </code>
           </pre>
         ),
         position: "bottom-right",

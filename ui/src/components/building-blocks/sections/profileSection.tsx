@@ -1,3 +1,7 @@
+import type { Profile } from "@/types/Profile";
+import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
+import { useDispatch, useSelector } from "react-redux";
 import { ProfilePicture } from "@/components/building-blocks/profilePicture";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,10 +12,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { selectProfileSlice, toggleProfile } from "@/slices/profileSlice";
-import type { Profile } from "@/types/Profile";
-import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
-import { DynamicIcon } from "lucide-react/dynamic";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
   CardAction,

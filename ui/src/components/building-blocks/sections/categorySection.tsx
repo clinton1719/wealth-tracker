@@ -1,3 +1,5 @@
+import type { CategorySectionProps } from "@/types/CategorySectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
 import { ProfilePicture } from "@/components/building-blocks/profilePicture";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,8 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { CategorySectionProps } from "@/types/CategorySectionProps";
-import { DynamicIcon } from "lucide-react/dynamic";
 
 export function CategorySection({
   category,
