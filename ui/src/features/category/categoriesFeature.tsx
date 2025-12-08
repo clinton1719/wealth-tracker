@@ -1,22 +1,6 @@
-import type * as z from "zod";
-import type { Category } from "@/types/Category";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DynamicIcon } from "lucide-react/dynamic";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddCategoryForm } from "@/components/building-blocks/forms/addCategoryForm";
-import { ProfilePicture } from "@/components/building-blocks/profilePicture";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CategorySection } from "@/components/building-blocks/sections/categorySection";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
 import {
@@ -25,10 +9,17 @@ import {
   useSaveCategoryMutation,
   useUpdateCategoryMutation,
 } from "@/services/categoriesApi";
+import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
+import type { Category } from "@/types/Category";
 import { defaultCategory } from "@/utilities/constants";
 import { categoryFormSchema } from "@/utilities/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type * as z from "zod";
 
-export default function CategoriesSection() {
+export default function CategoriesFeature() {
   const [isUpdate, setIsUpdate] = useState(false);
   const [deleteCategoryDialogOpen, setDeleteCategoryDialogOpen] =
     useState<boolean>(false);
@@ -50,23 +41,34 @@ export default function CategoriesSection() {
   const [deleteCategory, { isLoading: deleteCategoryLoading }] =
     useDeleteCategoryMutation();
   const {
-    error,
+    error: categoriesError,
     isLoading: getAllCategoriesLoading,
-    data,
+    data: categoriesData,
   } = useGetAllCategoriesQuery();
-  const { isError, errorComponent } = useApiError(error);
+  const {
+    error: profilesError,
+    isLoading: getAllProfilesLoading,
+    data: profilesData,
+  } = useGetAllProfilesForUserQuery();
+  const { isError: isCategoriesError, errorComponent: categoriesErrorComponent } = useApiError(categoriesError);
+  const { isError: isProfilesError, errorComponent: profilesErrorComponent } =
+    useApiError(profilesError);
 
   if (
     saveCategoryLoading ||
     getAllCategoriesLoading ||
     updateCategoryLoading ||
-    deleteCategoryLoading
+    deleteCategoryLoading ||
+    getAllProfilesLoading
   ) {
-    return <Spinner className="spinner"/>;
+    return <Spinner className="spinner" />;
   }
 
-  if (isError) {
-    return errorComponent;
+  if (isCategoriesError) {
+    return categoriesErrorComponent;
+  }
+  if (isProfilesError) {
+    return profilesErrorComponent;
   }
 
   async function onSubmit(formData: z.infer<typeof categoryFormSchema>) {
@@ -81,7 +83,15 @@ export default function CategoriesSection() {
 
   async function saveNewCategory(formData: z.infer<typeof categoryFormSchema>) {
     try {
-      const result = await saveCategory({ ...formData }).unwrap();
+      const profile = profilesData?.find(
+        (profile) => profile.profileName === formData.profileName,
+      );
+      if (!profile) {
+        toast.error("Invalid data found, refresh and try again");
+        return;
+      }
+
+      const result = await saveCategory({ ...formData, profileId: profile.id }).unwrap();
 
       toast("Category saved!", {
         description: (
@@ -130,7 +140,19 @@ export default function CategoriesSection() {
     formData: z.infer<typeof categoryFormSchema>,
   ) {
     try {
-      const result = await updateCategory({ ...formData }).unwrap();
+      const updatedFormData = {
+        ...formData,
+        accountPicture: undefined,
+      };
+      const profile = profilesData?.find(
+        (profile) => profile.profileName === updatedFormData.profileName,
+      );
+      if (!profile) {
+        toast.error("Invalid data found, refresh and try again");
+        return;
+      }
+
+      const result = await updateCategory({ ...formData, profileId: profile.id, }).unwrap();
 
       if (!result) {
         toast.error("Failed to update category, please try again later");
@@ -211,7 +233,7 @@ export default function CategoriesSection() {
     }
   };
 
-  if (data) {
+  if (categoriesData && profilesData) {
     return (
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-6">
@@ -219,75 +241,17 @@ export default function CategoriesSection() {
           <AddCategoryForm
             form={form}
             categoryDialogOpen={categoryDialogOpen}
+            isUpdate={isUpdate}
             setIsUpdate={setIsUpdate}
             setCategoryDialogOpen={setCategoryDialogOpen}
             onSubmit={onSubmit}
+            profiles={profilesData}
           />
         </div>
 
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {data.map((category) => (
-            <Card
-              key={category.id}
-              className="hover:shadow-md transition flex justify-between"
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 break-all">
-                  <DynamicIcon
-                    name={
-                      category.icon ? category.icon : ("badge-check" as any)
-                    }
-                    color={category.colorCode}
-                  />
-                  <div
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: category.colorCode }}
-                  />
-                  {category.categoryName}
-                </CardTitle>
-                <ProfilePicture imageSource="" fallbackName="" imageColor="" />
-              </CardHeader>
-              <CardContent className="mb-2">
-                <p className="text-sm text-muted-foreground mb-4 break-all">
-                  {category.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {category.tags?.map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant="outline"
-                      style={{ color: category.colorCode }}
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-              <CardFooter className="flex-row gap-2 justify-between">
-                <Button
-                  variant="ghost"
-                  onClick={() => handleUpdateCategory(category)}
-                >
-                  <DynamicIcon
-                    name="edit"
-                    color={category.colorCode}
-                    className="h-4 w-4"
-                  />
-                  Edit
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => handleDeleteCategory(category)}
-                >
-                  <DynamicIcon
-                    name="trash"
-                    color={category.colorCode}
-                    className="h-4 w-4"
-                  />
-                  Delete
-                </Button>
-              </CardFooter>
-            </Card>
+        <div className="normal-grid">
+          {categoriesData.map((category) => (
+            <CategorySection category={category} handleDeleteCategory={handleDeleteCategory} handleUpdateCategory={handleUpdateCategory} />
           ))}
         </div>
 

@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -45,7 +46,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 
   const [login, { isLoading }] = useLoginMutation();
 
-  if (isLoading) return <Spinner className="spinner"/>;
+  if (isLoading) return <Spinner className="spinner" />;
 
   async function onSubmit(formData: z.infer<typeof loginFormSchema>) {
     try {
@@ -176,6 +177,9 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
             <Button type="submit" form="form-rhf-demo">
               Submit
             </Button>
+            <FieldDescription className="px-6 text-center">
+              Don't have an account? <Link to="/login">Sign Up</Link>
+            </FieldDescription>
           </Field>
         </CardFooter>
       </Card>

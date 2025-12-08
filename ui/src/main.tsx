@@ -13,7 +13,7 @@ import "@/styles/index.css";
 
 const App = lazy(() => import("@/App.tsx"));
 const CategoriesSection = lazy(
-  () => import("@/features/category/categoriesSection.tsx"),
+  () => import("@/features/category/categoriesFeature"),
 );
 const ExpensesSection = lazy(
   () => import("@/features/expense/expensesSection.tsx"),

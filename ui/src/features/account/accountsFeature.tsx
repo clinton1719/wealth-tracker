@@ -257,7 +257,7 @@ export function AccountsFeature() {
             setAccountDialogOpen={setAccountDialogOpen}
           />
         </div>
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="normal-grid">
           {filteredAccountsData ? (
             filteredAccountsData.map((account) => {
               const profile = profilesData.find(

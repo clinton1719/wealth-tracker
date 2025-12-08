@@ -16,6 +16,7 @@ import {
 
 import {
   Field,
+  FieldContent,
   FieldDescription,
   FieldError,
   FieldGroup,
@@ -23,13 +24,16 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { defaultCategory } from "@/utilities/constants";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
 
 export function AddCategoryForm({
   form,
   categoryDialogOpen,
   setCategoryDialogOpen,
   onSubmit,
-  setIsUpdate
+  setIsUpdate,
+  isUpdate,
+  profiles
 }: AddCategoryFormProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -156,6 +160,50 @@ export function AddCategoryForm({
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
+                </Field>
+              )}
+            />
+            <Controller
+              name="profileName"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-account-type">
+                      Profile
+                    </FieldLabel>
+                    <FieldDescription>Choose your profile</FieldDescription>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isUpdate === true}
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-profile"
+                      aria-invalid={fieldState.invalid}
+                      className="min-w-[120px]"
+                    >
+                      <SelectValue placeholder="Select profile" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      {profiles.map((profile) => (
+                        <SelectItem
+                          key={profile.id}
+                          value={profile.profileName}
+                        >
+                          {profile.profileName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </Field>
               )}
             />

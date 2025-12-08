@@ -1,4 +1,5 @@
 import type { SubmitHandler, UseFormReturn } from "react-hook-form";
+import type { Profile } from "./Profile";
 
 export interface AddCategoryFormProps {
   form: UseFormReturn<
@@ -8,6 +9,7 @@ export interface AddCategoryFormProps {
       id?: number | undefined;
       description?: string | undefined;
       icon?: string | undefined;
+      profileName: string;
       tags?: string[] | undefined;
     },
     any,
@@ -17,6 +19,7 @@ export interface AddCategoryFormProps {
       id?: number | undefined;
       description?: string | undefined;
       icon?: string | undefined;
+      profileName: string;
       tags?: string[] | undefined;
     }
   >;
@@ -28,7 +31,10 @@ export interface AddCategoryFormProps {
     id?: number | undefined;
     description?: string | undefined;
     icon?: string | undefined;
+    profileName: string;
     tags?: string[] | undefined;
   }>;
+  isUpdate: boolean;
+  profiles: Profile[];
   setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 }

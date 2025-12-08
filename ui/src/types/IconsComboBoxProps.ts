@@ -11,6 +11,7 @@ export interface IconsComboBoxProps {
       colorCode: string;
       description?: string | undefined;
       icon?: string | undefined;
+      profileName: string;
       tags?: string[] | undefined;
     },
     "icon"
@@ -22,6 +23,7 @@ export interface IconsComboBoxProps {
       colorCode: string;
       description?: string | undefined;
       icon?: string | undefined;
+      profileName: string;
       tags?: string[] | undefined;
     },
     any,
@@ -30,6 +32,7 @@ export interface IconsComboBoxProps {
       colorCode: string;
       description?: string | undefined;
       icon?: string | undefined;
+      profileName: string;
       tags?: string[] | undefined;
     }
   >;
