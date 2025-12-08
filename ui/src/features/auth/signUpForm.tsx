@@ -62,7 +62,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
 
   const [signUp, { isLoading }] = useSignUpMutation();
 
-  if (isLoading) return <Spinner className="spinner"/>;
+  if (isLoading) return <Spinner className="spinner" />;
 
   async function onSubmit(formData: z.infer<typeof formSchema>) {
     try {

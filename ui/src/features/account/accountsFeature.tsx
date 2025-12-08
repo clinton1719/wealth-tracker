@@ -28,7 +28,7 @@ export function AccountsFeature() {
   const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] =
     useState<boolean>(false);
   const [currentAccount, setCurrentAccount] = useState<Account | undefined>();
-  const [accountSearchText, setAccountSearchText] = useState('');
+  const [accountSearchText, setAccountSearchText] = useState("");
 
   const form = useForm<z.infer<typeof accountFormSchema>>({
     resolver: zodResolver(accountFormSchema),
@@ -235,18 +235,27 @@ export function AccountsFeature() {
     setCurrentAccount(account);
   };
 
-  const filteredAccountsData = accountsData?.filter(
-    (account) => {
-      return enabledMap[account.profileId] && (!accountSearchText || account.accountName.toLowerCase().includes(accountSearchText.toLowerCase()));
-    }
-  );
+  const filteredAccountsData = accountsData?.filter((account) => {
+    return (
+      enabledMap[account.profileId] &&
+      (!accountSearchText ||
+        account.accountName
+          .toLowerCase()
+          .includes(accountSearchText.toLowerCase()))
+    );
+  });
 
   if (profilesData) {
     return (
       <div id="accountsSection">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">Accounts</h1>
-          <Input type="search" placeholder="Search accounts..." className="search-bar" onChange={e => setAccountSearchText(e.target.value)} />
+          <Input
+            type="search"
+            placeholder="Search accounts..."
+            className="search-bar"
+            onChange={(e) => setAccountSearchText(e.target.value)}
+          />
           <AddAccountForm
             profiles={profilesData}
             form={form}

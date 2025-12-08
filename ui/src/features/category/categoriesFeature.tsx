@@ -1,6 +1,7 @@
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddCategoryForm } from "@/components/building-blocks/forms/addCategoryForm";
 import { CategorySection } from "@/components/building-blocks/sections/categorySection";
+import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
 import {
@@ -10,12 +11,14 @@ import {
   useUpdateCategoryMutation,
 } from "@/services/categoriesApi";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
+import { selectProfileSlice } from "@/slices/profileSlice";
 import type { Category } from "@/types/Category";
 import { defaultCategory } from "@/utilities/constants";
 import { categoryFormSchema } from "@/utilities/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import type * as z from "zod";
 
@@ -27,6 +30,7 @@ export default function CategoriesFeature() {
     Category | undefined
   >();
   const [categoryDialogOpen, setCategoryDialogOpen] = useState<boolean>(false);
+  const [categorySearchText, setACategorySearchText] = useState("");
 
   const form = useForm<z.infer<typeof categoryFormSchema>>({
     resolver: zodResolver(categoryFormSchema),
@@ -50,7 +54,11 @@ export default function CategoriesFeature() {
     isLoading: getAllProfilesLoading,
     data: profilesData,
   } = useGetAllProfilesForUserQuery();
-  const { isError: isCategoriesError, errorComponent: categoriesErrorComponent } = useApiError(categoriesError);
+  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
+  const {
+    isError: isCategoriesError,
+    errorComponent: categoriesErrorComponent,
+  } = useApiError(categoriesError);
   const { isError: isProfilesError, errorComponent: profilesErrorComponent } =
     useApiError(profilesError);
 
@@ -91,7 +99,10 @@ export default function CategoriesFeature() {
         return;
       }
 
-      const result = await saveCategory({ ...formData, profileId: profile.id }).unwrap();
+      const result = await saveCategory({
+        ...formData,
+        profileId: profile.id,
+      }).unwrap();
 
       toast("Category saved!", {
         description: (
@@ -152,7 +163,10 @@ export default function CategoriesFeature() {
         return;
       }
 
-      const result = await updateCategory({ ...formData, profileId: profile.id, }).unwrap();
+      const result = await updateCategory({
+        ...formData,
+        profileId: profile.id,
+      }).unwrap();
 
       if (!result) {
         toast.error("Failed to update category, please try again later");
@@ -233,11 +247,27 @@ export default function CategoriesFeature() {
     }
   };
 
-  if (categoriesData && profilesData) {
+  const filteredCategoriesData = categoriesData?.filter((category) => {
+    return (
+      enabledMap[category.profileId] &&
+      (!categorySearchText ||
+        category.categoryName
+          .toLowerCase()
+          .includes(categorySearchText.toLowerCase()))
+    );
+  });
+
+  if (filteredCategoriesData && profilesData) {
     return (
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">Categories</h1>
+          <Input
+            type="search"
+            placeholder="Search accounts..."
+            className="search-bar"
+            onChange={(e) => setACategorySearchText(e.target.value)}
+          />
           <AddCategoryForm
             form={form}
             categoryDialogOpen={categoryDialogOpen}
@@ -250,8 +280,12 @@ export default function CategoriesFeature() {
         </div>
 
         <div className="normal-grid">
-          {categoriesData.map((category) => (
-            <CategorySection category={category} handleDeleteCategory={handleDeleteCategory} handleUpdateCategory={handleUpdateCategory} />
+          {filteredCategoriesData.map((category) => (
+            <CategorySection
+              category={category}
+              handleDeleteCategory={handleDeleteCategory}
+              handleUpdateCategory={handleUpdateCategory}
+            />
           ))}
         </div>
 

@@ -24,7 +24,13 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { defaultCategory } from "@/utilities/constants";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@radix-ui/react-select";
 
 export function AddCategoryForm({
   form,
@@ -33,7 +39,7 @@ export function AddCategoryForm({
   onSubmit,
   setIsUpdate,
   isUpdate,
-  profiles
+  profiles,
 }: AddCategoryFormProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -57,7 +63,7 @@ export function AddCategoryForm({
       <DialogContent
         className="max-w-md"
         onClickMethod={() => {
-          setCategoryDialogOpen(false)
+          setCategoryDialogOpen(false);
         }}
       >
         <DialogHeader>

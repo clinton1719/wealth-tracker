@@ -12,7 +12,15 @@ import type { Profile } from "@/types/Profile";
 import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../ui/card";
 
 export function ProfileSection({
   profile,
@@ -31,7 +39,10 @@ export function ProfileSection({
   const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
 
   return (
-    <Card className="w-full max-w-sm" style={{ backgroundColor: `${profile.colorCode}40` }}>
+    <Card
+      className="w-full max-w-sm"
+      style={{ backgroundColor: `${profile.colorCode}40` }}
+    >
       <CardHeader>
         <CardTitle>
           <ProfilePicture
@@ -43,9 +54,7 @@ export function ProfileSection({
         <CardDescription>
           <div className="flex flex-col">
             <span className="card-title">{profile.profileName}</span>
-            <span className="description">
-              {profile.description}
-            </span>
+            <span className="description">{profile.description}</span>
           </div>
         </CardDescription>
         <CardAction>
@@ -80,8 +89,13 @@ export function ProfileSection({
       <CardContent>
         <div className="flex flex-col gap-6">
           <div className="flex justify-between">
-            <span className={`status-badge ${enabledMap[profile.id] ? "enabled" : "disabled"
-              }`}>{enabledMap[profile.id] ? "Enabled" : "Disabled"}</span>
+            <span
+              className={`status-badge ${
+                enabledMap[profile.id] ? "enabled" : "disabled"
+              }`}
+            >
+              {enabledMap[profile.id] ? "Enabled" : "Disabled"}
+            </span>
             <Switch
               id={`profile-${profile.id}`}
               checked={enabledMap[profile.id]}
@@ -90,9 +104,7 @@ export function ProfileSection({
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-
-      </CardFooter>
+      <CardFooter className="flex-col gap-2"></CardFooter>
     </Card>
   );
 }

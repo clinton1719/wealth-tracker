@@ -9,7 +9,15 @@ import {
 import type { Account } from "@/types/Account";
 import type { AccountSectionProps } from "@/types/AccountSectionProps";
 import { DynamicIcon } from "lucide-react/dynamic";
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../ui/card";
 
 export function AccountSection({
   account,
@@ -27,7 +35,10 @@ export function AccountSection({
   };
 
   return (
-    <Card className="w-full max-w-sm" style={{ backgroundColor: `${profile.colorCode}40` }}>
+    <Card
+      className="w-full max-w-sm"
+      style={{ backgroundColor: `${profile.colorCode}40` }}
+    >
       <CardHeader>
         <CardTitle>
           <ProfilePicture
@@ -39,9 +50,7 @@ export function AccountSection({
         <CardDescription>
           <div className="flex flex-col">
             <span className="card-title">{account.accountName}</span>
-            <span className="description">
-              {account.description}
-            </span>
+            <span className="description">{account.description}</span>
           </div>
         </CardDescription>
         <CardAction>
@@ -57,10 +66,16 @@ export function AccountSection({
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="bg-white">
-              <DropdownMenuItem onClick={() => handleUpdateAccount(account)} className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={() => handleUpdateAccount(account)}
+                className="cursor-pointer"
+              >
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDeleteAccount(account)} className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={() => handleDeleteAccount(account)}
+                className="cursor-pointer"
+              >
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -77,15 +92,11 @@ export function AccountSection({
           </div>
           <div className="flex justify-between">
             <span className="card-key">Account type:</span>
-            <span className="card-value">
-              {account.accountType}
-            </span>
+            <span className="card-value">{account.accountType}</span>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-
-      </CardFooter>
+      <CardFooter className="flex-col gap-2"></CardFooter>
     </Card>
   );
 }

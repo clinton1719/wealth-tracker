@@ -25,7 +25,7 @@ export function ProfilesFeature() {
   const [deleteProfileDialogOpen, setDeleteProfileDialogOpen] =
     useState<boolean>(false);
   const [currentProfile, setCurrentProfile] = useState<Profile | undefined>();
-  const [profileSearchText, setProfileSearchText] = useState('');
+  const [profileSearchText, setProfileSearchText] = useState("");
 
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -199,15 +199,27 @@ export function ProfilesFeature() {
     setCurrentProfile(profile);
   };
 
-  const filteredProfileData = profileData ? profileData.filter(profile => {
-    return !profileSearchText || profile.profileName.toLowerCase().includes(profileSearchText.toLowerCase());
-  }) : undefined;
+  const filteredProfileData = profileData
+    ? profileData.filter((profile) => {
+        return (
+          !profileSearchText ||
+          profile.profileName
+            .toLowerCase()
+            .includes(profileSearchText.toLowerCase())
+        );
+      })
+    : undefined;
 
   return (
     <div id="profilesSection">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Profiles</h1>
-        <Input type="search" placeholder="Search profiles..." className="search-bar" onChange={e => setProfileSearchText(e.target.value)} />
+        <Input
+          type="search"
+          placeholder="Search profiles..."
+          className="search-bar"
+          onChange={(e) => setProfileSearchText(e.target.value)}
+        />
         <AddProfileForm
           form={form}
           onSubmit={onSubmit}
