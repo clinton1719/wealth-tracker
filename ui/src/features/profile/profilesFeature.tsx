@@ -1,6 +1,6 @@
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddProfileForm } from "@/components/building-blocks/forms/addProfileForm";
-import { ProfileSection } from "@/components/building-blocks/profileSection";
+import { ProfileSection } from "@/components/building-blocks/sections/profileSection";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
 import {
@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type * as z from "zod";
 
-export function ProfilesSection() {
+export function ProfilesFeature() {
   const [isUpdate, setIsUpdate] = useState(false);
   const [profileDialogOpen, setProfileDialogOpen] = useState<boolean>(false);
   const [deleteProfileDialogOpen, setDeleteProfileDialogOpen] =

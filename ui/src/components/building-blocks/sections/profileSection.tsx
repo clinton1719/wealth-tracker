@@ -12,8 +12,7 @@ import type { Profile } from "@/types/Profile";
 import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
-import { Label } from "../ui/label";
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card";
 
 export function ProfileSection({
   profile,
@@ -43,8 +42,8 @@ export function ProfileSection({
         </CardTitle>
         <CardDescription>
           <div className="flex flex-col">
-            <span className="text-lg font-medium text-muted-foreground">{profile.profileName}</span>
-            <span className="text-muted-foreground text-sm mt-1 flex-1 max-w-[90%] text-left break-all">
+            <span className="card-title">{profile.profileName}</span>
+            <span className="description">
               {profile.description}
             </span>
           </div>
@@ -81,7 +80,8 @@ export function ProfileSection({
       <CardContent>
         <div className="flex flex-col gap-6">
           <div className="flex justify-between">
-            <Label htmlFor={`profile-${profile.id}`}> {enabledMap[profile.id] ? "Enabled" : "Disabled"}</Label>
+            <span className={`status-badge ${enabledMap[profile.id] ? "enabled" : "disabled"
+              }`}>{enabledMap[profile.id] ? "Enabled" : "Disabled"}</span>
             <Switch
               id={`profile-${profile.id}`}
               checked={enabledMap[profile.id]}

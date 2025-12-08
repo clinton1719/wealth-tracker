@@ -128,3 +128,45 @@
     @apply bg-background text-foreground;
   }
 }
+
+.description {
+  @apply text-muted-foreground text-sm mt-1 flex-1 max-w-[90%] text-left break-all;
+}
+
+.card-title {
+  @apply text-lg font-medium text-muted-foreground break-all;
+}
+
+.card-key {
+  @apply text-sm font-medium text-muted-foreground
+         pr-2 uppercase break-all;
+}
+
+.card-value {
+  @apply text-foreground text-sm font-semibold
+         px-2 py-0.5 rounded-md
+         bg-card border border-border
+         whitespace-normal break-all;
+}
+
+.enabled {
+  @apply text-foreground text-sm font-semibold
+         px-2 py-0.5 rounded-md
+         bg-card border border-border
+         whitespace-normal break-all cursor-default;
+}
+
+.disabled {
+  @apply text-white text-sm font-semibold
+         px-2 py-0.5 rounded-md
+         bg-black border border-border
+         whitespace-normal break-all opacity-60 cursor-not-allowed;
+}
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-import { AccountSection } from "@/components/building-blocks/accountSection";
+import { AccountSection } from "@/components/building-blocks/sections/accountSection";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddAccountForm } from "@/components/building-blocks/forms/addAccountForm";
 import { Spinner } from "@/components/ui/spinner";
@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import type * as z from "zod";
 
-export function AccountsSection() {
+export function AccountsFeature() {
   const [isUpdate, setIsUpdate] = useState(false);
   const [accountDialogOpen, setAccountDialogOpen] = useState<boolean>(false);
   const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] =

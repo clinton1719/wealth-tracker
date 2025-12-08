@@ -9,7 +9,7 @@ import {
 import type { Account } from "@/types/Account";
 import type { AccountSectionProps } from "@/types/AccountSectionProps";
 import { DynamicIcon } from "lucide-react/dynamic";
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card";
 
 export function AccountSection({
   account,
@@ -38,8 +38,8 @@ export function AccountSection({
         </CardTitle>
         <CardDescription>
           <div className="flex flex-col">
-            <span className="text-lg font-medium text-muted-foreground">{account.accountName}</span>
-            <span className="text-muted-foreground text-sm mt-1 max-w-[90%] text-left break-all">
+            <span className="card-title">{account.accountName}</span>
+            <span className="description">
               {account.description}
             </span>
           </div>
@@ -70,14 +70,14 @@ export function AccountSection({
       <CardContent>
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
-            <span className="text-md font-medium text-muted-foreground">Account balance:</span>
-            <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
+            <span className="card-key">Account balance:</span>
+            <span className="card-value">
               ₹{account.accountBalance.toLocaleString()}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-md font-medium text-muted-foreground">Account type:</span>
-            <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
+            <span className="card-key">Account type:</span>
+            <span className="card-value">
               {account.accountType}
             </span>
           </div>
