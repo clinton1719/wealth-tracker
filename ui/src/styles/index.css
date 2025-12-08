@@ -167,6 +167,10 @@
   @apply mx-auto my-auto size-28 text-primary;
 }
 
+.search-bar {
+  @apply bg-accent max-w-md;
+}
+
 
 
 

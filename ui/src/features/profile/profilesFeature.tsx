@@ -1,6 +1,7 @@
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddProfileForm } from "@/components/building-blocks/forms/addProfileForm";
 import { ProfileSection } from "@/components/building-blocks/sections/profileSection";
+import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
 import {
@@ -24,6 +25,7 @@ export function ProfilesFeature() {
   const [deleteProfileDialogOpen, setDeleteProfileDialogOpen] =
     useState<boolean>(false);
   const [currentProfile, setCurrentProfile] = useState<Profile | undefined>();
+  const [profileSearchText, setProfileSearchText] = useState('');
 
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -34,7 +36,7 @@ export function ProfilesFeature() {
   const {
     error,
     isLoading: getAllProfilesLoading,
-    data,
+    data: profileData,
   } = useGetAllProfilesForUserQuery();
   const [saveProfile, { isLoading: saveProfileLoading }] =
     useSaveProfileMutation();
@@ -197,10 +199,15 @@ export function ProfilesFeature() {
     setCurrentProfile(profile);
   };
 
+  const filteredProfileData = profileData ? profileData.filter(profile => {
+    return !profileSearchText || profile.profileName.toLowerCase().includes(profileSearchText.toLowerCase());
+  }) : undefined;
+
   return (
     <div id="profilesSection">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Profiles</h1>
+        <Input type="search" placeholder="Search profiles..." className="search-bar" onChange={e => setProfileSearchText(e.target.value)} />
         <AddProfileForm
           form={form}
           onSubmit={onSubmit}
@@ -209,8 +216,8 @@ export function ProfilesFeature() {
         />
       </div>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {data ? (
-          data.map((profile) => (
+        {filteredProfileData ? (
+          filteredProfileData.map((profile) => (
             <ProfileSection
               profile={profile}
               key={profile.id}

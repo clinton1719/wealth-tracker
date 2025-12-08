@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import type * as z from "zod";
+import { Input } from "@/components/ui/input";
 
 export function AccountsFeature() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -27,6 +28,7 @@ export function AccountsFeature() {
   const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] =
     useState<boolean>(false);
   const [currentAccount, setCurrentAccount] = useState<Account | undefined>();
+  const [accountSearchText, setAccountSearchText] = useState('');
 
   const form = useForm<z.infer<typeof accountFormSchema>>({
     resolver: zodResolver(accountFormSchema),
@@ -63,7 +65,7 @@ export function AccountsFeature() {
     deleteAccountLoading ||
     getAllProfilesLoading
   ) {
-    return <Spinner className="spinner"/>;
+    return <Spinner className="spinner" />;
   }
 
   if (isAccountsError) {
@@ -72,10 +74,6 @@ export function AccountsFeature() {
   if (isProfilesError) {
     return profilesErrorComponent;
   }
-
-  const filteredData = accountsData?.filter(
-    (account) => enabledMap[account.profileId],
-  );
 
   async function onSubmit(formData: z.infer<typeof accountFormSchema>) {
     if (isUpdate) {
@@ -237,11 +235,18 @@ export function AccountsFeature() {
     setCurrentAccount(account);
   };
 
+  const filteredAccountsData = accountsData?.filter(
+    (account) => {
+      return enabledMap[account.profileId] && (!accountSearchText || account.accountName.toLowerCase().includes(accountSearchText.toLowerCase()));
+    }
+  );
+
   if (profilesData) {
     return (
       <div id="accountsSection">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">Accounts</h1>
+          <Input type="search" placeholder="Search accounts..." className="search-bar" onChange={e => setAccountSearchText(e.target.value)} />
           <AddAccountForm
             profiles={profilesData}
             form={form}
@@ -253,8 +258,8 @@ export function AccountsFeature() {
           />
         </div>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {filteredData ? (
-            filteredData.map((account) => {
+          {filteredAccountsData ? (
+            filteredAccountsData.map((account) => {
               const profile = profilesData.find(
                 (profile) => profile.id === account.profileId,
               );
