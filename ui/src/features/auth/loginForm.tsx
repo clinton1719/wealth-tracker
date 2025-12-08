@@ -166,7 +166,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
           </form>
         </CardContent>
         <CardFooter>
-          <Field orientation="horizontal">
+          <Field orientation="vertical">
             <Button
               type="button"
               variant="outline"
@@ -178,7 +178,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
               Submit
             </Button>
             <FieldDescription className="px-6 text-center">
-              Don't have an account? <Link to="/login">Sign Up</Link>
+              Don't have an account? <Link to="/signup">Sign Up</Link>
             </FieldDescription>
           </Field>
         </CardFooter>

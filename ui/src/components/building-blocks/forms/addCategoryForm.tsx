@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
+} from "@/components/ui/select";
 import { PlusCircle, XIcon } from "lucide-react";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
