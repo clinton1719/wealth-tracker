@@ -1,14 +1,9 @@
-import type * as z from "zod";
-import type { Category } from "@/types/Category";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddCategoryForm } from "@/components/building-blocks/forms/addCategoryForm";
 import { CategorySection } from "@/components/building-blocks/sections/categorySection";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
 import {
@@ -19,8 +14,15 @@ import {
 } from "@/services/categoriesApi";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { selectProfileSlice } from "@/slices/profileSlice";
+import type { Category } from "@/types/Category";
 import { defaultCategory } from "@/utilities/constants";
 import { categoryFormSchema } from "@/utilities/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import type * as z from "zod";
 
 export default function CategoriesFeature() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -31,6 +33,7 @@ export default function CategoriesFeature() {
   >();
   const [categoryDialogOpen, setCategoryDialogOpen] = useState<boolean>(false);
   const [categorySearchText, setACategorySearchText] = useState("");
+  const [selectedTag, setSelectedTag] = useState('');
 
   const form = useForm<z.infer<typeof categoryFormSchema>>({
     resolver: zodResolver(categoryFormSchema),
@@ -246,20 +249,45 @@ export default function CategoriesFeature() {
         category.categoryName
           .toLowerCase()
           .includes(categorySearchText.toLowerCase()))
+      && (selectedTag ? category.tags?.includes(selectedTag) : true)
     );
   });
+
+  const tags = filteredCategoriesData?.flatMap(category => category.tags);
 
   if (filteredCategoriesData && profilesData) {
     return (
       <div className="container mx-auto px-4 py-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold">Categories</h1>
-          <Input
-            type="search"
-            placeholder="Search categories..."
-            className="search-bar"
-            onChange={(e) => setACategorySearchText(e.target.value)}
-          />
+          <div className="flex gap-2 min-w-lg">
+            <Input
+              type="search"
+              placeholder="Search categories by name..."
+              className="search-bar"
+              onChange={(e) => setACategorySearchText(e.target.value)}
+            />
+            {tags ? (
+              <>
+                <Select value={selectedTag} onValueChange={e => setSelectedTag(e)}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Filter by tags" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Tags</SelectLabel>
+                      {tags.map(tag => {
+                        if (tag) {
+                          return (<SelectItem key={tag} value={tag}>{tag}</SelectItem>);
+                        }
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <Button variant="destructive" onClick={() => setSelectedTag('')}>Clear filters</Button>
+              </>
+            ) : <></>}
+          </div>
           <AddCategoryForm
             form={form}
             categoryDialogOpen={categoryDialogOpen}
@@ -272,7 +300,7 @@ export default function CategoriesFeature() {
         </div>
 
         <div className="normal-grid">
-          {filteredCategoriesData.map((category) => {
+          {filteredCategoriesData.sort((categoryA, categoryB) => categoryA.categoryName.localeCompare(categoryB.categoryName)).map((category) => {
             const profile = profilesData.find(
               (profile) => profile.id === category.profileId,
             );

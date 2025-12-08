@@ -251,11 +251,11 @@ export function AccountsFeature() {
   if (profilesData) {
     return (
       <div id="accountsSection">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold">Accounts</h1>
           <Input
             type="search"
-            placeholder="Search accounts..."
+            placeholder="Search accounts by name..."
             className="search-bar"
             onChange={(e) => setAccountSearchText(e.target.value)}
           />
@@ -271,7 +271,7 @@ export function AccountsFeature() {
         </div>
         <div className="normal-grid">
           {filteredAccountsData ? (
-            filteredAccountsData.map((account) => {
+            filteredAccountsData.sort((accountA, accountB) => accountA.accountName.localeCompare(accountB.accountName)).map((account) => {
               const profile = profilesData.find(
                 (profile) => profile.id === account.profileId,
               );

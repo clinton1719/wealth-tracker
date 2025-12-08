@@ -215,11 +215,11 @@ export function ProfilesFeature() {
 
   return (
     <div id="profilesSection">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold">Profiles</h1>
         <Input
           type="search"
-          placeholder="Search profiles..."
+          placeholder="Search profiles by name..."
           className="search-bar"
           onChange={(e) => setProfileSearchText(e.target.value)}
         />
@@ -232,7 +232,7 @@ export function ProfilesFeature() {
       </div>
       <div className="normal-grid">
         {filteredProfileData ? (
-          filteredProfileData.map((profile) => (
+          filteredProfileData.sort((profileA, profileB) => profileA.profileName.localeCompare(profileB.profileName)).map((profile) => (
             <ProfileSection
               profile={profile}
               key={profile.id}

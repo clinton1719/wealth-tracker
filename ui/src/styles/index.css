@@ -168,7 +168,7 @@
 }
 
 .search-bar {
-  @apply bg-accent max-w-md;
+  @apply bg-accent max-w-sm;
 }
 
 .normal-grid {

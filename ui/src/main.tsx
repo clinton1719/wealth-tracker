@@ -16,7 +16,7 @@ const CategoriesSection = lazy(
   () => import("@/features/category/categoriesFeature"),
 );
 const ExpensesSection = lazy(
-  () => import("@/features/expense/expensesSection.tsx"),
+  () => import("@/features/expense/expensesFeature"),
 );
 
 createRoot(document.getElementById("root")!).render(

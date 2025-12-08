@@ -1,6 +1,3 @@
-import type { AddAccountFormProps } from "@/types/AddAccountFormProps";
-import { PlusCircle } from "lucide-react";
-import { Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,11 +20,13 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
+import type { AddAccountFormProps } from "@/types/AddAccountFormProps";
 import { defaultAccount } from "@/utilities/constants";
+import { PlusCircle } from "lucide-react";
+import { Controller } from "react-hook-form";
 
 export function AddAccountForm({
   profiles,
@@ -138,14 +137,13 @@ export function AddAccountForm({
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger
-                      id="form-rhf-select-language"
+                      id="form-rhf-select-accountType"
                       aria-invalid={fieldState.invalid}
                       className="min-w-[120px]"
                     >
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      <SelectSeparator />
                       <SelectItem key="savings" value="SAVINGS">
                         Savings
                       </SelectItem>
