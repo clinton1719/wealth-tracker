@@ -138,7 +138,7 @@
 }
 
 .card-key {
-  @apply text-sm font-medium text-muted-foreground
+  @apply text-sm font-semibold text-muted-foreground
          pr-2 uppercase break-all;
 }
 
@@ -173,4 +173,12 @@
 
 .normal-grid {
   @apply grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+}
+
+.card {
+  @apply w-full max-w-sm hover:shadow-md transition flex justify-between;
+}
+
+.text-value {
+  @apply text-muted-foreground text-sm flex-1 max-w-[90%] text-left break-all;
 }

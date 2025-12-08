@@ -40,7 +40,7 @@ export function ProfileSection({
 
   return (
     <Card
-      className="w-full max-w-sm"
+      className="card"
       style={{ backgroundColor: `${profile.colorCode}40` }}
     >
       <CardHeader>
@@ -88,7 +88,7 @@ export function ProfileSection({
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-6">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span
               className={`status-badge ${
                 enabledMap[profile.id] ? "enabled" : "disabled"

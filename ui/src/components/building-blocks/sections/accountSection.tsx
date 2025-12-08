@@ -36,7 +36,7 @@ export function AccountSection({
 
   return (
     <Card
-      className="w-full max-w-sm"
+      className="card"
       style={{ backgroundColor: `${profile.colorCode}40` }}
     >
       <CardHeader>
@@ -84,13 +84,13 @@ export function AccountSection({
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-2">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span className="card-key">Account balance:</span>
             <span className="card-value">
               ₹{account.accountBalance.toLocaleString()}
             </span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span className="card-key">Account type:</span>
             <span className="card-value">{account.accountType}</span>
           </div>

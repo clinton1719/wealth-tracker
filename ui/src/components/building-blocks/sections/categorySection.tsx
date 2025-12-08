@@ -1,44 +1,97 @@
-import type { CategorySectionProps } from "@/types/CategorySectionProps";
-import { DynamicIcon } from "lucide-react/dynamic";
 import { ProfilePicture } from "@/components/building-blocks/profilePicture";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import type { Category } from "@/types/Category";
+import type { CategorySectionProps } from "@/types/CategorySectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
 
 export function CategorySection({
   category,
-  handleUpdateCategory,
   handleDeleteCategory,
+  profile,
+  form,
+  setCategoryDialogOpen,
+  setIsUpdate
 }: CategorySectionProps) {
+  const handleUpdateCategory = (category: Category) => {
+    form.reset(category);
+    form.setValue("profileName", profile.profileName);
+    setCategoryDialogOpen(true);
+    setIsUpdate(true);
+  };
+
   return (
     <Card
-      key={category.id}
-      className="hover:shadow-md transition flex justify-between"
+      className="card"
+      style={{ backgroundColor: `${profile.colorCode}40` }}
     >
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 break-all">
-          <DynamicIcon
-            name={category.icon ? category.icon : ("badge-check" as any)}
-            color={category.colorCode}
+        <CardTitle>
+          <ProfilePicture
+            imageSource={profile.profilePicture}
+            fallbackName={profile.profileName.charAt(0)}
+            imageColor={profile.colorCode}
           />
-          <div
-            className="w-4 h-4 rounded-full"
-            style={{ backgroundColor: category.colorCode }}
-          />
-          {category.categoryName}
         </CardTitle>
-        <ProfilePicture imageSource="" fallbackName="" imageColor="" />
+        <CardDescription>
+          <div className="flex flex-col gap-2 mt-2">
+            <div className="flex flex-row gap-2">
+              <DynamicIcon
+                name={category.icon ? category.icon : ("badge-check" as any)}
+                color={category.colorCode}
+              />
+              <span className="card-title" style={{color: category.colorCode}}>{category.categoryName}</span>
+            </div>
+          </div>
+        </CardDescription>
+        <CardAction>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-muted rounded-full shrink-0"
+              >
+                <DynamicIcon name="ellipsis-vertical" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="bg-white">
+              <DropdownMenuItem
+                onClick={() => handleUpdateCategory(category)}
+                className="cursor-pointer"
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleDeleteCategory(category)}
+                className="cursor-pointer"
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardAction>
       </CardHeader>
-      <CardContent className="mb-2">
-        <p className="text-sm text-muted-foreground mb-4 break-all">
-          {category.description}
-        </p>
+      <CardContent>
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between items-center">
+            <span className="card-key">Description: </span>
+            <span className="text-value">{category.description}</span>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="flex-col gap-2">
         <div className="flex flex-wrap gap-2 mt-4">
           {category.tags?.map((tag) => (
             <Badge
@@ -49,26 +102,7 @@ export function CategorySection({
               {tag}
             </Badge>
           ))}
-        </div>
-      </CardContent>
-      <CardFooter className="flex-row gap-2 justify-between">
-        <Button variant="ghost" onClick={() => handleUpdateCategory(category)}>
-          <DynamicIcon
-            name="edit"
-            color={category.colorCode}
-            className="h-4 w-4"
-          />
-          Edit
-        </Button>
-        <Button variant="ghost" onClick={() => handleDeleteCategory(category)}>
-          <DynamicIcon
-            name="trash"
-            color={category.colorCode}
-            className="h-4 w-4"
-          />
-          Delete
-        </Button>
-      </CardFooter>
+        </div> </CardFooter>
     </Card>
   );
 }

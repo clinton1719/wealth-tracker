@@ -64,6 +64,7 @@ export function AddCategoryForm({
         className="max-w-md"
         onClickMethod={() => {
           setCategoryDialogOpen(false);
+          setIsUpdate(false);
         }}
       >
         <DialogHeader>

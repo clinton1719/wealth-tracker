@@ -154,18 +154,13 @@ export default function CategoriesFeature() {
     formData: z.infer<typeof categoryFormSchema>,
   ) {
     try {
-      const updatedFormData = {
-        ...formData,
-        accountPicture: undefined,
-      };
       const profile = profilesData?.find(
-        (profile) => profile.profileName === updatedFormData.profileName,
+        (profile) => profile.profileName === formData.profileName,
       );
       if (!profile) {
         toast.error("Invalid data found, refresh and try again");
         return;
       }
-
       const result = await updateCategory({
         ...formData,
         profileId: profile.id,
@@ -223,12 +218,6 @@ export default function CategoriesFeature() {
     }
   }
 
-  const handleUpdateCategory = (category: Category) => {
-    form.reset(category);
-    setCategoryDialogOpen(true);
-    setIsUpdate(true);
-  };
-
   const handleDeleteCategory = (category: Category) => {
     setDeleteCategoryDialogOpen(true);
     setCurrentCategory(category);
@@ -267,7 +256,7 @@ export default function CategoriesFeature() {
           <h1 className="text-2xl font-bold">Categories</h1>
           <Input
             type="search"
-            placeholder="Search accounts..."
+            placeholder="Search categories..."
             className="search-bar"
             onChange={(e) => setACategorySearchText(e.target.value)}
           />
@@ -283,16 +272,35 @@ export default function CategoriesFeature() {
         </div>
 
         <div className="normal-grid">
-          {filteredCategoriesData.map((category) => (
-            <CategorySection
-              key={category.id}
-              category={category}
-              handleDeleteCategory={handleDeleteCategory}
-              handleUpdateCategory={handleUpdateCategory}
-            />
-          ))}
+          {filteredCategoriesData.map((category) => {
+            const profile = profilesData.find(
+              (profile) => profile.id === category.profileId,
+            );
+            if (profile) {
+              return (
+                <CategorySection
+                  key={category.id}
+                  category={category}
+                  handleDeleteCategory={handleDeleteCategory}
+                  profile={profile}
+                  form={form}
+                  setCategoryDialogOpen={setCategoryDialogOpen}
+                  setIsUpdate={setIsUpdate}
+                />
+              );
+            } else {
+              return (
+                <p
+                  key={category.id}
+                  role="alert"
+                  className="text-red-600 font-medium"
+                >
+                  Profile not found for this category, contact admin.
+                </p>
+              );
+            }
+          })}
         </div>
-
         <AlertDialogComponent
           isDialogOpen={deleteCategoryDialogOpen}
           alertType="DELETE_CATEGORY"
