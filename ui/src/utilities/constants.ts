@@ -31,3 +31,13 @@ export const defaultAccount = {
   accountType: "",
   profileName: "",
 };
+
+export const defaultExpense = {
+  amount: 0,
+  description: "",
+  createdAt: "",
+  updatedAt: "",
+  categoryName: "",
+  accountName: "",
+  profileName: "",
+};

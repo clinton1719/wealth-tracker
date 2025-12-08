@@ -254,6 +254,7 @@ export default function CategoriesFeature() {
   });
 
   const tags = filteredCategoriesData?.flatMap(category => category.tags);
+  const uniqueTags = [...new Set(tags)];
 
   if (filteredCategoriesData && profilesData) {
     return (
@@ -276,7 +277,7 @@ export default function CategoriesFeature() {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Tags</SelectLabel>
-                      {tags.map(tag => {
+                      {uniqueTags.map(tag => {
                         if (tag) {
                           return (<SelectItem key={tag} value={tag}>{tag}</SelectItem>);
                         }
@@ -284,7 +285,7 @@ export default function CategoriesFeature() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-                <Button variant="destructive" onClick={() => setSelectedTag('')}>Clear filters</Button>
+                <Button variant="destructive" onClick={() => setSelectedTag('')}>Clear tags</Button>
               </>
             ) : <></>}
           </div>
