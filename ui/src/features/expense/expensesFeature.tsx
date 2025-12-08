@@ -1,7 +1,7 @@
 import { AddExpenseForm } from "@/components/building-blocks/forms/addExpenseForm";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
-import { useGetAllExpensesInRangeQuery } from "@/services/expensesApi";
+import { useDeleteExpenseMutation, useGetAllExpensesInRangeQuery, useSaveExpenseMutation, useUpdateExpenseMutation } from "@/services/expensesApi";
 import { formatDate } from "@/utilities/helper";
 import { useState } from "react";
 import { ExpenseSummaryCards } from "./ExpenseSummaryCards";
@@ -37,6 +37,12 @@ export default function ExpensesFeature() {
     pageNumber: 0,
     pageSize: 100,
   });
+  const [saveExpense, { isLoading: saveExpenseLoading }] =
+    useSaveExpenseMutation();
+  const [updateExpense, { isLoading: updateExpenseLoading }] =
+    useUpdateExpenseMutation();
+  const [deleteExpense, { isLoading: deleteExpenseLoading }] =
+    useDeleteExpenseMutation();
   const {
     error: profilesError,
     isLoading: getAllProfilesLoading,
@@ -57,7 +63,7 @@ export default function ExpensesFeature() {
   const { isError: isAccountsError, errorComponent: accountsErrorComponent } = useApiError(accountsError);
   const { isError: isCategoriesError, errorComponent: categoriesErrorComponent } = useApiError(categoriesError);
 
-  if (getAllExpensesLoading || getAllProfilesLoading || getAllAccountsLoading || getAllCategoriesLoading) return <Spinner className="spinner" />;
+  if (getAllExpensesLoading || getAllProfilesLoading || getAllAccountsLoading || getAllCategoriesLoading || saveExpenseLoading || updateExpenseLoading || deleteExpenseLoading) return <Spinner className="spinner" />;
 
   if (isExpensesError) {
     return expensesErrorComponent;
@@ -70,29 +76,42 @@ export default function ExpensesFeature() {
   }
 
   async function onSubmit(formData: z.infer<typeof expenseFormSchema>) {
+    console.log('triggered')
+    console.log(isUpdate)
     if (isUpdate) {
-      await updateExistingCategory(formData);
+      await updateExistingExpense(formData);
     } else if (!isUpdate) {
-      await saveNewCategory(formData);
+      await saveNewExpense(formData);
     } else {
       toast.error("Unknown action, try again");
     }
   }
 
-  async function saveNewCategory(formData: z.infer<typeof expenseFormSchema>) {
+  async function saveNewExpense(formData: z.infer<typeof expenseFormSchema>) {
     try {
-      // const profile = profilesData?.find(
-      //   (profile) => profile.profileName === formData.profileName,
-      // );
-      // if (!profile) {
-      //   toast.error("Invalid data found, refresh and try again");
-      //   return;
-      // }
+      const profile = profilesData?.find(
+        (profile) => profile.profileName === formData.profileName,
+      );
 
-      // const result = await saveCategory({
-      //   ...formData,
-      //   profileId: profile.id,
-      // }).unwrap();
+      const category = categoriesData?.find(
+        (category) => category.categoryName === formData.categoryName,
+      );
+
+      const account = accountsData?.find(
+        (account) => account.accountName === formData.accountName,
+      );
+
+      if (!category || !profile || !account) {
+        toast.error("Invalid data found, refresh and try again");
+        return;
+      }
+
+      const result = await saveExpense({
+        ...formData,
+        profileId: profile.id,
+        accountId: account.id,
+        categoryId: category.id
+      }).unwrap();
 
       toast("Category saved!", {
         description: (
@@ -104,8 +123,7 @@ export default function ExpensesFeature() {
             }}
           >
             <code>
-              Category name:
-              {/* {result.categoryName} */}
+              Expense of: {result.amount} created at: {result.createdAt}
             </code>
           </pre>
         ),
@@ -140,7 +158,7 @@ export default function ExpensesFeature() {
     }
   }
 
-  async function updateExistingCategory(
+  async function updateExistingExpense(
     formData: z.infer<typeof expenseFormSchema>,
   ) {
     try {

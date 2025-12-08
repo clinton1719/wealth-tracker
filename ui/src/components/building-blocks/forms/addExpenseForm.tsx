@@ -7,7 +7,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { PlusCircle } from "lucide-react";
-import { useState } from "react";
 import { Controller } from "react-hook-form";
 
 import {
@@ -28,7 +27,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { AddExpenseFormProps } from "@/types/AddExpenseFormProps";
-import { defaultCategory } from "@/utilities/constants";
+import { defaultExpense } from "@/utilities/constants";
 import { DynamicIcon } from "lucide-react/dynamic";
 
 export function AddExpenseForm({
@@ -42,8 +41,6 @@ export function AddExpenseForm({
     accounts,
     categories
 }: AddExpenseFormProps) {
-    const [inputValue, setInputValue] = useState("");
-
     const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
         if (e.key === "Enter") e.preventDefault();
     };
@@ -85,14 +82,14 @@ export function AddExpenseForm({
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="form-rhf-category-description">
+                                    <FieldLabel htmlFor="form-rhf-expense-description">
                                         Description
                                     </FieldLabel>
                                     <Input
                                         {...field}
-                                        id="form-rhf-category-description"
+                                        id="form-rhf-expense-description"
                                         aria-invalid={fieldState.invalid}
-                                        placeholder="Enter category description"
+                                        placeholder="Enter expense description"
                                         autoComplete="off"
                                     />
                                     {fieldState.invalid && (
@@ -224,7 +221,7 @@ export function AddExpenseForm({
                                 >
                                     <FieldContent>
                                         <FieldLabel htmlFor="form-rhf-select-category">
-                                            Categories
+                                            Category
                                         </FieldLabel>
                                         <FieldDescription>Choose your category</FieldDescription>
                                         {fieldState.invalid && (
@@ -266,11 +263,11 @@ export function AddExpenseForm({
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => form.reset(defaultCategory)}
+                                onClick={() => form.reset(defaultExpense)}
                             >
                                 Reset
                             </Button>
-                            <Button form="form-rhf-category">Submit</Button>
+                            <Button form="form-rhf-expense">Submit</Button>
                         </Field>
                     </FieldGroup>
                 </form>

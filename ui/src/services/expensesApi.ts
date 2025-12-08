@@ -19,15 +19,23 @@ export const expensesApi = createApi({
   endpoints: (builder) => ({
     saveExpense: builder.mutation<Expense, Partial<Expense>>({
       query: (newExpense) => ({
-        url: "/expenses",
+        url: "/expenses/save",
         method: "POST",
         body: newExpense,
       }),
       invalidatesTags: ["Expenses"],
     }),
+    updateExpense: builder.mutation<Expense, Partial<Expense>>({
+      query: (existingExpense) => ({
+        url: `/expenses/update`,
+        method: "PUT",
+        body: existingExpense,
+      }),
+      invalidatesTags: ["Expenses"],
+    }),
     deleteExpense: builder.mutation<void, number>({
       query: (id: number) => ({
-        url: `/expenses/${id}`,
+        url: `/expenses/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Expenses"],
@@ -52,4 +60,5 @@ export const {
   useSaveExpenseMutation,
   useDeleteExpenseMutation,
   useGetAllExpensesInRangeQuery,
+  useUpdateExpenseMutation
 } = expensesApi;
