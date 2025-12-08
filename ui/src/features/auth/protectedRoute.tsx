@@ -8,7 +8,7 @@ export function ProtectedRoute() {
   const location = useLocation();
 
   if (token === undefined) {
-    return <Spinner />;
+    return <Spinner className="spinner"/>;
   }
 
   if (!token) {

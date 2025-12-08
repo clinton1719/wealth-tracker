@@ -50,7 +50,7 @@ export function ProfilesFeature() {
     updateProfileLoading ||
     deleteProfileLoading
   ) {
-    return <Spinner className="mx-auto my-auto size-28 text-primary" />;
+    return <Spinner className="spinner" />;
   }
 
   if (isError) {

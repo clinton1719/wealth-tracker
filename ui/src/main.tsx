@@ -23,7 +23,7 @@ createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <BrowserRouter>
       <NavigationBar />
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<Spinner className="spinner"/>}>
         <Routes>
           {/* PUBLIC ROUTES */}
           <Route path="/login" element={<Login />} />

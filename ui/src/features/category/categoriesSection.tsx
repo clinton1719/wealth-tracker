@@ -62,7 +62,7 @@ export default function CategoriesSection() {
     updateCategoryLoading ||
     deleteCategoryLoading
   ) {
-    return <Spinner />;
+    return <Spinner className="spinner"/>;
   }
 
   if (isError) {

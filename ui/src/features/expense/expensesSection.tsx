@@ -27,7 +27,7 @@ export default function ExpensesSection() {
   });
   const { isError, errorComponent } = useApiError(error);
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner className="spinner"/>;
   if (isError) return errorComponent;
 
   if (data) {

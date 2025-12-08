@@ -163,6 +163,10 @@
          whitespace-normal break-all opacity-60 cursor-not-allowed;
 }
 
+.spinner {
+  @apply mx-auto my-auto size-28 text-primary;
+}
+
 
 
 
