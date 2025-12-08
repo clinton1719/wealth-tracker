@@ -2,13 +2,12 @@ import { AccountSection } from "@/components/building-blocks/accountSection";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddAccountForm } from "@/components/building-blocks/forms/addAccountForm";
 import { Spinner } from "@/components/ui/spinner";
-import { TabsContent } from "@/components/ui/tabs";
 import { useApiError } from "@/hooks/use-api-error";
 import {
   useDeleteAccountMutation,
   useGetAllAccountsQuery,
   useSaveAccountMutation,
-  useUpdateAccountMutation
+  useUpdateAccountMutation,
 } from "@/services/accountsApi";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { selectProfileSlice } from "@/slices/profileSlice";
@@ -20,7 +19,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import * as z from "zod";
+import type * as z from "zod";
 
 export function AccountsSection() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -52,8 +51,10 @@ export function AccountsSection() {
   const [deleteAccount, { isLoading: deleteAccountLoading }] =
     useDeleteAccountMutation();
   const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
-  const { isError: isAccountsError, errorComponent: accountsErrorComponent } = useApiError(accountsError);
-  const { isError: isProfilesError, errorComponent: profilesErrorComponent } = useApiError(profilesError);
+  const { isError: isAccountsError, errorComponent: accountsErrorComponent } =
+    useApiError(accountsError);
+  const { isError: isProfilesError, errorComponent: profilesErrorComponent } =
+    useApiError(profilesError);
 
   if (
     getAllAccountsLoading ||
@@ -62,7 +63,7 @@ export function AccountsSection() {
     deleteAccountLoading ||
     getAllProfilesLoading
   ) {
-    return <Spinner />;
+    return <Spinner className="mx-auto my-auto size-28 text-primary"/>;
   }
 
   if (isAccountsError) {
@@ -73,7 +74,7 @@ export function AccountsSection() {
   }
 
   const filteredData = accountsData?.filter(
-    account => enabledMap[account.profileId]
+    (account) => enabledMap[account.profileId],
   );
 
   async function onSubmit(formData: z.infer<typeof accountFormSchema>) {
@@ -88,12 +89,17 @@ export function AccountsSection() {
 
   async function saveNewAccount(formData: z.infer<typeof accountFormSchema>) {
     try {
-      const profile = profilesData?.find(profile => profile.profileName === formData.profileName);
+      const profile = profilesData?.find(
+        (profile) => profile.profileName === formData.profileName,
+      );
       if (!profile) {
         toast.error("Invalid data found, refresh and try again");
         return;
       }
-      const result = await saveAccount({ ...formData, profileId: profile.id }).unwrap();
+      const result = await saveAccount({
+        ...formData,
+        profileId: profile.id,
+      }).unwrap();
 
       toast("Account saved!", {
         description: (
@@ -147,14 +153,19 @@ export function AccountsSection() {
     try {
       const updatedFormData = {
         ...formData,
-        accountPicture: undefined
-      }
-      const profile = profilesData?.find(profile => profile.profileName === updatedFormData.profileName);
+        accountPicture: undefined,
+      };
+      const profile = profilesData?.find(
+        (profile) => profile.profileName === updatedFormData.profileName,
+      );
       if (!profile) {
         toast.error("Invalid data found, refresh and try again");
         return;
       }
-      const result = await updateAccount({ ...updatedFormData, profileId: profile.id }).unwrap();
+      const result = await updateAccount({
+        ...updatedFormData,
+        profileId: profile.id,
+      }).unwrap();
 
       if (!result) {
         toast.error("Failed to update account, please try again later");
@@ -170,9 +181,7 @@ export function AccountsSection() {
               color: "var(--foreground-code, #f5f5f5)",
             }}
           >
-            <code>
-              Account name: {result.accountName}
-            </code>
+            <code>Account name: {result.accountName}</code>
           </pre>
         ),
         position: "bottom-right",
@@ -229,46 +238,63 @@ export function AccountsSection() {
   };
 
   if (profilesData) {
-    return (<TabsContent value="accounts">
-      <div className="space-y-4 mt-2">
-        {filteredData ? (
-          filteredData.map((account) => {
-            const profile = profilesData.find(profile => profile.id === account.profileId)
-            if (profile) {
-              return (<AccountSection
-                account={account}
-                profile={profile}
-                key={account.id}
-                form={form}
-                setIsUpdate={setIsUpdate}
-                setAccountDialogOpen={setAccountDialogOpen}
-                handleDeleteAccount={handleDeleteAccount}
-              />);
-            }
-          })
-        ) : (
-          <p className="text-muted-foreground text-sm">
-            Create a new account here
-          </p>
-        )}
-        {profilesData ? (<AddAccountForm
-          profiles={profilesData}
-          form={form}
-          onSubmit={onSubmit}
-          isUpdate={isUpdate}
-          setIsUpdate={setIsUpdate}
-          accountDialogOpen={accountDialogOpen}
-          setAccountDialogOpen={setAccountDialogOpen}
-        />) : <p>Something went wrong with enabling creating accounts</p>}
-
+    return (
+      <div id="accountsSection">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Accounts</h1>
+          <AddAccountForm
+            profiles={profilesData}
+            form={form}
+            onSubmit={onSubmit}
+            isUpdate={isUpdate}
+            setIsUpdate={setIsUpdate}
+            accountDialogOpen={accountDialogOpen}
+            setAccountDialogOpen={setAccountDialogOpen}
+          />
+        </div>
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {filteredData ? (
+            filteredData.map((account) => {
+              const profile = profilesData.find(
+                (profile) => profile.id === account.profileId,
+              );
+              if (profile) {
+                return (
+                  <AccountSection
+                    account={account}
+                    profile={profile}
+                    key={account.id}
+                    form={form}
+                    setIsUpdate={setIsUpdate}
+                    setAccountDialogOpen={setAccountDialogOpen}
+                    handleDeleteAccount={handleDeleteAccount}
+                  />
+                );
+              } else {
+                return (
+                  <p
+                    key={account.id}
+                    role="alert"
+                    className="text-red-600 font-medium"
+                  >
+                    Profile not found for this account, contact admin.
+                  </p>
+                );
+              }
+            })
+          ) : (
+            <p className="text-muted-foreground text-sm">
+              Create a new account here
+            </p>
+          )}
+        </div>
+        <AlertDialogComponent
+          isDialogOpen={deleteAccountDialogOpen}
+          alertType="DELETE_ACCOUNT"
+          onSecondaryButtonClick={cancelDeleteAccount}
+          onPrimaryButtonClick={deleteCurrentAccount}
+        />
       </div>
-      <AlertDialogComponent
-        isDialogOpen={deleteAccountDialogOpen}
-        alertType="DELETE_ACCOUNT"
-        onSecondaryButtonClick={cancelDeleteAccount}
-        onPrimaryButtonClick={deleteCurrentAccount}
-      />
-    </TabsContent>);
+    );
   }
-
 }

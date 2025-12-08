@@ -37,7 +37,7 @@ export function AlertDialogComponent({
         secondaryButton: "Cancel",
       };
       break;
-      case "DELETE_ACCOUNT":
+    case "DELETE_ACCOUNT":
       alert = {
         title: "Do you really want to delete this account?",
         description:

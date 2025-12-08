@@ -30,4 +30,5 @@ export interface AddCategoryFormProps {
     icon?: string | undefined;
     tags?: string[] | undefined;
   }>;
+  setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -12,8 +12,8 @@ import type { Profile } from "@/types/Profile";
 import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { useDispatch, useSelector } from "react-redux";
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
-import { Card } from "../ui/card";
 
 export function ProfileSection({
   profile,
@@ -32,68 +32,67 @@ export function ProfileSection({
   const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
 
   return (
-    <Card
-      className="flex flex-row items-center justify-between p-4 shadow-sm border rounded-xl"
-      style={{ backgroundColor: `${profile.colorCode}15` }}
-    >
-      <div className="flex items-center gap-4 flex-1 min-w-0">
-
-        <ProfilePicture
-          imageSource={profile.profilePicture}
-          fallbackName={profile.profileName.charAt(0)}
-          imageColor={profile.colorCode}
-        />
-
-        <div className="flex flex-col min-w-0">
-          <span className="text-lg font-semibold leading-none tracking-tight truncate">
-            {profile.profileName}
-          </span>
-
-          <span className="text-muted-foreground text-sm truncate">
-            {profile.description ?? "No description"}
-          </span>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-4 shrink-0">
-
-        <div className="flex items-center gap-2">
-          <Switch
-            id={`profile-${profile.id}`}
-            checked={enabledMap[profile.id]}
-            onCheckedChange={() => dispatch(toggleProfile(profile.id))}
+    <Card className="w-full max-w-sm" style={{ backgroundColor: `${profile.colorCode}40` }}>
+      <CardHeader>
+        <CardTitle>
+          <ProfilePicture
+            imageSource={profile.profilePicture}
+            fallbackName={profile.profileName.charAt(0)}
+            imageColor={profile.colorCode}
           />
-          <Label
-            htmlFor={`profile-${profile.id}`}
-            className="text-sm font-medium whitespace-nowrap"
-          >
-            {enabledMap[profile.id] ? "Enabled" : "Disabled"}
-          </Label>
+        </CardTitle>
+        <CardDescription>
+          <div className="flex flex-col">
+            <span className="text-lg font-medium text-muted-foreground">{profile.profileName}</span>
+            <span className="text-muted-foreground text-sm mt-1 flex-1 max-w-[90%] text-left break-all">
+              {profile.description}
+            </span>
+          </div>
+        </CardDescription>
+        <CardAction>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-muted rounded-full"
+              >
+                <DynamicIcon name="ellipsis-vertical" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="bg-white">
+              <DropdownMenuItem
+                onClick={() => handleUpdateProfile(profile)}
+                className="cursor-pointer"
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleDeleteProfile(profile)}
+                className="cursor-pointer"
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col gap-6">
+          <div className="flex justify-between">
+            <Label htmlFor={`profile-${profile.id}`}> {enabledMap[profile.id] ? "Enabled" : "Disabled"}</Label>
+            <Switch
+              id={`profile-${profile.id}`}
+              checked={enabledMap[profile.id]}
+              onCheckedChange={() => dispatch(toggleProfile(profile.id))}
+            />
+          </div>
         </div>
+      </CardContent>
+      <CardFooter className="flex-col gap-2">
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="hover:bg-muted rounded-full">
-              <DynamicIcon name="ellipsis-vertical" />
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="bg-white">
-            <DropdownMenuItem
-              onClick={() => handleUpdateProfile(profile)}
-              className="cursor-pointer"
-            >
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleDeleteProfile(profile)}
-              className="cursor-pointer"
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      </CardFooter>
     </Card>
   );
 }

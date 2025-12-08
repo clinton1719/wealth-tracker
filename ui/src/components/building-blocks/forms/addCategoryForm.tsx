@@ -29,6 +29,7 @@ export function AddCategoryForm({
   categoryDialogOpen,
   setCategoryDialogOpen,
   onSubmit,
+  setIsUpdate
 }: AddCategoryFormProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -42,6 +43,7 @@ export function AddCategoryForm({
         <Button
           onClick={() => {
             setCategoryDialogOpen(true);
+            setIsUpdate(false);
           }}
         >
           <PlusCircle className="mr-2 h-5 w-5" />
@@ -50,7 +52,9 @@ export function AddCategoryForm({
       </DialogTrigger>
       <DialogContent
         className="max-w-md"
-        onClickMethod={() => setCategoryDialogOpen(false)}
+        onClickMethod={() => {
+          setCategoryDialogOpen(false)
+        }}
       >
         <DialogHeader>
           <DialogTitle>Create Category</DialogTitle>

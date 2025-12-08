@@ -2,7 +2,6 @@ import { AlertDialogComponent } from "@/components/building-blocks/alertDialogCo
 import { AddProfileForm } from "@/components/building-blocks/forms/addProfileForm";
 import { ProfileSection } from "@/components/building-blocks/profileSection";
 import { Spinner } from "@/components/ui/spinner";
-import { TabsContent } from "@/components/ui/tabs";
 import { useApiError } from "@/hooks/use-api-error";
 import {
   useDeleteProfileMutation,
@@ -17,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
+import type * as z from "zod";
 
 export function ProfilesSection() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -51,7 +50,7 @@ export function ProfilesSection() {
     updateProfileLoading ||
     deleteProfileLoading
   ) {
-    return <Spinner />;
+    return <Spinner className="mx-auto my-auto size-28 text-primary" />;
   }
 
   if (isError) {
@@ -124,8 +123,8 @@ export function ProfilesSection() {
     try {
       const formDataa = {
         ...formData,
-        profilePicture: undefined
-      }
+        profilePicture: undefined,
+      };
       const result = await updateProfile({ ...formDataa }).unwrap();
 
       if (!result) {
@@ -142,9 +141,7 @@ export function ProfilesSection() {
               color: "var(--foreground-code, #f5f5f5)",
             }}
           >
-            <code>
-              Profile name: {result.profileName}
-            </code>
+            <code>Profile name: {result.profileName}</code>
           </pre>
         ),
         position: "bottom-right",
@@ -201,8 +198,17 @@ export function ProfilesSection() {
   };
 
   return (
-    <TabsContent value="profiles">
-      <div className="space-y-4 mt-2">
+    <div id="profilesSection">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Profiles</h1>
+        <AddProfileForm
+          form={form}
+          onSubmit={onSubmit}
+          profileDialogOpen={profileDialogOpen}
+          setProfileDialogOpen={setProfileDialogOpen}
+        />
+      </div>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {data ? (
           data.map((profile) => (
             <ProfileSection
@@ -219,12 +225,6 @@ export function ProfilesSection() {
             Create a new profile here
           </p>
         )}
-        <AddProfileForm
-          form={form}
-          onSubmit={onSubmit}
-          profileDialogOpen={profileDialogOpen}
-          setProfileDialogOpen={setProfileDialogOpen}
-        />
       </div>
       <AlertDialogComponent
         isDialogOpen={deleteProfileDialogOpen}
@@ -232,6 +232,6 @@ export function ProfilesSection() {
         onSecondaryButtonClick={cancelDeleteProfile}
         onPrimaryButtonClick={deleteCurrentProfile}
       />
-    </TabsContent>
+    </div>
   );
 }

@@ -69,7 +69,10 @@ public class AccountService {
                             + user.getId());
         }
         Profile profile = user.getProfiles().parallelStream().filter(p -> Objects.equals(p.getId(), createAccountDTO.getProfileId()))
-                .findFirst().orElseThrow(() -> new ResourceNotFoundException("Profile id not found"));
+                .findFirst().orElseThrow(() -> {
+                    LOGGER.atError().log("Profile id not found while saving account: {}", createAccountDTO);
+                    return new ResourceNotFoundException("Profile id not found while saving account");
+                });
         Account account = AccountMapper.createAccountDTOToAccount(createAccountDTO, user, profile);
         Account savedAccount = this.accountRepository.save(account);
         LOGGER.atInfo().log("Account to be saved created : {}", savedAccount);

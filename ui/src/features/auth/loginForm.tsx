@@ -1,10 +1,10 @@
+import type * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
-import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,8 +26,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/services/authApi";
 import { setCredentials } from "@/slices/authSlice";
-import { loginFormSchema } from "@/utilities/zodSchemas";
 import { defaultLogin } from "@/utilities/constants";
+import { loginFormSchema } from "@/utilities/zodSchemas";
 
 type LoginFormProps = {
   className?: string;

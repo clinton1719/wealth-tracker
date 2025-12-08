@@ -1,10 +1,10 @@
+import type * as z from "zod";
 import type { Category } from "@/types/Category";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddCategoryForm } from "@/components/building-blocks/forms/addCategoryForm";
 import { ProfilePicture } from "@/components/building-blocks/profilePicture";
@@ -25,8 +25,8 @@ import {
   useSaveCategoryMutation,
   useUpdateCategoryMutation,
 } from "@/services/categoriesApi";
-import { categoryFormSchema } from "@/utilities/zodSchemas";
 import { defaultCategory } from "@/utilities/constants";
+import { categoryFormSchema } from "@/utilities/zodSchemas";
 
 export default function CategoriesSection() {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -92,9 +92,7 @@ export default function CategoriesSection() {
               color: "var(--foreground-code, #f5f5f5)",
             }}
           >
-            <code>
-              Category name: {result.categoryName}
-            </code>
+            <code>Category name: {result.categoryName}</code>
           </pre>
         ),
         position: "bottom-right",
@@ -221,6 +219,7 @@ export default function CategoriesSection() {
           <AddCategoryForm
             form={form}
             categoryDialogOpen={categoryDialogOpen}
+            setIsUpdate={setIsUpdate}
             setCategoryDialogOpen={setCategoryDialogOpen}
             onSubmit={onSubmit}
           />

@@ -39,7 +39,7 @@ export const accountApi = createApi({
     }),
     deleteAccount: builder.mutation<void, number>({
       query: (id: number) => ({
-        url: `/accounts/${id}`,
+        url: `/accounts/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Accounts"],

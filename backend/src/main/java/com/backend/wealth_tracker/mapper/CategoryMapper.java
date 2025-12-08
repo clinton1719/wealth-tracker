@@ -3,6 +3,7 @@ package com.backend.wealth_tracker.mapper;
 import com.backend.wealth_tracker.dto.request_dto.CreateCategoryDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryDTO;
 import com.backend.wealth_tracker.model.Category;
+import com.backend.wealth_tracker.model.Profile;
 import com.backend.wealth_tracker.model.User;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public final class CategoryMapper {
   ;
 
   public static Category createCategoryDTOtoCategory(
-      CreateCategoryDTO createCategoryDTO, User user) {
+          CreateCategoryDTO createCategoryDTO, User user, Profile profile) {
     Category category = new Category();
     category.setCategoryName(createCategoryDTO.getCategoryName());
     category.setDescription(createCategoryDTO.getDescription());
@@ -20,6 +21,7 @@ public final class CategoryMapper {
     category.setIcon(createCategoryDTO.getIcon());
     category.setTags(createCategoryDTO.getTags());
     category.setUser(user);
+    category.setProfile(profile);
     return category;
   }
 
