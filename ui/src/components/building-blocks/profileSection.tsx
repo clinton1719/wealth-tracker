@@ -44,7 +44,7 @@ export function ProfileSection({
         <CardDescription>
           <div className="flex flex-col">
             <span className="text-lg font-medium text-muted-foreground">{profile.profileName}</span>
-            <span className="text-muted-foreground text-sm mt-1 flex-1 max-w-[80%] text-left wrap-break-word">
+            <span className="text-muted-foreground text-sm mt-1 flex-1 max-w-[40%] text-left wrap-break-word">
               {profile.description}
             </span>
           </div>

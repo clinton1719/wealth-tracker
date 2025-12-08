@@ -39,7 +39,7 @@ export function AccountSection({
         <CardDescription>
           <div className="flex flex-col">
             <span className="text-lg font-medium text-muted-foreground">{account.accountName}</span>
-            <span className="text-muted-foreground text-sm mt-1 whitespace-normal wrap-break-word">
+            <span className="text-muted-foreground text-sm mt-1 max-w-[40%] text-left wrap-break-word">
               {account.description}
             </span>
           </div>
