@@ -50,7 +50,7 @@ export function ProfilesSection() {
     updateProfileLoading ||
     deleteProfileLoading
   ) {
-    return <Spinner />;
+    return <Spinner className="mx-auto my-auto size-28 text-primary" />;
   }
 
   if (isError) {

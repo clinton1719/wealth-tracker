@@ -63,7 +63,7 @@ export function AccountsSection() {
     deleteAccountLoading ||
     getAllProfilesLoading
   ) {
-    return <Spinner />;
+    return <Spinner className="mx-auto my-auto size-28 text-primary"/>;
   }
 
   if (isAccountsError) {

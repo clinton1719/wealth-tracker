@@ -39,7 +39,7 @@ export function AccountSection({
         <CardDescription>
           <div className="flex flex-col">
             <span className="text-lg font-medium text-muted-foreground">{account.accountName}</span>
-            <span className="text-muted-foreground text-sm mt-1 max-w-[40%] text-left wrap-break-word">
+            <span className="text-muted-foreground text-sm mt-1 max-w-[90%] text-left break-all">
               {account.description}
             </span>
           </div>
@@ -57,10 +57,10 @@ export function AccountSection({
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="bg-white">
-              <DropdownMenuItem onClick={() => handleUpdateAccount(account)}>
+              <DropdownMenuItem onClick={() => handleUpdateAccount(account)} className="cursor-pointer">
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDeleteAccount(account)}>
+              <DropdownMenuItem onClick={() => handleDeleteAccount(account)} className="cursor-pointer">
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
