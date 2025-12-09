@@ -10,8 +10,6 @@ export interface AddExpenseFormProps {
     setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
     form: UseFormReturn<{
         amount: number;
-        createdAt: string;
-        updatedAt: string;
         categoryName: string;
         accountName: string;
         profileName: string;
@@ -19,8 +17,6 @@ export interface AddExpenseFormProps {
         description?: string | undefined;
     }, any, {
         amount: number;
-        createdAt: string;
-        updatedAt: string;
         categoryName: string;
         accountName: string;
         profileName: string;
@@ -29,8 +25,6 @@ export interface AddExpenseFormProps {
     }>;
     onSubmit: SubmitHandler<{
         amount: number;
-        createdAt: string;
-        updatedAt: string;
         categoryName: string;
         accountName: string;
         profileName: string;

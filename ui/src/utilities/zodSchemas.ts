@@ -65,8 +65,6 @@ export const expenseFormSchema = z.object({
     .string()
     .max(100, "Description must be at most 100 characters long")
     .optional(),
-  createdAt: z.iso.datetime({ message: "Invalid date format" }),
-  updatedAt: z.iso.datetime({ message: "Invalid date format" }),
   categoryName: z.string().min(1, "Category is required"),
   accountName: z.string().min(1, "Account is required"),
   profileName: z.string().min(1, "Profile is required"),
