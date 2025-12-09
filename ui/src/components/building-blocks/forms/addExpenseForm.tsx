@@ -29,6 +29,8 @@ import { Input } from "@/components/ui/input";
 import type { AddExpenseFormProps } from "@/types/AddExpenseFormProps";
 import { defaultExpense } from "@/utilities/constants";
 import { DynamicIcon } from "lucide-react/dynamic";
+import type { Account } from "@/types/Account";
+import type { Category } from "@/types/Category";
 
 export function AddExpenseForm({
     expenseDialogOpen,
@@ -41,9 +43,22 @@ export function AddExpenseForm({
     accounts,
     categories
 }: AddExpenseFormProps) {
+    const { watch } = form;
+
+    const profileName = watch("profileName");
+    const profile = profiles.find(profile => profile.profileName === profileName);
+
     const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
         if (e.key === "Enter") e.preventDefault();
     };
+
+    let filteredAccounts;
+    let filteredCategories;
+
+    if (profile) {
+        filteredAccounts = accounts.filter(account => account.profileId === profile.id);
+        filteredCategories = categories.filter(category => category.profileId === profile.id);
+    }
 
     return (
         <Dialog open={expenseDialogOpen}>
@@ -167,51 +182,52 @@ export function AddExpenseForm({
                                 </Field>
                             )}
                         />
-                        <Controller
-                            name="accountName"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field
-                                    orientation="responsive"
-                                    data-invalid={fieldState.invalid}
-                                >
-                                    <FieldContent>
-                                        <FieldLabel htmlFor="form-rhf-select-account-type">
-                                            Account
-                                        </FieldLabel>
-                                        <FieldDescription>Choose your account</FieldDescription>
-                                        {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]} />
-                                        )}
-                                    </FieldContent>
-                                    <Select
-                                        name={field.name}
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        disabled={isUpdate === true}
+                        {filteredAccounts ? (
+                            <Controller
+                                name="accountName"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field
+                                        orientation="responsive"
+                                        data-invalid={fieldState.invalid}
                                     >
-                                        <SelectTrigger
-                                            id="form-rhf-select-profile"
-                                            aria-invalid={fieldState.invalid}
-                                            className="min-w-[120px]"
+                                        <FieldContent>
+                                            <FieldLabel htmlFor="form-rhf-select-account-type">
+                                                Account
+                                            </FieldLabel>
+                                            <FieldDescription>Choose your account</FieldDescription>
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} />
+                                            )}
+                                        </FieldContent>
+                                        <Select
+                                            name={field.name}
+                                            value={field.value}
+                                            onValueChange={field.onChange}
+                                            disabled={isUpdate === true && !form.getValues("profileName")}
                                         >
-                                            <SelectValue placeholder="Select account" />
-                                        </SelectTrigger>
-                                        <SelectContent position="item-aligned">
-                                            {accounts.map((account) => (
-                                                <SelectItem
-                                                    key={account.id}
-                                                    value={account.accountName}
-                                                >
-                                                    {account.accountName}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </Field>
-                            )}
-                        />
-                        <Controller
+                                            <SelectTrigger
+                                                id="form-rhf-select-profile"
+                                                aria-invalid={fieldState.invalid}
+                                                className="min-w-[120px]"
+                                            >
+                                                <SelectValue placeholder="Select account" />
+                                            </SelectTrigger>
+                                            <SelectContent position="item-aligned">
+                                                {filteredAccounts.map((account: Account) => (
+                                                    <SelectItem
+                                                        key={account.id}
+                                                        value={account.accountName}
+                                                    >
+                                                        {account.accountName}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </Field>
+                                )}
+                            />) : <></>}
+                        {filteredCategories ? (<Controller
                             name="categoryName"
                             control={form.control}
                             render={({ field, fieldState }) => (
@@ -232,7 +248,7 @@ export function AddExpenseForm({
                                         name={field.name}
                                         value={field.value}
                                         onValueChange={field.onChange}
-                                        disabled={isUpdate === true}
+                                        disabled={!form.getValues("profileName")}
                                     >
                                         <SelectTrigger
                                             id="form-rhf-select-profile"
@@ -242,7 +258,7 @@ export function AddExpenseForm({
                                             <SelectValue placeholder="Select category" />
                                         </SelectTrigger>
                                         <SelectContent position="item-aligned">
-                                            {categories.map((category) => (
+                                            {filteredCategories.map((category: Category) => (
                                                 <SelectItem
                                                     key={category.id}
                                                     value={category.categoryName}
@@ -258,7 +274,7 @@ export function AddExpenseForm({
                                     </Select>
                                 </Field>
                             )}
-                        />
+                        />) : <></>}
                         <Field orientation="horizontal">
                             <Button
                                 type="button"

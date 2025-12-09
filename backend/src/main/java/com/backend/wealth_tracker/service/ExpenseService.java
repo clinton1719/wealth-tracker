@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -77,6 +78,10 @@ public class ExpenseService {
     }
     Expense expense = setRequiredFieldsInExpense(createExpenseDTO);
     Expense savedExpense = this.expenseRepository.save(expense);
+    if(!Objects.equals(savedExpense.getAccount().getProfile().getId(), createExpenseDTO.getProfileId()) || !Objects.equals(savedExpense.getCategory().getProfile().getId(), createExpenseDTO.getProfileId())) {
+        LOGGER.atError().log("Profile ID: {}, not consistent with that of account: {} and category: {}", createExpenseDTO.getProfileId(), savedExpense.getAccount().getProfile().getId(), savedExpense.getCategory().getProfile().getId());
+        throw new UnAuthorizedException("Profile ID not consistent");
+    }
     this.accountService.debitAccount(createExpenseDTO.getAccountId(), savedExpense.getAmount());
     LOGGER.atInfo().log("Expense to be saved created : {}", savedExpense);
     return savedExpense;

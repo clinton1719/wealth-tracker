@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../ui/card";
+import { formatCurrency } from "@/utilities/helper";
 
 export function AccountSection({
   account,
@@ -87,7 +88,7 @@ export function AccountSection({
           <div className="flex justify-between items-center">
             <span className="card-key">Account balance:</span>
             <span className="card-value">
-              ₹{account.accountBalance.toLocaleString()}
+              {formatCurrency(account.accountBalance)}
             </span>
           </div>
           <div className="flex justify-between items-center">

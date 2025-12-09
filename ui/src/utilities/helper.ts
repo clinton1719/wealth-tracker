@@ -12,3 +12,12 @@ export function base64ToFile(
 
   return new File([byteArray], filename, { type });
 }
+
+export function formatCurrency(amount: number): string {
+  const formatted = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2
+  }).format(amount);
+  return formatted;
+}

@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { useGetAllAccountsQuery } from "@/services/accountsApi";
 import { useGetAllCategoriesQuery } from "@/services/categoriesApi";
-import { DataTableDemo } from "./expensesList";
+import {  ExpensesList } from "./expensesList";
 
 export default function ExpensesFeature() {
   const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false);
@@ -252,7 +252,7 @@ export default function ExpensesFeature() {
           />
         </div>
         <ExpenseSummaryCards expensesData={expensesData} />
-        <DataTableDemo />
+        <ExpensesList expensesData={expensesData} categoriesData={categoriesData} accountsData={accountsData} profilesData={profilesData}/>
       </div>
     );
   }

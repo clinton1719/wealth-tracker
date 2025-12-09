@@ -1,3 +1,4 @@
+import * as React from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -11,15 +12,17 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-import * as React from "react"
 
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import {
@@ -30,41 +33,113 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import type { Expense } from "@/types/Expense"
-import type { ExpensesListProps } from "@/types/ExpensesListProps"
-import { formatCurrency } from "@/utilities/helper"
-import type { FilteredExpense } from "@/types/filteredExpense"
 
-export const columns: ColumnDef<Expense>[] = [
+const data: Payment[] = [
   {
-    accessorKey: "description",
-    header: () => <div className="text-left">Description</div>,
-    cell: ({ row }) => <div className="text-left">{row.getValue("description")}</div>,
+    id: "m5gr84i9",
+    amount: 316,
+    status: "success",
+    email: "ken99@example.com",
   },
   {
-    accessorKey: "amount",
+    id: "3u1reuv4",
+    amount: 242,
+    status: "success",
+    email: "Abe45@example.com",
+  },
+  {
+    id: "derv1ws0",
+    amount: 837,
+    status: "processing",
+    email: "Monserrat44@example.com",
+  },
+  {
+    id: "5kma53ae",
+    amount: 874,
+    status: "success",
+    email: "Silas22@example.com",
+  },
+  {
+    id: "bhqecj4p",
+    amount: 721,
+    status: "failed",
+    email: "carmella@example.com",
+  },
+]
+
+export type Payment = {
+  id: string
+  amount: number
+  status: "pending" | "processing" | "success" | "failed"
+  email: string
+}
+
+export const columns: ColumnDef<Payment>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("status")}</div>
+    ),
+  },
+  {
+    accessorKey: "email",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          style={{ marginLeft: "-1em" }}
         >
-          Amount
+          Email
           <ArrowUpDown />
         </Button>
       )
     },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+  },
+  {
+    accessorKey: "amount",
+    header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
-      const formattedAmount = formatCurrency(row.getValue("amount"))
+      const amount = parseFloat(row.getValue("amount"))
 
-      return <div className="text-left font-medium">{formattedAmount}</div>
+      // Format the amount as a dollar amount
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount)
+
+      return <div className="text-right font-medium">{formatted}</div>
     },
   },
   {
     id: "actions",
     enableHiding: false,
-    cell: () => {
+    cell: ({ row }) => {
+      const payment = row.original
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -74,8 +149,15 @@ export const columns: ColumnDef<Expense>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edit expense</DropdownMenuItem>
-            <DropdownMenuItem>Delete expense</DropdownMenuItem>
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy payment ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -83,20 +165,7 @@ export const columns: ColumnDef<Expense>[] = [
   },
 ]
 
-export function ExpensesList({ expensesData, accountsData, categoriesData, profilesData }: ExpensesListProps) {
-  const filteredExpensesData: FilteredExpense[] = expensesData.map(expense => {
-    return {
-      id: expense.id,
-      amount: expense.amount,
-      createdAt: expense.createdAt,
-      updatedAt: expense.updatedAt,
-      description: expense.description,
-      category: categoriesData.find(category => category.id === expense.categoryId),
-      account: accountsData.find(account => account.id === expense.accountId),
-      profile: profilesData.find(profile => profile.id === expense.profileId)
-    }
-  })
-
+export function DataTableDemo() {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -106,7 +175,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data: expensesData,
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -128,10 +197,10 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter by description..."
-          value={(table.getColumn("description")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter emails..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("description")?.setFilterValue(event.target.value)
+            table.getColumn("email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -173,9 +242,9 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   )
                 })}
@@ -213,6 +282,10 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="text-muted-foreground flex-1 text-sm">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
