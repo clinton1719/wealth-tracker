@@ -4,7 +4,7 @@ import { useApiError } from "@/hooks/use-api-error";
 import { useDeleteExpenseMutation, useGetAllExpensesInRangeQuery, useSaveExpenseMutation, useUpdateExpenseMutation } from "@/services/expensesApi";
 import { formatDate } from "@/utilities/helper";
 import { useState } from "react";
-import { ExpenseSummaryCards } from "./ExpenseSummaryCards";
+import { ExpenseSummaryCards } from "./expenseSummaryCards";
 import type * as z from "zod";
 import { useForm } from "react-hook-form";
 import { expenseFormSchema } from "@/utilities/zodSchemas";
@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { useGetAllAccountsQuery } from "@/services/accountsApi";
 import { useGetAllCategoriesQuery } from "@/services/categoriesApi";
+import { DataTableDemo } from "./expensesList";
 
 export default function ExpensesFeature() {
   const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false);
@@ -251,6 +252,7 @@ export default function ExpensesFeature() {
           />
         </div>
         <ExpenseSummaryCards expensesData={expensesData} />
+        <DataTableDemo />
       </div>
     );
   }
