@@ -125,7 +125,7 @@ export default function ExpensesFeature() {
             }}
           >
             <code>
-              Expense of: {result.amount} created at: {result.expenseCreatedAt}
+              Expense of: {result.expenseAmount} created at: {result.expenseCreatedAt}
             </code>
           </pre>
         ),
