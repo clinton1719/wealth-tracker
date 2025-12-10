@@ -43,7 +43,7 @@ public final class ProfileMapper {
     responseProfileDTO.setAccountIds(
         profile.getAccounts().parallelStream().map(Account::getId).collect(Collectors.toSet()));
     responseProfileDTO.setCategoryIds(
-        profile.getCategories().parallelStream().map(Category::getId).collect(Collectors.toSet()));
+        profile.getCategories().parallelStream().map(Category::getCategoryId).collect(Collectors.toSet()));
     responseProfileDTO.setExpenseIds(
         profile.getExpenses().parallelStream().map(Expense::getId).collect(Collectors.toSet()));
     return responseProfileDTO;

@@ -231,8 +231,8 @@ export default function CategoriesFeature() {
   };
 
   const deleteCurrentCategory = async () => {
-    if (currentCategory && currentCategory.id) {
-      await deleteCategory(currentCategory.id);
+    if (currentCategory && currentCategory.categoryId) {
+      await deleteCategory(currentCategory.categoryId);
       toast.info(
         `Category : ${currentCategory.categoryName} deleted successfully!`,
       );
@@ -249,11 +249,11 @@ export default function CategoriesFeature() {
         category.categoryName
           .toLowerCase()
           .includes(categorySearchText.toLowerCase()))
-      && (selectedTag ? category.tags?.includes(selectedTag) : true)
+      && (selectedTag ? category.categoryTags?.includes(selectedTag) : true)
     );
   });
 
-  const tags = filteredCategoriesData?.flatMap(category => category.tags);
+  const tags = filteredCategoriesData?.flatMap(category => category.categoryTags);
   const uniqueTags = [...new Set(tags)];
 
   if (filteredCategoriesData && profilesData) {
@@ -308,7 +308,7 @@ export default function CategoriesFeature() {
             if (profile) {
               return (
                 <CategorySection
-                  key={category.id}
+                  key={category.categoryId}
                   category={category}
                   handleDeleteCategory={handleDeleteCategory}
                   profile={profile}
@@ -320,7 +320,7 @@ export default function CategoriesFeature() {
             } else {
               return (
                 <p
-                  key={category.id}
+                  key={category.categoryId}
                   role="alert"
                   className="text-red-600 font-medium"
                 >

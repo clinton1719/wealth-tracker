@@ -44,7 +44,7 @@ public final class Helper {
 
   public static boolean isCategoryIdValid(Set<Category> categories, Long categoryId) {
     return categories.parallelStream()
-        .anyMatch(category -> Objects.equals(category.getId(), categoryId));
+        .anyMatch(category -> Objects.equals(category.getCategoryId(), categoryId));
   }
 
   public static boolean isCategoryIdProfileIdAndAccountIdValid(

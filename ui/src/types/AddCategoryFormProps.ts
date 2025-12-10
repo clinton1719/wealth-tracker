@@ -6,21 +6,21 @@ export interface AddCategoryFormProps {
     {
       categoryName: string;
       colorCode: string;
-      id?: number | undefined;
-      description?: string | undefined;
-      icon?: string | undefined;
+      categoryId?: number | undefined;
+      categoryDescription?: string | undefined;
+      categoryIcon?: string | undefined;
       profileName: string;
-      tags?: string[] | undefined;
+      categoryTags?: string[] | undefined;
     },
     any,
     {
       categoryName: string;
       colorCode: string;
-      id?: number | undefined;
-      description?: string | undefined;
-      icon?: string | undefined;
+      categoryId?: number | undefined;
+      categoryDescription?: string | undefined;
+      categoryIcon?: string | undefined;
       profileName: string;
-      tags?: string[] | undefined;
+      categoryTags?: string[] | undefined;
     }
   >;
   categoryDialogOpen: boolean;
@@ -28,11 +28,11 @@ export interface AddCategoryFormProps {
   onSubmit: SubmitHandler<{
     categoryName: string;
     colorCode: string;
-    id?: number | undefined;
-    description?: string | undefined;
-    icon?: string | undefined;
+    categoryId?: number | undefined;
+    categoryDescription?: string | undefined;
+    categoryIcon?: string | undefined;
     profileName: string;
-    tags?: string[] | undefined;
+    categoryTags?: string[] | undefined;
   }>;
   isUpdate: boolean;
   profiles: Profile[];

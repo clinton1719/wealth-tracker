@@ -99,7 +99,7 @@ export function AddCategoryForm({
               )}
             />
             <Controller
-              name="description"
+              name="categoryDescription"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -148,7 +148,7 @@ export function AddCategoryForm({
               )}
             />
             <Controller
-              name="icon"
+              name="categoryIcon"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field
@@ -215,7 +215,7 @@ export function AddCategoryForm({
               )}
             />
             <Controller
-              name="tags"
+              name="categoryTags"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -230,11 +230,11 @@ export function AddCategoryForm({
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && inputValue.trim() !== "") {
-                        const tags = form.getValues("tags");
+                        const tags = form.getValues("categoryTags");
                         if (tags) {
-                          form.setValue("tags", [...tags, inputValue.trim()]);
+                          form.setValue("categoryTags", [...tags, inputValue.trim()]);
                         } else {
-                          form.setValue("tags", [inputValue.trim()]);
+                          form.setValue("categoryTags", [inputValue.trim()]);
                         }
                         setInputValue("");
                       }
@@ -244,20 +244,20 @@ export function AddCategoryForm({
                     <FieldError errors={[fieldState.error]} />
                   )}
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {form.getValues("tags") ? (
-                      form.getValues("tags")?.map((tag) => (
+                    {form.getValues("categoryTags") ? (
+                      form.getValues("categoryTags")?.map((tag) => (
                         <Badge key={tag} variant="secondary">
                           {tag}
                           <button
                             type="button"
                             className="ml-2 text-destructive"
                             onClick={() => {
-                              const tags = form.getValues("tags");
+                              const tags = form.getValues("categoryTags");
                               if (tags) {
                                 const newTags = tags.filter(
                                   (_tag) => _tag !== tag,
                                 );
-                                form.setValue("tags", [...newTags]);
+                                form.setValue("categoryTags", [...newTags]);
                               }
                             }}
                           >

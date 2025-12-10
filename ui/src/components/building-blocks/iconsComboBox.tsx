@@ -57,7 +57,7 @@ export function IconsComboBox({ field, fieldState, form }: IconsComboBoxProps) {
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
-                    form.setValue("icon", currentValue);
+                    form.setValue("categoryIcon", currentValue);
                   }}
                 >
                   <DynamicIcon name={iconName ?? "badge-check"} />

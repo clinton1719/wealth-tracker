@@ -86,7 +86,7 @@ public class CategoryService {
             throws ResourceNotFoundException, ResourceAlreadyExistsException {
         User user = this.authService.getUserByUsername(userName);
         Optional<Category> categoryOptional =
-                this.categoryRepository.findByIdAndUserId(updateCategoryDTO.getId(), user.getId());
+                this.categoryRepository.findByIdAndUserId(updateCategoryDTO.getCategoryId(), user.getId());
         if (categoryOptional.isEmpty()) {
             LOGGER.atError().log("Category to be updated not found : {}", updateCategoryDTO);
             throw new ResourceNotFoundException("Category not found");
@@ -113,17 +113,17 @@ public class CategoryService {
         if (updateCategoryDTO.getCategoryName() != null) {
             category.setCategoryName(updateCategoryDTO.getCategoryName());
         }
-        if (updateCategoryDTO.getDescription() != null) {
-            category.setDescription(updateCategoryDTO.getDescription());
+        if (updateCategoryDTO.getCategoryDescription() != null) {
+            category.setCategoryDescription(updateCategoryDTO.getCategoryDescription());
         }
-        if (updateCategoryDTO.getColorCode() != null) {
-            category.setColorCode(updateCategoryDTO.getColorCode());
+        if (updateCategoryDTO.getCategoryColorCode() != null) {
+            category.setCategoryColorCode(updateCategoryDTO.getCategoryColorCode());
         }
-        if (updateCategoryDTO.getIcon() != null) {
-            category.setIcon(updateCategoryDTO.getIcon());
+        if (updateCategoryDTO.getCategoryIcon() != null) {
+            category.setCategoryIcon(updateCategoryDTO.getCategoryIcon());
         }
-        if (updateCategoryDTO.getTags() != null) {
-            category.setTags(updateCategoryDTO.getTags());
+        if (updateCategoryDTO.getCategoryTags() != null) {
+            category.setCategoryTags(updateCategoryDTO.getCategoryTags());
         }
         return category;
     }

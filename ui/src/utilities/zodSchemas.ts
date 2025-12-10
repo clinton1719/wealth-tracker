@@ -37,7 +37,7 @@ export const categoryFormSchema = z.object({
     .string()
     .min(4, "Color code must be valid")
     .max(7, "Color code must be valid"),
-  icon: z.string().optional(),
+  categoryIcon: z.string().optional(),
   profileName: z.string().min(1, "Profile is required"),
   tags: z.array(z.string()).optional(),
 });

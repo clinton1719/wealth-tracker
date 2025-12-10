@@ -30,17 +30,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import type { Expense } from "@/types/Expense"
 import type { ExpensesListProps } from "@/types/ExpensesListProps"
+import type { FilteredExpense } from "@/types/FilteredExpense"
 import { formatCurrency } from "@/utilities/helper"
-import type { FilteredExpense } from "@/types/filteredExpense"
+import { DynamicIcon } from "lucide-react/dynamic"
 
-export const columns: ColumnDef<Expense>[] = [
-  {
-    accessorKey: "description",
-    header: () => <div className="text-left">Description</div>,
-    cell: ({ row }) => <div className="text-left">{row.getValue("description")}</div>,
-  },
+export const columns: ColumnDef<FilteredExpense>[] = [
   {
     accessorKey: "amount",
     header: ({ column }) => {
@@ -60,6 +55,49 @@ export const columns: ColumnDef<Expense>[] = [
 
       return <div className="text-left font-medium">{formattedAmount}</div>
     },
+  },
+  {
+    accessorKey: "categoryName",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          style={{ marginLeft: "-1em" }}
+        >
+          Category name
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="text-left flex gap-2">
+      <DynamicIcon
+        name={row.getValue("categoryIcon") ? row.getValue("categoryIcon") : ("badge-check" as any)}
+        color={row.getValue("categoryColorCode")}
+      />
+      {row.getValue("categoryName")}</div>,
+  },
+  {
+    accessorKey: "categoryIcon",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          style={{ marginLeft: "-1em" }}
+        >
+          Category name
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="text-left flex gap-2">
+      {row.getValue("categoryIcon")}</div>,
+  },
+  {
+    accessorKey: "description",
+    header: () => <div className="text-left">Description</div>,
+    cell: ({ row }) => <div className="text-left">{row.getValue("description")}</div>,
   },
   {
     id: "actions",
@@ -84,18 +122,34 @@ export const columns: ColumnDef<Expense>[] = [
 ]
 
 export function ExpensesList({ expensesData, accountsData, categoriesData, profilesData }: ExpensesListProps) {
-  const filteredExpensesData: FilteredExpense[] = expensesData.map(expense => {
-    return {
+  const categoryMap = React.useMemo(() => Object.fromEntries(
+    categoriesData.map(c => [c.categoryId, c])
+  ), [categoriesData]);
+
+  const accountMap = React.useMemo(() => Object.fromEntries(
+    accountsData.map(a => [a.id, a])
+  ), [accountsData]);
+
+  const profileMap = React.useMemo(() => Object.fromEntries(
+    profilesData.map(p => [p.id, p])
+  ), [profilesData]);
+
+  const filteredExpensesData = React.useMemo(() => {
+    console.log(categoriesData)
+    return expensesData.map(expense => ({
       id: expense.id,
       amount: expense.amount,
       createdAt: expense.createdAt,
       updatedAt: expense.updatedAt,
       description: expense.description,
-      category: categoriesData.find(category => category.id === expense.categoryId),
-      account: accountsData.find(account => account.id === expense.accountId),
-      profile: profilesData.find(profile => profile.id === expense.profileId)
-    }
-  })
+      categoryName: categoryMap[expense.categoryId]?.categoryName,
+      categoryIcon: categoryMap[expense.categoryId]?.categoryIcon,
+      categoryColorCode: categoryMap[expense.categoryId]?.categoryColorCode,
+      account: accountMap[expense.accountId],
+      profile: profileMap[expense.profileId]
+    }));
+  }, [expensesData, categoryMap, accountMap, profileMap]);
+
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -106,7 +160,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data: expensesData,
+    data: filteredExpensesData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

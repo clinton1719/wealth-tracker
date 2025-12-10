@@ -47,10 +47,10 @@ export function CategorySection({
           <div className="flex flex-col gap-2 mt-2">
             <div className="flex flex-row gap-2">
               <DynamicIcon
-                name={category.icon ? category.icon : ("badge-check" as any)}
-                color={category.colorCode}
+                name={category.categoryIcon ? category.categoryIcon : ("badge-check" as any)}
+                color={category.categoryColorCode}
               />
-              <span className="card-title" style={{color: category.colorCode}}>{category.categoryName}</span>
+              <span className="card-title" style={{color: category.categoryColorCode}}>{category.categoryName}</span>
             </div>
           </div>
         </CardDescription>
@@ -87,17 +87,17 @@ export function CategorySection({
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <span className="card-key">Description: </span>
-            <span className="text-value">{category.description}</span>
+            <span className="text-value">{category.categoryDescription}</span>
           </div>
         </div>
       </CardContent>
       <CardFooter className="flex-col gap-2">
         <div className="flex flex-wrap gap-2 mt-4">
-          {category.tags?.map((tag) => (
+          {category.categoryTags?.map((tag) => (
             <Badge
               key={tag}
               variant="outline"
-              style={{ color: category.colorCode }}
+              style={{ color: category.categoryColorCode }}
             >
               {tag}
             </Badge>

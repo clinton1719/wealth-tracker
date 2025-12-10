@@ -12,17 +12,17 @@ public class CreateCategoryDTO {
   @NotBlank(message = "Category name cannot be blank")
   private String categoryName;
 
-  private String description;
+  private String categoryDescription;
 
   @NotBlank(message = "Category color code cannot be blank")
   @Length(
       min = 4,
       max = 7,
       message = "Color code must be between 4 and 7 characters long, inclusive.")
-  private String colorCode;
+  private String categoryColorCode;
 
-  private String icon;
-  private List<String> tags;
+  private String categoryIcon;
+  private List<String> categoryTags;
 
   @NotNull(message = "Profile id cannot be null")
   private Long profileId;
@@ -35,39 +35,39 @@ public class CreateCategoryDTO {
     this.categoryName = categoryName;
   }
 
-  public String getDescription() {
-    return description;
+  public String getCategoryDescription() {
+    return categoryDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setCategoryDescription(String categoryDescription) {
+    this.categoryDescription = categoryDescription;
   }
 
-  public String getColorCode() {
-    return colorCode;
+  public String getCategoryColorCode() {
+    return categoryColorCode;
   }
 
-  public void setColorCode(String colorCode) {
-    this.colorCode = colorCode;
+  public void setCategoryColorCode(String categoryColorCode) {
+    this.categoryColorCode = categoryColorCode;
   }
 
-  public String getIcon() {
-    return icon;
+  public String getCategoryIcon() {
+    return categoryIcon;
   }
 
-  public void setIcon(String icon) {
-    this.icon = icon;
+  public void setCategoryIcon(String categoryIcon) {
+    this.categoryIcon = categoryIcon;
   }
 
-  public List<String> getTags() {
-    return List.copyOf(tags);
+  public List<String> getCategoryTags() {
+    return List.copyOf(categoryTags);
   }
 
-  public void setTags(List<String> tags) {
-    if (tags != null) {
-      this.tags = new ArrayList<>(tags);
+  public void setCategoryTags(List<String> categoryTags) {
+    if (categoryTags != null) {
+      this.categoryTags = new ArrayList<>(categoryTags);
     } else {
-      this.tags = List.of();
+      this.categoryTags = List.of();
     }
   }
 

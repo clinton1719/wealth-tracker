@@ -1,5 +1,4 @@
 import type { Account } from "./Account";
-import type { Category } from "./Category";
 import type { Profile } from "./Profile";
 
 export interface FilteredExpense {
@@ -8,7 +7,9 @@ export interface FilteredExpense {
   description: string;
   createdAt: string;
   updatedAt: string;
-  category: Category;
-  account: Account;
-  profile: Profile;
+  categoryName: string | undefined;
+  categoryIcon: string | undefined;
+  categoryColorCode: string | undefined;
+  account: Account | undefined;
+  profile: Profile | undefined;
 }

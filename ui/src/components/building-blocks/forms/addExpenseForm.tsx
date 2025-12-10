@@ -260,12 +260,12 @@ export function AddExpenseForm({
                                         <SelectContent position="item-aligned">
                                             {filteredCategories.map((category: Category) => (
                                                 <SelectItem
-                                                    key={category.id}
+                                                    key={category.categoryId}
                                                     value={category.categoryName}
                                                 >
                                                     <DynamicIcon
-                                                        name={category.icon ? category.icon : ("badge-check" as any)}
-                                                        color={category.colorCode}
+                                                        name={category.categoryIcon ? category.categoryIcon : ("badge-check" as any)}
+                                                        color={category.categoryColorCode}
                                                     />
                                                     {category.categoryName}
                                                 </SelectItem>

@@ -10,18 +10,18 @@ export interface CategorySectionProps {
     categoryName: string;
     colorCode: string;
     profileName: string;
-    id?: number | undefined;
-    description?: string | undefined;
-    icon?: string | undefined;
-    tags?: string[] | undefined;
+    categoryId?: number | undefined;
+    categoryDescription?: string | undefined;
+    categoryIcon?: string | undefined;
+    categoryTags?: string[] | undefined;
   }, any, {
     categoryName: string;
     colorCode: string;
     profileName: string;
-    id?: number | undefined;
-    description?: string | undefined;
-    icon?: string | undefined;
-    tags?: string[] | undefined;
+    categoryId?: number | undefined;
+    categoryDescription?: string | undefined;
+    categoryIcon?: string | undefined;
+    categoryTags?: string[] | undefined;
   }>;
   setCategoryDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>

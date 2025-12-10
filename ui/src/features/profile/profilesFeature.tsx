@@ -1,7 +1,7 @@
 import type * as z from "zod";
 import type { Profile } from "@/types/Profile";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
@@ -45,6 +45,18 @@ export function ProfilesFeature() {
   const [deleteProfile, { isLoading: deleteProfileLoading }] =
     useDeleteProfileMutation();
   const { isError, errorComponent } = useApiError(error);
+
+  const filteredProfileData = React.useMemo(() => {
+    if (!profileData) return undefined;
+
+    if (!profileSearchText) return profileData;
+
+    const search = profileSearchText.toLowerCase();
+
+    return profileData.filter((profile) =>
+      profile.profileName.toLowerCase().includes(search)
+    );
+  }, [profileData, profileSearchText]);
 
   if (
     getAllProfilesLoading ||
@@ -202,16 +214,6 @@ export function ProfilesFeature() {
     setCurrentProfile(profile);
   };
 
-  const filteredProfileData = profileData
-    ? profileData.filter((profile) => {
-        return (
-          !profileSearchText ||
-          profile.profileName
-            .toLowerCase()
-            .includes(profileSearchText.toLowerCase())
-        );
-      })
-    : undefined;
 
   return (
     <div id="profilesSection">
@@ -232,7 +234,7 @@ export function ProfilesFeature() {
       </div>
       <div className="normal-grid">
         {filteredProfileData ? (
-          filteredProfileData.sort((profileA, profileB) => profileA.profileName.localeCompare(profileB.profileName)).map((profile) => (
+          filteredProfileData.map((profile) => (
             <ProfileSection
               profile={profile}
               key={profile.id}

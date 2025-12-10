@@ -14,7 +14,7 @@ public final class ExpenseMapper {
     ResponseExpenseDTO dto = new ResponseExpenseDTO();
     dto.setDescription(expense.getDescription());
     dto.setAmount(expense.getAmount());
-    dto.setCategoryId(expense.getCategory().getId());
+    dto.setCategoryId(expense.getCategory().getCategoryId());
     dto.setAccountId(expense.getAccount().getId());
     dto.setProfileId(expense.getProfile().getId());
     dto.setCreatedAt(expense.getCreatedAt());

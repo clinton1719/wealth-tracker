@@ -9,7 +9,7 @@ export const defaultCategory = {
   categoryName: "",
   description: "",
   colorCode: "#000000",
-  icon: "",
+  categoryIcon: "",
   tags: [],
 };
 

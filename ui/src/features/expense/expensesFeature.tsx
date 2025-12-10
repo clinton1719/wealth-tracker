@@ -44,6 +44,7 @@ export default function ExpensesFeature() {
     useUpdateExpenseMutation();
   const [deleteExpense, { isLoading: deleteExpenseLoading }] =
     useDeleteExpenseMutation();
+    console.log(updateExpense, deleteExpense);
   const {
     error: profilesError,
     isLoading: getAllProfilesLoading,
@@ -111,7 +112,7 @@ export default function ExpensesFeature() {
         ...formData,
         profileId: profile.id,
         accountId: account.id,
-        categoryId: category.id
+        categoryId: category.categoryId
       }).unwrap();
 
       toast("Category saved!", {
