@@ -1,22 +1,21 @@
 import { AddExpenseForm } from "@/components/building-blocks/forms/addExpenseForm";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
-import { useDeleteExpenseMutation, useGetAllExpensesInRangeQuery, useSaveExpenseMutation, useUpdateExpenseMutation } from "@/services/expensesApi";
-import { formatDate } from "@/utilities/helper";
-import { useState } from "react";
-import { ExpenseSummaryCards } from "./expenseSummaryCards";
-import type * as z from "zod";
-import { useForm } from "react-hook-form";
-import { expenseFormSchema } from "@/utilities/zodSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { defaultExpense } from "@/utilities/constants";
-import { toast } from "sonner";
-import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { useGetAllAccountsQuery } from "@/services/accountsApi";
 import { useGetAllCategoriesQuery } from "@/services/categoriesApi";
-import { ExpensesList } from "./expensesList";
-import type { Profile } from "@/types/Profile";
+import { useDeleteExpenseMutation, useGetAllExpensesInRangeQuery, useSaveExpenseMutation, useUpdateExpenseMutation } from "@/services/expensesApi";
+import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import type { UpdateExpense } from "@/types/UpdateExpense";
+import { defaultExpense } from "@/utilities/constants";
+import { formatDate } from "@/utilities/helper";
+import { expenseFormSchema } from "@/utilities/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type * as z from "zod";
+import { ExpensesList } from "./expense-feature-components/expensesList";
+import { ExpenseSummaryCards } from "./expense-feature-components/expenseSummaryCards";
 
 export default function ExpensesFeature() {
   const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false);

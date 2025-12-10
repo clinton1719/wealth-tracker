@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -113,6 +114,10 @@ public class ExpenseService {
             throw new ResourceNotFoundException("Expense not found for id: " + updateExpenseDTO.getExpenseId());
         }
         Expense expense = expenseOptional.get();
+        BigDecimal oldExpenseAmount = expense.getExpenseAmount();
+        BigDecimal newExpenseAmount = updateExpenseDTO.getExpenseAmount();
+        BigDecimal difference = newExpenseAmount.subtract(oldExpenseAmount);
+        //TODO
         checkIfBelongsToProfile(updateExpenseDTO, expense);
         updateExpenseValues(updateExpenseDTO, expense);
         Expense updatedExpense = this.expenseRepository.save(expense);
