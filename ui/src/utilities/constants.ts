@@ -7,10 +7,10 @@ export const defaultProfile = {
 
 export const defaultCategory = {
   categoryName: "",
-  description: "",
-  colorCode: "#000000",
+  categoryDescription: "",
+  categoryColorCode: "#000000",
   categoryIcon: "",
-  tags: [],
+  categoryTags: [],
 };
 
 export const defaultLogin = {

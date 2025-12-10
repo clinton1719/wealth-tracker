@@ -5,7 +5,7 @@ export interface AddCategoryFormProps {
   form: UseFormReturn<
     {
       categoryName: string;
-      colorCode: string;
+      categoryColorCode: string;
       categoryId?: number | undefined;
       categoryDescription?: string | undefined;
       categoryIcon?: string | undefined;
@@ -15,7 +15,7 @@ export interface AddCategoryFormProps {
     any,
     {
       categoryName: string;
-      colorCode: string;
+      categoryColorCode: string;
       categoryId?: number | undefined;
       categoryDescription?: string | undefined;
       categoryIcon?: string | undefined;
@@ -27,7 +27,7 @@ export interface AddCategoryFormProps {
   setCategoryDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: SubmitHandler<{
     categoryName: string;
-    colorCode: string;
+    categoryColorCode: string;
     categoryId?: number | undefined;
     categoryDescription?: string | undefined;
     categoryIcon?: string | undefined;

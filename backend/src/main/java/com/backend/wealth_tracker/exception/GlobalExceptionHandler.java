@@ -17,50 +17,57 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-  @ExceptionHandler(IOException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public String handleAllIOExceptions(IOException ex) {
-    LOGGER.atError().log("IO exception: {}", ex.getMessage(), ex);
-    return "Possible issue with file(s), please check";
-  }
+    @ExceptionHandler(AccountCannotHaveNegativeBalanceException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public String handleAccountCannotHaveNegativeBalanceException(AccountCannotHaveNegativeBalanceException ex) {
+        LOGGER.atError().log("Negative balance in account error: {}", ex.getMessage(), ex);
+        return "Invalid operation";
+    }
 
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ResponseEntity<Map<String, String>> handleValidationExceptions(
-      MethodArgumentNotValidException ex) {
-    Map<String, String> errors = new HashMap<>();
-    ex.getBindingResult()
-        .getAllErrors()
-        .forEach(
-            (error) -> {
-              String fieldName = ((FieldError) error).getField();
-              String errorMessage = error.getDefaultMessage();
-              errors.put(fieldName, errorMessage);
-            });
-    LOGGER.atError().log(errors.toString(), ex.getMessage(), ex);
-    return ResponseEntity.badRequest().body(errors);
-  }
+    @ExceptionHandler(IOException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleAllIOExceptions(IOException ex) {
+        LOGGER.atError().log("IO exception: {}", ex.getMessage(), ex);
+        return "Possible issue with file(s), please check";
+    }
 
-  @ExceptionHandler(UnAuthorizedException.class)
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public String handleAllUnAuthorizedExceptions(UnAuthorizedException ex) {
-    LOGGER.atError().log("Unauthorized exception: {}", ex.getMessage(), ex);
-    return "Unauthorized access";
-  }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult()
+                .getAllErrors()
+                .forEach(
+                        (error) -> {
+                            String fieldName = ((FieldError) error).getField();
+                            String errorMessage = error.getDefaultMessage();
+                            errors.put(fieldName, errorMessage);
+                        });
+        LOGGER.atError().log(errors.toString(), ex.getMessage(), ex);
+        return ResponseEntity.badRequest().body(errors);
+    }
 
-  @ExceptionHandler(ResourceAlreadyExistsException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public String handleAllResourceAlreadyExistsExceptions(ResourceAlreadyExistsException ex) {
-    LOGGER.atError().log("Resource already exists exception: {}", ex.getMessage(), ex);
-    return "Resource already exists";
-  }
+    @ExceptionHandler(UnAuthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleAllUnAuthorizedExceptions(UnAuthorizedException ex) {
+        LOGGER.atError().log("Unauthorized exception: {}", ex.getMessage(), ex);
+        return "Unauthorized access";
+    }
 
-  @ExceptionHandler(RuntimeException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public String handleAllResourceAlreadyExistsExceptions(RuntimeException ex) {
-    LOGGER.atError().log("Server error: {}", ex.getMessage(), ex);
-    return "Something went wrong on server, kindly try again later";
-  }
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleAllResourceAlreadyExistsExceptions(ResourceAlreadyExistsException ex) {
+        LOGGER.atError().log("Resource already exists exception: {}", ex.getMessage(), ex);
+        return "Resource already exists";
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleAllResourceAlreadyExistsExceptions(RuntimeException ex) {
+        LOGGER.atError().log("Server error: {}", ex.getMessage(), ex);
+        return "Something went wrong on server, kindly try again later";
+    }
 }

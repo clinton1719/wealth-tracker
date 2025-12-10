@@ -203,7 +203,7 @@ public class ExpenseService {
             Integer pageSize) {
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("expenseCreatedAt").descending());
         List<Expense> expenses = this.expenseRepository.findByCreatedAtBetween(start, end, pageable);
         LOGGER.atInfo().log("Found {} expenses between {} and {}", expenses.size(), startDate, endDate);
         return expenses;

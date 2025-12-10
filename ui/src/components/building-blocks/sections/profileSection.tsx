@@ -41,7 +41,7 @@ export function ProfileSection({
   return (
     <Card
       className="card"
-      style={{ backgroundColor: `${profile.profileColorCode}40` }}
+      style={{ backgroundColor: `${profile.profileColorCode}70` }}
     >
       <CardHeader>
         <CardTitle>

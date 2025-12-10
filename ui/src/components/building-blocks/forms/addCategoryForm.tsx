@@ -120,7 +120,7 @@ export function AddCategoryForm({
               )}
             />
             <Controller
-              name="colorCode"
+              name="categoryColorCode"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>

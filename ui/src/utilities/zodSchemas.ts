@@ -27,23 +27,23 @@ export const loginFormSchema = z.object({
 });
 
 export const categoryFormSchema = z.object({
-  id: z.number().optional(),
+  categoryId: z.number().optional(),
   categoryName: z.string().min(1, "Category name is required"),
-  description: z
+  categoryDescription: z
     .string()
     .max(100, "Description must be at most 100 characters long")
     .optional(),
-  colorCode: z
+  categoryColorCode: z
     .string()
     .min(4, "Color code must be valid")
     .max(7, "Color code must be valid"),
   categoryIcon: z.string().optional(),
   profileName: z.string().min(1, "Profile is required"),
-  tags: z.array(z.string()).optional(),
+  categoryTags: z.array(z.string()).optional(),
 });
 
 export const accountFormSchema = z.object({
-  id: z.number().optional(),
+  accountId: z.number().optional(),
   accountName: z.string().min(1, "Account name is required"),
   accountDescription: z
     .string()
@@ -57,7 +57,7 @@ export const accountFormSchema = z.object({
 });
 
 export const expenseFormSchema = z.object({
-  id: z.number().optional(),
+  expenseId: z.number().optional(),
   expenseAmount: z
     .number({ error: "Invalid input, please enter only numbers" })
     .nonnegative("Expense amount cannot be negative"),

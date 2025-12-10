@@ -1,16 +1,17 @@
 import {
-  type ColumnDef,
   type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   type SortingState,
   useReactTable,
-  type VisibilityState,
+  type VisibilityState
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import * as React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -18,7 +19,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -31,97 +31,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { ExpensesListProps } from "@/types/ExpensesListProps"
-import type { FilteredExpense } from "@/types/FilteredExpense"
-import { formatCurrency } from "@/utilities/helper"
-import { DynamicIcon } from "lucide-react/dynamic"
+import { createColumns } from "./columnDefinition"
 
-export const columns: ColumnDef<FilteredExpense>[] = [
-  {
-    accessorKey: "expenseAmount",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          style={{ marginLeft: "-1em" }}
-        >
-          Amount
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-      const formattedAmount = formatCurrency(row.getValue("amount"))
-
-      return <div className="text-left font-medium">{formattedAmount}</div>
-    },
-  },
-  {
-    accessorKey: "categoryName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          style={{ marginLeft: "-1em" }}
-        >
-          Category name
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="text-left flex gap-2">
-      <DynamicIcon
-        name={row.getValue("categoryIcon") ? row.getValue("categoryIcon") : ("badge-check" as any)}
-        color={row.getValue("categoryColorCode")}
-      />
-      {row.getValue("categoryName")}</div>,
-  },
-  {
-    accessorKey: "categoryIcon",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          style={{ marginLeft: "-1em" }}
-        >
-          Category name
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="text-left flex gap-2">
-      {row.getValue("categoryIcon")}</div>,
-  },
-  {
-    accessorKey: "description",
-    header: () => <div className="text-left">Description</div>,
-    cell: ({ row }) => <div className="text-left">{row.getValue("description")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: () => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edit expense</DropdownMenuItem>
-            <DropdownMenuItem>Delete expense</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
-
-export function ExpensesList({ expensesData, accountsData, categoriesData, profilesData }: ExpensesListProps) {
+export function ExpensesList({ expensesData, accountsData, categoriesData, profilesData, handleUpdateProfile }: ExpensesListProps) {
   const categoryMap = React.useMemo(() => Object.fromEntries(
     categoriesData.map(c => [c.categoryId, c])
   ), [categoriesData]);
@@ -135,29 +47,31 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
   ), [profilesData]);
 
   const filteredExpensesData = React.useMemo(() => {
-    console.log(categoriesData)
     return expensesData.map(expense => ({
       expenseId: expense.expenseId,
       expenseAmount: expense.expenseAmount,
       expenseCreatedAt: expense.expenseCreatedAt,
-      expenseUpdatedAt: expense.expenseUpdatedAt,
       expenseDescription: expense.expenseDescription,
+      categoryId: categoryMap[expense.categoryId]?.categoryId,
       categoryName: categoryMap[expense.categoryId]?.categoryName,
       categoryIcon: categoryMap[expense.categoryId]?.categoryIcon,
       categoryColorCode: categoryMap[expense.categoryId]?.categoryColorCode,
-      account: accountMap[expense.accountId],
-      profile: profileMap[expense.profileId]
+      accountName: accountMap[expense.accountId].accountName,
+      profileName: profileMap[expense.profileId].profileName
     }));
   }, [expensesData, categoryMap, accountMap, profileMap]);
 
+  const columns = React.useMemo(
+    () => createColumns(handleUpdateProfile),
+    [handleUpdateProfile]
+  )
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({ expenseCreatedAt: false, })
 
   const table = useReactTable({
     data: filteredExpensesData,
@@ -168,13 +82,13 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
     },
   })
 
@@ -183,9 +97,9 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter by description..."
-          value={(table.getColumn("description")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("expenseDescription")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("description")?.setFilterValue(event.target.value)
+            table.getColumn("expenseDescription")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -209,7 +123,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {column.id.replace("expense", "").replace("Name", " name")}
                   </DropdownMenuCheckboxItem>
                 )
               })}

@@ -204,7 +204,7 @@ export function AddExpenseForm({
                                             name={field.name}
                                             value={field.value}
                                             onValueChange={field.onChange}
-                                            disabled={isUpdate === true && !form.getValues("profileName")}
+                                            disabled={isUpdate === true || !form.getValues("profileName")}
                                         >
                                             <SelectTrigger
                                                 id="form-rhf-select-profile"

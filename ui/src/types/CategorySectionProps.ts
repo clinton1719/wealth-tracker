@@ -8,7 +8,7 @@ export interface CategorySectionProps {
   handleDeleteCategory: (category: Category) => void;
   form: UseFormReturn<{
     categoryName: string;
-    colorCode: string;
+    categoryColorCode: string;
     profileName: string;
     categoryId?: number | undefined;
     categoryDescription?: string | undefined;
@@ -16,7 +16,7 @@ export interface CategorySectionProps {
     categoryTags?: string[] | undefined;
   }, any, {
     categoryName: string;
-    colorCode: string;
+    categoryColorCode: string;
     profileName: string;
     categoryId?: number | undefined;
     categoryDescription?: string | undefined;

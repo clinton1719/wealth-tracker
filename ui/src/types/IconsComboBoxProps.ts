@@ -8,11 +8,11 @@ export interface IconsComboBoxProps {
   field: ControllerRenderProps<
     {
       categoryName: string;
-      colorCode: string;
-      description?: string | undefined;
+      categoryColorCode: string;
+      categoryDescription?: string | undefined;
       categoryIcon?: string | undefined;
       profileName: string;
-      tags?: string[] | undefined;
+      categoryTags?: string[] | undefined;
     },
     "categoryIcon"
   >;
@@ -20,20 +20,20 @@ export interface IconsComboBoxProps {
   form: UseFormReturn<
     {
       categoryName: string;
-      colorCode: string;
-      description?: string | undefined;
+      categoryColorCode: string;
+      categoryDescription?: string | undefined;
       categoryIcon?: string | undefined;
       profileName: string;
-      tags?: string[] | undefined;
+      categoryTags?: string[] | undefined;
     },
     any,
     {
       categoryName: string;
-      colorCode: string;
-      description?: string | undefined;
+      categoryColorCode: string;
+      categoryDescription?: string | undefined;
       categoryIcon?: string | undefined;
       profileName: string;
-      tags?: string[] | undefined;
+      categoryTags?: string[] | undefined;
     }
   >;
 }

@@ -14,7 +14,9 @@ import { toast } from "sonner";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { useGetAllAccountsQuery } from "@/services/accountsApi";
 import { useGetAllCategoriesQuery } from "@/services/categoriesApi";
-import {  ExpensesList } from "./expensesList";
+import { ExpensesList } from "./expensesList";
+import type { Profile } from "@/types/Profile";
+import type { UpdateExpense } from "@/types/UpdateExpense";
 
 export default function ExpensesFeature() {
   const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false);
@@ -44,7 +46,6 @@ export default function ExpensesFeature() {
     useUpdateExpenseMutation();
   const [deleteExpense, { isLoading: deleteExpenseLoading }] =
     useDeleteExpenseMutation();
-    console.log(updateExpense, deleteExpense);
   const {
     error: profilesError,
     isLoading: getAllProfilesLoading,
@@ -78,8 +79,6 @@ export default function ExpensesFeature() {
   }
 
   async function onSubmit(formData: z.infer<typeof expenseFormSchema>) {
-    console.log('triggered')
-    console.log(isUpdate)
     if (isUpdate) {
       await updateExistingExpense(formData);
     } else if (!isUpdate) {
@@ -115,7 +114,7 @@ export default function ExpensesFeature() {
         categoryId: category.categoryId
       }).unwrap();
 
-      toast("Category saved!", {
+      toast("Expense saved!", {
         description: (
           <pre
             className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
@@ -125,7 +124,7 @@ export default function ExpensesFeature() {
             }}
           >
             <code>
-              Expense of: {result.expenseAmount} created at: {result.expenseCreatedAt}
+              Expense of {result.expenseAmount} created at: {result.expenseCreatedAt}
             </code>
           </pre>
         ),
@@ -142,9 +141,9 @@ export default function ExpensesFeature() {
 
       setExpenseDialogOpen(false);
     } catch (error: any) {
-      if (error?.originalStatus === 409) {
+      if (error?.originalStatus === 406) {
         toast.error(
-          `Category already exists with name: ${formData.categoryName}`,
+          `Insufficient balance in account: ${formData.accountName}`,
         );
       } else if (error.originalStatus === 400) {
         toast.error("Invalid input. Please check your details.");
@@ -155,7 +154,7 @@ export default function ExpensesFeature() {
           "Access denied. You do not have permission to access this resource.",
         );
       } else {
-        toast.error("Failed to create category, please try again");
+        toast.error("Failed to create expense, please try again");
       }
     }
   }
@@ -164,24 +163,21 @@ export default function ExpensesFeature() {
     formData: z.infer<typeof expenseFormSchema>,
   ) {
     try {
-      // const profile = profilesData?.find(
-      //   (profile) => profile.profileName === formData.profileName,
-      // );
-      // if (!profile) {
-      //   toast.error("Invalid data found, refresh and try again");
-      //   return;
-      // }
-      // const result = await updateCategory({
-      //   ...formData,
-      //   profileId: profile.id,
-      // }).unwrap();
+      const category = categoriesData?.find(
+        (category) => category.categoryName === formData.categoryName,
+      );
 
-      // if (!result) {
-      //   toast.error("Failed to update category, please try again later");
-      //   return;
-      // }
+      if (!category) {
+        toast.error("Invalid data found, refresh and try again");
+        return;
+      }
 
-      toast("Category updated!", {
+      const result = await updateExpense({
+        ...formData,
+        categoryId: category.categoryId
+      }).unwrap();
+
+      toast("Expense updated!", {
         description: (
           <pre
             className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
@@ -191,8 +187,7 @@ export default function ExpensesFeature() {
             }}
           >
             <code>
-              Category name:
-              {/* {result.categoryName} */}
+              Expense of {result.expenseAmount} updated at: {result.expenseUpdatedAt}
             </code>
           </pre>
         ),
@@ -210,9 +205,9 @@ export default function ExpensesFeature() {
       setIsUpdate(false);
       setExpenseDialogOpen(false);
     } catch (error: any) {
-      if (error?.originalStatus === 409) {
+      if (error?.originalStatus === 406) {
         toast.error(
-          `Category already exists with name: ${formData.categoryName}`,
+          `Insufficient balance in account: ${formData.accountName}`,
         );
       } else if (error.originalStatus === 400) {
         toast.error("Invalid input. Please check your details.");
@@ -223,10 +218,16 @@ export default function ExpensesFeature() {
       } else if (error.originalStatus === 404) {
         toast.error("This resource does not exist, kindly refresh your page.");
       } else {
-        toast.error("Failed to update category, please try again");
+        toast.error("Failed to update expense, please try again");
       }
     }
   }
+
+  const handleUpdateProfile = (updateExpense: UpdateExpense) => {
+    form.reset(updateExpense);
+    setExpenseDialogOpen(true);
+    setIsUpdate(true);
+  };
 
   if (expensesData && profilesData && accountsData && categoriesData) {
     return (
@@ -253,7 +254,7 @@ export default function ExpensesFeature() {
           />
         </div>
         <ExpenseSummaryCards expensesData={expensesData} />
-        <ExpensesList expensesData={expensesData} categoriesData={categoriesData} accountsData={accountsData} profilesData={profilesData}/>
+        <ExpensesList expensesData={expensesData} categoriesData={categoriesData} accountsData={accountsData} profilesData={profilesData} handleUpdateProfile={handleUpdateProfile} />
       </div>
     );
   }
