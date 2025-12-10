@@ -6,20 +6,20 @@ import org.springframework.web.multipart.MultipartFile;
 @SuppressWarnings("PMD.DataClass")
 public class UpdateProfileDTO {
   @NotNull(message = "Profile ID cannot be null")
-  private Long id;
+  private Long profileId;
 
   private String profileName;
-  private String description;
-  private String colorCode;
+  private String profileDescription;
+  private String profileColorCode;
   private String profilePicture;
   private MultipartFile profilePictureFile;
 
-  public Long getId() {
-    return id;
+  public Long getProfileId() {
+    return profileId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setProfileId(Long profileId) {
+    this.profileId = profileId;
   }
 
   public String getProfileName() {
@@ -30,20 +30,20 @@ public class UpdateProfileDTO {
     this.profileName = profileName;
   }
 
-  public String getDescription() {
-    return description;
+  public String getProfileDescription() {
+    return profileDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setProfileDescription(String profileDescription) {
+    this.profileDescription = profileDescription;
   }
 
-  public String getColorCode() {
-    return colorCode;
+  public String getProfileColorCode() {
+    return profileColorCode;
   }
 
-  public void setColorCode(String colorCode) {
-    this.colorCode = colorCode;
+  public void setProfileColorCode(String profileColorCode) {
+    this.profileColorCode = profileColorCode;
   }
 
   public String getProfilePicture() {

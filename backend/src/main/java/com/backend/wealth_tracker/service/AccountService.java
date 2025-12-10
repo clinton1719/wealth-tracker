@@ -68,7 +68,7 @@ public class AccountService {
                             + " for user: "
                             + user.getId());
         }
-        Profile profile = user.getProfiles().parallelStream().filter(p -> Objects.equals(p.getId(), createAccountDTO.getProfileId()))
+        Profile profile = user.getProfiles().parallelStream().filter(p -> Objects.equals(p.getProfileId(), createAccountDTO.getProfileId()))
                 .findFirst().orElseThrow(() -> {
                     LOGGER.atError().log("Profile id not found while saving account: {}", createAccountDTO);
                     return new ResourceNotFoundException("Profile id not found while saving account");

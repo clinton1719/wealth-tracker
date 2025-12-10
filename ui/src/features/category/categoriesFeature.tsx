@@ -104,7 +104,7 @@ export default function CategoriesFeature() {
 
       const result = await saveCategory({
         ...formData,
-        profileId: profile.id,
+        profileId: profile.profileId,
       }).unwrap();
 
       toast("Category saved!", {
@@ -166,7 +166,7 @@ export default function CategoriesFeature() {
       }
       const result = await updateCategory({
         ...formData,
-        profileId: profile.id,
+        profileId: profile.profileId,
       }).unwrap();
 
       if (!result) {
@@ -303,7 +303,7 @@ export default function CategoriesFeature() {
         <div className="normal-grid">
           {filteredCategoriesData.sort((categoryA, categoryB) => categoryA.categoryName.localeCompare(categoryB.categoryName)).map((category) => {
             const profile = profilesData.find(
-              (profile) => profile.id === category.profileId,
+              (profile) => profile.profileId === category.profileId,
             );
             if (profile) {
               return (

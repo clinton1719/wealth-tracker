@@ -96,7 +96,7 @@ export function AccountsFeature() {
       }
       const result = await saveAccount({
         ...formData,
-        profileId: profile.id,
+        profileId: profile.profileId,
       }).unwrap();
 
       toast("Account saved!", {
@@ -162,7 +162,7 @@ export function AccountsFeature() {
       }
       const result = await updateAccount({
         ...updatedFormData,
-        profileId: profile.id,
+        profileId: profile.profileId,
       }).unwrap();
 
       if (!result) {
@@ -273,7 +273,7 @@ export function AccountsFeature() {
           {filteredAccountsData ? (
             filteredAccountsData.sort((accountA, accountB) => accountA.accountName.localeCompare(accountB.accountName)).map((account) => {
               const profile = profilesData.find(
-                (profile) => profile.id === account.profileId,
+                (profile) => profile.profileId === account.profileId,
               );
               if (profile) {
                 return (

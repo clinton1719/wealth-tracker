@@ -1,13 +1,13 @@
 import * as z from "zod";
 
 export const profileFormSchema = z.object({
-  id: z.number().optional(),
+  profileId: z.number().optional(),
   profileName: z.string().min(1, "Profile name is required"),
-  description: z
+  profileDescription: z
     .string()
     .max(100, "Description must be at most 100 characters long")
     .optional(),
-  colorCode: z
+  profileColorCode: z
     .string()
     .min(4, "Color code must be valid")
     .max(7, "Color code must be valid"),

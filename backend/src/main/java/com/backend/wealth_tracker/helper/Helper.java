@@ -34,7 +34,7 @@ public final class Helper {
 
   public static boolean isProfileIdValid(Set<Profile> profiles, Long profileId) {
     return profiles.parallelStream()
-        .anyMatch(profile -> Objects.equals(profile.getId(), profileId));
+        .anyMatch(profile -> Objects.equals(profile.getProfileId(), profileId));
   }
 
   public static boolean isAccountIdValid(Set<Account> accounts, Long accountId) {

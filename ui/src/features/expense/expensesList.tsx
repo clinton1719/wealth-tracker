@@ -131,7 +131,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
   ), [accountsData]);
 
   const profileMap = React.useMemo(() => Object.fromEntries(
-    profilesData.map(p => [p.id, p])
+    profilesData.map(p => [p.profileId, p])
   ), [profilesData]);
 
   const filteredExpensesData = React.useMemo(() => {

@@ -198,8 +198,8 @@ export function ProfilesFeature() {
   };
 
   const deleteCurrentProfile = async () => {
-    if (currentProfile && currentProfile.id) {
-      await deleteProfile(currentProfile.id);
+    if (currentProfile && currentProfile.profileId) {
+      await deleteProfile(currentProfile.profileId);
       toast.info(
         `Profile : ${currentProfile.profileName} deleted successfully!`,
       );
@@ -237,7 +237,7 @@ export function ProfilesFeature() {
           filteredProfileData.map((profile) => (
             <ProfileSection
               profile={profile}
-              key={profile.id}
+              key={profile.profileId}
               form={form}
               setIsUpdate={setIsUpdate}
               setProfileDialogOpen={setProfileDialogOpen}

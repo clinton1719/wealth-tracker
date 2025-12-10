@@ -1,7 +1,7 @@
 export const defaultProfile = {
   profileName: "",
-  colorCode: "#000000",
-  description: "",
+  profileColorCode: "#000000",
+  profileDescription: "",
   profilePicture: undefined,
 };
 

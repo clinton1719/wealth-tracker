@@ -56,8 +56,8 @@ export function AddExpenseForm({
     let filteredCategories;
 
     if (profile) {
-        filteredAccounts = accounts.filter(account => account.profileId === profile.id);
-        filteredCategories = categories.filter(category => category.profileId === profile.id);
+        filteredAccounts = accounts.filter(account => account.profileId === profile.profileId);
+        filteredCategories = categories.filter(category => category.profileId === profile.profileId);
     }
 
     return (
@@ -171,7 +171,7 @@ export function AddExpenseForm({
                                         <SelectContent position="item-aligned">
                                             {profiles.map((profile) => (
                                                 <SelectItem
-                                                    key={profile.id}
+                                                    key={profile.profileId}
                                                     value={profile.profileName}
                                                 >
                                                     {profile.profileName}

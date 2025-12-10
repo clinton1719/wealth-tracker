@@ -60,7 +60,7 @@ public class CategoryService {
             throw new UnAuthorizedException("Illegal profile id in category");
         }
         Profile profile = user.getProfiles().parallelStream().filter(
-                        p -> Objects.equals(p.getId(), createCategoryDTO.getProfileId()))
+                        p -> Objects.equals(p.getProfileId(), createCategoryDTO.getProfileId()))
                 .findFirst().orElseThrow(() -> {
                     LOGGER.atError().log("Profile id not found while saving category: {}", createCategoryDTO);
                     return new ResourceNotFoundException("Profile id not found while saving account");

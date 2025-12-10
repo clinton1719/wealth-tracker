@@ -16,7 +16,7 @@ public final class ExpenseMapper {
     dto.setAmount(expense.getAmount());
     dto.setCategoryId(expense.getCategory().getCategoryId());
     dto.setAccountId(expense.getAccount().getId());
-    dto.setProfileId(expense.getProfile().getId());
+    dto.setProfileId(expense.getProfile().getProfileId());
     dto.setCreatedAt(expense.getCreatedAt());
     dto.setUpdatedAt(expense.getUpdatedAt());
     dto.setId(expense.getId());

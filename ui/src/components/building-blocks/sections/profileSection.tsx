@@ -41,20 +41,20 @@ export function ProfileSection({
   return (
     <Card
       className="card"
-      style={{ backgroundColor: `${profile.colorCode}40` }}
+      style={{ backgroundColor: `${profile.profileColorCode}40` }}
     >
       <CardHeader>
         <CardTitle>
           <ProfilePicture
             imageSource={profile.profilePicture}
             fallbackName={profile.profileName.charAt(0)}
-            imageColor={profile.colorCode}
+            imageColor={profile.profileColorCode}
           />
         </CardTitle>
         <CardDescription>
           <div className="flex flex-col">
             <span className="card-title">{profile.profileName}</span>
-            <span className="description">{profile.description}</span>
+            <span className="description">{profile.profileDescription}</span>
           </div>
         </CardDescription>
         <CardAction>
@@ -91,15 +91,15 @@ export function ProfileSection({
           <div className="flex justify-between items-center">
             <span
               className={`status-badge ${
-                enabledMap[profile.id] ? "enabled" : "disabled"
+                enabledMap[profile.profileId] ? "enabled" : "disabled"
               }`}
             >
-              {enabledMap[profile.id] ? "Enabled" : "Disabled"}
+              {enabledMap[profile.profileId] ? "Enabled" : "Disabled"}
             </span>
             <Switch
-              id={`profile-${profile.id}`}
-              checked={enabledMap[profile.id]}
-              onCheckedChange={() => dispatch(toggleProfile(profile.id))}
+              id={`profile-${profile.profileId}`}
+              checked={enabledMap[profile.profileId]}
+              onCheckedChange={() => dispatch(toggleProfile(profile.profileId))}
             />
           </div>
         </div>

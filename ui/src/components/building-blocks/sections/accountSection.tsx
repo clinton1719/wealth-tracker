@@ -38,14 +38,14 @@ export function AccountSection({
   return (
     <Card
       className="card"
-      style={{ backgroundColor: `${profile.colorCode}40` }}
+      style={{ backgroundColor: `${profile.profileColorCode}40` }}
     >
       <CardHeader>
         <CardTitle>
           <ProfilePicture
             imageSource={profile.profilePicture}
             fallbackName={profile.profileName.charAt(0)}
-            imageColor={profile.colorCode}
+            imageColor={profile.profileColorCode}
           />
         </CardTitle>
         <CardDescription>

@@ -30,7 +30,7 @@ public final class AccountMapper {
     responseAccountDTO.setDescription(account.getDescription());
     responseAccountDTO.setAccountBalance(account.getAccountBalance());
     responseAccountDTO.setAccountType(account.getAccountType());
-    responseAccountDTO.setProfileId(account.getProfile().getId());
+    responseAccountDTO.setProfileId(account.getProfile().getProfileId());
     return responseAccountDTO;
   }
 

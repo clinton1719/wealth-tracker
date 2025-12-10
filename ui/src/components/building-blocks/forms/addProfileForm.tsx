@@ -77,7 +77,7 @@ export function AddProfileForm({
               )}
             />
             <Controller
-              name="description"
+              name="profileDescription"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -98,7 +98,7 @@ export function AddProfileForm({
               )}
             />
             <Controller
-              name="colorCode"
+              name="profileColorCode"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>

@@ -60,7 +60,7 @@ public class ProfileService {
       throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
     User user = this.authService.getUserByUsername(userName);
     Optional<Profile> profileOptional =
-        this.profileRepository.findByIdAndUserId(updateProfileDTO.getId(), user.getId());
+        this.profileRepository.findByIdAndUserId(updateProfileDTO.getProfileId(), user.getId());
     if (profileOptional.isEmpty()) {
       throw new ResourceNotFoundException("Profile not found for: " + updateProfileDTO);
     }
@@ -88,11 +88,11 @@ public class ProfileService {
     if (updateProfileDTO.getProfileName() != null) {
       profile.setProfileName(updateProfileDTO.getProfileName());
     }
-    if (updateProfileDTO.getDescription() != null) {
-      profile.setDescription(updateProfileDTO.getDescription());
+    if (updateProfileDTO.getProfileDescription() != null) {
+      profile.setProfileDescription(updateProfileDTO.getProfileDescription());
     }
-    if (updateProfileDTO.getColorCode() != null) {
-      profile.setColorCode(updateProfileDTO.getColorCode());
+    if (updateProfileDTO.getProfileColorCode() != null) {
+      profile.setProfileColorCode(updateProfileDTO.getProfileColorCode());
     }
     if (updateProfileDTO.getProfilePictureFile() != null
         && !updateProfileDTO.getProfilePictureFile().isEmpty()) {

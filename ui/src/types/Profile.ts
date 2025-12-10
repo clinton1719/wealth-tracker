@@ -1,10 +1,11 @@
 export interface Profile {
-  id: number;
+  profileId: number;
   profileName: string;
-  colorCode: string;
-  description?: string;
+  profileColorCode: string;
+  profileDescription?: string;
   profilePicture?: string;
   profilePictureFile?: File;
   categoryIds: Array<number>;
   expenseIds: Array<number>;
 }
+

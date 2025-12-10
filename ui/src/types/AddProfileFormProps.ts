@@ -6,18 +6,18 @@ export interface AddProfileFormProps {
   form: UseFormReturn<
     {
       profileName: string;
-      colorCode: string;
-      id?: number | undefined;
-      description?: string | undefined;
+      profileColorCode: string;
+      profileId?: number | undefined;
+      profileDescription?: string | undefined;
       profilePicture?: string;
       profilePictureFile?: File;
     },
     any,
     {
       profileName: string;
-      colorCode: string;
-      id?: number | undefined;
-      description?: string | undefined;
+      profileColorCode: string;
+      profileId?: number | undefined;
+      profileDescription?: string | undefined;
       profilePicture?: string;
       profilePictureFile?: File;
     }

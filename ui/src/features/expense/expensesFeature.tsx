@@ -110,7 +110,7 @@ export default function ExpensesFeature() {
 
       const result = await saveExpense({
         ...formData,
-        profileId: profile.id,
+        profileId: profile.profileId,
         accountId: account.id,
         categoryId: category.categoryId
       }).unwrap();

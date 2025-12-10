@@ -78,8 +78,8 @@ public class ExpenseService {
         }
         Expense expense = setRequiredFieldsInExpense(createExpenseDTO);
         Expense savedExpense = this.expenseRepository.save(expense);
-        if (!Objects.equals(savedExpense.getAccount().getProfile().getId(), createExpenseDTO.getProfileId()) || !Objects.equals(savedExpense.getCategory().getProfile().getId(), createExpenseDTO.getProfileId())) {
-            LOGGER.atError().log("Profile ID: {}, not consistent with that of account: {} and category: {}", createExpenseDTO.getProfileId(), savedExpense.getAccount().getProfile().getId(), savedExpense.getCategory().getProfile().getId());
+        if (!Objects.equals(savedExpense.getAccount().getProfile().getProfileId(), createExpenseDTO.getProfileId()) || !Objects.equals(savedExpense.getCategory().getProfile().getProfileId(), createExpenseDTO.getProfileId())) {
+            LOGGER.atError().log("Profile ID: {}, not consistent with that of account: {} and category: {}", createExpenseDTO.getProfileId(), savedExpense.getAccount().getProfile().getProfileId(), savedExpense.getCategory().getProfile().getProfileId());
             throw new UnAuthorizedException("Profile ID not consistent");
         }
         this.accountService.debitAccount(createExpenseDTO.getAccountId(), savedExpense.getAmount());
@@ -126,7 +126,7 @@ public class ExpenseService {
             LOGGER.atError().log("Category not found to update expense: {}", updateExpenseDTO);
             throw new ResourceNotFoundException("Category not found");
         }
-        if (!Objects.equals(category.get().getProfile().getId(), expense.getProfile().getId())) {
+        if (!Objects.equals(category.get().getProfile().getProfileId(), expense.getProfile().getProfileId())) {
             LOGGER.atError().log("Invalid category for this profile: {}", updateExpenseDTO);
             throw new UnAuthorizedException("Invalid category");
         }

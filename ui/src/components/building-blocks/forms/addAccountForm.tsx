@@ -188,7 +188,7 @@ export function AddAccountForm({
                     <SelectContent position="item-aligned">
                       {profiles.map((profile) => (
                         <SelectItem
-                          key={profile.id}
+                          key={profile.profileId}
                           value={profile.profileName}
                         >
                           {profile.profileName}

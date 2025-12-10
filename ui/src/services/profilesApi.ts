@@ -29,8 +29,8 @@ export const profileApi = createApi({
           const existing = state.profile.enabled;
 
           profiles.forEach((p) => {
-            if (!(p.id in existing)) {
-              dispatch(enableProfile(p.id));
+            if (!(p.profileId in existing)) {
+              dispatch(enableProfile(p.profileId));
             }
           });
         } catch (error) {
