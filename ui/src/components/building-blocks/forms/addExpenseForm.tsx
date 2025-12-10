@@ -93,7 +93,7 @@ export function AddExpenseForm({
                 >
                     <FieldGroup>
                         <Controller
-                            name="description"
+                            name="expenseDescription"
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
@@ -114,7 +114,7 @@ export function AddExpenseForm({
                             )}
                         />
                         <Controller
-                            name="amount"
+                            name="expenseAmount"
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
@@ -216,7 +216,7 @@ export function AddExpenseForm({
                                             <SelectContent position="item-aligned">
                                                 {filteredAccounts.map((account: Account) => (
                                                     <SelectItem
-                                                        key={account.id}
+                                                        key={account.accountId}
                                                         value={account.accountName}
                                                     >
                                                         {account.accountName}

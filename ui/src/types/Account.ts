@@ -1,8 +1,8 @@
 export interface Account {
-  id: number;
+  accountId: number;
   accountName: string;
   accountBalance: number;
-  description: string;
+  accountDescription: string;
   accountType: string;
   profileId: number;
 }

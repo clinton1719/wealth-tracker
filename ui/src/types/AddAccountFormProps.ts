@@ -11,8 +11,8 @@ export interface AddAccountFormProps {
       accountBalance: number;
       accountType: string;
       profileName: string;
-      id?: number | undefined;
-      description?: string | undefined;
+      accountId?: number | undefined;
+      accountDescription?: string | undefined;
     },
     any,
     {
@@ -20,8 +20,8 @@ export interface AddAccountFormProps {
       accountBalance: number;
       accountType: string;
       profileName: string;
-      id?: number | undefined;
-      description?: string | undefined;
+      accountId?: number | undefined;
+      accountDescription?: string | undefined;
     }
   >;
   onSubmit: any;

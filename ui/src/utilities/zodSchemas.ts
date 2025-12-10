@@ -45,7 +45,7 @@ export const categoryFormSchema = z.object({
 export const accountFormSchema = z.object({
   id: z.number().optional(),
   accountName: z.string().min(1, "Account name is required"),
-  description: z
+  accountDescription: z
     .string()
     .max(100, "Description must be at most 100 characters long")
     .optional(),
@@ -58,10 +58,10 @@ export const accountFormSchema = z.object({
 
 export const expenseFormSchema = z.object({
   id: z.number().optional(),
-  amount: z
+  expenseAmount: z
     .number({ error: "Invalid input, please enter only numbers" })
     .nonnegative("Expense amount cannot be negative"),
-  description: z
+  expenseDescription: z
     .string()
     .max(100, "Description must be at most 100 characters long")
     .optional(),

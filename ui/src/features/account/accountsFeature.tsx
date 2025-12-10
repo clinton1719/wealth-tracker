@@ -222,8 +222,8 @@ export function AccountsFeature() {
   };
 
   const deleteCurrentAccount = async () => {
-    if (currentAccount && currentAccount.id) {
-      await deleteAccount(currentAccount.id);
+    if (currentAccount && currentAccount.accountId) {
+      await deleteAccount(currentAccount.accountId);
       toast.info(
         `Account : ${currentAccount.accountName} deleted successfully!`,
       );
@@ -280,7 +280,7 @@ export function AccountsFeature() {
                   <AccountSection
                     account={account}
                     profile={profile}
-                    key={account.id}
+                    key={account.accountId}
                     form={form}
                     setIsUpdate={setIsUpdate}
                     setAccountDialogOpen={setAccountDialogOpen}
@@ -290,7 +290,7 @@ export function AccountsFeature() {
               } else {
                 return (
                   <p
-                    key={account.id}
+                    key={account.accountId}
                     role="alert"
                     className="text-red-600 font-medium"
                   >

@@ -11,9 +11,9 @@ public class CreateExpenseDTO {
   private Long categoryId;
 
   @Positive(message = "Expense amount cannot be negative")
-  private BigDecimal amount;
+  private BigDecimal expenseAmount;
 
-  private String description;
+  private String expenseDescription;
 
   @NotNull(message = "Profile id cannot be null")
   private Long profileId;
@@ -29,20 +29,20 @@ public class CreateExpenseDTO {
     this.categoryId = categoryId;
   }
 
-  public BigDecimal getAmount() {
-    return amount;
+  public BigDecimal getExpenseAmount() {
+    return expenseAmount;
   }
 
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
+  public void setExpenseAmount(BigDecimal expenseAmount) {
+    this.expenseAmount = expenseAmount;
   }
 
-  public String getDescription() {
-    return description;
+  public String getExpenseDescription() {
+    return expenseDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setExpenseDescription(String expenseDescription) {
+    this.expenseDescription = expenseDescription;
   }
 
   public Long getProfileId() {
@@ -67,9 +67,9 @@ public class CreateExpenseDTO {
         + "categoryId="
         + categoryId
         + ", amount="
-        + amount
+        + expenseAmount
         + ", description='"
-        + description
+        + expenseDescription
         + '\''
         + ", profileId="
         + profileId

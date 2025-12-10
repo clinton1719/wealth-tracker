@@ -41,11 +41,11 @@ public final class ProfileMapper {
         profile.getProfilePictureExtension()
             + Base64.getEncoder().encodeToString(profile.getProfilePicture()));
     responseProfileDTO.setAccountIds(
-        profile.getAccounts().parallelStream().map(Account::getId).collect(Collectors.toSet()));
+        profile.getAccounts().parallelStream().map(Account::getAccountId).collect(Collectors.toSet()));
     responseProfileDTO.setCategoryIds(
         profile.getCategories().parallelStream().map(Category::getCategoryId).collect(Collectors.toSet()));
     responseProfileDTO.setExpenseIds(
-        profile.getExpenses().parallelStream().map(Expense::getId).collect(Collectors.toSet()));
+        profile.getExpenses().parallelStream().map(Expense::getExpenseId).collect(Collectors.toSet()));
     return responseProfileDTO;
   }
 

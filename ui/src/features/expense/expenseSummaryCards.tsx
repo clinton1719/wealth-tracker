@@ -13,7 +13,7 @@ export function ExpenseSummaryCards({ expensesData }: ExpenseSummaryCardsProps) 
                 </CardHeader>
                 <CardContent>
                     <p className="leading-7 not-first:mt-6 font-bold">
-                        ₹{expensesData.reduce((total, expense) => total + expense.amount, 0)}
+                        ₹{expensesData.reduce((total, expense) => total + expense.expenseAmount, 0)}
                     </p>
                 </CardContent>
                 <CardFooter>
@@ -31,7 +31,7 @@ export function ExpenseSummaryCards({ expensesData }: ExpenseSummaryCardsProps) 
                 </CardHeader>
                 <CardContent>
                     <p className="leading-7 not-first:mt-6 font-bold">
-                        ₹{expensesData.reduce((total, expense) => total + expense.amount, 0)}
+                        ₹{expensesData.reduce((total, expense) => total + expense.expenseAmount, 0)}
                     </p>
                 </CardContent>
                 <CardFooter>
@@ -49,7 +49,7 @@ export function ExpenseSummaryCards({ expensesData }: ExpenseSummaryCardsProps) 
                 </CardHeader>
                 <CardContent>
                     <p className="leading-7 not-first:mt-6 font-bold">
-                        ₹{expensesData.reduce((total, expense) => total + expense.amount, 0)}
+                        ₹{expensesData.reduce((total, expense) => total + expense.expenseAmount, 0)}
                     </p>
                 </CardContent>
                 <CardFooter>
@@ -67,7 +67,7 @@ export function ExpenseSummaryCards({ expensesData }: ExpenseSummaryCardsProps) 
                 </CardHeader>
                 <CardContent>
                     <p className="leading-7 not-first:mt-6 font-bold">
-                        ₹{expensesData.reduce((total, expense) => total + expense.amount, 0)}
+                        ₹{expensesData.reduce((total, expense) => total + expense.expenseAmount, 0)}
                     </p>
                 </CardContent>
                 <CardFooter>

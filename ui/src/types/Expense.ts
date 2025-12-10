@@ -1,9 +1,9 @@
 export interface Expense {
-  id: number;
-  amount: number;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
+  expenseId: number;
+  expenseAmount: number;
+  expenseDescription: string;
+  expenseCreatedAt: string;
+  expenseUpdatedAt: string;
   categoryId: number;
   accountId: number;
   profileId: number;

@@ -9,27 +9,27 @@ export interface AddExpenseFormProps {
     isUpdate: boolean;
     setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
     form: UseFormReturn<{
-        amount: number;
+        expenseAmount: number;
         categoryName: string;
         accountName: string;
         profileName: string;
-        id?: number | undefined;
-        description?: string | undefined;
+        expenseId?: number | undefined;
+        expenseDescription?: string | undefined;
     }, any, {
-        amount: number;
+        expenseAmount: number;
         categoryName: string;
         accountName: string;
         profileName: string;
-        id?: number | undefined;
-        description?: string | undefined;
+        expenseId?: number | undefined;
+        expenseDescription?: string | undefined;
     }>;
     onSubmit: SubmitHandler<{
-        amount: number;
+        expenseAmount: number;
         categoryName: string;
         accountName: string;
         profileName: string;
-        id?: number | undefined;
-        description?: string | undefined;
+        expenseId?: number | undefined;
+        expenseDescription?: string | undefined;
     }>;
     profiles: Profile[];
     accounts: Account[];

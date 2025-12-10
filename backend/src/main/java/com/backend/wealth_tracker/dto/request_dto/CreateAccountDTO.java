@@ -12,7 +12,7 @@ public class CreateAccountDTO {
   @NotBlank(message = "Account name cannot be blank")
   private String accountName;
 
-  private String description;
+  private String accountDescription;
 
   @NotNull(message = "Account balance cannot be null")
   @PositiveOrZero(message = "Account balance cannot be negative")
@@ -32,12 +32,12 @@ public class CreateAccountDTO {
     this.accountName = accountName;
   }
 
-  public String getDescription() {
-    return description;
+  public String getAccountDescription() {
+    return accountDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setAccountDescription(String accountDescription) {
+    this.accountDescription = accountDescription;
   }
 
   public BigDecimal getAccountBalance() {

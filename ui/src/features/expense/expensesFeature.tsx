@@ -111,7 +111,7 @@ export default function ExpensesFeature() {
       const result = await saveExpense({
         ...formData,
         profileId: profile.profileId,
-        accountId: account.id,
+        accountId: account.accountId,
         categoryId: category.categoryId
       }).unwrap();
 
@@ -125,7 +125,7 @@ export default function ExpensesFeature() {
             }}
           >
             <code>
-              Expense of: {result.amount} created at: {result.createdAt}
+              Expense of: {result.amount} created at: {result.expenseCreatedAt}
             </code>
           </pre>
         ),

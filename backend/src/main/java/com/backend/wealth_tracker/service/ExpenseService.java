@@ -82,7 +82,7 @@ public class ExpenseService {
             LOGGER.atError().log("Profile ID: {}, not consistent with that of account: {} and category: {}", createExpenseDTO.getProfileId(), savedExpense.getAccount().getProfile().getProfileId(), savedExpense.getCategory().getProfile().getProfileId());
             throw new UnAuthorizedException("Profile ID not consistent");
         }
-        this.accountService.debitAccount(createExpenseDTO.getAccountId(), savedExpense.getAmount());
+        this.accountService.debitAccount(createExpenseDTO.getAccountId(), savedExpense.getExpenseAmount());
         LOGGER.atInfo().log("Expense to be saved created : {}", savedExpense);
         return savedExpense;
     }
@@ -108,15 +108,15 @@ public class ExpenseService {
                             updateExpenseDTO.getCategoryId());
             throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
         }
-        Optional<Expense> expenseOptional = this.expenseRepository.findById(updateExpenseDTO.getId());
+        Optional<Expense> expenseOptional = this.expenseRepository.findById(updateExpenseDTO.getExpenseId());
         if (expenseOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Expense not found for id: " + updateExpenseDTO.getId());
+            throw new ResourceNotFoundException("Expense not found for id: " + updateExpenseDTO.getExpenseId());
         }
         Expense expense = expenseOptional.get();
         checkIfBelongsToProfile(updateExpenseDTO, expense);
         updateExpenseValues(updateExpenseDTO, expense);
         Expense updatedExpense = this.expenseRepository.save(expense);
-        LOGGER.atInfo().log("Expense updated for id: {}", updatedExpense.getId());
+        LOGGER.atInfo().log("Expense updated for id: {}", updatedExpense.getExpenseId());
         return updatedExpense;
     }
 
@@ -134,11 +134,11 @@ public class ExpenseService {
 
     private void updateExpenseValues(UpdateExpenseDTO updateExpenseDTO, Expense expense)
             throws ResourceNotFoundException {
-        if (updateExpenseDTO.getDescription() != null) {
-            expense.setDescription(updateExpenseDTO.getDescription());
+        if (updateExpenseDTO.getExpenseDescription() != null) {
+            expense.setExpenseDescription(updateExpenseDTO.getExpenseDescription());
         }
-        if (updateExpenseDTO.getAmount() != null) {
-            expense.setAmount(updateExpenseDTO.getAmount());
+        if (updateExpenseDTO.getExpenseAmount() != null) {
+            expense.setExpenseAmount(updateExpenseDTO.getExpenseAmount());
         }
         setCategoryIfPresent(updateExpenseDTO.getCategoryId(), expense);
     }
@@ -186,7 +186,7 @@ public class ExpenseService {
             throw new ResourceNotFoundException("Expense not found for id: " + id);
         }
         this.accountService.creditAccount(
-                expenseOptional.get().getAccount().getId(), expenseOptional.get().getAmount());
+                expenseOptional.get().getAccount().getAccountId(), expenseOptional.get().getExpenseAmount());
         this.expenseRepository.delete(expenseOptional.get());
         LOGGER.atInfo().log("Expense deleted for id: {}", id);
     }

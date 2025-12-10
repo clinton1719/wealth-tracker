@@ -37,7 +37,7 @@ import { DynamicIcon } from "lucide-react/dynamic"
 
 export const columns: ColumnDef<FilteredExpense>[] = [
   {
-    accessorKey: "amount",
+    accessorKey: "expenseAmount",
     header: ({ column }) => {
       return (
         <Button
@@ -127,7 +127,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
   ), [categoriesData]);
 
   const accountMap = React.useMemo(() => Object.fromEntries(
-    accountsData.map(a => [a.id, a])
+    accountsData.map(a => [a.accountId, a])
   ), [accountsData]);
 
   const profileMap = React.useMemo(() => Object.fromEntries(
@@ -137,11 +137,11 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
   const filteredExpensesData = React.useMemo(() => {
     console.log(categoriesData)
     return expensesData.map(expense => ({
-      id: expense.id,
-      amount: expense.amount,
-      createdAt: expense.createdAt,
-      updatedAt: expense.updatedAt,
-      description: expense.description,
+      expenseId: expense.expenseId,
+      expenseAmount: expense.expenseAmount,
+      expenseCreatedAt: expense.expenseCreatedAt,
+      expenseUpdatedAt: expense.expenseUpdatedAt,
+      expenseDescription: expense.expenseDescription,
       categoryName: categoryMap[expense.categoryId]?.categoryName,
       categoryIcon: categoryMap[expense.categoryId]?.categoryIcon,
       categoryColorCode: categoryMap[expense.categoryId]?.categoryColorCode,

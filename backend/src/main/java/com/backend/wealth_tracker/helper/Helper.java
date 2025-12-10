@@ -39,7 +39,7 @@ public final class Helper {
 
   public static boolean isAccountIdValid(Set<Account> accounts, Long accountId) {
     return accounts.parallelStream()
-        .anyMatch(account -> Objects.equals(account.getId(), accountId));
+        .anyMatch(account -> Objects.equals(account.getAccountId(), accountId));
   }
 
   public static boolean isCategoryIdValid(Set<Category> categories, Long categoryId) {

@@ -84,7 +84,7 @@ public class AccountService {
             throws ResourceNotFoundException, ResourceAlreadyExistsException {
         User user = this.authService.getUserByUsername(userName);
         Optional<Account> accountOptional =
-                this.accountRepository.findByIdAndUserId(updateAccountDTO.getId(), user.getId());
+                this.accountRepository.findByIdAndUserId(updateAccountDTO.getAccountId(), user.getId());
         if (accountOptional.isEmpty()) {
             LOGGER.atError().log("Account to be updated not found : {}", updateAccountDTO);
             throw new ResourceNotFoundException("Account not found");
@@ -125,8 +125,8 @@ public class AccountService {
         if (updateAccountDTO.getAccountName() != null) {
             account.setAccountName(updateAccountDTO.getAccountName());
         }
-        if (updateAccountDTO.getDescription() != null) {
-            account.setDescription(updateAccountDTO.getDescription());
+        if (updateAccountDTO.getAccountDescription() != null) {
+            account.setAccountDescription(updateAccountDTO.getAccountDescription());
         }
         if (updateAccountDTO.getAccountType() != null) {
             account.setAccountType(updateAccountDTO.getAccountType());

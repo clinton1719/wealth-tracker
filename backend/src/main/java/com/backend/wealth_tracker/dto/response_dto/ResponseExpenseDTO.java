@@ -9,15 +9,15 @@ import java.time.LocalDate;
 @SuppressWarnings("PMD.DataClass")
 public class ResponseExpenseDTO {
     @NotNull
-    private Long id;
+    private Long expenseId;
     @NotNull
-    private BigDecimal amount;
+    private BigDecimal expenseAmount;
     @NotBlank
-    private String description;
+    private String expenseDescription;
     @NotNull
-    private LocalDate createdAt;
+    private LocalDate expenseCreatedAt;
     @NotNull
-    private LocalDate updatedAt;
+    private LocalDate expenseUpdatedAt;
     @NotBlank
     private Long categoryId;
     @NotNull
@@ -25,44 +25,44 @@ public class ResponseExpenseDTO {
     @NotNull
     private Long accountId;
 
-    public Long getId() {
-        return id;
+    public Long getExpenseId() {
+        return expenseId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setExpenseId(Long expenseId) {
+        this.expenseId = expenseId;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getExpenseAmount() {
+        return expenseAmount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setExpenseAmount(BigDecimal expenseAmount) {
+        this.expenseAmount = expenseAmount;
     }
 
-    public String getDescription() {
-        return description;
+    public String getExpenseDescription() {
+        return expenseDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setExpenseDescription(String expenseDescription) {
+        this.expenseDescription = expenseDescription;
     }
 
-    public LocalDate getCreatedAt() {
-        return createdAt;
+    public LocalDate getExpenseCreatedAt() {
+        return expenseCreatedAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
+    public void setExpenseCreatedAt(LocalDate expenseCreatedAt) {
+        this.expenseCreatedAt = expenseCreatedAt;
     }
 
-    public LocalDate getUpdatedAt() {
-        return updatedAt;
+    public LocalDate getExpenseUpdatedAt() {
+        return expenseUpdatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setExpenseUpdatedAt(LocalDate expenseUpdatedAt) {
+        this.expenseUpdatedAt = expenseUpdatedAt;
     }
 
     public Long getCategoryId() {

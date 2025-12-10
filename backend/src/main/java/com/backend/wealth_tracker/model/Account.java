@@ -18,12 +18,12 @@ public class Account implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long accountId;
 
   @Column(nullable = false)
   private String accountName;
 
-  private String description;
+  private String accountDescription;
 
   @Column(nullable = false)
   @PositiveOrZero(message = "Account balance cannot be negative")
@@ -46,9 +46,9 @@ public class Account implements Serializable {
   public Account() {}
 
   public Account(Account originalAccount) {
-    this.id = originalAccount.id;
+    this.accountId = originalAccount.accountId;
     this.accountName = originalAccount.accountName;
-    this.description = originalAccount.description;
+    this.accountDescription = originalAccount.accountDescription;
     this.accountBalance = originalAccount.accountBalance;
     this.accountType = originalAccount.accountType;
     this.user = originalAccount.user;
@@ -56,12 +56,12 @@ public class Account implements Serializable {
     this.profile = originalAccount.profile;
   }
 
-  public Long getId() {
-    return id;
+  public Long getAccountId() {
+    return accountId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 
   public String getAccountName() {
@@ -72,12 +72,12 @@ public class Account implements Serializable {
     this.accountName = accountName;
   }
 
-  public String getDescription() {
-    return description;
+  public String getAccountDescription() {
+    return accountDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setAccountDescription(String accountDescription) {
+    this.accountDescription = accountDescription;
   }
 
   public BigDecimal getAccountBalance() {
@@ -149,12 +149,12 @@ public class Account implements Serializable {
   public String toString() {
     return "Account{"
         + "id="
-        + id
+        + accountId
         + ", accountName='"
         + accountName
         + '\''
         + ", description='"
-        + description
+        + accountDescription
         + '\''
         + ", accountBalance="
         + accountBalance

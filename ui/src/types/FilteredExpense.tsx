@@ -2,11 +2,11 @@ import type { Account } from "./Account";
 import type { Profile } from "./Profile";
 
 export interface FilteredExpense {
-  id: number;
-  amount: number;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
+  expenseId: number;
+  expenseAmount: number;
+  expenseDescription: string;
+  expenseCreatedAt: string;
+  expenseUpdatedAt: string;
   categoryName: string | undefined;
   categoryIcon: string | undefined;
   categoryColorCode: string | undefined;

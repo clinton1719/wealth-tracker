@@ -27,16 +27,16 @@ export const defaultSignUp = {
 export const defaultAccount = {
   accountName: "",
   accountBalance: 0,
-  description: "",
+  accountDescription: "",
   accountType: "",
   profileName: "",
 };
 
 export const defaultExpense = {
-  amount: 0,
-  description: "",
-  createdAt: "",
-  updatedAt: "",
+  expenseAmount: 0,
+  expenseDescription: "",
+  expenseCreatedAt: "",
+  expenseUpdatedAt: "",
   categoryName: "",
   accountName: "",
   profileName: "",
