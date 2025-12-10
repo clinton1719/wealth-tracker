@@ -84,7 +84,7 @@ public class AccountService {
             throws ResourceNotFoundException, ResourceAlreadyExistsException {
         User user = this.authService.getUserByUsername(userName);
         Optional<Account> accountOptional =
-                this.accountRepository.findByIdAndUserId(updateAccountDTO.getAccountId(), user.getId());
+                this.accountRepository.findByAccountIdAndUserId(updateAccountDTO.getAccountId(), user.getId());
         if (accountOptional.isEmpty()) {
             LOGGER.atError().log("Account to be updated not found : {}", updateAccountDTO);
             throw new ResourceNotFoundException("Account not found");
@@ -110,7 +110,7 @@ public class AccountService {
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public void deleteAccount(Long id, String userName) throws ResourceNotFoundException {
         User user = this.authService.getUserByUsername(userName);
-        Optional<Account> accountOptional = this.accountRepository.findByIdAndUserId(id, user.getId());
+        Optional<Account> accountOptional = this.accountRepository.findByAccountIdAndUserId(id, user.getId());
         if (accountOptional.isEmpty()) {
             LOGGER.atError().log("Account to be deleted not found with id: {}", id);
             throw new ResourceNotFoundException("Account not found");

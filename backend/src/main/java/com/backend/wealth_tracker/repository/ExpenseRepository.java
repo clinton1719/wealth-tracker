@@ -15,6 +15,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
             "LEFT JOIN FETCH e.category " +
             "LEFT JOIN FETCH e.account " +
             "LEFT JOIN FETCH e.profile " +
-            "WHERE e.createdAt BETWEEN :startDate AND :endDate")
+            "WHERE e.expenseCreatedAt BETWEEN :startDate AND :endDate")
     List<Expense> findByCreatedAtBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
 }

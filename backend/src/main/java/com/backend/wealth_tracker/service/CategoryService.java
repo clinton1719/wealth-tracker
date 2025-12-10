@@ -86,7 +86,7 @@ public class CategoryService {
             throws ResourceNotFoundException, ResourceAlreadyExistsException {
         User user = this.authService.getUserByUsername(userName);
         Optional<Category> categoryOptional =
-                this.categoryRepository.findByIdAndUserId(updateCategoryDTO.getCategoryId(), user.getId());
+                this.categoryRepository.findByCategoryIdAndUserId(updateCategoryDTO.getCategoryId(), user.getId());
         if (categoryOptional.isEmpty()) {
             LOGGER.atError().log("Category to be updated not found : {}", updateCategoryDTO);
             throw new ResourceNotFoundException("Category not found");
@@ -132,7 +132,7 @@ public class CategoryService {
     public void deleteCategory(Long id, String userName) throws ResourceNotFoundException {
         User user = this.authService.getUserByUsername(userName);
         Optional<Category> categoryOptional =
-                this.categoryRepository.findByIdAndUserId(id, user.getId());
+                this.categoryRepository.findByCategoryIdAndUserId(id, user.getId());
         if (categoryOptional.isEmpty()) {
             LOGGER.atError().log("Category to be deleted not found with id: {}", id);
             throw new ResourceNotFoundException("Category not found");
