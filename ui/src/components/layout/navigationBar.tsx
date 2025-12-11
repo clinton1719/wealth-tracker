@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+import { Link } from "react-router";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -6,12 +6,12 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu'
-import { useIsMobile } from '@/hooks/use-mobile'
-import { navigationStaticValues } from '@/static-values/navigation-values'
+} from "@/components/ui/navigation-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { navigationStaticValues } from "@/static-values/navigation-values";
 
 export function NavigationBar() {
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile();
   return (
     <NavigationMenu viewport={isMobile}>
       <NavigationMenuList className="flex-wrap mb-4 mt-2 ml-2">
@@ -45,7 +45,7 @@ export function NavigationBar() {
           <NavigationMenuTrigger>Expenses</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {navigationStaticValues.map(navigationStaticValue => (
+              {navigationStaticValues.map((navigationStaticValue) => (
                 <ListItem
                   key={navigationStaticValue.title}
                   title={navigationStaticValue.title}
@@ -59,7 +59,7 @@ export function NavigationBar() {
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
-  )
+  );
 }
 
 function ListItem({
@@ -68,14 +68,14 @@ function ListItem({
   to,
   _target,
   ...props
-}: React.ComponentPropsWithoutRef<'li'> & {
-  to: string
-  _target?: '_blank' | '_self' | '_parent' | '_top'
+}: React.ComponentPropsWithoutRef<"li"> & {
+  to: string;
+  _target?: "_blank" | "_self" | "_parent" | "_top";
 }) {
   return (
     <li {...props}>
       <NavigationMenuLink asChild>
-        <Link to={to} target={_target || '_self'} rel="noopener noreferrer">
+        <Link to={to} target={_target || "_self"} rel="noopener noreferrer">
           <div className="text-sm leading-none font-medium">{title}</div>
           <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
             {children}
@@ -83,5 +83,5 @@ function ListItem({
         </Link>
       </NavigationMenuLink>
     </li>
-  )
+  );
 }

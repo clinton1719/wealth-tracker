@@ -1,15 +1,15 @@
-import type { Account } from '@/types/Account'
-import type { AccountSectionProps } from '@/types/AccountSectionProps'
-import { DynamicIcon } from 'lucide-react/dynamic'
-import { ProfilePicture } from '@/components/building-blocks/profilePicture'
-import { Button } from '@/components/ui/button'
+import type { Account } from "@/types/Account";
+import type { AccountSectionProps } from "@/types/AccountSectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
+import { ProfilePicture } from "@/components/building-blocks/profilePicture";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { formatCurrency } from '@/utilities/helper'
+} from "@/components/ui/dropdown-menu";
+import { formatCurrency } from "@/utilities/helper";
 import {
   Card,
   CardAction,
@@ -18,7 +18,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../../ui/card'
+} from "../../ui/card";
 
 export function AccountSection({
   account,
@@ -29,11 +29,11 @@ export function AccountSection({
   handleDeleteAccount,
 }: AccountSectionProps) {
   const handleUpdateAccount = (account: Account) => {
-    form.reset(account)
-    form.setValue('profileName', profile.profileName)
-    setAccountDialogOpen(true)
-    setIsUpdate(true)
-  }
+    form.reset(account);
+    form.setValue("profileName", profile.profileName);
+    setAccountDialogOpen(true);
+    setIsUpdate(true);
+  };
 
   return (
     <Card
@@ -99,5 +99,5 @@ export function AccountSection({
       </CardContent>
       <CardFooter className="flex-col gap-2"></CardFooter>
     </Card>
-  )
+  );
 }

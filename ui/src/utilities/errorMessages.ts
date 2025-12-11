@@ -1,1 +1,1 @@
-export const expenseShouldBePositive = 'expenseAmount: must be greater than 0'
+export const expenseShouldBePositive = "expenseAmount: must be greater than 0";
