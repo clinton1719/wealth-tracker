@@ -6,11 +6,12 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.backend.wealth_tracker.exception.SecurityConfigurationException;
 import com.backend.wealth_tracker.model.User;
-import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 
 @Service
 public class TokenProvider {
@@ -62,7 +63,7 @@ public class TokenProvider {
 
   private Instant genAccessExpirationDate() {
     Instant now = Instant.now();
-    Instant expiresAt = now.plusSeconds(60 * 60);
+    Instant expiresAt = now.plusSeconds(60 * 60 * 24);
     LOGGER.atInfo().log("Token generated at: {}, expires at: {}", now, expiresAt);
     return expiresAt;
   }

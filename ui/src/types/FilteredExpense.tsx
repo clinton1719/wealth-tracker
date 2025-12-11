@@ -9,4 +9,6 @@ export interface FilteredExpense {
   categoryColorCode: string | undefined;
   accountName: string | undefined;
   profileName: string | undefined;
+  profilePicture: string | undefined;
+  profileColorCode: string | undefined;
 }

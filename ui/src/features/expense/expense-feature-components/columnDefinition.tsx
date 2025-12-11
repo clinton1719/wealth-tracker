@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatCurrency } from "@/utilities/helper";
 import { DataTableFilter } from "./dataTableFilter";
+import { ProfilePicture } from "@/components/building-blocks/profilePicture";
 
 export function createColumns(
   handleUpdateProfile: (updateExpense: UpdateExpense) => void,
@@ -108,7 +109,15 @@ export function createColumns(
         );
       },
       cell: ({ row }) => (
-        <div className="text-left">{row.getValue("profileName")}</div>
+
+        <div className="text-left flex items-center gap-2">
+          <ProfilePicture
+            imageSource={row.getValue("profilePicture")}
+            fallbackName={(row.getValue("profileName") as string).charAt(0)}
+            imageColor={row.getValue("profileColorCode")}
+          />
+          {row.getValue("profileName")}
+        </div>
       ),
       filterFn: "arrIncludes",
     },
@@ -135,6 +144,20 @@ export function createColumns(
     },
     {
       accessorKey: "categoryId",
+      enableHiding: false,
+      header: () => null,
+      cell: () => null,
+      size: 0,
+    },
+    {
+      accessorKey: "profilePicture",
+      enableHiding: false,
+      header: () => null,
+      cell: () => null,
+      size: 0,
+    },
+    {
+      accessorKey: "profileColorCode",
       enableHiding: false,
       header: () => null,
       cell: () => null,

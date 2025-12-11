@@ -73,6 +73,8 @@ export function ExpensesList({
         categoryColorCode: categoryMap[expense.categoryId]?.categoryColorCode,
         accountName: accountMap[expense.accountId].accountName,
         profileName: profileMap[expense.profileId].profileName,
+        profilePicture: profileMap[expense.profileId].profilePicture,
+        profileColorCode: profileMap[expense.profileId].profileColorCode,
       }));
   }, [expensesData, enabledMap, categoryMap, accountMap, profileMap]);
 
@@ -201,26 +203,6 @@ export function ExpensesList({
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
       </div>
     </div>
   );
