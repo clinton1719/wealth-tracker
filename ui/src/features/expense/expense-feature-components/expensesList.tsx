@@ -1,5 +1,7 @@
+import type { ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
+import type { ExpensesListProps } from '@/types/ExpensesListProps'
 import {
-  type ColumnFiltersState,
+
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -7,21 +9,21 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  type SortingState,
-  useReactTable,
-  type VisibilityState
-} from "@tanstack/react-table"
-import { ChevronDown } from "lucide-react"
-import * as React from "react"
 
-import { Button } from "@/components/ui/button"
+  useReactTable,
+
+} from '@tanstack/react-table'
+import { ChevronDown } from 'lucide-react'
+
+import * as React from 'react'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -29,29 +31,31 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import type { ExpensesListProps } from "@/types/ExpensesListProps"
-import { createColumns } from "./columnDefinition"
+} from '@/components/ui/table'
+import { createColumns } from './columnDefinition'
 
-export function ExpensesList({ expensesData, accountsData, categoriesData, profilesData, handleUpdateProfile, enabledMap }: ExpensesListProps) {
+export function ExpensesList({ expensesData, accountsData, categoriesData, profilesData, handleUpdateProfile, enabledMap, handleDeleteAccount }: ExpensesListProps) {
   const categoryMap = React.useMemo(() => {
-    if (!categoriesData) return {};
-    return Object.fromEntries(categoriesData.map(c => [c.categoryId, c]));
-  }, [categoriesData ?? null]);
-
+    if (!categoriesData)
+      return {}
+    return Object.fromEntries(categoriesData.map(c => [c.categoryId, c]))
+  }, [categoriesData ?? null])
 
   const accountMap = React.useMemo(() => {
-    if (!accountsData) return {};
+    if (!accountsData)
+      return {}
     return Object.fromEntries(
-      accountsData.map(a => [a.accountId, a])
+      accountsData.map(a => [a.accountId, a]),
     )
-  }, [accountsData ?? null]);
+  }, [accountsData ?? null])
 
   const profileMap = React.useMemo(() => {
-    if (!profilesData) return {};
+    if (!profilesData)
+      return {}
     return Object.fromEntries(
-    profilesData.map(p => [p.profileId, p])
-  )}, [profilesData ?? null]);
+      profilesData.map(p => [p.profileId, p]),
+    )
+  }, [profilesData ?? null])
 
   const filteredExpensesData = React.useMemo(() => {
     return expensesData.filter(expense => enabledMap[expense.profileId]).map(expense => ({
@@ -64,21 +68,21 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
       categoryIcon: categoryMap[expense.categoryId]?.categoryIcon,
       categoryColorCode: categoryMap[expense.categoryId]?.categoryColorCode,
       accountName: accountMap[expense.accountId].accountName,
-      profileName: profileMap[expense.profileId].profileName
-    }));
-  }, [expensesData, categoryMap, accountMap, profileMap]);
+      profileName: profileMap[expense.profileId].profileName,
+    }))
+  }, [expensesData, categoriesData, accountsData, enabledMap, profilesData, categoryMap, accountMap, profileMap])
 
   const columns = React.useMemo(
-    () => createColumns(handleUpdateProfile),
-    [handleUpdateProfile]
+    () => createColumns(handleUpdateProfile, handleDeleteAccount),
+    [handleUpdateProfile, handleDeleteAccount],
   )
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({ accountName: false, profileName: false })
+  const [columnVisibility, setColumnVisibility]
+    = React.useState<VisibilityState>({ accountName: false, profileName: false })
 
   const table = useReactTable({
     data: filteredExpensesData,
@@ -92,7 +96,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onColumnVisibilityChange: setColumnVisibility,
-    getRowId: (row) => row.expenseId.toString(),
+    getRowId: row => row.expenseId.toString(),
     state: {
       sorting,
       columnFilters,
@@ -105,33 +109,33 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter by description..."
-          value={(table.getColumn("expenseDescription")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("expenseDescription")?.setFilterValue(event.target.value)
-          }
+          value={(table.getColumn('expenseDescription')?.getFilterValue() as string) ?? ''}
+          onChange={event =>
+            table.getColumn('expenseDescription')?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
+              Columns
+              {' '}
+              <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter((column) => column.getCanHide())
+              .filter(column => column.getCanHide())
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+                    onCheckedChange={value =>
+                      column.toggleVisibility(!!value)}
                   >
-                    {column.id.replace("expense", "").replace("Name", " name")}
+                    {column.id.replace('expense', '').replace('Name', ' name')}
                   </DropdownMenuCheckboxItem>
                 )
               })}
@@ -141,7 +145,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
@@ -149,9 +153,9 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   )
                 })}
@@ -159,32 +163,34 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+            {table.getRowModel().rows?.length
+              ? (
+                  table.getRowModel().rows.map(row => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map(cell => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                )
+              : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
+                  </TableRow>
+                )}
           </TableBody>
         </Table>
       </div>

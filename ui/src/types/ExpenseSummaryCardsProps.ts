@@ -1,6 +1,6 @@
-import type { Expense } from "./Expense";
+import type { Expense } from './Expense'
 
 export interface ExpenseSummaryCardsProps {
-    expensesData: Expense[]
+  expensesData: Expense[]
 
 }

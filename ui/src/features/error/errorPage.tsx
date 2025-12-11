@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from 'react-router'
 
 export default function ErrorPage({ errorCode }: ErrorPageProps) {
   return (
@@ -21,20 +21,20 @@ export default function ErrorPage({ errorCode }: ErrorPageProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 interface ErrorPageProps {
-  errorCode: number;
+  errorCode: number
 }
 
 function errorCodeToMessage(code: number): string {
   switch (code) {
     case 404:
-      return "Oops, it looks like the page you're looking for doesn't exist.";
+      return 'Oops, it looks like the page you\'re looking for doesn\'t exist.'
     case 500:
-      return "Oops, something went wrong on our end.";
+      return 'Oops, something went wrong on our end.'
     default:
-      return "Oops, an unexpected error occurred.";
+      return 'Oops, an unexpected error occurred.'
   }
 }
