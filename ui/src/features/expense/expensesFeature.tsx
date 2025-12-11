@@ -328,7 +328,7 @@ export default function ExpensesFeature() {
             categories={categoriesData}
           />
         </div>
-        <ExpenseSummaryCards expensesData={expensesData} />
+        <ExpenseSummaryCards expensesData={expensesData} categoriesData={categoriesData}/>
         <div className="flex items-center justify-between mb-4 mt-8">
           <Button
             variant="outline"
