@@ -47,12 +47,11 @@
                                 "$ref": "#/components/schemas/UpdateProfileDTO"
                             }
                         }
-                    },
-                    "required": true
+                    }
                 },
                 "responses": {
-                    "409": {
-                        "description": "Conflict",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -61,8 +60,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "409": {
+                        "description": "Conflict",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -82,6 +81,9 @@
                                             "additionalProperties": {
                                                 "type": "string"
                                             }
+                                        },
+                                        {
+                                            "type": "object"
                                         },
                                         {
                                             "type": "string"
@@ -142,6 +144,39 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "content": {
@@ -173,8 +208,8 @@
                     "required": true
                 },
                 "responses": {
-                    "409": {
-                        "description": "Conflict",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -183,8 +218,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "409": {
+                        "description": "Conflict",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -199,6 +234,29 @@
                             "*/*": {
                                 "schema": {
                                     "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -234,8 +292,8 @@
                     "required": true
                 },
                 "responses": {
-                    "409": {
-                        "description": "Conflict",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -244,8 +302,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "409": {
+                        "description": "Conflict",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -260,6 +318,29 @@
                             "*/*": {
                                 "schema": {
                                     "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -294,8 +375,8 @@
                     }
                 },
                 "responses": {
-                    "409": {
-                        "description": "Conflict",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -304,8 +385,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "409": {
+                        "description": "Conflict",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -325,6 +406,9 @@
                                             "additionalProperties": {
                                                 "type": "string"
                                             }
+                                        },
+                                        {
+                                            "type": "object"
                                         },
                                         {
                                             "type": "string"
@@ -385,6 +469,39 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
                     "201": {
                         "description": "Created",
                         "content": {
@@ -416,8 +533,8 @@
                     "required": true
                 },
                 "responses": {
-                    "409": {
-                        "description": "Conflict",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -426,8 +543,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "409": {
+                        "description": "Conflict",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -442,6 +559,29 @@
                             "*/*": {
                                 "schema": {
                                     "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -476,6 +616,16 @@
                     "required": true
                 },
                 "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
                     "409": {
                         "description": "Conflict",
                         "content": {
@@ -486,12 +636,25 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
-                                    "type": "string"
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -536,6 +699,29 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "content": {
@@ -567,8 +753,8 @@
                     "required": true
                 },
                 "responses": {
-                    "409": {
-                        "description": "Conflict",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -577,8 +763,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "409": {
+                        "description": "Conflict",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -593,6 +779,29 @@
                             "*/*": {
                                 "schema": {
                                     "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -624,6 +833,29 @@
                             "*/*": {
                                 "schema": {
                                     "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -698,6 +930,29 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "content": {
@@ -732,6 +987,29 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "content": {
@@ -762,6 +1040,29 @@
                             "*/*": {
                                 "schema": {
                                     "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -811,6 +1112,29 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -842,6 +1166,29 @@
                             "*/*": {
                                 "schema": {
                                     "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -881,6 +1228,29 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -916,6 +1286,29 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -928,17 +1321,17 @@
             "UpdateProfileDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "profileId": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "profileName": {
                         "type": "string"
                     },
-                    "description": {
+                    "profileDescription": {
                         "type": "string"
                     },
-                    "colorCode": {
+                    "profileColorCode": {
                         "type": "string"
                     },
                     "profilePicture": {
@@ -950,23 +1343,23 @@
                     }
                 },
                 "required": [
-                    "id"
+                    "profileId"
                 ]
             },
             "ResponseProfileDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "profileId": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "profileName": {
                         "type": "string"
                     },
-                    "description": {
+                    "profileDescription": {
                         "type": "string"
                     },
-                    "colorCode": {
+                    "profileColorCode": {
                         "type": "string"
                     },
                     "profilePicture": {
@@ -1001,7 +1394,7 @@
             "UpdateExpenseDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "expenseId": {
                         "type": "integer",
                         "format": "int64"
                     },
@@ -1009,210 +1402,41 @@
                         "type": "integer",
                         "format": "int64"
                     },
-                    "amount": {
+                    "expenseAmount": {
                         "type": "number"
                     },
-                    "description": {
+                    "expenseDescription": {
                         "type": "string"
                     }
                 },
                 "required": [
-                    "id"
+                    "expenseId"
                 ]
-            },
-            "Account": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "accountName": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "accountBalance": {
-                        "type": "number"
-                    },
-                    "accountType": {
-                        "type": "string",
-                        "enum": [
-                            "SAVINGS",
-                            "CURRENT"
-                        ]
-                    },
-                    "user": {
-                        "$ref": "#/components/schemas/User"
-                    },
-                    "expenses": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Expense"
-                        },
-                        "uniqueItems": true
-                    },
-                    "profile": {
-                        "$ref": "#/components/schemas/Profile"
-                    }
-                }
-            },
-            "Category": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "categoryName": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "colorCode": {
-                        "type": "string"
-                    },
-                    "icon": {
-                        "type": "string"
-                    },
-                    "tags": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "user": {
-                        "$ref": "#/components/schemas/User"
-                    },
-                    "expenses": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Expense"
-                        },
-                        "uniqueItems": true
-                    },
-                    "profile": {
-                        "$ref": "#/components/schemas/Profile"
-                    }
-                }
-            },
-            "Expense": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "type": "number"
-                    },
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date"
-                    },
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date"
-                    },
-                    "user": {
-                        "$ref": "#/components/schemas/User"
-                    },
-                    "category": {
-                        "$ref": "#/components/schemas/Category"
-                    },
-                    "account": {
-                        "$ref": "#/components/schemas/Account"
-                    },
-                    "profile": {
-                        "$ref": "#/components/schemas/Profile"
-                    }
-                }
-            },
-            "GrantedAuthority": {
-                "type": "object",
-                "properties": {
-                    "authority": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Profile": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "profileName": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "colorCode": {
-                        "type": "string"
-                    },
-                    "profilePicture": {
-                        "type": "string",
-                        "format": "byte"
-                    },
-                    "profilePictureExtension": {
-                        "type": "string"
-                    },
-                    "user": {
-                        "$ref": "#/components/schemas/User"
-                    },
-                    "accounts": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Account"
-                        },
-                        "uniqueItems": true
-                    },
-                    "categories": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Category"
-                        },
-                        "uniqueItems": true
-                    },
-                    "expenses": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Expense"
-                        },
-                        "uniqueItems": true
-                    }
-                }
             },
             "ResponseExpenseDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "expenseId": {
                         "type": "integer",
                         "format": "int64"
                     },
-                    "category": {
-                        "$ref": "#/components/schemas/Category"
-                    },
-                    "amount": {
+                    "expenseAmount": {
                         "type": "number"
                     },
-                    "description": {
+                    "expenseDescription": {
                         "type": "string"
                     },
-                    "createdAt": {
+                    "expenseCreatedAt": {
                         "type": "string",
                         "format": "date"
                     },
-                    "updatedAt": {
+                    "expenseUpdatedAt": {
                         "type": "string",
                         "format": "date"
+                    },
+                    "categoryId": {
+                        "type": "integer",
+                        "format": "int64"
                     },
                     "profileId": {
                         "type": "integer",
@@ -1225,103 +1449,35 @@
                 },
                 "required": [
                     "accountId",
-                    "amount",
-                    "category",
-                    "createdAt",
-                    "description",
-                    "id",
-                    "profileId",
-                    "updatedAt"
+                    "categoryId",
+                    "expenseAmount",
+                    "expenseCreatedAt",
+                    "expenseDescription",
+                    "expenseId",
+                    "expenseUpdatedAt",
+                    "profileId"
                 ]
-            },
-            "User": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "username": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    },
-                    "role": {
-                        "type": "string",
-                        "enum": [
-                            "ADMIN",
-                            "USER"
-                        ]
-                    },
-                    "expenses": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Expense"
-                        },
-                        "uniqueItems": true
-                    },
-                    "categories": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Category"
-                        },
-                        "uniqueItems": true
-                    },
-                    "accounts": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Account"
-                        },
-                        "uniqueItems": true
-                    },
-                    "profiles": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Profile"
-                        },
-                        "uniqueItems": true
-                    },
-                    "enabled": {
-                        "type": "boolean"
-                    },
-                    "credentialsNonExpired": {
-                        "type": "boolean"
-                    },
-                    "accountNonExpired": {
-                        "type": "boolean"
-                    },
-                    "accountNonLocked": {
-                        "type": "boolean"
-                    },
-                    "authorities": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/GrantedAuthority"
-                        }
-                    }
-                }
             },
             "UpdateCategoryDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "categoryId": {
                         "type": "integer",
                         "format": "int64"
                     },
-                    "name": {
+                    "categoryName": {
                         "type": "string"
                     },
-                    "description": {
+                    "categoryDescription": {
                         "type": "string"
                     },
-                    "colorCode": {
+                    "categoryColorCode": {
                         "type": "string"
                     },
-                    "icon": {
+                    "categoryIcon": {
                         "type": "string"
                     },
-                    "tags": {
+                    "categoryTags": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -1329,29 +1485,29 @@
                     }
                 },
                 "required": [
-                    "id"
+                    "categoryId"
                 ]
             },
             "ResponseCategoryDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "categoryId": {
                         "type": "integer",
                         "format": "int64"
                     },
-                    "name": {
+                    "categoryName": {
                         "type": "string"
                     },
-                    "description": {
+                    "categoryDescription": {
                         "type": "string"
                     },
-                    "colorCode": {
+                    "categoryColorCode": {
                         "type": "string"
                     },
-                    "icon": {
+                    "categoryIcon": {
                         "type": "string"
                     },
-                    "tags": {
+                    "categoryTags": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -1363,23 +1519,23 @@
                     }
                 },
                 "required": [
-                    "colorCode",
-                    "id",
-                    "name",
+                    "categoryColorCode",
+                    "categoryId",
+                    "categoryName",
                     "profileId"
                 ]
             },
             "UpdateAccountDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "accountId": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "accountName": {
                         "type": "string"
                     },
-                    "description": {
+                    "accountDescription": {
                         "type": "string"
                     },
                     "accountBalance": {
@@ -1394,20 +1550,20 @@
                     }
                 },
                 "required": [
-                    "id"
+                    "accountId"
                 ]
             },
             "ResponseAccountDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "accountId": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "accountName": {
                         "type": "string"
                     },
-                    "description": {
+                    "accountDescription": {
                         "type": "string"
                     },
                     "accountBalance": {
@@ -1427,9 +1583,9 @@
                 },
                 "required": [
                     "accountBalance",
+                    "accountId",
                     "accountName",
                     "accountType",
-                    "id",
                     "profileId"
                 ]
             },
@@ -1439,10 +1595,10 @@
                     "profileName": {
                         "type": "string"
                     },
-                    "description": {
+                    "profileDescription": {
                         "type": "string"
                     },
-                    "colorCode": {
+                    "profileColorCode": {
                         "type": "string"
                     },
                     "profilePicture": {
@@ -1454,7 +1610,7 @@
                     }
                 },
                 "required": [
-                    "colorCode",
+                    "profileColorCode",
                     "profileName"
                 ]
             },
@@ -1465,10 +1621,10 @@
                         "type": "integer",
                         "format": "int64"
                     },
-                    "amount": {
+                    "expenseAmount": {
                         "type": "number"
                     },
-                    "description": {
+                    "expenseDescription": {
                         "type": "string"
                     },
                     "profileId": {
@@ -1489,19 +1645,19 @@
             "CreateCategoryDTO": {
                 "type": "object",
                 "properties": {
-                    "name": {
+                    "categoryName": {
                         "type": "string"
                     },
-                    "description": {
+                    "categoryDescription": {
                         "type": "string"
                     },
-                    "colorCode": {
+                    "categoryColorCode": {
                         "type": "string"
                     },
-                    "icon": {
+                    "categoryIcon": {
                         "type": "string"
                     },
-                    "tags": {
+                    "categoryTags": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -1513,8 +1669,8 @@
                     }
                 },
                 "required": [
-                    "colorCode",
-                    "name",
+                    "categoryColorCode",
+                    "categoryName",
                     "profileId"
                 ]
             },
@@ -1577,7 +1733,7 @@
                     "accountName": {
                         "type": "string"
                     },
-                    "description": {
+                    "accountDescription": {
                         "type": "string"
                     },
                     "accountBalance": {
