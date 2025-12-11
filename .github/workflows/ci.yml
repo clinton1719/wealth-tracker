@@ -36,5 +36,12 @@ jobs:
       - name: UI build
         run: pnpm run ui:build
 
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
       - name: Backend build
         run: pnpm run backend:build
