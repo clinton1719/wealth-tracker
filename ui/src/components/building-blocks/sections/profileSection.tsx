@@ -30,7 +30,10 @@ export function ProfileSection({
   handleDeleteProfile,
 }: ProfileSectionProps) {
   const handleUpdateProfile = (profile: Profile) => {
-    form.reset(profile);
+    form.reset({
+      ...profile,
+      profileDescription: profile.profileDescription ?? ''
+    });
     setProfileDialogOpen(true);
     setIsUpdate(true);
   };
@@ -90,9 +93,8 @@ export function ProfileSection({
         <div className="flex flex-col gap-6">
           <div className="flex justify-between items-center">
             <span
-              className={`status-badge ${
-                enabledMap[profile.profileId] ? "enabled" : "disabled"
-              }`}
+              className={`status-badge ${enabledMap[profile.profileId] ? "enabled" : "disabled"
+                }`}
             >
               {enabledMap[profile.profileId] ? "Enabled" : "Disabled"}
             </span>

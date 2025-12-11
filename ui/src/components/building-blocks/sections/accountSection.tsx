@@ -29,7 +29,10 @@ export function AccountSection({
   handleDeleteAccount,
 }: AccountSectionProps) {
   const handleUpdateAccount = (account: Account) => {
-    form.reset(account);
+    form.reset({
+      ...account,
+      accountDescription: account.accountDescription ?? ''
+    });
     form.setValue("profileName", profile.profileName);
     setAccountDialogOpen(true);
     setIsUpdate(true);

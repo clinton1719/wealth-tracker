@@ -42,7 +42,7 @@ export function ExpensesList({
   profilesData,
   handleUpdateProfile,
   enabledMap,
-  handleDeleteAccount,
+  handleDeleteAccount
 }: ExpensesListProps) {
   const categoryMap = React.useMemo(() => {
     if (!categoriesData) return {};

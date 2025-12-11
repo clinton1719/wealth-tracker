@@ -1,13 +1,6 @@
-import type * as z from "zod";
-import type { FilteredExpense } from "@/types/FilteredExpense";
-import type { UpdateExpense } from "@/types/UpdateExpense";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import { AddExpenseForm } from "@/components/building-blocks/forms/addExpenseForm";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useApiError } from "@/hooks/use-api-error";
 import { useGetAllAccountsQuery } from "@/services/accountsApi";
@@ -20,10 +13,18 @@ import {
 } from "@/services/expensesApi";
 import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
 import { selectProfileSlice } from "@/slices/profileSlice";
+import type { FilteredExpense } from "@/types/FilteredExpense";
+import type { UpdateExpense } from "@/types/UpdateExpense";
 import { defaultExpense } from "@/utilities/constants";
 import { expenseShouldBePositive } from "@/utilities/errorMessages";
 import { formatDate } from "@/utilities/helper";
 import { expenseFormSchema } from "@/utilities/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import type * as z from "zod";
 import { ExpensesList } from "./expense-feature-components/expensesList";
 import { ExpenseSummaryCards } from "./expense-feature-components/expenseSummaryCards";
 
@@ -35,6 +36,7 @@ export default function ExpensesFeature() {
   const [currentExpense, setCurrentExpense] = useState<
     Partial<FilteredExpense> | undefined
   >();
+  const [monthOffset, setMonthOffset] = useState(0);
 
   const form = useForm<z.infer<typeof expenseFormSchema>>({
     resolver: zodResolver(expenseFormSchema),
@@ -42,12 +44,21 @@ export default function ExpensesFeature() {
     defaultValues: defaultExpense,
   });
 
-  const now = new Date();
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  function getMonthRange(offset: number) {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + offset + 1, 0);
 
-  const startDate = formatDate(startOfMonth);
-  const endDate = formatDate(endOfMonth);
+    return {
+      startDate: formatDate(start),
+      endDate: formatDate(end)
+    };
+  }
+
+  const { startDate, endDate } = useMemo(() =>
+    getMonthRange(monthOffset)
+    , [monthOffset]);
+
   const {
     data: expensesData,
     isLoading: getAllExpensesLoading,
@@ -83,7 +94,10 @@ export default function ExpensesFeature() {
 
   const handleUpdateProfile = useCallback(
     (updateExpense: UpdateExpense) => {
-      form.reset(updateExpense);
+      form.reset({
+        ...updateExpense,
+        expenseDescription: updateExpense.expenseDescription ?? ''
+      });
       setExpenseDialogOpen(true);
       setIsUpdate(true);
     },
@@ -315,6 +329,26 @@ export default function ExpensesFeature() {
           />
         </div>
         <ExpenseSummaryCards expensesData={expensesData} />
+        <div className="flex items-center justify-between mb-4 mt-8">
+          <Button
+            variant="outline"
+            onClick={() => setMonthOffset(prev => prev - 1)}
+          >
+            Previous Month
+          </Button>
+
+          <h2 className="font-bold text-xl">
+            {new Date(startDate).toLocaleString("default", { month: "long", year: "numeric" })}
+          </h2>
+
+          <Button variant="outline" disabled={monthOffset === 0} onClick={() => {
+            if (monthOffset !== 0) {
+              setMonthOffset(prev => prev + 1);
+            }
+          }}>
+            Next Month
+          </Button>
+        </div>
         <ExpensesList
           expensesData={expensesData}
           categoriesData={categoriesData}

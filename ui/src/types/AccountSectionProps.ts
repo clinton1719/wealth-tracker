@@ -12,7 +12,7 @@ export interface AccountSectionProps {
       accountType: string;
       profileName: string;
       id?: number | undefined;
-      description?: string | undefined;
+      accountDescription?: string | undefined;
     },
     any,
     {
@@ -21,7 +21,7 @@ export interface AccountSectionProps {
       accountType: string;
       profileName: string;
       id?: number | undefined;
-      description?: string | undefined;
+      accountDescription?: string | undefined;
     }
   >;
   setAccountDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;

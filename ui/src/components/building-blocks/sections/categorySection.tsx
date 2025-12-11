@@ -29,7 +29,10 @@ export function CategorySection({
   setIsUpdate,
 }: CategorySectionProps) {
   const handleUpdateCategory = (category: Category) => {
-    form.reset(category);
+    form.reset({
+      ...category,
+      categoryDescription: category.categoryDescription ?? ''
+    });
     form.setValue("profileName", profile.profileName);
     setCategoryDialogOpen(true);
     setIsUpdate(true);
