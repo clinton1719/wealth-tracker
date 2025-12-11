@@ -12,7 +12,8 @@ public final class AccountMapper {
   private AccountMapper() {}
   ;
 
-  public static Account createAccountDTOToAccount(CreateAccountDTO createAccountDTO, User user, Profile profile) {
+  public static Account createAccountDTOToAccount(
+      CreateAccountDTO createAccountDTO, User user, Profile profile) {
     Account account = new Account();
     account.setAccountName(createAccountDTO.getAccountName());
     account.setAccountType(createAccountDTO.getAccountType());

@@ -1,17 +1,17 @@
 export const navigationStaticValues: {
-  title: string;
-  to: string;
-  description: string;
+  title: string
+  to: string
+  description: string
 }[] = [
   {
-    title: "Add expense",
-    to: "/expense",
+    title: 'Add expense',
+    to: '/expense',
     description:
-      "Quickly add a new expense to keep track of your spending habits.",
+      'Quickly add a new expense to keep track of your spending habits.',
   },
   {
-    title: "Manage categories",
-    to: "/category",
-    description: "Quickly view and manage your categories.",
+    title: 'Manage categories',
+    to: '/category',
+    description: 'Quickly view and manage your categories.',
   },
-];
+]

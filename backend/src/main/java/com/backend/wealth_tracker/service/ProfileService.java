@@ -60,7 +60,8 @@ public class ProfileService {
       throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
     User user = this.authService.getUserByUsername(userName);
     Optional<Profile> profileOptional =
-        this.profileRepository.findByProfileIdAndUserId(updateProfileDTO.getProfileId(), user.getId());
+        this.profileRepository.findByProfileIdAndUserId(
+            updateProfileDTO.getProfileId(), user.getId());
     if (profileOptional.isEmpty()) {
       throw new ResourceNotFoundException("Profile not found for: " + updateProfileDTO);
     }
@@ -107,7 +108,8 @@ public class ProfileService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteProfile(Long id, String userName) throws ResourceNotFoundException {
     User user = this.authService.getUserByUsername(userName);
-    Optional<Profile> profileOptional = this.profileRepository.findByProfileIdAndUserId(id, user.getId());
+    Optional<Profile> profileOptional =
+        this.profileRepository.findByProfileIdAndUserId(id, user.getId());
     if (profileOptional.isEmpty()) {
       LOGGER.atError().log("Profile to be deleted not found with id: {}", id);
       throw new ResourceNotFoundException("Profile not found");

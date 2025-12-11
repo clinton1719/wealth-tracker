@@ -13,7 +13,7 @@ public final class CategoryMapper {
   ;
 
   public static Category createCategoryDTOtoCategory(
-          CreateCategoryDTO createCategoryDTO, User user, Profile profile) {
+      CreateCategoryDTO createCategoryDTO, User user, Profile profile) {
     Category category = new Category();
     category.setCategoryName(createCategoryDTO.getCategoryName());
     category.setCategoryDescription(createCategoryDTO.getCategoryDescription());

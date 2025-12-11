@@ -1,9 +1,9 @@
-import { toast } from "sonner";
-import { LoginForm } from "./loginForm";
+import { toast } from 'sonner'
+import { LoginForm } from './loginForm'
 
 export default function Login({ isTokenExpired }: LoginProps) {
   if (isTokenExpired) {
-    toast.warning("Your session has expired. Please log in again.");
+    toast.warning('Your session has expired. Please log in again.')
   }
 
   return (
@@ -12,9 +12,9 @@ export default function Login({ isTokenExpired }: LoginProps) {
         <LoginForm />
       </div>
     </div>
-  );
+  )
 }
 
 interface LoginProps {
-  isTokenExpired?: boolean;
+  isTokenExpired?: boolean
 }

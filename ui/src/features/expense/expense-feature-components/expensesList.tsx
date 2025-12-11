@@ -2,8 +2,8 @@ import type {
   ColumnFiltersState,
   SortingState,
   VisibilityState,
-} from "@tanstack/react-table";
-import type { ExpensesListProps } from "@/types/ExpensesListProps";
+} from '@tanstack/react-table'
+import type { ExpensesListProps } from '@/types/ExpensesListProps'
 import {
   flexRender,
   getCoreRowModel,
@@ -13,18 +13,18 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+} from '@tanstack/react-table'
+import { ChevronDown } from 'lucide-react'
 
-import * as React from "react";
-import { Button } from "@/components/ui/button";
+import * as React from 'react'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -32,8 +32,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { createColumns } from "./columnDefinition";
+} from '@/components/ui/table'
+import { createColumns } from './columnDefinition'
 
 export function ExpensesList({
   expensesData,
@@ -42,27 +42,30 @@ export function ExpensesList({
   profilesData,
   handleUpdateProfile,
   enabledMap,
-  handleDeleteAccount
+  handleDeleteAccount,
 }: ExpensesListProps) {
   const categoryMap = React.useMemo(() => {
-    if (!categoriesData) return {};
-    return Object.fromEntries(categoriesData.map((c) => [c.categoryId, c]));
-  }, [categoriesData]);
+    if (!categoriesData)
+      return {}
+    return Object.fromEntries(categoriesData.map(c => [c.categoryId, c]))
+  }, [categoriesData])
 
   const accountMap = React.useMemo(() => {
-    if (!accountsData) return {};
-    return Object.fromEntries(accountsData.map((a) => [a.accountId, a]));
-  }, [accountsData]);
+    if (!accountsData)
+      return {}
+    return Object.fromEntries(accountsData.map(a => [a.accountId, a]))
+  }, [accountsData])
 
   const profileMap = React.useMemo(() => {
-    if (!profilesData) return {};
-    return Object.fromEntries(profilesData.map((p) => [p.profileId, p]));
-  }, [profilesData]);
+    if (!profilesData)
+      return {}
+    return Object.fromEntries(profilesData.map(p => [p.profileId, p]))
+  }, [profilesData])
 
   const filteredExpensesData = React.useMemo(() => {
     return expensesData
-      .filter((expense) => enabledMap[expense.profileId])
-      .map((expense) => ({
+      .filter(expense => enabledMap[expense.profileId])
+      .map(expense => ({
         expenseId: expense.expenseId,
         expenseAmount: expense.expenseAmount,
         expenseCreatedAt: expense.expenseCreatedAt,
@@ -75,20 +78,20 @@ export function ExpensesList({
         profileName: profileMap[expense.profileId].profileName,
         profilePicture: profileMap[expense.profileId].profilePicture,
         profileColorCode: profileMap[expense.profileId].profileColorCode,
-      }));
-  }, [expensesData, enabledMap, categoryMap, accountMap, profileMap]);
+      }))
+  }, [expensesData, enabledMap, categoryMap, accountMap, profileMap])
 
   const columns = React.useMemo(
     () => createColumns(handleUpdateProfile, handleDeleteAccount),
     [handleUpdateProfile, handleDeleteAccount],
-  );
+  )
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({ accountName: false, profileName: false });
+  )
+  const [columnVisibility, setColumnVisibility]
+    = React.useState<VisibilityState>({ accountName: false, profileName: false })
 
   const table = useReactTable({
     data: filteredExpensesData,
@@ -102,13 +105,13 @@ export function ExpensesList({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onColumnVisibilityChange: setColumnVisibility,
-    getRowId: (row) => row.expenseId.toString(),
+    getRowId: row => row.expenseId.toString(),
     state: {
       sorting,
       columnFilters,
       columnVisibility,
     },
-  });
+  })
 
   return (
     <div className="w-full">
@@ -117,39 +120,39 @@ export function ExpensesList({
           placeholder="Filter by description..."
           value={
             (table
-              .getColumn("expenseDescription")
-              ?.getFilterValue() as string) ?? ""
+              .getColumn('expenseDescription')
+              ?.getFilterValue() as string) ?? ''
           }
-          onChange={(event) =>
+          onChange={event =>
             table
-              .getColumn("expenseDescription")
-              ?.setFilterValue(event.target.value)
-          }
+              .getColumn('expenseDescription')
+              ?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
+              Columns
+              {' '}
+              <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter((column) => column.getCanHide())
+              .filter(column => column.getCanHide())
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+                    onCheckedChange={value =>
+                      column.toggleVisibility(!!value)}
                   >
-                    {column.id.replace("expense", "").replace("Name", " name")}
+                    {column.id.replace('expense', '').replace('Name', ' name')}
                   </DropdownMenuCheckboxItem>
-                );
+                )
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -157,7 +160,7 @@ export function ExpensesList({
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
@@ -169,41 +172,43 @@ export function ExpensesList({
                             header.getContext(),
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+            {table.getRowModel().rows?.length
+              ? (
+                  table.getRowModel().rows.map(row => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map(cell => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                )
+              : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
+                  </TableRow>
+                )}
           </TableBody>
         </Table>
       </div>
     </div>
-  );
+  )
 }

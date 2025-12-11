@@ -1,4 +1,8 @@
-import type { ExpenseSummaryCardsProps } from "@/types/ExpenseSummaryCardsProps";
+import type { Category } from '@/types/Category'
+import type { Expense } from '@/types/Expense'
+import type { ExpenseSummaryCardsProps } from '@/types/ExpenseSummaryCardsProps'
+import { DynamicIcon } from 'lucide-react/dynamic'
+import { useMemo } from 'react'
 import {
   Card,
   CardContent,
@@ -6,87 +10,84 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useMemo } from "react";
-import { formatCurrency } from "@/utilities/helper";
-import type { Expense } from "@/types/Expense";
-import type { Category } from "@/types/Category";
-import { DynamicIcon } from "lucide-react/dynamic";
+} from '@/components/ui/card'
+import { formatCurrency } from '@/utilities/helper'
 
 function getHighestSpendingCategory(expensesData: Expense[], categoriesData: Category[]): { category: Category, totalSpent: number } | null {
-  if (!expensesData || expensesData.length === 0) return null;
+  if (!expensesData || expensesData.length === 0)
+    return null
 
   const totalsByCategory = expensesData.reduce((acc, exp) => {
-    acc[exp.categoryId] = (acc[exp.categoryId] || 0) + exp.expenseAmount;
-    return acc;
-  }, {} as Record<number, number>);
+    acc[exp.categoryId] = (acc[exp.categoryId] || 0) + exp.expenseAmount
+    return acc
+  }, {} as Record<number, number>)
 
-  let maxCategoryId = null;
-  let maxAmount = -Infinity;
+  let maxCategoryId = null
+  let maxAmount = -Infinity
 
   for (const [categoryId, total] of Object.entries(totalsByCategory)) {
     if (total > maxAmount) {
-      maxAmount = total;
-      maxCategoryId = Number(categoryId);
+      maxAmount = total
+      maxCategoryId = Number(categoryId)
     }
   }
 
-  if (!maxCategoryId) return null;
+  if (!maxCategoryId)
+    return null
 
   return {
     category: categoriesData.find(cat => cat.categoryId === maxCategoryId)!,
     totalSpent: maxAmount,
-  };
+  }
 }
 
 function getHighestSpendingTag(expensesData: Expense[], categoriesData: Category[]): { tag: string, totalSpent: number } | null {
-  if (!expensesData || expensesData.length === 0) return null;
+  if (!expensesData || expensesData.length === 0)
+    return null
 
   const totalsByTag = expensesData.reduce((acc, expense) => {
     const tags: string[] | undefined = categoriesData.find(category => category.categoryId === expense.categoryId)?.categoryTags
     if (tags) {
       for (const tag of tags) {
-        acc[tag] = (acc[tag] || 0) + expense.expenseAmount;
+        acc[tag] = (acc[tag] || 0) + expense.expenseAmount
       }
     }
-    return acc;
-  }, {} as Record<string, number>);
+    return acc
+  }, {} as Record<string, number>)
 
-  let maxTag = null;
-  let maxTagAmount = -Infinity;
+  let maxTag = null
+  let maxTagAmount = -Infinity
 
   for (const [tag, total] of Object.entries(totalsByTag)) {
     if (total > maxTagAmount) {
-      maxTagAmount = total;
-      maxTag = tag;
+      maxTagAmount = total
+      maxTag = tag
     }
   }
 
-  if (!maxTag) return null;
+  if (!maxTag)
+    return null
 
   return {
     tag: maxTag,
     totalSpent: maxTagAmount,
-  };
+  }
 }
-
 
 export function ExpenseSummaryCards({
   expensesData,
-  categoriesData
+  categoriesData,
 }: ExpenseSummaryCardsProps) {
-
   const monthlyExpense = useMemo(() =>
     expensesData.reduce(
       (total, expense) => total + expense.expenseAmount,
       0,
-    )
-    , [expensesData]);
+    ), [expensesData])
 
-  const monthlyTransactions = useMemo(() => expensesData.length, [expensesData]);
+  const monthlyTransactions = useMemo(() => expensesData.length, [expensesData])
 
-  const highestSpendingCategory = useMemo(() => getHighestSpendingCategory(expensesData, categoriesData), [expensesData, categoriesData]);
-  const highestSpendingTag = useMemo(() => getHighestSpendingTag(expensesData, categoriesData), [expensesData, categoriesData]);
+  const highestSpendingCategory = useMemo(() => getHighestSpendingCategory(expensesData, categoriesData), [expensesData, categoriesData])
+  const highestSpendingTag = useMemo(() => getHighestSpendingTag(expensesData, categoriesData), [expensesData, categoriesData])
 
   return (
     <div className="flex flex-col md:flex-row justify-between mt-6">
@@ -104,7 +105,9 @@ export function ExpenseSummaryCards({
         </CardContent>
         <CardFooter>
           <p className="text-muted-foreground text-sm">
-            {monthlyTransactions} transactions this month
+            {monthlyTransactions}
+            {' '}
+            transactions this month
           </p>
         </CardFooter>
       </Card>
@@ -115,31 +118,39 @@ export function ExpenseSummaryCards({
             Highest spending category this month
           </CardDescription>
         </CardHeader>
-        {highestSpendingCategory ? (
-          <CardContent>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="card-key">Category:</span>
-                <span className="card-value flex gap-2">
-                  <DynamicIcon
-                    name={
-                      highestSpendingCategory.category.categoryIcon
-                        ? highestSpendingCategory.category.categoryIcon
-                        : ("badge-check" as any)
-                    }
-                    color={highestSpendingCategory.category.categoryColorCode}
-                  />
-                  {highestSpendingCategory.category.categoryName}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        ) : <></>}
-        {highestSpendingCategory && highestSpendingCategory.totalSpent ? <CardFooter>
-          <p className="text-muted-foreground text-sm">
-            {formatCurrency(highestSpendingCategory.totalSpent)} spent this month
-          </p>
-        </CardFooter> : <></>}
+        {highestSpendingCategory
+          ? (
+              <CardContent>
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-between items-center">
+                    <span className="card-key">Category:</span>
+                    <span className="card-value flex gap-2">
+                      <DynamicIcon
+                        name={
+                          highestSpendingCategory.category.categoryIcon
+                            ? highestSpendingCategory.category.categoryIcon
+                            : ('badge-check' as any)
+                        }
+                        color={highestSpendingCategory.category.categoryColorCode}
+                      />
+                      {highestSpendingCategory.category.categoryName}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            )
+          : <></>}
+        {highestSpendingCategory && highestSpendingCategory.totalSpent
+          ? (
+              <CardFooter>
+                <p className="text-muted-foreground text-sm">
+                  {formatCurrency(highestSpendingCategory.totalSpent)}
+                  {' '}
+                  spent this month
+                </p>
+              </CardFooter>
+            )
+          : <></>}
       </Card>
       <Card className="mt-4 w-full max-w-sm">
         <CardHeader>
@@ -148,25 +159,32 @@ export function ExpenseSummaryCards({
             Highest spending tag this month
           </CardDescription>
         </CardHeader>
-        {highestSpendingTag ? (
-          <CardContent>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="card-key">Tag:</span>
-                <span className="card-value flex gap-2">
-                  {highestSpendingTag.tag}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        ) : <></>}
-        {highestSpendingTag && highestSpendingTag.totalSpent ?
-          <CardFooter>
-            <p className="text-muted-foreground text-sm">
-              {formatCurrency(highestSpendingTag?.totalSpent)} spent this month
-            </p>
-          </CardFooter> : <></>}
+        {highestSpendingTag
+          ? (
+              <CardContent>
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-between items-center">
+                    <span className="card-key">Tag:</span>
+                    <span className="card-value flex gap-2">
+                      {highestSpendingTag.tag}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            )
+          : <></>}
+        {highestSpendingTag && highestSpendingTag.totalSpent
+          ? (
+              <CardFooter>
+                <p className="text-muted-foreground text-sm">
+                  {formatCurrency(highestSpendingTag?.totalSpent)}
+                  {' '}
+                  spent this month
+                </p>
+              </CardFooter>
+            )
+          : <></>}
       </Card>
     </div>
-  );
+  )
 }

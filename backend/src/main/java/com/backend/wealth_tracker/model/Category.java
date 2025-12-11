@@ -26,7 +26,9 @@ public class Category implements Serializable {
   @Column(nullable = false)
   private String categoryColorCode;
 
-  @Column(name = "categoryIcon") private String categoryIcon;
+  @Column(name = "categoryIcon")
+  private String categoryIcon;
+
   @Column private List<String> categoryTags;
 
   @ManyToOne

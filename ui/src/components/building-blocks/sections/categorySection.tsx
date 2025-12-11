@@ -1,9 +1,9 @@
-import type { Category } from "@/types/Category";
-import type { CategorySectionProps } from "@/types/CategorySectionProps";
-import { DynamicIcon } from "lucide-react/dynamic";
-import { ProfilePicture } from "@/components/building-blocks/profilePicture";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import type { Category } from '@/types/Category'
+import type { CategorySectionProps } from '@/types/CategorySectionProps'
+import { DynamicIcon } from 'lucide-react/dynamic'
+import { ProfilePicture } from '@/components/building-blocks/profilePicture'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardAction,
@@ -12,13 +12,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 
 export function CategorySection({
   category,
@@ -31,12 +31,12 @@ export function CategorySection({
   const handleUpdateCategory = (category: Category) => {
     form.reset({
       ...category,
-      categoryDescription: category.categoryDescription ?? ''
-    });
-    form.setValue("profileName", profile.profileName);
-    setCategoryDialogOpen(true);
-    setIsUpdate(true);
-  };
+      categoryDescription: category.categoryDescription ?? '',
+    })
+    form.setValue('profileName', profile.profileName)
+    setCategoryDialogOpen(true)
+    setIsUpdate(true)
+  }
 
   return (
     <Card
@@ -58,7 +58,7 @@ export function CategorySection({
                 name={
                   category.categoryIcon
                     ? category.categoryIcon
-                    : ("badge-check" as any)
+                    : ('badge-check' as any)
                 }
                 color={category.categoryColorCode}
               />
@@ -110,7 +110,7 @@ export function CategorySection({
       </CardContent>
       <CardFooter className="flex-col gap-2">
         <div className="flex flex-wrap gap-2 mt-4">
-          {category.categoryTags?.map((tag) => (
+          {category.categoryTags?.map(tag => (
             <Badge
               key={tag}
               variant="outline"
@@ -119,8 +119,9 @@ export function CategorySection({
               {tag}
             </Badge>
           ))}
-        </div>{" "}
+        </div>
+        {' '}
       </CardFooter>
     </Card>
-  );
+  )
 }
