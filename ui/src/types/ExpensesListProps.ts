@@ -10,4 +10,5 @@ export interface ExpensesListProps {
     accountsData: Account[];
     profilesData: Profile[];
     handleUpdateProfile: (updateExpense: UpdateExpense) => void
+    enabledMap: Record<number, boolean>;
 }

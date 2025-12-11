@@ -10,13 +10,15 @@ import { defaultExpense } from "@/utilities/constants";
 import { formatDate } from "@/utilities/helper";
 import { expenseFormSchema } from "@/utilities/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type * as z from "zod";
 import { ExpensesList } from "./expense-feature-components/expensesList";
 import { ExpenseSummaryCards } from "./expense-feature-components/expenseSummaryCards";
 import { expenseShouldBePositive } from "@/utilities/errorMessages";
+import { useSelector } from "react-redux";
+import { selectProfileSlice } from "@/slices/profileSlice";
 
 export default function ExpensesFeature() {
   const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false);
@@ -46,6 +48,7 @@ export default function ExpensesFeature() {
     useUpdateExpenseMutation();
   const [deleteExpense, { isLoading: deleteExpenseLoading }] =
     useDeleteExpenseMutation();
+  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
   const {
     error: profilesError,
     isLoading: getAllProfilesLoading,
@@ -61,6 +64,16 @@ export default function ExpensesFeature() {
     isLoading: getAllCategoriesLoading,
     data: categoriesData,
   } = useGetAllCategoriesQuery();
+  
+   const handleUpdateProfile = useCallback(
+    (updateExpense: UpdateExpense) => {
+      form.reset(updateExpense);
+      setExpenseDialogOpen(true);
+      setIsUpdate(true);
+    },
+    [form]
+  );
+
   const { isError: isExpensesError, errorComponent: expensesErrorComponent } = useApiError(expensesError);
   const { isError: isProfilesError, errorComponent: profilesErrorComponent } = useApiError(profilesError);
   const { isError: isAccountsError, errorComponent: accountsErrorComponent } = useApiError(accountsError);
@@ -228,11 +241,6 @@ export default function ExpensesFeature() {
     }
   }
 
-  const handleUpdateProfile = (updateExpense: UpdateExpense) => {
-    form.reset(updateExpense);
-    setExpenseDialogOpen(true);
-    setIsUpdate(true);
-  };
 
   if (expensesData && profilesData && accountsData && categoriesData) {
     return (
@@ -259,7 +267,7 @@ export default function ExpensesFeature() {
           />
         </div>
         <ExpenseSummaryCards expensesData={expensesData} />
-        <ExpensesList expensesData={expensesData} categoriesData={categoriesData} accountsData={accountsData} profilesData={profilesData} handleUpdateProfile={handleUpdateProfile} />
+        <ExpensesList expensesData={expensesData} categoriesData={categoriesData} accountsData={accountsData} profilesData={profilesData} handleUpdateProfile={handleUpdateProfile} enabledMap={enabledMap} />
       </div>
     );
   }

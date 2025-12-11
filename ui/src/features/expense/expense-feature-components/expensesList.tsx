@@ -33,21 +33,28 @@ import {
 import type { ExpensesListProps } from "@/types/ExpensesListProps"
 import { createColumns } from "./columnDefinition"
 
-export function ExpensesList({ expensesData, accountsData, categoriesData, profilesData, handleUpdateProfile }: ExpensesListProps) {
-  const categoryMap = React.useMemo(() => Object.fromEntries(
-    categoriesData.map(c => [c.categoryId, c])
-  ), [categoriesData]);
+export function ExpensesList({ expensesData, accountsData, categoriesData, profilesData, handleUpdateProfile, enabledMap }: ExpensesListProps) {
+  const categoryMap = React.useMemo(() => {
+    if (!categoriesData) return {};
+    return Object.fromEntries(categoriesData.map(c => [c.categoryId, c]));
+  }, [categoriesData ?? null]);
 
-  const accountMap = React.useMemo(() => Object.fromEntries(
-    accountsData.map(a => [a.accountId, a])
-  ), [accountsData]);
 
-  const profileMap = React.useMemo(() => Object.fromEntries(
+  const accountMap = React.useMemo(() => {
+    if (!accountsData) return {};
+    return Object.fromEntries(
+      accountsData.map(a => [a.accountId, a])
+    )
+  }, [accountsData ?? null]);
+
+  const profileMap = React.useMemo(() => {
+    if (!profilesData) return {};
+    return Object.fromEntries(
     profilesData.map(p => [p.profileId, p])
-  ), [profilesData]);
+  )}, [profilesData ?? null]);
 
   const filteredExpensesData = React.useMemo(() => {
-    return expensesData.map(expense => ({
+    return expensesData.filter(expense => enabledMap[expense.profileId]).map(expense => ({
       expenseId: expense.expenseId,
       expenseAmount: expense.expenseAmount,
       expenseCreatedAt: expense.expenseCreatedAt,
@@ -71,7 +78,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({ expenseCreatedAt: false, })
+    React.useState<VisibilityState>({ accountName: false, profileName: false })
 
   const table = useReactTable({
     data: filteredExpensesData,
@@ -85,6 +92,7 @@ export function ExpensesList({ expensesData, accountsData, categoriesData, profi
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onColumnVisibilityChange: setColumnVisibility,
+    getRowId: (row) => row.expenseId.toString(),
     state: {
       sorting,
       columnFilters,
