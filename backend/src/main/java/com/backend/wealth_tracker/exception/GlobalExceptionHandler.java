@@ -1,9 +1,11 @@
 package com.backend.wealth_tracker.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +50,25 @@ public class GlobalExceptionHandler {
                         });
         LOGGER.atError().log(errors.toString(), ex.getMessage(), ex);
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(TransactionSystemException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> handleTransactionSystemException(TransactionSystemException ex) {
+        Throwable rootCause = ex.getRootCause();
+
+        if (rootCause instanceof ConstraintViolationException violationEx) {
+            String msg = violationEx.getConstraintViolations()
+                    .stream()
+                    .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                    .findFirst()
+                    .orElse("Validation failed");
+
+            return ResponseEntity.badRequest().body(Map.of("error", msg));
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Transaction failed");
     }
 
     @ExceptionHandler(UnAuthorizedException.class)

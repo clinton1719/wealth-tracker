@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseAPI } from "@/static-values/constants";
+import { ALL_TAG_TYPES } from "@/utilities/constants";
 
 export interface Auth {
   accessToken: string;
@@ -20,7 +21,7 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI,
   }),
-  tagTypes: ["Auth"],
+  tagTypes: ALL_TAG_TYPES,
   endpoints: (builder) => ({
     login: builder.mutation<Auth, LoginData>({
       query: (credentials) => ({

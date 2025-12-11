@@ -4,9 +4,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { selectAuthToken } from "@/slices/authSlice";
 import { enableProfile } from "@/slices/profileSlice";
 import { baseAPI } from "@/static-values/constants";
+import { ALL_TAG_TYPES } from "@/utilities/constants";
 
 export const profileApi = createApi({
   reducerPath: "Profile",
+  refetchOnMountOrArgChange: true,
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI,
     prepareHeaders: (headers, { getState }) => {
@@ -17,7 +21,7 @@ export const profileApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Profiles"],
+  tagTypes: ALL_TAG_TYPES,
   endpoints: (builder) => ({
     getAllProfilesForUser: builder.query<Profile[], void>({
       query: () => `/profiles/all`,

@@ -177,6 +177,13 @@ export const createColumns = (
             size: 0,
         },
         {
+            accessorKey: "categoryId",
+            enableHiding: false,
+            header: () => null,
+            cell: () => null,
+            size: 0,
+        },
+        {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {

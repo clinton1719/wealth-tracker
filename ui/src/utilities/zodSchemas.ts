@@ -60,7 +60,7 @@ export const expenseFormSchema = z.object({
   expenseId: z.number().optional(),
   expenseAmount: z
     .number({ error: "Invalid input, please enter only numbers" })
-    .nonnegative("Expense amount cannot be negative"),
+    .positive("Expense amount must be greater than zero"),
   expenseDescription: z
     .string()
     .max(100, "Description must be at most 100 characters long")

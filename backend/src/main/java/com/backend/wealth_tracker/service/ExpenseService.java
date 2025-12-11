@@ -77,13 +77,13 @@ public class ExpenseService {
                             createExpenseDTO.getAccountId());
             throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
         }
+        this.accountService.debitAccount(createExpenseDTO.getAccountId(), createExpenseDTO.getExpenseAmount());
         Expense expense = setRequiredFieldsInExpense(createExpenseDTO);
         Expense savedExpense = this.expenseRepository.save(expense);
         if (!Objects.equals(savedExpense.getAccount().getProfile().getProfileId(), createExpenseDTO.getProfileId()) || !Objects.equals(savedExpense.getCategory().getProfile().getProfileId(), createExpenseDTO.getProfileId())) {
             LOGGER.atError().log("Profile ID: {}, not consistent with that of account: {} and category: {}", createExpenseDTO.getProfileId(), savedExpense.getAccount().getProfile().getProfileId(), savedExpense.getCategory().getProfile().getProfileId());
             throw new UnAuthorizedException("Profile ID not consistent");
         }
-        this.accountService.debitAccount(createExpenseDTO.getAccountId(), savedExpense.getExpenseAmount());
         LOGGER.atInfo().log("Expense to be saved created : {}", savedExpense);
         return savedExpense;
     }
@@ -99,7 +99,7 @@ public class ExpenseService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public Expense updateExpense(UpdateExpenseDTO updateExpenseDTO, String userName)
-            throws ResourceNotFoundException, UnAuthorizedException {
+            throws ResourceNotFoundException, UnAuthorizedException, AccountCannotHaveNegativeBalanceException {
         User user = this.authService.getUserByUsername(userName);
         if (!Helper.isCategoryIdValid(user.getCategories(), updateExpenseDTO.getCategoryId())) {
             LOGGER
@@ -116,8 +116,12 @@ public class ExpenseService {
         Expense expense = expenseOptional.get();
         BigDecimal oldExpenseAmount = expense.getExpenseAmount();
         BigDecimal newExpenseAmount = updateExpenseDTO.getExpenseAmount();
-        BigDecimal difference = newExpenseAmount.subtract(oldExpenseAmount);
-        //TODO
+        BigDecimal differenceAmount = newExpenseAmount.subtract(oldExpenseAmount);
+        if (differenceAmount.compareTo(BigDecimal.ZERO) < 0) {
+            this.accountService.creditAccount(expense.getAccount().getAccountId(), differenceAmount.abs());
+        } else if (differenceAmount.compareTo(BigDecimal.ZERO) > 0) {
+            this.accountService.debitAccount(expense.getAccount().getAccountId(), differenceAmount.abs());
+        }
         checkIfBelongsToProfile(updateExpenseDTO, expense);
         updateExpenseValues(updateExpenseDTO, expense);
         Expense updatedExpense = this.expenseRepository.save(expense);

@@ -94,11 +94,11 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 
       navigate("/");
     } catch (error: any) {
-      if (error.originalStatus === 401) {
+      if (error.status === 401) {
         toast.error("Invalid username or password.");
-      } else if (error.originalStatus === 400) {
+      } else if (error.status === 400) {
         toast.error("Invalid input. Please check your details.");
-      } else if (error.originalStatus === 403) {
+      } else if (error.status === 403) {
         toast.error(
           "Access denied. You do not have permission to access this resource.",
         );

@@ -2,9 +2,13 @@ import type { Expense } from "@/types/Expense";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { selectAuthToken } from "@/slices/authSlice";
 import { baseAPI } from "@/static-values/constants";
+import { ALL_TAG_TYPES } from "@/utilities/constants";
 
 export const expensesApi = createApi({
   reducerPath: "expensesApi",
+  refetchOnMountOrArgChange: true,
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI,
     prepareHeaders: (headers, { getState }) => {
@@ -15,7 +19,7 @@ export const expensesApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Expenses"],
+  tagTypes: ALL_TAG_TYPES,
   endpoints: (builder) => ({
     saveExpense: builder.mutation<Expense, Partial<Expense>>({
       query: (newExpense) => ({
@@ -23,7 +27,7 @@ export const expensesApi = createApi({
         method: "POST",
         body: newExpense,
       }),
-      invalidatesTags: ["Expenses"],
+      invalidatesTags: ["Expenses", "Accounts"],
     }),
     updateExpense: builder.mutation<Expense, Partial<Expense>>({
       query: (existingExpense) => ({
@@ -31,14 +35,14 @@ export const expensesApi = createApi({
         method: "PUT",
         body: existingExpense,
       }),
-      invalidatesTags: ["Expenses"],
+      invalidatesTags: ["Expenses", "Accounts"],
     }),
     deleteExpense: builder.mutation<void, number>({
       query: (id: number) => ({
         url: `/expenses/delete/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Expenses"],
+      invalidatesTags: ["Expenses", "Accounts"],
     }),
     getAllExpensesInRange: builder.query<
       Expense[],

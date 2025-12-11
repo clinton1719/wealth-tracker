@@ -61,7 +61,7 @@ public class ExpenseController {
   public ResponseExpenseDTO updateExpense(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateExpenseDTO updateExpenseDTO)
-      throws ResourceNotFoundException, UnAuthorizedException {
+          throws ResourceNotFoundException, UnAuthorizedException, AccountCannotHaveNegativeBalanceException {
     return ExpenseMapper.expenseToResponseExpenseDTO(
         this.expenseService.updateExpense(updateExpenseDTO, userDetails.getUsername()));
   }

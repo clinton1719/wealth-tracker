@@ -41,3 +41,5 @@ export const defaultExpense = {
   accountName: "",
   profileName: "",
 };
+
+export const ALL_TAG_TYPES = ["Accounts", "Expenses", "Categories", "Auth", "Profiles"] as const;

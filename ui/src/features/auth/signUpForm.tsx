@@ -98,9 +98,9 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
       );
       navigate("/login");
     } catch (error: any) {
-      if (error?.originalStatus === 409) {
+      if (error?.status === 409) {
         toast.error("Username already exists. Please try another one.");
-      } else if (error?.originalStatus === 400) {
+      } else if (error?.status === 400) {
         toast.error("Invalid input. Please check your details.");
       } else {
         toast.error("Sign up failed. Please try again later.");

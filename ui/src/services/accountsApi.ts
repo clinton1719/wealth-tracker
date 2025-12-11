@@ -2,9 +2,13 @@ import type { Account } from "@/types/Account";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { selectAuthToken } from "@/slices/authSlice";
 import { baseAPI } from "@/static-values/constants";
+import { ALL_TAG_TYPES } from "@/utilities/constants";
 
 export const accountApi = createApi({
   reducerPath: "accountApi",
+  refetchOnMountOrArgChange: true,
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI,
     prepareHeaders: (headers, { getState }) => {
@@ -15,7 +19,7 @@ export const accountApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Accounts"],
+  tagTypes: ALL_TAG_TYPES,
   endpoints: (builder) => ({
     getAllAccounts: builder.query<Account[], void>({
       query: () => `/accounts/all`,

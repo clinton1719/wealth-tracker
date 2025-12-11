@@ -2,9 +2,13 @@ import type { Category } from "@/types/Category";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { selectAuthToken } from "@/slices/authSlice";
 import { baseAPI } from "@/static-values/constants";
+import { ALL_TAG_TYPES } from "@/utilities/constants";
 
 export const categoriesApi = createApi({
   reducerPath: "categoriesApi",
+  refetchOnMountOrArgChange: true,
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI,
     prepareHeaders: (headers, { getState }) => {
@@ -15,7 +19,7 @@ export const categoriesApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Categories"],
+  tagTypes: ALL_TAG_TYPES,
   endpoints: (builder) => ({
     getAllCategories: builder.query<Category[], void>({
       query: () => `/categories/all`,

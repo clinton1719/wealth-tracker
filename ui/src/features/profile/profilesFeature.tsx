@@ -113,15 +113,15 @@ export function ProfilesFeature() {
 
       setProfileDialogOpen(false);
     } catch (error: any) {
-      if (error?.originalStatus === 409) {
+      if (error?.status === 409) {
         toast.error(
           `Profile already exists with name: ${formData.profileName}`,
         );
-      } else if (error.originalStatus === 400) {
+      } else if (error.status === 400) {
         toast.error("Invalid input. Please check your details.");
-      } else if (error.originalStatus === 404) {
+      } else if (error.status === 404) {
         toast.error("This resource does not exist, kindly refresh your page.");
-      } else if (error.originalStatus === 403) {
+      } else if (error.status === 403) {
         toast.error(
           "Access denied. You do not have permission to access this resource.",
         );
@@ -175,17 +175,17 @@ export function ProfilesFeature() {
       setIsUpdate(false);
       setProfileDialogOpen(false);
     } catch (error: any) {
-      if (error?.originalStatus === 409) {
+      if (error?.status === 409) {
         toast.error(
           `Profile already exists with name: ${formData.profileName}`,
         );
-      } else if (error.originalStatus === 400) {
+      } else if (error.status === 400) {
         toast.error("Invalid input. Please check your details.");
-      } else if (error.originalStatus === 403) {
+      } else if (error.status === 403) {
         toast.error(
           "Access denied. You do not have permission to access this resource.",
         );
-      } else if (error.originalStatus === 404) {
+      } else if (error.status === 404) {
         toast.error("This resource does not exist, kindly refresh your page.");
       } else {
         toast.error("Failed to update profile, please try again");

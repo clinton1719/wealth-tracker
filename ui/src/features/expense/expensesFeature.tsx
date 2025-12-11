@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import type * as z from "zod";
 import { ExpensesList } from "./expense-feature-components/expensesList";
 import { ExpenseSummaryCards } from "./expense-feature-components/expenseSummaryCards";
+import { expenseShouldBePositive } from "@/utilities/errorMessages";
 
 export default function ExpensesFeature() {
   const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false);
@@ -123,7 +124,7 @@ export default function ExpensesFeature() {
             }}
           >
             <code>
-              Expense of {result.expenseAmount} created at: {result.expenseCreatedAt}
+              Expense of {result.expenseAmount} created at {result.expenseCreatedAt}
             </code>
           </pre>
         ),
@@ -140,15 +141,15 @@ export default function ExpensesFeature() {
 
       setExpenseDialogOpen(false);
     } catch (error: any) {
-      if (error?.originalStatus === 406) {
+      if (error?.status === 406) {
         toast.error(
           `Insufficient balance in account: ${formData.accountName}`,
         );
-      } else if (error.originalStatus === 400) {
+      } else if (error.status === 400) {
         toast.error("Invalid input. Please check your details.");
-      } else if (error.originalStatus === 404) {
+      } else if (error.status === 404) {
         toast.error("This resource does not exist, kindly refresh your page.");
-      } else if (error.originalStatus === 403) {
+      } else if (error.status === 403) {
         toast.error(
           "Access denied. You do not have permission to access this resource.",
         );
@@ -186,7 +187,7 @@ export default function ExpensesFeature() {
             }}
           >
             <code>
-              Expense of {result.expenseAmount} updated at: {result.expenseUpdatedAt}
+              Expense of {result.expenseAmount} updated at {result.expenseUpdatedAt}
             </code>
           </pre>
         ),
@@ -204,17 +205,22 @@ export default function ExpensesFeature() {
       setIsUpdate(false);
       setExpenseDialogOpen(false);
     } catch (error: any) {
-      if (error?.originalStatus === 406) {
+      console.log(error.data.error);
+      if (error?.status === 406) {
         toast.error(
           `Insufficient balance in account: ${formData.accountName}`,
         );
-      } else if (error.originalStatus === 400) {
-        toast.error("Invalid input. Please check your details.");
-      } else if (error.originalStatus === 403) {
+      } else if (error.status === 400) {
+        if (expenseShouldBePositive === error.data.error) {
+          toast.error("Expense should be greater than zero");
+        } else {
+          toast.error("Invalid input. Please check your details.");
+        }
+      } else if (error.status === 403) {
         toast.error(
           "Access denied. You do not have permission to access this resource.",
         );
-      } else if (error.originalStatus === 404) {
+      } else if (error.status === 404) {
         toast.error("This resource does not exist, kindly refresh your page.");
       } else {
         toast.error("Failed to update expense, please try again");
