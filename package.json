@@ -4,7 +4,15 @@
   "description": "Desi Wealth tracker application to monitor and manage personal finances.",
   "main": "index.js",
   "scripts": {
-    "ui": "pnpm --prefix ui run dev"
+    "ui:dev": "pnpm --prefix ui run dev",
+    "ui:build": "pnpm --prefix ui run build",
+    "ui:lint": "pnpm --prefix ui run lint",
+    "ui:lint:fix": "pnpm --prefix ui run lint:fix",
+    "ui:preview": "pnpm --prefix ui run preview",
+    "ui:format": "pnpm --prefix ui run format",
+    "ui:format:check": "pnpm --prefix ui run format:check",
+    "ui:knip": "pnpm --prefix ui run knip",
+    "backend:build": "cd backend && mvn clean install"
   },
   "keywords": [],
   "author": "Clinton Fernandes",
