@@ -1,5 +1,5 @@
-import type { ProfilePictureProps } from '@/types/ProfilePictureProps'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import type { ProfilePictureProps } from "@/types/ProfilePictureProps";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function ProfilePicture({
   fallbackName,
@@ -20,5 +20,5 @@ export function ProfilePicture({
         {fallbackName}
       </AvatarFallback>
     </Avatar>
-  )
+  );
 }

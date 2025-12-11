@@ -1,10 +1,10 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router'
-import { toast } from 'sonner'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
 
 import {
   Card,
@@ -13,107 +13,103 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { Spinner } from '@/components/ui/spinner'
-import { cn } from '@/lib/utils'
-import { useSignUpMutation } from '@/services/authApi'
-import { defaultSignUp } from '@/utilities/constants'
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
+import { useSignUpMutation } from "@/services/authApi";
+import { defaultSignUp } from "@/utilities/constants";
 
 const formSchema = z
   .object({
     username: z
       .string()
-      .min(4, 'Username must be at least 4 characters long')
-      .max(20, 'Username must be at most 20 characters long'),
+      .min(4, "Username must be at least 4 characters long")
+      .max(20, "Username must be at most 20 characters long"),
     password: z
       .string()
-      .min(6, 'Password must be at least 6 characters long')
-      .max(20, 'Password must be at most 20 characters long'),
+      .min(6, "Password must be at least 6 characters long")
+      .max(20, "Password must be at most 20 characters long"),
     confirmPassword: z
       .string()
-      .min(6, 'Password must be at least 6 characters long')
-      .max(20, 'Password must be at most 20 characters long'),
+      .min(6, "Password must be at least 6 characters long")
+      .max(20, "Password must be at most 20 characters long"),
   })
-  .refine(data => data.password === data.confirmPassword, {
-    message: 'Passwords must match',
-    path: ['confirmPassword'],
-  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 type SignUpFormProps = {
-  className?: string
-} & React.HTMLAttributes<HTMLDivElement>
+  className?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    mode: 'onSubmit',
+    mode: "onSubmit",
     defaultValues: defaultSignUp,
-  })
+  });
 
-  const [signUp, { isLoading }] = useSignUpMutation()
+  const [signUp, { isLoading }] = useSignUpMutation();
 
-  if (isLoading)
-    return <Spinner className="spinner" />
+  if (isLoading) return <Spinner className="spinner" />;
 
   async function onSubmit(formData: z.infer<typeof formSchema>) {
     try {
       await signUp({
         username: formData.username,
         password: formData.password,
-      }).unwrap()
+      }).unwrap();
 
       toast(`Sign up successful for ${formData.username}`, {
         description: (
           <pre
             className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
             style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
+              background: "var(--background-code, #1a1a1a)",
+              color: "var(--foreground-code, #f5f5f5)",
             }}
           >
             <code>Welcome to Desi wealth tracker!</code>
           </pre>
         ),
-        position: 'bottom-right',
+        position: "bottom-right",
         classNames: {
-          content: 'flex flex-col gap-2',
+          content: "flex flex-col gap-2",
         },
         style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
+          "--border-radius": "calc(var(--radius)  + 4px)",
+          background: "var(--background, #fff)",
+          color: "var(--foreground, #000)",
         } as React.CSSProperties,
-      })
+      });
       toast.success(
-        'Your account has been created successfully. Please log in.',
-      )
-      navigate('/login')
-    }
-    catch (error: any) {
+        "Your account has been created successfully. Please log in.",
+      );
+      navigate("/login");
+    } catch (error: any) {
       if (error?.status === 409) {
-        toast.error('Username already exists. Please try another one.')
-      }
-      else if (error?.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else {
-        toast.error('Sign up failed. Please try again later.')
+        toast.error("Username already exists. Please try another one.");
+      } else if (error?.status === 400) {
+        toast.error("Invalid input. Please check your details.");
+      } else {
+        toast.error("Sign up failed. Please try again later.");
       }
     }
   }
 
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
+    <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
           <CardTitle>Create a new account</CardTitle>
@@ -203,13 +199,11 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               Submit
             </Button>
             <FieldDescription className="px-6 text-center">
-              Already have an account?
-              {' '}
-              <Link to="/login">Sign in</Link>
+              Already have an account? <Link to="/login">Sign in</Link>
             </FieldDescription>
           </Field>
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

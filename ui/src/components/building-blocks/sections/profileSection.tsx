@@ -1,17 +1,17 @@
-import type { Profile } from '@/types/Profile'
-import type { ProfileSectionProps } from '@/types/ProfileSectionProps'
-import { DynamicIcon } from 'lucide-react/dynamic'
-import { useDispatch, useSelector } from 'react-redux'
-import { ProfilePicture } from '@/components/building-blocks/profilePicture'
-import { Button } from '@/components/ui/button'
+import type { Profile } from "@/types/Profile";
+import type { ProfileSectionProps } from "@/types/ProfileSectionProps";
+import { DynamicIcon } from "lucide-react/dynamic";
+import { useDispatch, useSelector } from "react-redux";
+import { ProfilePicture } from "@/components/building-blocks/profilePicture";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Switch } from '@/components/ui/switch'
-import { selectProfileSlice, toggleProfile } from '@/slices/profileSlice'
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { selectProfileSlice, toggleProfile } from "@/slices/profileSlice";
 import {
   Card,
   CardAction,
@@ -20,7 +20,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../../ui/card'
+} from "../../ui/card";
 
 export function ProfileSection({
   profile,
@@ -32,14 +32,14 @@ export function ProfileSection({
   const handleUpdateProfile = (profile: Profile) => {
     form.reset({
       ...profile,
-      profileDescription: profile.profileDescription ?? '',
-    })
-    setProfileDialogOpen(true)
-    setIsUpdate(true)
-  }
+      profileDescription: profile.profileDescription ?? "",
+    });
+    setProfileDialogOpen(true);
+    setIsUpdate(true);
+  };
 
-  const dispatch = useDispatch()
-  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
+  const dispatch = useDispatch();
+  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice);
 
   return (
     <Card
@@ -94,10 +94,10 @@ export function ProfileSection({
           <div className="flex justify-between items-center">
             <span
               className={`status-badge ${
-                enabledMap[profile.profileId] ? 'enabled' : 'disabled'
+                enabledMap[profile.profileId] ? "enabled" : "disabled"
               }`}
             >
-              {enabledMap[profile.profileId] ? 'Enabled' : 'Disabled'}
+              {enabledMap[profile.profileId] ? "Enabled" : "Disabled"}
             </span>
             <Switch
               id={`profile-${profile.profileId}`}
@@ -109,5 +109,5 @@ export function ProfileSection({
       </CardContent>
       <CardFooter className="flex-col gap-2"></CardFooter>
     </Card>
-  )
+  );
 }
