@@ -2,16 +2,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { baseAPI } from '@/static-values/constants'
 import { ALL_TAG_TYPES } from '@/utilities/constants'
 
-export interface Auth {
+interface Auth {
   accessToken: string
 }
 
-export interface LoginData {
+interface LoginData {
   username: string
   password: string
 }
 
-export interface SignUpData {
+interface SignUpData {
   username: string
   password: string
 }

@@ -10,6 +10,7 @@ import { ProtectedRoute } from '@/features/auth/protectedRoute.tsx'
 import SignUp from '@/features/auth/signUp.tsx'
 import { store } from '@/store.ts'
 import '@/styles/index.css'
+import ErrorBoundary from './components/error-boundary/error-boundary'
 
 const App = lazy(() => import('@/App.tsx'))
 const CategoriesSection = lazy(
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <NavigationBar />
       <Suspense fallback={<Spinner className="spinner" />}>
+      <ErrorBoundary>
         <Routes>
           {/* PUBLIC ROUTES */}
           <Route path="/login" element={<Login />} />
@@ -36,6 +38,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="category" element={<CategoriesSection />} />
           </Route>
         </Routes>
+        </ErrorBoundary>
       </Suspense>
 
       <Toaster />

@@ -9,8 +9,6 @@
     "ui:lint": "pnpm --prefix ui run lint",
     "ui:lint:fix": "pnpm --prefix ui run lint:fix",
     "ui:preview": "pnpm --prefix ui run preview",
-    "ui:format": "pnpm --prefix ui run format",
-    "ui:format:check": "pnpm --prefix ui run format:check",
     "ui:knip": "pnpm --prefix ui run knip",
     "backend:build": "cd backend && mvn clean install"
   },

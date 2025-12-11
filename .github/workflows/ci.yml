@@ -30,8 +30,8 @@ jobs:
       - name: UI lint
         run: pnpm run ui:lint
 
-      - name: UI format check
-        run: pnpm run ui:format:check
+      - name: UI modules check
+        run: pnpm run ui:knip
 
       - name: UI build
         run: pnpm run ui:build

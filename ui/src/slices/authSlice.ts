@@ -20,13 +20,9 @@ const authSlice = createSlice({
       state.username = action.payload.username
       state.token = action.payload.token
     },
-    clearCredentials(state) {
-      state.username = null
-      state.token = null
-    },
   },
 })
 
 export const selectAuthToken = (state: RootState) => state.auth.token
-export const { setCredentials, clearCredentials } = authSlice.actions
+export const { setCredentials } = authSlice.actions
 export default authSlice.reducer

@@ -5,7 +5,7 @@ import Login from "@/features/auth/login";
 import SignUp from "@/features/auth/signUp";
 import ErrorPage from "@/features/error/errorPage";
 
-export type ApiError = FetchBaseQueryError | SerializedError;
+type ApiError = FetchBaseQueryError | SerializedError;
 
 interface ErrorResponse {
   isError: boolean;
