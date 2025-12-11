@@ -1,17 +1,17 @@
-import type { Column } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import type { Column } from '@tanstack/react-table'
+import { ChevronDown } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 
 interface DataTableFilterProps<TData> {
-  column: Column<TData, unknown>;
-  title: string;
+  column: Column<TData, unknown>
+  title: string
 }
 export function DataTableFilter<TData>({
   column,
@@ -19,8 +19,8 @@ export function DataTableFilter<TData>({
 }: DataTableFilterProps<TData>) {
   const options = Array.from(
     column.getFacetedUniqueValues()?.keys() || [],
-  ) as string[];
-  const filterValue = column.getFilterValue() as string[] | undefined;
+  ) as string[]
+  const filterValue = column.getFilterValue() as string[] | undefined
 
   return (
     <DropdownMenu>
@@ -33,7 +33,9 @@ export function DataTableFilter<TData>({
           {title}
           {filterValue && filterValue.length > 0 && (
             <span className="ml-1 text-xs font-bold opacity-70">
-              ({filterValue.length})
+              (
+              {filterValue.length}
+              )
             </span>
           )}
           <ChevronDown className="ml-2 h-4 w-4" />
@@ -50,32 +52,33 @@ export function DataTableFilter<TData>({
         )}
 
         {options.map((option) => {
-          const isSelected = filterValue?.includes(option);
+          const isSelected = filterValue?.includes(option)
 
           return (
             <DropdownMenuCheckboxItem
               key={option}
               checked={isSelected}
               onCheckedChange={(checked) => {
-                let newFilterValue = filterValue ? [...filterValue] : [];
+                let newFilterValue = filterValue ? [...filterValue] : []
 
                 if (checked) {
-                  newFilterValue.push(option);
-                } else {
+                  newFilterValue.push(option)
+                }
+                else {
                   newFilterValue = newFilterValue.filter(
-                    (val) => val !== option,
-                  );
+                    val => val !== option,
+                  )
                 }
                 column.setFilterValue(
                   newFilterValue.length > 0 ? newFilterValue : undefined,
-                );
+                )
               }}
             >
               {option}
             </DropdownMenuCheckboxItem>
-          );
+          )
         })}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
