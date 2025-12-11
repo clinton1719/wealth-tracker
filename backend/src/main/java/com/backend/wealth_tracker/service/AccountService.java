@@ -41,8 +41,8 @@ public class AccountService {
       propagation = Propagation.REQUIRED,
       readOnly = true)
   public List<Account> getAllAccounts(String userName) throws ResourceNotFoundException {
-    User user = this.authService.getUserByUsername(userName);
-    List<Account> accountList = this.accountRepository.findAllWithRelations(user.getId());
+    User user = authService.getUserByUsername(userName);
+    List<Account> accountList = accountRepository.findAllWithRelations(user.getId());
     LOGGER.atInfo().log("Fetched {} accounts for user: {}", accountList.size(), userName);
     return accountList;
   }
@@ -50,7 +50,7 @@ public class AccountService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Account saveAccount(CreateAccountDTO createAccountDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException, UnAuthorizedException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     if (!Helper.isProfileIdValid(user.getProfiles(), createAccountDTO.getProfileId())) {
       LOGGER
           .atError()
@@ -58,7 +58,7 @@ public class AccountService {
       throw new UnAuthorizedException("Illegal profile id in account");
     }
     Optional<Account> similarAccount =
-        this.accountRepository.findByAccountNameAndUserId(
+        accountRepository.findByAccountNameAndUserId(
             createAccountDTO.getAccountName(), user.getId());
     if (similarAccount.isPresent()) {
       throw new ResourceAlreadyExistsException(
@@ -79,7 +79,7 @@ public class AccountService {
                   return new ResourceNotFoundException("Profile id not found while saving account");
                 });
     Account account = AccountMapper.createAccountDTOToAccount(createAccountDTO, user, profile);
-    Account savedAccount = this.accountRepository.save(account);
+    Account savedAccount = accountRepository.save(account);
     LOGGER.atInfo().log("Account to be saved created : {}", savedAccount);
     return savedAccount;
   }
@@ -87,17 +87,16 @@ public class AccountService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Account updateAccount(UpdateAccountDTO updateAccountDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Optional<Account> accountOptional =
-        this.accountRepository.findByAccountIdAndUserId(
-            updateAccountDTO.getAccountId(), user.getId());
+        accountRepository.findByAccountIdAndUserId(updateAccountDTO.getAccountId(), user.getId());
     if (accountOptional.isEmpty()) {
       LOGGER.atError().log("Account to be updated not found : {}", updateAccountDTO);
       throw new ResourceNotFoundException("Account not found");
     }
     if (!accountOptional.get().getAccountName().equals(accountOptional.get().getAccountName())) {
       Optional<Account> similarAccount =
-          this.accountRepository.findByAccountNameAndUserId(
+          accountRepository.findByAccountNameAndUserId(
               updateAccountDTO.getAccountName(), user.getId());
       if (similarAccount.isPresent()) {
         throw new ResourceAlreadyExistsException(
@@ -108,22 +107,22 @@ public class AccountService {
       }
     }
     Account account = updateAccountValues(updateAccountDTO, accountOptional.get(), user.getId());
-    Account updatedAccount = this.accountRepository.save(account);
+    Account updatedAccount = accountRepository.save(account);
     LOGGER.atInfo().log("Account updated : {}", updatedAccount);
     return updatedAccount;
   }
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteAccount(Long id, String userName) throws ResourceNotFoundException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Optional<Account> accountOptional =
-        this.accountRepository.findByAccountIdAndUserId(id, user.getId());
+        accountRepository.findByAccountIdAndUserId(id, user.getId());
     if (accountOptional.isEmpty()) {
       LOGGER.atError().log("Account to be deleted not found with id: {}", id);
       throw new ResourceNotFoundException("Account not found");
     }
     Account account = accountOptional.get();
-    this.accountRepository.delete(account);
+    accountRepository.delete(account);
     LOGGER.atInfo().log("Account deleted with id: {}", id);
   }
 
@@ -162,7 +161,7 @@ public class AccountService {
       throw new AccountCannotHaveNegativeBalanceException();
     }
     account.setAccountBalance(accountBalance.subtract(debitAmount));
-    Account savedAccount = this.accountRepository.save(account);
+    Account savedAccount = accountRepository.save(account);
     LOGGER.atInfo().log("Account debited: {} with: {}", savedAccount, debitAmount);
   }
 
@@ -175,7 +174,7 @@ public class AccountService {
                 () -> new ResourceNotFoundException("Account not found for id: " + accountId));
     BigDecimal accountBalance = account.getAccountBalance();
     account.setAccountBalance(accountBalance.add(creditAmount));
-    Account savedAccount = this.accountRepository.save(account);
+    Account savedAccount = accountRepository.save(account);
     LOGGER.atInfo().log("Account credited: {} with: {}", savedAccount, creditAmount);
   }
 }

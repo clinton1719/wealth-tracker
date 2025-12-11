@@ -1,7 +1,7 @@
-import type { AddProfileFormProps } from '@/types/AddProfileFormProps'
-import { PlusCircle } from 'lucide-react'
-import { Controller } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
+import type { AddProfileFormProps } from "@/types/AddProfileFormProps";
+import { PlusCircle } from "lucide-react";
+import { Controller } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,15 +9,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { defaultProfile } from '@/utilities/constants'
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { defaultProfile } from "@/utilities/constants";
 
 export function AddProfileForm({
   profileDialogOpen,
@@ -26,16 +26,15 @@ export function AddProfileForm({
   onSubmit,
 }: AddProfileFormProps) {
   const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
+    if (e.key === "Enter") e.preventDefault();
+  };
 
   return (
     <Dialog open={profileDialogOpen}>
       <DialogTrigger asChild>
         <Button
           onClick={() => {
-            setProfileDialogOpen(true)
+            setProfileDialogOpen(true);
           }}
         >
           <PlusCircle className="mr-2 h-5 w-5" />
@@ -53,7 +52,7 @@ export function AddProfileForm({
         <form
           id="form-rhf-profile"
           onSubmit={form.handleSubmit(onSubmit)}
-          onKeyDown={e => checkKeyDown(e)}
+          onKeyDown={(e) => checkKeyDown(e)}
         >
           <FieldGroup>
             <Controller
@@ -141,8 +140,8 @@ export function AddProfileForm({
                     name={field.name}
                     ref={field.ref}
                     onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      field.onChange(file)
+                      const file = e.target.files?.[0];
+                      field.onChange(file);
                     }}
                   />
                   {fieldState.invalid && (
@@ -165,5 +164,5 @@ export function AddProfileForm({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

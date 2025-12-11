@@ -42,8 +42,8 @@ public class CategoryService {
       propagation = Propagation.REQUIRED,
       readOnly = true)
   public List<Category> getAllCategories(String userName) throws ResourceNotFoundException {
-    User user = this.authService.getUserByUsername(userName);
-    List<Category> categories = this.categoryRepository.findAllWithRelations(user.getId());
+    User user = authService.getUserByUsername(userName);
+    List<Category> categories = categoryRepository.findAllWithRelations(user.getId());
     LOGGER.atInfo().log("Fetched {} categories for user: {}", categories.size(), userName);
     return categories;
   }
@@ -51,7 +51,7 @@ public class CategoryService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Category saveCategory(CreateCategoryDTO createCategoryDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException, UnAuthorizedException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     if (!Helper.isProfileIdValid(user.getProfiles(), createCategoryDTO.getProfileId())) {
       LOGGER
           .atError()
@@ -72,8 +72,7 @@ public class CategoryService {
     Category category =
         CategoryMapper.createCategoryDTOtoCategory(createCategoryDTO, user, profile);
     Optional<Category> similarCategory =
-        this.categoryRepository.findByCategoryNameAndUserId(
-            category.getCategoryName(), user.getId());
+        categoryRepository.findByCategoryNameAndUserId(category.getCategoryName(), user.getId());
     if (similarCategory.isPresent()) {
       throw new ResourceAlreadyExistsException(
           "Category already present with name: "
@@ -81,7 +80,7 @@ public class CategoryService {
               + " for user: "
               + user.getId());
     }
-    Category savedCategory = this.categoryRepository.save(category);
+    Category savedCategory = categoryRepository.save(category);
     LOGGER.atInfo().log("Category to be saved created : {}", savedCategory);
     return savedCategory;
   }
@@ -89,9 +88,9 @@ public class CategoryService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Category updateCategory(UpdateCategoryDTO updateCategoryDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Optional<Category> categoryOptional =
-        this.categoryRepository.findByCategoryIdAndUserId(
+        categoryRepository.findByCategoryIdAndUserId(
             updateCategoryDTO.getCategoryId(), user.getId());
     if (categoryOptional.isEmpty()) {
       LOGGER.atError().log("Category to be updated not found : {}", updateCategoryDTO);
@@ -99,7 +98,7 @@ public class CategoryService {
     }
     if (!categoryOptional.get().getCategoryName().equals(updateCategoryDTO.getCategoryName())) {
       Optional<Category> similarCategory =
-          this.categoryRepository.findByCategoryNameAndUserId(
+          categoryRepository.findByCategoryNameAndUserId(
               updateCategoryDTO.getCategoryName(), user.getId());
       if (similarCategory.isPresent()) {
         throw new ResourceAlreadyExistsException(
@@ -110,7 +109,7 @@ public class CategoryService {
       }
     }
     Category category = updateCategoryValues(updateCategoryDTO, categoryOptional.get());
-    Category updatedCategory = this.categoryRepository.save(category);
+    Category updatedCategory = categoryRepository.save(category);
     LOGGER.atInfo().log("Category updated : {}", updatedCategory);
     return updatedCategory;
   }
@@ -136,15 +135,15 @@ public class CategoryService {
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteCategory(Long id, String userName) throws ResourceNotFoundException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Optional<Category> categoryOptional =
-        this.categoryRepository.findByCategoryIdAndUserId(id, user.getId());
+        categoryRepository.findByCategoryIdAndUserId(id, user.getId());
     if (categoryOptional.isEmpty()) {
       LOGGER.atError().log("Category to be deleted not found with id: {}", id);
       throw new ResourceNotFoundException("Category not found");
     }
     Category category = categoryOptional.get();
-    this.categoryRepository.delete(category);
+    categoryRepository.delete(category);
     LOGGER.atInfo().log("Category deleted with id: {}", id);
   }
 }

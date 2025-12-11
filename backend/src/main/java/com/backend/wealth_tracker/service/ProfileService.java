@@ -38,10 +38,10 @@ public class ProfileService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Profile saveProfile(CreateProfileDTO createProfileDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Profile profile = ProfileMapper.createProfileDTOToProfile(createProfileDTO);
     Optional<Profile> similarCategory =
-        this.profileRepository.findByProfileNameAndUserId(profile.getProfileName(), user.getId());
+        profileRepository.findByProfileNameAndUserId(profile.getProfileName(), user.getId());
     if (similarCategory.isPresent()) {
       throw new ResourceAlreadyExistsException(
           "Profile already present with name: "
@@ -49,8 +49,8 @@ public class ProfileService {
               + " for user: "
               + user.getId());
     }
-    profile.setUser(this.authService.getUserByUsername(userName));
-    Profile savedProfile = this.profileRepository.save(profile);
+    profile.setUser(authService.getUserByUsername(userName));
+    Profile savedProfile = profileRepository.save(profile);
     LOGGER.atInfo().log("Profile created : {}", savedProfile);
     return savedProfile;
   }
@@ -58,17 +58,16 @@ public class ProfileService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Profile updateProfile(UpdateProfileDTO updateProfileDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Optional<Profile> profileOptional =
-        this.profileRepository.findByProfileIdAndUserId(
-            updateProfileDTO.getProfileId(), user.getId());
+        profileRepository.findByProfileIdAndUserId(updateProfileDTO.getProfileId(), user.getId());
     if (profileOptional.isEmpty()) {
       throw new ResourceNotFoundException("Profile not found for: " + updateProfileDTO);
     }
     Profile profile = profileOptional.get();
     if (!profile.getProfileName().equals(updateProfileDTO.getProfileName())) {
       Optional<Profile> similarProfile =
-          this.profileRepository.findByProfileNameAndUserId(
+          profileRepository.findByProfileNameAndUserId(
               updateProfileDTO.getProfileName(), user.getId());
       if (similarProfile.isPresent()) {
         throw new ResourceAlreadyExistsException(
@@ -79,7 +78,7 @@ public class ProfileService {
       }
     }
     Profile updatedProfile = updateProfileValues(updateProfileDTO, profile);
-    Profile savedProfile = this.profileRepository.save(updatedProfile);
+    Profile savedProfile = profileRepository.save(updatedProfile);
     LOGGER.atInfo().log("Profile updated : {}", savedProfile);
     return savedProfile;
   }
@@ -107,15 +106,15 @@ public class ProfileService {
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteProfile(Long id, String userName) throws ResourceNotFoundException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Optional<Profile> profileOptional =
-        this.profileRepository.findByProfileIdAndUserId(id, user.getId());
+        profileRepository.findByProfileIdAndUserId(id, user.getId());
     if (profileOptional.isEmpty()) {
       LOGGER.atError().log("Profile to be deleted not found with id: {}", id);
       throw new ResourceNotFoundException("Profile not found");
     }
     Profile profile = profileOptional.get();
-    this.profileRepository.delete(profile);
+    profileRepository.delete(profile);
     LOGGER.atInfo().log("Category deleted with id: {}", id);
   }
 
@@ -124,8 +123,8 @@ public class ProfileService {
       propagation = Propagation.REQUIRED,
       readOnly = true)
   public List<Profile> getAllProfilesForUser(String userName) throws ResourceNotFoundException {
-    User user = this.authService.getUserByUsername(userName);
-    List<Profile> profiles = this.profileRepository.findAllWithRelations(user.getId());
+    User user = authService.getUserByUsername(userName);
+    List<Profile> profiles = profileRepository.findAllWithRelations(user.getId());
     LOGGER.atInfo().log("Fetched {} profiles for user: {}", profiles.size(), userName);
     return profiles;
   }
