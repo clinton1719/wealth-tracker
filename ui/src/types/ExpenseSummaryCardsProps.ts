@@ -1,7 +1,7 @@
-import type { Category } from './Category'
-import type { Expense } from './Expense'
+import type { Category } from "./Category";
+import type { Expense } from "./Expense";
 
 export interface ExpenseSummaryCardsProps {
-  expensesData: Expense[]
-  categoriesData: Category[]
+  expensesData: Expense[];
+  categoriesData: Category[];
 }

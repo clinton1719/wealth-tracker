@@ -1,6 +1,6 @@
-import { Separator } from '@/components/ui/separator'
-import { AccountsFeature } from '@/features/account/accountsFeature'
-import { ProfilesFeature } from '@/features/profile/profilesFeature'
+import { Separator } from "@/components/ui/separator";
+import { AccountsFeature } from "@/features/account/accountsFeature";
+import { ProfilesFeature } from "@/features/profile/profilesFeature";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <Separator decorative className="bg-accent" />
       <AccountsFeature />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
