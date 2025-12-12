@@ -50,7 +50,7 @@ export const accountFormSchema = z.object({
     .max(100, 'Description must be at most 100 characters long')
     .optional(),
   accountBalance: z
-    .number({ error: 'Invalid input, please enter only numbers' })
+    .number({ error: 'Invalid input, please enter a valid amount' })
     .nonnegative('Balance cannot be negative'),
   accountType: z.string().min(1, 'Account type is required'),
   profileName: z.string().min(1, 'Profile is required'),
@@ -59,7 +59,7 @@ export const accountFormSchema = z.object({
 export const expenseFormSchema = z.object({
   expenseId: z.number().optional(),
   expenseAmount: z
-    .number({ error: 'Invalid input, please enter only numbers' })
+    .number({ error: 'Invalid input, please enter a valid amount' })
     .positive('Expense amount must be greater than zero'),
   expenseDescription: z
     .string()

@@ -182,3 +182,7 @@
 .text-value {
   @apply text-muted-foreground text-sm flex-1 max-w-[90%] text-left break-all;
 }
+
+.card-border {
+  @apply border-4 border-solid;
+}

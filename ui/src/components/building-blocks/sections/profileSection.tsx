@@ -43,8 +43,8 @@ export function ProfileSection({
 
   return (
     <Card
-      className="card"
-      style={{ backgroundColor: `${profile.profileColorCode}70` }}
+      className="card card-border"
+      style={{ borderColor: profile.profileColorCode }}
     >
       <CardHeader>
         <CardTitle>
@@ -93,9 +93,8 @@ export function ProfileSection({
         <div className="flex flex-col gap-6">
           <div className="flex justify-between items-center">
             <span
-              className={`status-badge ${
-                enabledMap[profile.profileId] ? 'enabled' : 'disabled'
-              }`}
+              className={`status-badge ${enabledMap[profile.profileId] ? 'enabled' : 'disabled'
+                }`}
             >
               {enabledMap[profile.profileId] ? 'Enabled' : 'Disabled'}
             </span>

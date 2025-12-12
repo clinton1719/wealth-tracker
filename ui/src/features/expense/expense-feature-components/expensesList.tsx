@@ -40,9 +40,8 @@ export function ExpensesList({
   accountsData,
   categoriesData,
   profilesData,
-  handleUpdateProfile,
-  enabledMap,
-  handleDeleteAccount,
+  handleUpdateExpense,
+  handleDeleteExpense,
 }: ExpensesListProps) {
   const categoryMap = React.useMemo(() => {
     if (!categoriesData)
@@ -64,7 +63,6 @@ export function ExpensesList({
 
   const filteredExpensesData = React.useMemo(() => {
     return expensesData
-      .filter(expense => enabledMap[expense.profileId])
       .map(expense => ({
         expenseId: expense.expenseId,
         expenseAmount: expense.expenseAmount,
@@ -79,11 +77,11 @@ export function ExpensesList({
         profilePicture: profileMap[expense.profileId].profilePicture,
         profileColorCode: profileMap[expense.profileId].profileColorCode,
       }))
-  }, [expensesData, enabledMap, categoryMap, accountMap, profileMap])
+  }, [expensesData, categoryMap, accountMap, profileMap])
 
   const columns = React.useMemo(
-    () => createColumns(handleUpdateProfile, handleDeleteAccount),
-    [handleUpdateProfile, handleDeleteAccount],
+    () => createColumns(handleUpdateExpense, handleDeleteExpense),
+    [handleUpdateExpense, handleDeleteExpense],
   )
 
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -168,9 +166,9 @@ export function ExpensesList({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                     </TableHead>
                   )
                 })}
@@ -180,32 +178,35 @@ export function ExpensesList({
           <TableBody>
             {table.getRowModel().rows?.length
               ? (
-                  table.getRowModel().rows.map(row => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map(cell => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                )
-              : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
+                table.getRowModel().rows.map(row => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                    style={{
+                      borderLeft: `6px solid ${row.getValue("profileColorCode") ?? undefined}`,
+                    }}
+                  >
+                    {row.getVisibleCells().map(cell => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                )}
+                ))
+              )
+              : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </div>

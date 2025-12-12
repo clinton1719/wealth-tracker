@@ -93,7 +93,7 @@ export default function ExpensesFeature() {
     data: categoriesData,
   } = useGetAllCategoriesQuery()
 
-  const handleUpdateProfile = useCallback(
+  const handleUpdateExpense = useCallback(
     (updateExpense: UpdateExpense) => {
       form.reset({
         ...updateExpense,
@@ -147,7 +147,7 @@ export default function ExpensesFeature() {
 
   const deleteCurrentExpense = async () => {
     if (currentExpense && currentExpense.expenseId) {
-      await deleteExpense(currentExpense.expenseId)
+      await deleteExpense(currentExpense.expenseId).unwrap();
       toast.info(
         `Expense of ${currentExpense.expenseAmount} created at ${currentExpense.expenseCreatedAt} deleted successfully!`,
       )
@@ -158,7 +158,7 @@ export default function ExpensesFeature() {
     }
   }
 
-  const handleDeleteAccount = (expense: Partial<FilteredExpense>) => {
+  const handleDeleteExpense = (expense: Partial<FilteredExpense>) => {
     setDeleteExpenseDialogOpen(true)
     setCurrentExpense(expense)
   }
@@ -333,7 +333,13 @@ export default function ExpensesFeature() {
     }
   }
 
-  if (expensesData && profilesData && accountsData && categoriesData) {
+  let enabledExpenses;
+
+  if (expensesData) {
+    enabledExpenses = expensesData.filter(expense => enabledMap[expense.profileId]);
+  }
+
+  if (enabledExpenses && profilesData && accountsData && categoriesData) {
     return (
       <div className="container mx-auto p-4 min-h-screen mb-4">
         <div className="flex items-center justify-between">
@@ -358,7 +364,7 @@ export default function ExpensesFeature() {
           />
         </div>
         <ExpenseSummaryCards
-          expensesData={expensesData}
+          expensesData={enabledExpenses}
           categoriesData={categoriesData}
         />
         <div className="flex items-center justify-between mb-4 mt-8">
@@ -389,13 +395,12 @@ export default function ExpensesFeature() {
           </Button>
         </div>
         <ExpensesList
-          expensesData={expensesData}
+          expensesData={enabledExpenses}
           categoriesData={categoriesData}
           accountsData={accountsData}
           profilesData={profilesData}
-          handleUpdateProfile={handleUpdateProfile}
-          enabledMap={enabledMap}
-          handleDeleteAccount={handleDeleteAccount}
+          handleUpdateExpense={handleUpdateExpense}
+          handleDeleteExpense={handleDeleteExpense}
         />
         <AlertDialogComponent
           isDialogOpen={deleteExpenseDialogOpen}
