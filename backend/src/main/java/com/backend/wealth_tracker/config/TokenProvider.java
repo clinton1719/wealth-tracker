@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class TokenProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(TokenProvider.class);
 
-  @Value("${security.jwt.token.secret-key}")
+  @Value("${security.jwt.token.secret.key}")
   private String JWT_SECRET;
 
   public String generateAccessToken(User user) {
