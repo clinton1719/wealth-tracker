@@ -1,3 +1,9 @@
+import type * as z from 'zod'
+import type { Profile } from '@/types/Profile'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddProfileForm } from '@/components/building-blocks/forms/addProfileForm'
 import { ProfileSection } from '@/components/building-blocks/sections/profileSection'
@@ -10,14 +16,8 @@ import {
   useSaveProfileMutation,
   useUpdateProfileMutation,
 } from '@/services/profilesApi'
-import type { Profile } from '@/types/Profile'
 import { defaultProfile } from '@/utilities/constants'
 import { profileFormSchema } from '@/utilities/zodSchemas'
-import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import type * as z from 'zod'
 
 export function ProfilesFeature() {
   const [isUpdate, setIsUpdate] = useState(false)
@@ -215,7 +215,7 @@ export function ProfilesFeature() {
 
   const deleteCurrentProfile = async () => {
     if (currentProfile && currentProfile.profileId) {
-      await deleteProfile(currentProfile.profileId).unwrap();
+      await deleteProfile(currentProfile.profileId).unwrap()
       toast.info(
         `Profile : ${currentProfile.profileName} deleted successfully!`,
       )
@@ -252,22 +252,22 @@ export function ProfilesFeature() {
       <div className="normal-grid">
         {filteredProfileData
           ? (
-            filteredProfileData.map(profile => (
-              <ProfileSection
-                profile={profile}
-                key={profile.profileId}
-                form={form}
-                setIsUpdate={setIsUpdate}
-                setProfileDialogOpen={setProfileDialogOpen}
-                handleDeleteProfile={handleDeleteProfile}
-              />
-            ))
-          )
+              filteredProfileData.map(profile => (
+                <ProfileSection
+                  profile={profile}
+                  key={profile.profileId}
+                  form={form}
+                  setIsUpdate={setIsUpdate}
+                  setProfileDialogOpen={setProfileDialogOpen}
+                  handleDeleteProfile={handleDeleteProfile}
+                />
+              ))
+            )
           : (
-            <p className="text-muted-foreground text-sm">
-              Create a new profile here
-            </p>
-          )}
+              <p className="text-muted-foreground text-sm">
+                Create a new profile here
+              </p>
+            )}
       </div>
       <AlertDialogComponent
         isDialogOpen={deleteProfileDialogOpen}

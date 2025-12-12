@@ -1,3 +1,10 @@
+import type * as z from 'zod'
+import type { Category } from '@/types/Category'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Fragment, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddCategoryForm } from '@/components/building-blocks/forms/addCategoryForm'
 import { CategorySection } from '@/components/building-blocks/sections/categorySection'
@@ -22,15 +29,8 @@ import {
 } from '@/services/categoriesApi'
 import { useGetAllProfilesForUserQuery } from '@/services/profilesApi'
 import { selectProfileSlice } from '@/slices/profileSlice'
-import type { Category } from '@/types/Category'
 import { defaultCategory } from '@/utilities/constants'
 import { categoryFormSchema } from '@/utilities/zodSchemas'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { toast } from 'sonner'
-import type * as z from 'zod'
 
 export default function CategoriesFeature() {
   const [isUpdate, setIsUpdate] = useState(false)
@@ -81,13 +81,13 @@ export default function CategoriesFeature() {
         || category.categoryName
           .toLowerCase()
           .includes(categorySearchText.toLowerCase()))
-      && (selectedTag ? category.categoryTags?.includes(selectedTag) : true)
+        && (selectedTag ? category.categoryTags?.includes(selectedTag) : true)
     )
-  }), [categoriesData, enabledMap, categorySearchText, selectedTag]);
+  }), [categoriesData, enabledMap, categorySearchText, selectedTag])
 
   const tags = useMemo(() => filteredCategoriesData?.flatMap(
     category => category.categoryTags,
-  ), [filteredCategoriesData]);
+  ), [filteredCategoriesData])
   const uniqueTags = [...new Set(tags)]
 
   if (
@@ -270,7 +270,7 @@ export default function CategoriesFeature() {
 
   const deleteCurrentCategory = async () => {
     if (currentCategory && currentCategory.categoryId) {
-      await deleteCategory(currentCategory.categoryId).unwrap();
+      await deleteCategory(currentCategory.categoryId).unwrap()
       toast.info(
         `Category : ${currentCategory.categoryName} deleted successfully!`,
       )
@@ -295,38 +295,38 @@ export default function CategoriesFeature() {
             />
             {tags
               ? (
-                <>
-                  <Select
-                    value={selectedTag}
-                    onValueChange={e => setSelectedTag(e)}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Filter by tags" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Tags</SelectLabel>
-                        {uniqueTags.map((tag) => {
-                          return (
-                            <SelectItem key={tag} value={tag ?? ''}>
-                              {tag}
-                            </SelectItem>
-                          )
-                        })}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    variant="destructive"
-                    onClick={() => setSelectedTag('')}
-                  >
-                    Clear tags
-                  </Button>
-                </>
-              )
+                  <>
+                    <Select
+                      value={selectedTag}
+                      onValueChange={e => setSelectedTag(e)}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Filter by tags" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Tags</SelectLabel>
+                          {uniqueTags.map((tag) => {
+                            return (
+                              <SelectItem key={tag} value={tag ?? ''}>
+                                {tag}
+                              </SelectItem>
+                            )
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      variant="destructive"
+                      onClick={() => setSelectedTag('')}
+                    >
+                      Clear tags
+                    </Button>
+                  </>
+                )
               : (
-                <></>
-              )}
+                  <></>
+                )}
           </div>
           <AddCategoryForm
             form={form}
@@ -363,7 +363,8 @@ export default function CategoriesFeature() {
               }
               else {
                 return (
-                 <></>
+                  <Fragment key={category.categoryId}>
+                  </Fragment>
                 )
               }
             })}

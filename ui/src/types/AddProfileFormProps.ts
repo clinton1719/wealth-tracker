@@ -23,5 +23,5 @@ export interface AddProfileFormProps {
     }
   >
   onSubmit: any
-  setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>
 }

@@ -24,7 +24,7 @@ export function AddProfileForm({
   setProfileDialogOpen,
   form,
   onSubmit,
-  setIsUpdate
+  setIsUpdate,
 }: AddProfileFormProps) {
   const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter')
@@ -47,7 +47,7 @@ export function AddProfileForm({
         className="max-w-md"
         onClickMethod={() => {
           setProfileDialogOpen(false)
-          setIsUpdate(false);
+          setIsUpdate(false)
         }}
       >
         <DialogHeader>

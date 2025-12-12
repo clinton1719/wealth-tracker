@@ -94,7 +94,7 @@ export function ProfileSection({
           <div className="flex justify-between items-center">
             <span
               className={`status-badge ${enabledMap[profile.profileId] ? 'enabled' : 'disabled'
-                }`}
+              }`}
             >
               {enabledMap[profile.profileId] ? 'Enabled' : 'Disabled'}
             </span>

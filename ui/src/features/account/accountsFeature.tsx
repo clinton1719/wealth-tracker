@@ -1,3 +1,10 @@
+import type * as z from 'zod'
+import type { Account } from '@/types/Account'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Fragment, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddAccountForm } from '@/components/building-blocks/forms/addAccountForm'
 import { AccountSection } from '@/components/building-blocks/sections/accountSection'
@@ -12,15 +19,8 @@ import {
 } from '@/services/accountsApi'
 import { useGetAllProfilesForUserQuery } from '@/services/profilesApi'
 import { selectProfileSlice } from '@/slices/profileSlice'
-import type { Account } from '@/types/Account'
 import { defaultAccount } from '@/utilities/constants'
 import { accountFormSchema } from '@/utilities/zodSchemas'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { toast } from 'sonner'
-import type * as z from 'zod'
 
 export function AccountsFeature() {
   const [isUpdate, setIsUpdate] = useState(false)
@@ -67,7 +67,7 @@ export function AccountsFeature() {
           .toLowerCase()
           .includes(accountSearchText.toLowerCase()))
     )
-  }), [accountsData, enabledMap, accountSearchText]);
+  }), [accountsData, enabledMap, accountSearchText])
 
   if (
     getAllAccountsLoading
@@ -247,7 +247,7 @@ export function AccountsFeature() {
 
   const deleteCurrentAccount = async () => {
     if (currentAccount && currentAccount.accountId) {
-      await deleteAccount(currentAccount.accountId).unwrap();
+      await deleteAccount(currentAccount.accountId).unwrap()
       toast.info(
         `Account : ${currentAccount.accountName} deleted successfully!`,
       )
@@ -287,39 +287,40 @@ export function AccountsFeature() {
         <div className="normal-grid">
           {filteredAccountsData
             ? (
-              filteredAccountsData
-                .sort((accountA, accountB) =>
-                  accountA.accountName.localeCompare(accountB.accountName),
-                )
-                .map((account) => {
-                  const profile = profilesData.find(
-                    profile => profile.profileId === account.profileId,
+                filteredAccountsData
+                  .sort((accountA, accountB) =>
+                    accountA.accountName.localeCompare(accountB.accountName),
                   )
-                  if (profile) {
-                    return (
-                      <AccountSection
-                        account={account}
-                        profile={profile}
-                        key={account.accountId}
-                        form={form}
-                        setIsUpdate={setIsUpdate}
-                        setAccountDialogOpen={setAccountDialogOpen}
-                        handleDeleteAccount={handleDeleteAccount}
-                      />
+                  .map((account) => {
+                    const profile = profilesData.find(
+                      profile => profile.profileId === account.profileId,
                     )
-                  }
-                  else {
-                    return (
-                     <></>
-                    )
-                  }
-                })
-            )
+                    if (profile) {
+                      return (
+                        <AccountSection
+                          account={account}
+                          profile={profile}
+                          key={account.accountId}
+                          form={form}
+                          setIsUpdate={setIsUpdate}
+                          setAccountDialogOpen={setAccountDialogOpen}
+                          handleDeleteAccount={handleDeleteAccount}
+                        />
+                      )
+                    }
+                    else {
+                      return (
+                        <Fragment key={account.accountId}>
+                        </Fragment>
+                      )
+                    }
+                  })
+              )
             : (
-              <p className="text-muted-foreground text-sm">
-                Create a new account here
-              </p>
-            )}
+                <p className="text-muted-foreground text-sm">
+                  Create a new account here
+                </p>
+              )}
         </div>
         <AlertDialogComponent
           isDialogOpen={deleteAccountDialogOpen}

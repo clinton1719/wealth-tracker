@@ -155,7 +155,7 @@ export default function ExpensesFeature() {
 
   const deleteCurrentExpense = async () => {
     if (currentExpense && currentExpense.expenseId) {
-      await deleteExpense(currentExpense.expenseId).unwrap();
+      await deleteExpense(currentExpense.expenseId).unwrap()
       toast.info(
         `Expense of ${currentExpense.expenseAmount} created at ${currentExpense.expenseCreatedAt} deleted successfully!`,
       )
@@ -341,10 +341,10 @@ export default function ExpensesFeature() {
     }
   }
 
-  let enabledExpenses;
+  let enabledExpenses
 
   if (expensesData) {
-    enabledExpenses = expensesData.filter(expense => enabledMap[expense.profileId]);
+    enabledExpenses = expensesData.filter(expense => enabledMap[expense.profileId])
   }
 
   if (enabledExpenses && profilesData && accountsData && categoriesData) {

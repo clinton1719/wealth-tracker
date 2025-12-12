@@ -7,8 +7,8 @@ interface AuthState {
   token: string | null
 }
 
-const persistedUsername = localStorage.getItem('username');
-const persistedToken = localStorage.getItem('token');
+const persistedUsername = localStorage.getItem('username')
+const persistedToken = localStorage.getItem('token')
 
 const initialState: AuthState = {
   username: persistedUsername || null,
@@ -20,21 +20,21 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials(state, action: PayloadAction<AuthState>) {
-      const { username, token } = action.payload;
-      state.username = username;
-      state.token = token;
+      const { username, token } = action.payload
+      state.username = username
+      state.token = token
 
       if (token && username) {
-        localStorage.setItem('username', username);
-        localStorage.setItem('token', token);
+        localStorage.setItem('username', username)
+        localStorage.setItem('token', token)
       }
     },
     logout(state) {
-      state.username = null;
-      state.token = null;
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-    }
+      state.username = null
+      state.token = null
+      localStorage.removeItem('username')
+      localStorage.removeItem('token')
+    },
   },
 })
 
