@@ -14,6 +14,10 @@ public class UpdateProfileDTO {
   private String profilePicture;
   private MultipartFile profilePictureFile;
 
+  public boolean isProfilePicturePresent() {
+    return this.getProfilePictureFile() != null && !this.getProfilePictureFile().isEmpty();
+  }
+
   public Long getProfileId() {
     return profileId;
   }

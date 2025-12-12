@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -94,11 +95,11 @@ public class ProfileService {
     if (updateProfileDTO.getProfileColorCode() != null) {
       profile.setProfileColorCode(updateProfileDTO.getProfileColorCode());
     }
-    if (updateProfileDTO.getProfilePictureFile() != null
-        && !updateProfileDTO.getProfilePictureFile().isEmpty()) {
-      String extension = Helper.getExtension(updateProfileDTO.getProfilePictureFile());
+    if (updateProfileDTO.isProfilePicturePresent()) {
+      MultipartFile file = updateProfileDTO.getProfilePictureFile();
+      String extension = Helper.getExtension(file);
       profile.setProfilePictureExtension(extension);
-      profile.setProfilePicture(updateProfileDTO.getProfilePictureFile().getBytes());
+      profile.setProfilePicture(file.getBytes());
     }
 
     return profile;
