@@ -2,7 +2,7 @@ name: Pipeline
 
 on:
   push:
-    branches: feature/*
+    branches: featur/*
   pull_request:
     branches:
       - main
