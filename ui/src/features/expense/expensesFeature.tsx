@@ -63,6 +63,7 @@ export default function ExpensesFeature() {
   const {
     data: expensesData,
     isLoading: getAllExpensesLoading,
+    isFetching: getAllExpensesFetching,
     error: expensesError,
   } = useGetAllExpensesInRangeQuery({
     startDate,
@@ -80,16 +81,19 @@ export default function ExpensesFeature() {
   const {
     error: profilesError,
     isLoading: getAllProfilesLoading,
+    isFetching: getAllProfilesFetching,
     data: profilesData,
   } = useGetAllProfilesForUserQuery()
   const {
     error: accountsError,
     isLoading: getAllAccountsLoading,
+    isFetching: getAllAccountsFetching,
     data: accountsData,
   } = useGetAllAccountsQuery()
   const {
     error: categoriesError,
     isLoading: getAllCategoriesLoading,
+    isFetching: getAllCategoriesFetching,
     data: categoriesData,
   } = useGetAllCategoriesQuery()
 
@@ -124,6 +128,10 @@ export default function ExpensesFeature() {
     || saveExpenseLoading
     || updateExpenseLoading
     || deleteExpenseLoading
+    || getAllAccountsFetching
+    || getAllExpensesFetching
+    || getAllCategoriesFetching
+    || getAllProfilesFetching
   ) {
     return <Spinner className="spinner" />
   }

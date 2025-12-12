@@ -58,6 +58,7 @@ export default function CategoriesFeature() {
   const {
     error: categoriesError,
     isLoading: getAllCategoriesLoading,
+    isFetching: getAllCategoriesFetching,
     data: categoriesData,
   } = useGetAllCategoriesQuery()
   const {
@@ -91,6 +92,7 @@ export default function CategoriesFeature() {
 
   if (
     saveCategoryLoading
+    || getAllCategoriesFetching
     || getAllCategoriesLoading
     || updateCategoryLoading
     || deleteCategoryLoading

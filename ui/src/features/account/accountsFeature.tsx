@@ -39,6 +39,7 @@ export function AccountsFeature() {
   const {
     error: accountsError,
     isLoading: getAllAccountsLoading,
+    isFetching: getAllAccountsFetching,
     data: accountsData,
   } = useGetAllAccountsQuery()
   const {
@@ -70,6 +71,7 @@ export function AccountsFeature() {
 
   if (
     getAllAccountsLoading
+    || getAllAccountsFetching
     || saveAccountLoading
     || updateAccountLoading
     || deleteAccountLoading

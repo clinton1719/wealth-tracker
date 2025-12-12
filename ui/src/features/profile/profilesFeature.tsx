@@ -36,6 +36,7 @@ export function ProfilesFeature() {
   const {
     error,
     isLoading: getAllProfilesLoading,
+    isFetching: getAllProfilesFetching,
     data: profileData,
   } = useGetAllProfilesForUserQuery()
   const [saveProfile, { isLoading: saveProfileLoading }]
@@ -62,6 +63,7 @@ export function ProfilesFeature() {
 
   if (
     getAllProfilesLoading
+    || getAllProfilesFetching
     || saveProfileLoading
     || updateProfileLoading
     || deleteProfileLoading
