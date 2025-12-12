@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router'
 import {
   NavigationMenu,
@@ -8,10 +9,13 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { logout } from '@/slices/authSlice'
 import { navigationStaticValues } from '@/static-values/navigation-values'
 
 export function NavigationBar() {
   const isMobile = useIsMobile()
+  const dispatch = useDispatch()
+
   return (
     <NavigationMenu viewport={isMobile}>
       <NavigationMenuList className="flex-wrap mb-4 mt-2 ml-2">
@@ -56,6 +60,15 @@ export function NavigationBar() {
               ))}
             </ul>
           </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <button
+            type="button"
+            onClick={() => dispatch(logout())}
+            className="card-value"
+          >
+            Logout
+          </button>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
