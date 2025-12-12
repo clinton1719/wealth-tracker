@@ -16,18 +16,20 @@ public class Category implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long categoryId;
 
   @Column(nullable = false)
   private String categoryName;
 
-  private String description;
+  private String categoryDescription;
 
   @Column(nullable = false)
-  private String colorCode;
+  private String categoryColorCode;
 
-  @Column private String icon;
-  @Column private List<String> tags;
+  @Column(name = "categoryIcon")
+  private String categoryIcon;
+
+  @Column private List<String> categoryTags;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
@@ -43,23 +45,23 @@ public class Category implements Serializable {
   public Category() {}
 
   public Category(Category originalCategory) {
-    this.id = originalCategory.id;
+    this.categoryId = originalCategory.categoryId;
     this.categoryName = originalCategory.categoryName;
-    this.description = originalCategory.description;
-    this.colorCode = originalCategory.colorCode;
-    this.icon = originalCategory.icon;
-    this.tags = originalCategory.tags;
+    this.categoryDescription = originalCategory.categoryDescription;
+    this.categoryColorCode = originalCategory.categoryColorCode;
+    this.categoryIcon = originalCategory.categoryIcon;
+    this.categoryTags = originalCategory.categoryTags;
     this.user = originalCategory.user;
     this.expenses = originalCategory.expenses;
     this.profile = originalCategory.profile;
   }
 
-  public Long getId() {
-    return id;
+  public Long getCategoryId() {
+    return categoryId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
   }
 
   public String getCategoryName() {
@@ -70,20 +72,20 @@ public class Category implements Serializable {
     this.categoryName = categoryName;
   }
 
-  public String getDescription() {
-    return description;
+  public String getCategoryDescription() {
+    return categoryDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setCategoryDescription(String categoryDescription) {
+    this.categoryDescription = categoryDescription;
   }
 
-  public String getColorCode() {
-    return colorCode;
+  public String getCategoryColorCode() {
+    return categoryColorCode;
   }
 
-  public void setColorCode(String colorCode) {
-    this.colorCode = colorCode;
+  public void setCategoryColorCode(String categoryColorCode) {
+    this.categoryColorCode = categoryColorCode;
   }
 
   public User getUser() {
@@ -120,30 +122,30 @@ public class Category implements Serializable {
     }
   }
 
-  public String getIcon() {
-    return icon;
+  public String getCategoryIcon() {
+    return categoryIcon;
   }
 
-  public void setIcon(String icon) {
-    this.icon = icon;
+  public void setCategoryIcon(String categoryIcon) {
+    this.categoryIcon = categoryIcon;
   }
 
-  public List<String> getTags() {
-    if (tags == null) {
+  public List<String> getCategoryTags() {
+    if (categoryTags == null) {
       return List.of();
     }
-    return new ArrayList<>(tags);
+    return new ArrayList<>(categoryTags);
   }
 
-  public void setTags(List<String> tags) {
-    if (this.tags == null) {
-      this.tags = new ArrayList<>();
+  public void setCategoryTags(List<String> categoryTags) {
+    if (this.categoryTags == null) {
+      this.categoryTags = new ArrayList<>();
     }
-    if (tags != null) {
-      this.tags.clear();
-      this.tags.addAll(tags);
+    if (categoryTags != null) {
+      this.categoryTags.clear();
+      this.categoryTags.addAll(categoryTags);
     } else {
-      this.tags.clear();
+      this.categoryTags.clear();
     }
   }
 
@@ -165,22 +167,22 @@ public class Category implements Serializable {
   @Override
   public String toString() {
     return "Category{"
-        + "id="
-        + id
+        + "categoryId="
+        + categoryId
         + ", categoryName='"
         + categoryName
         + '\''
-        + ", description='"
-        + description
+        + ", categoryDescription='"
+        + categoryDescription
         + '\''
-        + ", colorCode='"
-        + colorCode
+        + ", categoryColorCode='"
+        + categoryColorCode
         + '\''
-        + ", icon='"
-        + icon
+        + ", categoryIcon='"
+        + categoryIcon
         + '\''
-        + ", tags="
-        + tags
+        + ", categoryTags="
+        + categoryTags
         + ", user="
         + user
         + ", profile="

@@ -9,14 +9,14 @@ public class CreateProfileDTO {
   @NotBlank(message = "Profile name cannot be blank")
   private String profileName;
 
-  private String description;
+  private String profileDescription;
 
   @NotBlank(message = "Category color code cannot be blank")
   @Length(
       min = 4,
       max = 7,
       message = "Color code must be between 4 and 7 characters long, inclusive.")
-  private String colorCode;
+  private String profileColorCode;
 
   private String profilePicture;
 
@@ -30,20 +30,20 @@ public class CreateProfileDTO {
     this.profileName = profileName;
   }
 
-  public String getDescription() {
-    return description;
+  public String getProfileDescription() {
+    return profileDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setProfileDescription(String profileDescription) {
+    this.profileDescription = profileDescription;
   }
 
-  public String getColorCode() {
-    return colorCode;
+  public String getProfileColorCode() {
+    return profileColorCode;
   }
 
-  public void setColorCode(String colorCode) {
-    this.colorCode = colorCode;
+  public void setProfileColorCode(String profileColorCode) {
+    this.profileColorCode = profileColorCode;
   }
 
   public String getProfilePicture() {

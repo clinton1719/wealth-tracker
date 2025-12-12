@@ -20,5 +20,5 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
           + "WHERE p.user.id = :userId")
   List<Profile> findAllWithRelations(@Param("userId") Long userId);
 
-  Optional<Profile> findByIdAndUserId(Long id, Long userId);
+  Optional<Profile> findByProfileIdAndUserId(Long profileId, Long userId);
 }

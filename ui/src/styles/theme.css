@@ -8,7 +8,7 @@
      #5E6472  (deep slate)
   */
   --background: #faf3dd; /* light cream */
-  --foreground: #5e6472; /* deep slate for text */
+  --foreground: #000000; /* deep slate for text */
 
   --card: #ffffff;
   --card-foreground: var(--foreground);

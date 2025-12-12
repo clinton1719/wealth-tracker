@@ -15,15 +15,15 @@ public class Profile implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long profileId;
 
   @Column(nullable = false)
   private String profileName;
 
-  private String description;
+  private String profileDescription;
 
   @Column(nullable = false)
-  private String colorCode;
+  private String profileColorCode;
 
   @Column(columnDefinition = "bytea")
   private byte[] profilePicture;
@@ -46,10 +46,10 @@ public class Profile implements Serializable {
   public Profile() {}
 
   public Profile(Profile originalProfile) {
-    this.id = originalProfile.id;
+    this.profileId = originalProfile.profileId;
     this.profileName = originalProfile.profileName;
-    this.description = originalProfile.description;
-    this.colorCode = originalProfile.colorCode;
+    this.profileDescription = originalProfile.profileDescription;
+    this.profileColorCode = originalProfile.profileColorCode;
     this.profilePicture = originalProfile.profilePicture;
     this.profilePictureExtension = originalProfile.profilePictureExtension;
     this.user = originalProfile.user;
@@ -58,12 +58,12 @@ public class Profile implements Serializable {
     this.expenses = originalProfile.expenses;
   }
 
-  public Long getId() {
-    return id;
+  public Long getProfileId() {
+    return profileId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setProfileId(Long profileId) {
+    this.profileId = profileId;
   }
 
   public String getProfileName() {
@@ -74,12 +74,12 @@ public class Profile implements Serializable {
     this.profileName = profileName;
   }
 
-  public String getColorCode() {
-    return colorCode;
+  public String getProfileColorCode() {
+    return profileColorCode;
   }
 
-  public void setColorCode(String colorCode) {
-    this.colorCode = colorCode;
+  public void setProfileColorCode(String profileColorCode) {
+    this.profileColorCode = profileColorCode;
   }
 
   public byte[] getProfilePicture() {
@@ -157,12 +157,12 @@ public class Profile implements Serializable {
     }
   }
 
-  public String getDescription() {
-    return description;
+  public String getProfileDescription() {
+    return profileDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setProfileDescription(String profileDescription) {
+    this.profileDescription = profileDescription;
   }
 
   public User getUser() {
@@ -192,15 +192,15 @@ public class Profile implements Serializable {
   public String toString() {
     return "Profile{"
         + "id="
-        + id
+        + profileId
         + ", profileName='"
         + profileName
         + '\''
         + ", description='"
-        + description
+        + profileDescription
         + '\''
         + ", colorCode='"
-        + colorCode
+        + profileColorCode
         + '\''
         + ", profilePictureExtension='"
         + profilePictureExtension

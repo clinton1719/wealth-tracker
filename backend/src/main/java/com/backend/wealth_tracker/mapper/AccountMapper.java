@@ -12,11 +12,12 @@ public final class AccountMapper {
   private AccountMapper() {}
   ;
 
-  public static Account createAccountDTOToAccount(CreateAccountDTO createAccountDTO, User user, Profile profile) {
+  public static Account createAccountDTOToAccount(
+      CreateAccountDTO createAccountDTO, User user, Profile profile) {
     Account account = new Account();
     account.setAccountName(createAccountDTO.getAccountName());
     account.setAccountType(createAccountDTO.getAccountType());
-    account.setDescription(createAccountDTO.getDescription());
+    account.setAccountDescription(createAccountDTO.getAccountDescription());
     account.setAccountBalance(createAccountDTO.getAccountBalance());
     account.setUser(user);
     account.setProfile(profile);
@@ -25,12 +26,12 @@ public final class AccountMapper {
 
   public static ResponseAccountDTO accountToResponseAccountDTO(Account account) {
     ResponseAccountDTO responseAccountDTO = new ResponseAccountDTO();
-    responseAccountDTO.setId(account.getId());
+    responseAccountDTO.setAccountId(account.getAccountId());
     responseAccountDTO.setAccountName(account.getAccountName());
-    responseAccountDTO.setDescription(account.getDescription());
+    responseAccountDTO.setAccountDescription(account.getAccountDescription());
     responseAccountDTO.setAccountBalance(account.getAccountBalance());
     responseAccountDTO.setAccountType(account.getAccountType());
-    responseAccountDTO.setProfileId(account.getProfile().getId());
+    responseAccountDTO.setProfileId(account.getProfile().getProfileId());
     return responseAccountDTO;
   }
 

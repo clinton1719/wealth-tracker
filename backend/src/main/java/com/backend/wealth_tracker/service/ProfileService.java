@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -38,10 +39,10 @@ public class ProfileService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Profile saveProfile(CreateProfileDTO createProfileDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Profile profile = ProfileMapper.createProfileDTOToProfile(createProfileDTO);
     Optional<Profile> similarCategory =
-        this.profileRepository.findByProfileNameAndUserId(profile.getProfileName(), user.getId());
+        profileRepository.findByProfileNameAndUserId(profile.getProfileName(), user.getId());
     if (similarCategory.isPresent()) {
       throw new ResourceAlreadyExistsException(
           "Profile already present with name: "
@@ -49,8 +50,8 @@ public class ProfileService {
               + " for user: "
               + user.getId());
     }
-    profile.setUser(this.authService.getUserByUsername(userName));
-    Profile savedProfile = this.profileRepository.save(profile);
+    profile.setUser(authService.getUserByUsername(userName));
+    Profile savedProfile = profileRepository.save(profile);
     LOGGER.atInfo().log("Profile created : {}", savedProfile);
     return savedProfile;
   }
@@ -58,16 +59,16 @@ public class ProfileService {
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Profile updateProfile(UpdateProfileDTO updateProfileDTO, String userName)
       throws ResourceNotFoundException, ResourceAlreadyExistsException, IOException {
-    User user = this.authService.getUserByUsername(userName);
+    User user = authService.getUserByUsername(userName);
     Optional<Profile> profileOptional =
-        this.profileRepository.findByIdAndUserId(updateProfileDTO.getId(), user.getId());
+        profileRepository.findByProfileIdAndUserId(updateProfileDTO.getProfileId(), user.getId());
     if (profileOptional.isEmpty()) {
       throw new ResourceNotFoundException("Profile not found for: " + updateProfileDTO);
     }
     Profile profile = profileOptional.get();
     if (!profile.getProfileName().equals(updateProfileDTO.getProfileName())) {
       Optional<Profile> similarProfile =
-          this.profileRepository.findByProfileNameAndUserId(
+          profileRepository.findByProfileNameAndUserId(
               updateProfileDTO.getProfileName(), user.getId());
       if (similarProfile.isPresent()) {
         throw new ResourceAlreadyExistsException(
@@ -78,7 +79,7 @@ public class ProfileService {
       }
     }
     Profile updatedProfile = updateProfileValues(updateProfileDTO, profile);
-    Profile savedProfile = this.profileRepository.save(updatedProfile);
+    Profile savedProfile = profileRepository.save(updatedProfile);
     LOGGER.atInfo().log("Profile updated : {}", savedProfile);
     return savedProfile;
   }
@@ -88,17 +89,17 @@ public class ProfileService {
     if (updateProfileDTO.getProfileName() != null) {
       profile.setProfileName(updateProfileDTO.getProfileName());
     }
-    if (updateProfileDTO.getDescription() != null) {
-      profile.setDescription(updateProfileDTO.getDescription());
+    if (updateProfileDTO.getProfileDescription() != null) {
+      profile.setProfileDescription(updateProfileDTO.getProfileDescription());
     }
-    if (updateProfileDTO.getColorCode() != null) {
-      profile.setColorCode(updateProfileDTO.getColorCode());
+    if (updateProfileDTO.getProfileColorCode() != null) {
+      profile.setProfileColorCode(updateProfileDTO.getProfileColorCode());
     }
-    if (updateProfileDTO.getProfilePictureFile() != null
-        && !updateProfileDTO.getProfilePictureFile().isEmpty()) {
-      String extension = Helper.getExtension(updateProfileDTO.getProfilePictureFile());
+    if (updateProfileDTO.isProfilePicturePresent()) {
+      MultipartFile file = updateProfileDTO.getProfilePictureFile();
+      String extension = Helper.getExtension(file);
       profile.setProfilePictureExtension(extension);
-      profile.setProfilePicture(updateProfileDTO.getProfilePictureFile().getBytes());
+      profile.setProfilePicture(file.getBytes());
     }
 
     return profile;
@@ -106,14 +107,15 @@ public class ProfileService {
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteProfile(Long id, String userName) throws ResourceNotFoundException {
-    User user = this.authService.getUserByUsername(userName);
-    Optional<Profile> profileOptional = this.profileRepository.findByIdAndUserId(id, user.getId());
+    User user = authService.getUserByUsername(userName);
+    Optional<Profile> profileOptional =
+        profileRepository.findByProfileIdAndUserId(id, user.getId());
     if (profileOptional.isEmpty()) {
       LOGGER.atError().log("Profile to be deleted not found with id: {}", id);
       throw new ResourceNotFoundException("Profile not found");
     }
     Profile profile = profileOptional.get();
-    this.profileRepository.delete(profile);
+    profileRepository.delete(profile);
     LOGGER.atInfo().log("Category deleted with id: {}", id);
   }
 
@@ -122,8 +124,8 @@ public class ProfileService {
       propagation = Propagation.REQUIRED,
       readOnly = true)
   public List<Profile> getAllProfilesForUser(String userName) throws ResourceNotFoundException {
-    User user = this.authService.getUserByUsername(userName);
-    List<Profile> profiles = this.profileRepository.findAllWithRelations(user.getId());
+    User user = authService.getUserByUsername(userName);
+    List<Profile> profiles = profileRepository.findAllWithRelations(user.getId());
     LOGGER.atInfo().log("Fetched {} profiles for user: {}", profiles.size(), userName);
     return profiles;
   }

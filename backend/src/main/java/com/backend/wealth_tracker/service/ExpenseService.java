@@ -7,12 +7,17 @@ import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.helper.Helper;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
-import com.backend.wealth_tracker.model.*;
-import com.backend.wealth_tracker.repository.AccountRepository;
+import com.backend.wealth_tracker.model.Category;
+import com.backend.wealth_tracker.model.Expense;
+import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
-import com.backend.wealth_tracker.repository.ProfileRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +29,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class ExpenseService {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseService.class);
@@ -36,8 +37,7 @@ public class ExpenseService {
   private final AuthService authService;
   private final AccountService accountService;
   private final CategoryRepository categoryRepository;
-  private final ProfileRepository profileRepository;
-  private final AccountRepository accountRepository;
+  private final ExpenseTransactionService expenseTransactionService;
 
   @SuppressFBWarnings("EI_EXPOSE_REP2")
   public ExpenseService(
@@ -45,20 +45,20 @@ public class ExpenseService {
       AuthService authService,
       AccountService accountService,
       CategoryRepository categoryRepository,
-      ProfileRepository profileRepository,
-      AccountRepository accountRepository) {
+      ExpenseTransactionService expenseTransactionService) {
     this.categoryRepository = categoryRepository;
     this.authService = authService;
     this.accountService = accountService;
     this.expenseRepository = expenseRepository;
-    this.profileRepository = profileRepository;
-    this.accountRepository = accountRepository;
+    this.expenseTransactionService = expenseTransactionService;
   }
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Expense saveExpense(CreateExpenseDTO createExpenseDTO, String userName)
-          throws ResourceNotFoundException, UnAuthorizedException, AccountCannotHaveNegativeBalanceException {
-    User user = this.authService.getUserByUsername(userName);
+      throws ResourceNotFoundException,
+          UnAuthorizedException,
+          AccountCannotHaveNegativeBalanceException {
+    User user = authService.getUserByUsername(userName);
     if (!Helper.isCategoryIdProfileIdAndAccountIdValid(
         user.getCategories(),
         createExpenseDTO.getCategoryId(),
@@ -75,9 +75,24 @@ public class ExpenseService {
               createExpenseDTO.getAccountId());
       throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
     }
+    accountService.debitAccount(
+        createExpenseDTO.getAccountId(), createExpenseDTO.getExpenseAmount());
     Expense expense = setRequiredFieldsInExpense(createExpenseDTO);
-    Expense savedExpense = this.expenseRepository.save(expense);
-    this.accountService.debitAccount(createExpenseDTO.getAccountId(), savedExpense.getAmount());
+    Expense savedExpense = expenseRepository.save(expense);
+    if (!Objects.equals(
+            savedExpense.getAccount().getProfile().getProfileId(), createExpenseDTO.getProfileId())
+        || !Objects.equals(
+            savedExpense.getCategory().getProfile().getProfileId(),
+            createExpenseDTO.getProfileId())) {
+      LOGGER
+          .atError()
+          .log(
+              "Profile ID: {}, not consistent with that of account: {} and category: {}",
+              createExpenseDTO.getProfileId(),
+              savedExpense.getAccount().getProfile().getProfileId(),
+              savedExpense.getCategory().getProfile().getProfileId());
+      throw new UnAuthorizedException("Profile ID not consistent");
+    }
     LOGGER.atInfo().log("Expense to be saved created : {}", savedExpense);
     return savedExpense;
   }
@@ -85,16 +100,18 @@ public class ExpenseService {
   private Expense setRequiredFieldsInExpense(CreateExpenseDTO createExpenseDTO)
       throws ResourceNotFoundException {
     Expense expense = ExpenseMapper.createExpenseDTOtoExpense(createExpenseDTO);
-    setCategoryIfPresent(createExpenseDTO.getCategoryId(), expense);
-    setAccountIfPresent(createExpenseDTO.getAccountId(), expense);
-    setProfileIfPresent(createExpenseDTO.getProfileId(), expense);
+    expenseTransactionService.setCategoryIfPresent(createExpenseDTO.getCategoryId(), expense);
+    expenseTransactionService.setAccountIfPresent(createExpenseDTO.getAccountId(), expense);
+    expenseTransactionService.setProfileIfPresent(createExpenseDTO.getProfileId(), expense);
     return expense;
   }
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public Expense updateExpense(UpdateExpenseDTO updateExpenseDTO, String userName)
-      throws ResourceNotFoundException, UnAuthorizedException {
-    User user = this.authService.getUserByUsername(userName);
+      throws ResourceNotFoundException,
+          UnAuthorizedException,
+          AccountCannotHaveNegativeBalanceException {
+    User user = authService.getUserByUsername(userName);
     if (!Helper.isCategoryIdValid(user.getCategories(), updateExpenseDTO.getCategoryId())) {
       LOGGER
           .atError()
@@ -103,73 +120,51 @@ public class ExpenseService {
               updateExpenseDTO.getCategoryId());
       throw new UnAuthorizedException("Illegal id (profile | account | category) in account");
     }
-    Optional<Expense> expenseOptional = this.expenseRepository.findById(updateExpenseDTO.getId());
+    Optional<Expense> expenseOptional = expenseRepository.findById(updateExpenseDTO.getExpenseId());
     if (expenseOptional.isEmpty()) {
-      throw new ResourceNotFoundException("Expense not found for id: " + updateExpenseDTO.getId());
+      throw new ResourceNotFoundException(
+          "Expense not found for id: " + updateExpenseDTO.getExpenseId());
     }
     Expense expense = expenseOptional.get();
-    updateExpenseValues(updateExpenseDTO, expense);
-    Expense updatedExpense = this.expenseRepository.save(expense);
-    LOGGER.atInfo().log("Expense updated for id: {}", updatedExpense.getId());
+    BigDecimal oldExpenseAmount = expense.getExpenseAmount();
+    BigDecimal newExpenseAmount = updateExpenseDTO.getExpenseAmount();
+    BigDecimal differenceAmount = newExpenseAmount.subtract(oldExpenseAmount);
+    if (differenceAmount.compareTo(BigDecimal.ZERO) < 0) {
+      accountService.creditAccount(expense.getAccount().getAccountId(), differenceAmount.abs());
+    } else if (differenceAmount.compareTo(BigDecimal.ZERO) > 0) {
+      accountService.debitAccount(expense.getAccount().getAccountId(), differenceAmount.abs());
+    }
+    checkIfBelongsToProfile(updateExpenseDTO, expense);
+    expenseTransactionService.updateExpenseValues(updateExpenseDTO, expense);
+    Expense updatedExpense = expenseRepository.save(expense);
+    LOGGER.atInfo().log("Expense updated for id: {}", updatedExpense.getExpenseId());
     return updatedExpense;
   }
 
-  private void updateExpenseValues(UpdateExpenseDTO updateExpenseDTO, Expense expense)
-      throws ResourceNotFoundException {
-    if (updateExpenseDTO.getDescription() != null) {
-      expense.setDescription(updateExpenseDTO.getDescription());
+  private void checkIfBelongsToProfile(UpdateExpenseDTO updateExpenseDTO, Expense expense)
+      throws ResourceNotFoundException, UnAuthorizedException {
+    Optional<Category> category = categoryRepository.findById(updateExpenseDTO.getCategoryId());
+    if (category.isEmpty()) {
+      LOGGER.atError().log("Category not found to update expense: {}", updateExpenseDTO);
+      throw new ResourceNotFoundException("Category not found");
     }
-    if (updateExpenseDTO.getAmount() != null) {
-      expense.setAmount(updateExpenseDTO.getAmount());
-    }
-    setCategoryIfPresent(updateExpenseDTO.getCategoryId(), expense);
-  }
-
-  private void setAccountIfPresent(Long accountId, Expense expense)
-      throws ResourceNotFoundException {
-    if (accountId != null) {
-      Account account =
-          accountRepository
-              .findById(accountId)
-              .orElseThrow(
-                  () -> new ResourceNotFoundException("Account not found for id: " + accountId));
-      expense.setAccount(account);
-    }
-  }
-
-  private void setCategoryIfPresent(Long categoryId, Expense expense)
-      throws ResourceNotFoundException {
-    if (categoryId != null) {
-      Category category =
-          categoryRepository
-              .findById(categoryId)
-              .orElseThrow(
-                  () -> new ResourceNotFoundException("Category not found for id: " + categoryId));
-      expense.setCategory(category);
-    }
-  }
-
-  private void setProfileIfPresent(Long profileId, Expense expense)
-      throws ResourceNotFoundException {
-    if (profileId != null) {
-      Profile profile =
-          profileRepository
-              .findById(profileId)
-              .orElseThrow(
-                  () -> new ResourceNotFoundException("Profile not found for ID: " + profileId));
-      expense.setProfile(profile);
+    if (!Objects.equals(
+        category.get().getProfile().getProfileId(), expense.getProfile().getProfileId())) {
+      LOGGER.atError().log("Invalid category for this profile: {}", updateExpenseDTO);
+      throw new UnAuthorizedException("Invalid category");
     }
   }
 
   @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
   public void deleteExpense(Long id) throws ResourceNotFoundException {
-    Optional<Expense> expenseOptional = this.expenseRepository.findById(id);
+    Optional<Expense> expenseOptional = expenseRepository.findById(id);
     if (expenseOptional.isEmpty()) {
       throw new ResourceNotFoundException("Expense not found for id: " + id);
     }
-    this.accountService.creditAccount(
-        expenseOptional.get().getAccount().getId(), expenseOptional.get().getAmount());
-    this.expenseRepository.delete(expenseOptional.get());
+    accountService.creditAccount(
+        expenseOptional.get().getAccount().getAccountId(),
+        expenseOptional.get().getExpenseAmount());
+    expenseRepository.delete(expenseOptional.get());
     LOGGER.atInfo().log("Expense deleted for id: {}", id);
   }
 
@@ -185,8 +180,9 @@ public class ExpenseService {
       Integer pageSize) {
     LocalDate start = LocalDate.parse(startDate);
     LocalDate end = LocalDate.parse(endDate);
-    Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createdAt").descending());
-    List<Expense> expenses = this.expenseRepository.findByCreatedAtBetween(start, end, pageable);
+    Pageable pageable =
+        PageRequest.of(pageNumber, pageSize, Sort.by("expenseCreatedAt").descending());
+    List<Expense> expenses = expenseRepository.findByCreatedAtBetween(start, end, pageable);
     LOGGER.atInfo().log("Found {} expenses between {} and {}", expenses.size(), startDate, endDate);
     return expenses;
   }

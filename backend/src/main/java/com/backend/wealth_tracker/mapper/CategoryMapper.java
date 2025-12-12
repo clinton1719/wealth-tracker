@@ -13,13 +13,13 @@ public final class CategoryMapper {
   ;
 
   public static Category createCategoryDTOtoCategory(
-          CreateCategoryDTO createCategoryDTO, User user, Profile profile) {
+      CreateCategoryDTO createCategoryDTO, User user, Profile profile) {
     Category category = new Category();
     category.setCategoryName(createCategoryDTO.getCategoryName());
-    category.setDescription(createCategoryDTO.getDescription());
-    category.setColorCode(createCategoryDTO.getColorCode());
-    category.setIcon(createCategoryDTO.getIcon());
-    category.setTags(createCategoryDTO.getTags());
+    category.setCategoryDescription(createCategoryDTO.getCategoryDescription());
+    category.setCategoryColorCode(createCategoryDTO.getCategoryColorCode());
+    category.setCategoryIcon(createCategoryDTO.getCategoryIcon());
+    category.setCategoryTags(createCategoryDTO.getCategoryTags());
     category.setUser(user);
     category.setProfile(profile);
     return category;
@@ -27,13 +27,13 @@ public final class CategoryMapper {
 
   public static ResponseCategoryDTO categoryToResponseCategoryDTO(Category category) {
     ResponseCategoryDTO responseCategoryDTO = new ResponseCategoryDTO();
-    responseCategoryDTO.setId(category.getId());
+    responseCategoryDTO.setCategoryId(category.getCategoryId());
     responseCategoryDTO.setCategoryName(category.getCategoryName());
-    responseCategoryDTO.setDescription(category.getDescription());
-    responseCategoryDTO.setColorCode(category.getColorCode());
-    responseCategoryDTO.setIcon(category.getIcon());
-    responseCategoryDTO.setTags(category.getTags());
-    responseCategoryDTO.setProfileId(category.getProfile().getId());
+    responseCategoryDTO.setCategoryDescription(category.getCategoryDescription());
+    responseCategoryDTO.setCategoryColorCode(category.getCategoryColorCode());
+    responseCategoryDTO.setCategoryIcon(category.getCategoryIcon());
+    responseCategoryDTO.setCategoryTags(category.getCategoryTags());
+    responseCategoryDTO.setProfileId(category.getProfile().getProfileId());
     return responseCategoryDTO;
   }
 

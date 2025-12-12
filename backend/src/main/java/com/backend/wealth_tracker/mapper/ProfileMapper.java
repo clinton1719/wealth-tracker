@@ -20,8 +20,8 @@ public final class ProfileMapper {
       throws IOException {
     Profile profile = new Profile();
     profile.setProfileName(createProfileDTO.getProfileName());
-    profile.setDescription(createProfileDTO.getDescription());
-    profile.setColorCode(createProfileDTO.getColorCode());
+    profile.setProfileDescription(createProfileDTO.getProfileDescription());
+    profile.setProfileColorCode(createProfileDTO.getProfileColorCode());
     MultipartFile multipartFile = createProfileDTO.getProfilePictureFile();
     if (multipartFile != null) {
       profile.setProfilePicture(multipartFile.getBytes());
@@ -33,19 +33,25 @@ public final class ProfileMapper {
 
   public static ResponseProfileDTO profileToResponseProfileDTO(Profile profile) {
     ResponseProfileDTO responseProfileDTO = new ResponseProfileDTO();
-    responseProfileDTO.setId(profile.getId());
+    responseProfileDTO.setProfileId(profile.getProfileId());
     responseProfileDTO.setProfileName(profile.getProfileName());
-    responseProfileDTO.setDescription(profile.getDescription());
-    responseProfileDTO.setColorCode(profile.getColorCode());
+    responseProfileDTO.setProfileDescription(profile.getProfileDescription());
+    responseProfileDTO.setProfileColorCode(profile.getProfileColorCode());
     responseProfileDTO.setProfilePicture(
         profile.getProfilePictureExtension()
             + Base64.getEncoder().encodeToString(profile.getProfilePicture()));
     responseProfileDTO.setAccountIds(
-        profile.getAccounts().parallelStream().map(Account::getId).collect(Collectors.toSet()));
+        profile.getAccounts().parallelStream()
+            .map(Account::getAccountId)
+            .collect(Collectors.toSet()));
     responseProfileDTO.setCategoryIds(
-        profile.getCategories().parallelStream().map(Category::getId).collect(Collectors.toSet()));
+        profile.getCategories().parallelStream()
+            .map(Category::getCategoryId)
+            .collect(Collectors.toSet()));
     responseProfileDTO.setExpenseIds(
-        profile.getExpenses().parallelStream().map(Expense::getId).collect(Collectors.toSet()));
+        profile.getExpenses().parallelStream()
+            .map(Expense::getExpenseId)
+            .collect(Collectors.toSet()));
     return responseProfileDTO;
   }
 

@@ -34,17 +34,17 @@ public final class Helper {
 
   public static boolean isProfileIdValid(Set<Profile> profiles, Long profileId) {
     return profiles.parallelStream()
-        .anyMatch(profile -> Objects.equals(profile.getId(), profileId));
+        .anyMatch(profile -> Objects.equals(profile.getProfileId(), profileId));
   }
 
   public static boolean isAccountIdValid(Set<Account> accounts, Long accountId) {
     return accounts.parallelStream()
-        .anyMatch(account -> Objects.equals(account.getId(), accountId));
+        .anyMatch(account -> Objects.equals(account.getAccountId(), accountId));
   }
 
   public static boolean isCategoryIdValid(Set<Category> categories, Long categoryId) {
     return categories.parallelStream()
-        .anyMatch(category -> Objects.equals(category.getId(), categoryId));
+        .anyMatch(category -> Objects.equals(category.getCategoryId(), categoryId));
   }
 
   public static boolean isCategoryIdProfileIdAndAccountIdValid(

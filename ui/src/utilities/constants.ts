@@ -1,33 +1,51 @@
 export const defaultProfile = {
-  profileName: "",
-  colorCode: "#000000",
-  description: "",
+  profileName: '',
+  profileColorCode: '#000000',
+  profileDescription: '',
   profilePicture: undefined,
-};
+}
 
 export const defaultCategory = {
-  categoryName: "",
-  description: "",
-  colorCode: "#000000",
-  icon: "",
-  tags: [],
-};
+  categoryName: '',
+  categoryDescription: '',
+  categoryColorCode: '#000000',
+  categoryIcon: '',
+  categoryTags: [],
+}
 
 export const defaultLogin = {
-  username: "",
-  password: "",
-};
+  username: '',
+  password: '',
+}
 
 export const defaultSignUp = {
-  username: "",
-  password: "",
-  confirmPassword: "",
-};
+  username: '',
+  password: '',
+  confirmPassword: '',
+}
 
 export const defaultAccount = {
-  accountName: "",
+  accountName: '',
   accountBalance: 0,
-  description: "",
-  accountType: "",
-  profileName: "",
-};
+  accountDescription: '',
+  accountType: '',
+  profileName: '',
+}
+
+export const defaultExpense = {
+  expenseAmount: 0,
+  expenseDescription: '',
+  expenseCreatedAt: '',
+  expenseUpdatedAt: '',
+  categoryName: '',
+  accountName: '',
+  profileName: '',
+}
+
+export const ALL_TAG_TYPES = [
+  'Accounts',
+  'Expenses',
+  'Categories',
+  'Auth',
+  'Profiles',
+] as const

@@ -1,6 +1,5 @@
 package com.backend.wealth_tracker.dto.response_dto;
 
-import com.backend.wealth_tracker.model.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -8,68 +7,61 @@ import java.time.LocalDate;
 
 @SuppressWarnings("PMD.DataClass")
 public class ResponseExpenseDTO {
-  @NotNull private Long id;
-  @NotBlank private Category category;
-  @NotNull private BigDecimal amount;
-  @NotBlank private String description;
-  @NotNull private LocalDate createdAt;
-  @NotNull private LocalDate updatedAt;
+  @NotNull private Long expenseId;
+  @NotNull private BigDecimal expenseAmount;
+  @NotBlank private String expenseDescription;
+  @NotNull private LocalDate expenseCreatedAt;
+  @NotNull private LocalDate expenseUpdatedAt;
+  @NotBlank private Long categoryId;
   @NotNull private Long profileId;
   @NotNull private Long accountId;
 
-  public Long getId() {
-    return id;
+  public Long getExpenseId() {
+    return expenseId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setExpenseId(Long expenseId) {
+    this.expenseId = expenseId;
   }
 
-  public Category getCategory() {
-    if (category == null) {
-      return null;
-    }
-    return new Category(category);
+  public BigDecimal getExpenseAmount() {
+    return expenseAmount;
   }
 
-  public void setCategory(Category category) {
-    if (category != null) {
-      this.category = new Category(category);
-    } else {
-      throw new IllegalArgumentException("Category cannot be null for expense response.");
-    }
+  public void setExpenseAmount(BigDecimal expenseAmount) {
+    this.expenseAmount = expenseAmount;
   }
 
-  public BigDecimal getAmount() {
-    return amount;
+  public String getExpenseDescription() {
+    return expenseDescription;
   }
 
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
+  public void setExpenseDescription(String expenseDescription) {
+    this.expenseDescription = expenseDescription;
   }
 
-  public String getDescription() {
-    return description;
+  public LocalDate getExpenseCreatedAt() {
+    return expenseCreatedAt;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setExpenseCreatedAt(LocalDate expenseCreatedAt) {
+    this.expenseCreatedAt = expenseCreatedAt;
   }
 
-  public LocalDate getCreatedAt() {
-    return createdAt;
+  public LocalDate getExpenseUpdatedAt() {
+    return expenseUpdatedAt;
   }
 
-  public void setCreatedAt(LocalDate createdAt) {
-    this.createdAt = createdAt;
+  public void setExpenseUpdatedAt(LocalDate expenseUpdatedAt) {
+    this.expenseUpdatedAt = expenseUpdatedAt;
   }
 
-  public LocalDate getUpdatedAt() {
-    return updatedAt;
+  public Long getCategoryId() {
+    return categoryId;
   }
 
-  public void setUpdatedAt(LocalDate updatedAt) {
-    this.updatedAt = updatedAt;
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
   }
 
   public Long getProfileId() {

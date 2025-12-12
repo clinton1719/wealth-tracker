@@ -18,21 +18,21 @@ public class Expense implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long expenseId;
 
-  private String description;
+  private String expenseDescription;
 
   @Column(nullable = false)
   @Positive()
-  private BigDecimal amount;
+  private BigDecimal expenseAmount;
 
   @CreatedDate
   @Column(nullable = false, updatable = false)
-  private LocalDate createdAt;
+  private LocalDate expenseCreatedAt;
 
   @LastModifiedDate
   @Column(nullable = false)
-  private LocalDate updatedAt;
+  private LocalDate expenseUpdatedAt;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
@@ -50,20 +50,20 @@ public class Expense implements Serializable {
   @JoinColumn(name = "profile_id")
   private Profile profile;
 
-  public Long getId() {
-    return id;
+  public Long getExpenseId() {
+    return expenseId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setExpenseId(Long expenseId) {
+    this.expenseId = expenseId;
   }
 
-  public String getDescription() {
-    return description;
+  public String getExpenseDescription() {
+    return expenseDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setExpenseDescription(String expenseDescription) {
+    this.expenseDescription = expenseDescription;
   }
 
   public Category getCategory() {
@@ -81,28 +81,28 @@ public class Expense implements Serializable {
     }
   }
 
-  public BigDecimal getAmount() {
-    return amount;
+  public BigDecimal getExpenseAmount() {
+    return expenseAmount;
   }
 
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
+  public void setExpenseAmount(BigDecimal expenseAmount) {
+    this.expenseAmount = expenseAmount;
   }
 
-  public LocalDate getCreatedAt() {
-    return createdAt;
+  public LocalDate getExpenseCreatedAt() {
+    return expenseCreatedAt;
   }
 
-  public void setCreatedAt(LocalDate createdAt) {
-    this.createdAt = createdAt;
+  public void setExpenseCreatedAt(LocalDate expenseCreatedAt) {
+    this.expenseCreatedAt = expenseCreatedAt;
   }
 
-  public LocalDate getUpdatedAt() {
-    return updatedAt;
+  public LocalDate getExpenseUpdatedAt() {
+    return expenseUpdatedAt;
   }
 
-  public void setUpdatedAt(LocalDate updatedAt) {
-    this.updatedAt = updatedAt;
+  public void setExpenseUpdatedAt(LocalDate expenseUpdatedAt) {
+    this.expenseUpdatedAt = expenseUpdatedAt;
   }
 
   public User getUser() {
@@ -154,16 +154,16 @@ public class Expense implements Serializable {
   public String toString() {
     return "Expense{"
         + "id="
-        + id
+        + expenseId
         + ", description='"
-        + description
+        + expenseDescription
         + '\''
         + ", amount="
-        + amount
+        + expenseAmount
         + ", createdAt="
-        + createdAt
+        + expenseCreatedAt
         + ", updatedAt="
-        + updatedAt
+        + expenseUpdatedAt
         + ", user="
         + user
         + ", category="

@@ -1,11 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { accountApi } from "./services/accountsApi";
-import { authApi } from "./services/authApi";
-import { categoriesApi } from "./services/categoriesApi";
-import { expensesApi } from "./services/expensesApi";
-import { profileApi } from "./services/profilesApi";
-import authReducer from "./slices/authSlice";
-import profileReducer from "./slices/profileSlice";
+import { configureStore } from '@reduxjs/toolkit'
+import { accountApi } from './services/accountsApi'
+import { authApi } from './services/authApi'
+import { categoriesApi } from './services/categoriesApi'
+import { expensesApi } from './services/expensesApi'
+import { profileApi } from './services/profilesApi'
+import authReducer from './slices/authSlice'
+import profileReducer from './slices/profileSlice'
 
 export const store = configureStore({
   reducer: {
@@ -17,14 +17,13 @@ export const store = configureStore({
     auth: authReducer,
     profile: profileReducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
       .concat(expensesApi.middleware)
       .concat(authApi.middleware)
       .concat(categoriesApi.middleware)
       .concat(accountApi.middleware)
       .concat(profileApi.middleware),
-});
+})
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>

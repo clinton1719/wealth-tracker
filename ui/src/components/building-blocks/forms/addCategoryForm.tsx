@@ -1,10 +1,10 @@
-import type { AddCategoryFormProps } from "@/types/AddCategoryFormProps";
-import { PlusCircle, XIcon } from "lucide-react";
-import { useState } from "react";
-import { Controller } from "react-hook-form";
-import { IconsComboBox } from "@/components/building-blocks/iconsComboBox";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import type { AddCategoryFormProps } from '@/types/AddCategoryFormProps'
+import { PlusCircle, XIcon } from 'lucide-react'
+import { useState } from 'react'
+import { Controller } from 'react-hook-form'
+import { IconsComboBox } from '@/components/building-blocks/iconsComboBox'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -12,38 +12,49 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog'
 
 import {
   Field,
+  FieldContent,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { defaultCategory } from "@/utilities/constants";
+} from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { defaultCategory } from '@/utilities/constants'
 
 export function AddCategoryForm({
   form,
   categoryDialogOpen,
   setCategoryDialogOpen,
   onSubmit,
-  setIsUpdate
+  setIsUpdate,
+  isUpdate,
+  profiles,
 }: AddCategoryFormProps) {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('')
 
   const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === "Enter") e.preventDefault();
-  };
+    if (e.key === 'Enter')
+      e.preventDefault()
+  }
 
   return (
     <Dialog open={categoryDialogOpen}>
       <DialogTrigger asChild>
         <Button
           onClick={() => {
-            setCategoryDialogOpen(true);
-            setIsUpdate(false);
+            setCategoryDialogOpen(true)
+            setIsUpdate(false)
           }}
         >
           <PlusCircle className="mr-2 h-5 w-5" />
@@ -54,6 +65,7 @@ export function AddCategoryForm({
         className="max-w-md"
         onClickMethod={() => {
           setCategoryDialogOpen(false)
+          setIsUpdate(false)
         }}
       >
         <DialogHeader>
@@ -65,7 +77,7 @@ export function AddCategoryForm({
         <form
           id="form-rhf-category"
           onSubmit={form.handleSubmit(onSubmit)}
-          onKeyDown={(e) => checkKeyDown(e)}
+          onKeyDown={e => checkKeyDown(e)}
         >
           <FieldGroup>
             <Controller
@@ -88,7 +100,7 @@ export function AddCategoryForm({
               )}
             />
             <Controller
-              name="description"
+              name="categoryDescription"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -109,7 +121,7 @@ export function AddCategoryForm({
               )}
             />
             <Controller
-              name="colorCode"
+              name="categoryColorCode"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -137,7 +149,7 @@ export function AddCategoryForm({
               )}
             />
             <Controller
-              name="icon"
+              name="categoryIcon"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field
@@ -160,7 +172,51 @@ export function AddCategoryForm({
               )}
             />
             <Controller
-              name="tags"
+              name="profileName"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-account-type">
+                      Profile
+                    </FieldLabel>
+                    <FieldDescription>Choose your profile</FieldDescription>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isUpdate === true}
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-profile"
+                      aria-invalid={fieldState.invalid}
+                      className="min-w-[120px]"
+                    >
+                      <SelectValue placeholder="Select profile" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      {profiles.map(profile => (
+                        <SelectItem
+                          key={profile.profileId}
+                          value={profile.profileName}
+                        >
+                          {profile.profileName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
+            />
+            <Controller
+              name="categoryTags"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -172,16 +228,20 @@ export function AddCategoryForm({
                     placeholder="Press 'ENTER' after adding each tag"
                     autoComplete="off"
                     value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
+                    onChange={e => setInputValue(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" && inputValue.trim() !== "") {
-                        const tags = form.getValues("tags");
+                      if (e.key === 'Enter' && inputValue.trim() !== '') {
+                        const tags = form.getValues('categoryTags')
                         if (tags) {
-                          form.setValue("tags", [...tags, inputValue.trim()]);
-                        } else {
-                          form.setValue("tags", [inputValue.trim()]);
+                          form.setValue('categoryTags', [
+                            ...tags,
+                            inputValue.trim(),
+                          ])
                         }
-                        setInputValue("");
+                        else {
+                          form.setValue('categoryTags', [inputValue.trim()])
+                        }
+                        setInputValue('')
                       }
                     }}
                   />
@@ -189,30 +249,32 @@ export function AddCategoryForm({
                     <FieldError errors={[fieldState.error]} />
                   )}
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {form.getValues("tags") ? (
-                      form.getValues("tags")?.map((tag) => (
-                        <Badge key={tag} variant="secondary">
-                          {tag}
-                          <button
-                            type="button"
-                            className="ml-2 text-destructive"
-                            onClick={() => {
-                              const tags = form.getValues("tags");
-                              if (tags) {
-                                const newTags = tags.filter(
-                                  (_tag) => _tag !== tag,
-                                );
-                                form.setValue("tags", [...newTags]);
-                              }
-                            }}
-                          >
-                            <XIcon className="w-3 h-3" />
-                          </button>
-                        </Badge>
-                      ))
-                    ) : (
-                      <></>
-                    )}
+                    {form.getValues('categoryTags')
+                      ? (
+                          form.getValues('categoryTags')?.map(tag => (
+                            <Badge key={tag} variant="secondary">
+                              {tag}
+                              <button
+                                type="button"
+                                className="ml-2 text-destructive"
+                                onClick={() => {
+                                  const tags = form.getValues('categoryTags')
+                                  if (tags) {
+                                    const newTags = tags.filter(
+                                      _tag => _tag !== tag,
+                                    )
+                                    form.setValue('categoryTags', [...newTags])
+                                  }
+                                }}
+                              >
+                                <XIcon className="w-3 h-3" />
+                              </button>
+                            </Badge>
+                          ))
+                        )
+                      : (
+                          <></>
+                        )}
                   </div>
                 </Field>
               )}
@@ -231,5 +293,5 @@ export function AddCategoryForm({
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

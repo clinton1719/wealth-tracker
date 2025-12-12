@@ -3,26 +3,27 @@ package com.backend.wealth_tracker.dto.update_dto;
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-
 import java.math.BigDecimal;
 
 @SuppressWarnings("PMD.DataClass")
 public class UpdateAccountDTO {
   @NotNull(message = "Account ID cannot be null")
-  private Long id;
+  private Long accountId;
 
   private String accountName;
-  private String description;
+  private String accountDescription;
+
   @PositiveOrZero(message = "Account balance cannot be negative")
   private BigDecimal accountBalance;
+
   private AccountType accountType;
 
-  public Long getId() {
-    return id;
+  public Long getAccountId() {
+    return accountId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 
   public String getAccountName() {
@@ -33,12 +34,12 @@ public class UpdateAccountDTO {
     this.accountName = accountName;
   }
 
-  public String getDescription() {
-    return description;
+  public String getAccountDescription() {
+    return accountDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setAccountDescription(String accountDescription) {
+    this.accountDescription = accountDescription;
   }
 
   public BigDecimal getAccountBalance() {

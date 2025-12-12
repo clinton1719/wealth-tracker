@@ -2,35 +2,38 @@ import type {
   ControllerFieldState,
   ControllerRenderProps,
   UseFormReturn,
-} from "react-hook-form";
+} from 'react-hook-form'
 
 export interface IconsComboBoxProps {
   field: ControllerRenderProps<
     {
-      categoryName: string;
-      colorCode: string;
-      description?: string | undefined;
-      icon?: string | undefined;
-      tags?: string[] | undefined;
+      categoryName: string
+      categoryColorCode: string
+      categoryDescription?: string | undefined
+      categoryIcon?: string | undefined
+      profileName: string
+      categoryTags?: string[] | undefined
     },
-    "icon"
-  >;
-  fieldState: ControllerFieldState;
+    'categoryIcon'
+  >
+  fieldState: ControllerFieldState
   form: UseFormReturn<
     {
-      categoryName: string;
-      colorCode: string;
-      description?: string | undefined;
-      icon?: string | undefined;
-      tags?: string[] | undefined;
+      categoryName: string
+      categoryColorCode: string
+      categoryDescription?: string | undefined
+      categoryIcon?: string | undefined
+      profileName: string
+      categoryTags?: string[] | undefined
     },
     any,
     {
-      categoryName: string;
-      colorCode: string;
-      description?: string | undefined;
-      icon?: string | undefined;
-      tags?: string[] | undefined;
+      categoryName: string
+      categoryColorCode: string
+      categoryDescription?: string | undefined
+      categoryIcon?: string | undefined
+      profileName: string
+      categoryTags?: string[] | undefined
     }
-  >;
+  >
 }

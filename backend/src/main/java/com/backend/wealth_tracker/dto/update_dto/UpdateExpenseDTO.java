@@ -6,18 +6,18 @@ import java.math.BigDecimal;
 @SuppressWarnings("PMD.DataClass")
 public class UpdateExpenseDTO {
   @NotNull(message = "Expense ID cannot be null")
-  private Long id;
+  private Long expenseId;
 
   private Long categoryId;
-  private BigDecimal amount;
-  private String description;
+  private BigDecimal expenseAmount;
+  private String expenseDescription;
 
-  public Long getId() {
-    return id;
+  public Long getExpenseId() {
+    return expenseId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setExpenseId(Long expenseId) {
+    this.expenseId = expenseId;
   }
 
   public Long getCategoryId() {
@@ -28,19 +28,19 @@ public class UpdateExpenseDTO {
     this.categoryId = categoryId;
   }
 
-  public BigDecimal getAmount() {
-    return amount;
+  public BigDecimal getExpenseAmount() {
+    return expenseAmount;
   }
 
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
+  public void setExpenseAmount(BigDecimal expenseAmount) {
+    this.expenseAmount = expenseAmount;
   }
 
-  public String getDescription() {
-    return description;
+  public String getExpenseDescription() {
+    return expenseDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setExpenseDescription(String expenseDescription) {
+    this.expenseDescription = expenseDescription;
   }
 }

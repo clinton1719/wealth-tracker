@@ -128,3 +128,57 @@
     @apply bg-background text-foreground;
   }
 }
+
+.description {
+  @apply text-muted-foreground text-sm mt-1 flex-1 max-w-[90%] text-left break-all;
+}
+
+.card-title {
+  @apply text-lg font-medium text-muted-foreground break-all;
+}
+
+.card-key {
+  @apply text-sm font-semibold text-muted-foreground
+         pr-2 uppercase break-all;
+}
+
+.card-value {
+  @apply text-foreground text-sm font-semibold
+         px-2 py-0.5 rounded-md
+         bg-card border border-border
+         whitespace-normal break-all;
+}
+
+.enabled {
+  @apply text-foreground text-sm font-semibold
+         px-2 py-0.5 rounded-md
+         bg-card border border-border
+         whitespace-normal break-all cursor-default;
+}
+
+.disabled {
+  @apply text-white text-sm font-semibold
+         px-2 py-0.5 rounded-md
+         bg-black border border-border
+         whitespace-normal break-all opacity-60 cursor-not-allowed;
+}
+
+.spinner {
+  @apply mx-auto my-auto size-28 text-primary;
+}
+
+.search-bar {
+  @apply bg-accent max-w-sm;
+}
+
+.normal-grid {
+  @apply grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+}
+
+.card {
+  @apply w-full max-w-sm hover:shadow-md transition flex justify-between;
+}
+
+.text-value {
+  @apply text-muted-foreground text-sm flex-1 max-w-[90%] text-left break-all;
+}

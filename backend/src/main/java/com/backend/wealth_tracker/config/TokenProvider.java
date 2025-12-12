@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class TokenProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(TokenProvider.class);
 
-  @Value("${security.jwt.token.secret-key}")
+  @Value("${security.jwt.token.secret.key}")
   private String JWT_SECRET;
 
   public String generateAccessToken(User user) {
@@ -62,7 +62,7 @@ public class TokenProvider {
 
   private Instant genAccessExpirationDate() {
     Instant now = Instant.now();
-    Instant expiresAt = now.plusSeconds(60 * 60);
+    Instant expiresAt = now.plusSeconds(60 * 60 * 24);
     LOGGER.atInfo().log("Token generated at: {}, expires at: {}", now, expiresAt);
     return expiresAt;
   }
