@@ -4,6 +4,7 @@ import { selectAuthToken } from '@/slices/authSlice'
 import { baseAPI } from '@/static-values/constants'
 import { ALL_TAG_TYPES } from '@/utilities/constants'
 import type { CategoryExpense } from '@/types/CategoryExpense'
+import type { TagExpense } from '@/types/TagExpense'
 
 export const expensesApi = createApi({
   reducerPath: 'expensesApi',
@@ -67,6 +68,17 @@ export const expensesApi = createApi({
         `/expenses/by-category-and-created-at?startDate=${startDate}&endDate=${endDate}`,
       providesTags: ['Expenses'],
     }),
+    getExpensesByTagAndCreatedAt: builder.query<
+      TagExpense[],
+      {
+        startDate: string
+        endDate: string
+      }
+    >({
+      query: ({ startDate, endDate }) =>
+        `/expenses/by-tag-and-created-at?startDate=${startDate}&endDate=${endDate}`,
+      providesTags: ['Expenses'],
+    }),
   }),
 })
 
@@ -75,5 +87,6 @@ export const {
   useDeleteExpenseMutation,
   useGetAllExpensesInRangeQuery,
   useGetExpensesByCategoryAndCreatedAtQuery,
+  useGetExpensesByTagAndCreatedAtQuery,
   useUpdateExpenseMutation,
 } = expensesApi

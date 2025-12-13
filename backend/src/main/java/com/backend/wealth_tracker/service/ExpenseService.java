@@ -13,19 +13,17 @@ import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ExpenseService {
@@ -170,10 +168,7 @@ public class ExpenseService {
       isolation = Isolation.READ_COMMITTED,
       propagation = Propagation.REQUIRED,
       readOnly = true)
-  public List<Expense> getExpensesInRange(
-      UserDetails userDetails,
-      String startDate,
-      String endDate) {
+  public List<Expense> getExpensesInRange(String startDate, String endDate) {
     LocalDate start = LocalDate.parse(startDate);
     LocalDate end = LocalDate.parse(endDate);
     List<Expense> expenses = expenseRepository.findByCreatedAtBetweenOrderDesc(start, end);

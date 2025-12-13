@@ -3,92 +3,88 @@ package com.backend.wealth_tracker.dto.response_dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @SuppressWarnings("PMD.DataClass")
 public class ResponseExpenseDTO {
-    @NotNull
-    private Long expenseId;
-    @NotNull
-    private BigDecimal expenseAmount;
-    @NotBlank
-    private String expenseDescription;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    @NotNull
-    private LocalDate expenseCreatedAt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    @NotNull
-    private LocalDate expenseUpdatedAt;
-    @NotBlank
-    private Long categoryId;
-    @NotNull
-    private Long profileId;
-    @NotNull
-    private Long accountId;
+  @NotNull private Long expenseId;
+  @NotNull private BigDecimal expenseAmount;
+  @NotBlank private String expenseDescription;
 
-    public Long getExpenseId() {
-        return expenseId;
-    }
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+  @NotNull
+  private LocalDate expenseCreatedAt;
 
-    public void setExpenseId(Long expenseId) {
-        this.expenseId = expenseId;
-    }
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+  @NotNull
+  private LocalDate expenseUpdatedAt;
 
-    public BigDecimal getExpenseAmount() {
-        return expenseAmount;
-    }
+  @NotBlank private Long categoryId;
+  @NotNull private Long profileId;
+  @NotNull private Long accountId;
 
-    public void setExpenseAmount(BigDecimal expenseAmount) {
-        this.expenseAmount = expenseAmount;
-    }
+  public Long getExpenseId() {
+    return expenseId;
+  }
 
-    public String getExpenseDescription() {
-        return expenseDescription;
-    }
+  public void setExpenseId(Long expenseId) {
+    this.expenseId = expenseId;
+  }
 
-    public void setExpenseDescription(String expenseDescription) {
-        this.expenseDescription = expenseDescription;
-    }
+  public BigDecimal getExpenseAmount() {
+    return expenseAmount;
+  }
 
-    public LocalDate getExpenseCreatedAt() {
-        return expenseCreatedAt;
-    }
+  public void setExpenseAmount(BigDecimal expenseAmount) {
+    this.expenseAmount = expenseAmount;
+  }
 
-    public void setExpenseCreatedAt(LocalDate expenseCreatedAt) {
-        this.expenseCreatedAt = expenseCreatedAt;
-    }
+  public String getExpenseDescription() {
+    return expenseDescription;
+  }
 
-    public LocalDate getExpenseUpdatedAt() {
-        return expenseUpdatedAt;
-    }
+  public void setExpenseDescription(String expenseDescription) {
+    this.expenseDescription = expenseDescription;
+  }
 
-    public void setExpenseUpdatedAt(LocalDate expenseUpdatedAt) {
-        this.expenseUpdatedAt = expenseUpdatedAt;
-    }
+  public LocalDate getExpenseCreatedAt() {
+    return expenseCreatedAt;
+  }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
+  public void setExpenseCreatedAt(LocalDate expenseCreatedAt) {
+    this.expenseCreatedAt = expenseCreatedAt;
+  }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
+  public LocalDate getExpenseUpdatedAt() {
+    return expenseUpdatedAt;
+  }
 
-    public Long getProfileId() {
-        return profileId;
-    }
+  public void setExpenseUpdatedAt(LocalDate expenseUpdatedAt) {
+    this.expenseUpdatedAt = expenseUpdatedAt;
+  }
 
-    public void setProfileId(Long profileId) {
-        this.profileId = profileId;
-    }
+  public Long getCategoryId() {
+    return categoryId;
+  }
 
-    public Long getAccountId() {
-        return accountId;
-    }
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
+  }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
+  public Long getProfileId() {
+    return profileId;
+  }
+
+  public void setProfileId(Long profileId) {
+    this.profileId = profileId;
+  }
+
+  public Long getAccountId() {
+    return accountId;
+  }
+
+  public void setAccountId(Long accountId) {
+    this.accountId = accountId;
+  }
 }

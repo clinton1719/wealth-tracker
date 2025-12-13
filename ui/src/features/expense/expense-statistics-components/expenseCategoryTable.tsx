@@ -37,7 +37,7 @@ export function ExpenseCategoryTable({ categoryExpenses, fromDate, toDate, total
                             />) : <Fragment></Fragment>}
                             {categoryExpense.categoryName}
                         </TableCell>
-                        <TableCell className="text-right">{formatCurrency(categoryExpense.expenseAmount)}</TableCell>
+                        <TableCell className="text-right font-medium">{formatCurrency(categoryExpense.expenseAmount)}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>

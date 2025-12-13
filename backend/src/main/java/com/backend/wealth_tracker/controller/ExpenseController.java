@@ -3,6 +3,7 @@ package com.backend.wealth_tracker.controller;
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseTagExpenseDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.AccountCannotHaveNegativeBalanceException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
@@ -29,7 +30,8 @@ public class ExpenseController {
   private final ExpenseStatisticsService expenseStatisticsService;
 
   @SuppressFBWarnings("EI_EXPOSE_REP2")
-  public ExpenseController(ExpenseService expenseService, ExpenseStatisticsService expenseStatisticsService) {
+  public ExpenseController(
+      ExpenseService expenseService, ExpenseStatisticsService expenseStatisticsService) {
     this.expenseService = expenseService;
     this.expenseStatisticsService = expenseStatisticsService;
   }
@@ -38,25 +40,26 @@ public class ExpenseController {
   @ResponseStatus(HttpStatus.OK)
   @Tag(name = "FIND")
   public List<ResponseExpenseDTO> getExpensesInRange(
-      @AuthenticationPrincipal UserDetails userDetails,
-      @RequestParam String startDate,
-      @RequestParam String endDate) {
+      @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.expensesToResponseExpenseDTOs(
-        this.expenseService.getExpensesInRange(
-            userDetails, startDate, endDate));
+        this.expenseService.getExpensesInRange(startDate, endDate));
   }
 
-    @GetMapping("/by-category-and-created-at")
-    @ResponseStatus(HttpStatus.OK)
-    @Tag(name = "FIND")
-    public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam String startDate,
-            @RequestParam String endDate) {
-        return
-                this.expenseStatisticsService.getExpensesByCategoryAndCreatedAt(
-                        userDetails, startDate, endDate);
-    }
+  @GetMapping("/by-category-and-created-at")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
+  public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return this.expenseStatisticsService.getExpensesByCategoryAndCreatedAt(startDate, endDate);
+  }
+
+  @GetMapping("/by-tag-and-created-at")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
+  public List<ResponseTagExpenseDTO> getExpensesByTagAndCreatedAt(
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return this.expenseStatisticsService.getExpensesByTagAndCreatedAt(startDate, endDate);
+  }
 
   @PostMapping(path = "/save")
   @ResponseStatus(HttpStatus.CREATED)
