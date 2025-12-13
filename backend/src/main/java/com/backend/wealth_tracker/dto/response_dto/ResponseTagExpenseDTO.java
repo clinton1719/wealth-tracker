@@ -8,7 +8,16 @@ import java.math.BigDecimal;
 public class ResponseTagExpenseDTO implements Comparable<ResponseTagExpenseDTO> {
   @NotBlank private String tag;
   @NotNull private BigDecimal expenseAmount;
-    @NotNull private Long profileId;
+  @NotNull private Long profileId;
+  @NotNull private String profileColorCode;
+
+  public ResponseTagExpenseDTO(
+      String tag, BigDecimal expenseAmount, Long profileId, String profileColorCode) {
+    this.tag = tag;
+    this.expenseAmount = expenseAmount;
+    this.profileId = profileId;
+    this.profileColorCode = profileColorCode;
+  }
 
   public String getTag() {
     return tag;
@@ -26,15 +35,23 @@ public class ResponseTagExpenseDTO implements Comparable<ResponseTagExpenseDTO> 
     this.expenseAmount = expenseAmount;
   }
 
-    public Long getProfileId() {
-        return profileId;
-    }
+  public Long getProfileId() {
+    return profileId;
+  }
 
-    public void setProfileId(Long profileId) {
-        this.profileId = profileId;
-    }
+  public void setProfileId(Long profileId) {
+    this.profileId = profileId;
+  }
 
-    @Override
+  public String getProfileColorCode() {
+    return profileColorCode;
+  }
+
+  public void setProfileColorCode(String profileColorCode) {
+    this.profileColorCode = profileColorCode;
+  }
+
+  @Override
   public int compareTo(ResponseTagExpenseDTO responseTagExpenseDTO) {
     return this.getExpenseAmount().compareTo(responseTagExpenseDTO.getExpenseAmount());
   }

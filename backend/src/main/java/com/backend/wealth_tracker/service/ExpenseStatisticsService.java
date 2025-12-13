@@ -2,9 +2,8 @@ package com.backend.wealth_tracker.service;
 
 import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseTagExpenseDTO;
-import com.backend.wealth_tracker.mapper.ExpenseMapper;
-import com.backend.wealth_tracker.model.Category;
-import com.backend.wealth_tracker.model.Expense;
+import com.backend.wealth_tracker.projections.CategoryExpenseSummaryProjection;
+import com.backend.wealth_tracker.projections.TagExpenseSummaryProjection;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +12,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ExpenseStatisticsService {
@@ -38,24 +34,24 @@ public class ExpenseStatisticsService {
             String startDate, String endDate) {
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
-        List<Expense> expenses = expenseRepository.findByCreatedAtBetween(start, end);
+        List<CategoryExpenseSummaryProjection> responseCategoryExpenseDTOList =
+                expenseRepository.findByCategoryAndCreatedAt(start, end);
         LOGGER.atInfo().log(
                 "Found {} expenses between {} and {} for getExpensesByCategoryAndCreatedAt",
-                expenses.size(),
+                responseCategoryExpenseDTOList.size(),
                 startDate,
                 endDate);
-        Map<Long, BigDecimal> categoryExpenseMap = new HashMap<>();
-        Map<Long, Category> categoryMap = new HashMap<>();
-        Map<Long, Long> profileMap = new HashMap<>();
-        expenses.forEach(
-                expense -> {
-                    Category category = expense.getCategory();
-                    Long categoryId = category.getCategoryId();
-                    categoryExpenseMap.merge(categoryId, expense.getExpenseAmount(), BigDecimal::add);
-                    categoryMap.putIfAbsent(categoryId, category);
-                    profileMap.putIfAbsent(categoryId, category.getProfile().getProfileId());
-                });
-        return ExpenseMapper.createResponseCategoryExpenseDTOFromMaps(categoryExpenseMap, categoryMap, profileMap);
+        return responseCategoryExpenseDTOList.stream()
+                .map(
+                        projection ->
+                                new ResponseCategoryExpenseDTO(
+                                        projection.getCategoryName(),
+                                        projection.getCategoryColorCode(),
+                                        projection.getCategoryIcon(),
+                                        projection.getExpenseAmount(),
+                                        projection.getProfileId(),
+                                        projection.getProfileColorCode()))
+                .toList();
     }
 
     @Transactional(
@@ -66,23 +62,21 @@ public class ExpenseStatisticsService {
             String startDate, String endDate) {
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
-        List<Expense> expenses = expenseRepository.findByCreatedAtBetween(start, end);
+        List<TagExpenseSummaryProjection> responseTagExpenseDTOList =
+                expenseRepository.findByTagAndCreatedAt(start, end);
         LOGGER.atInfo().log(
                 "Found {} expenses between {} and {} for getExpensesByTagAndCreatedAt",
-                expenses.size(),
+                responseTagExpenseDTOList.size(),
                 startDate,
                 endDate);
-        Map<String, BigDecimal> tagMap = new HashMap<>();
-        Map<String, Long> profileMap = new HashMap<>();
-        expenses.forEach(
-                expense -> {
-                    Category category = expense.getCategory();
-                    List<String> tags = category.getCategoryTags();
-                    for (String tag : tags) {
-                        tagMap.merge(tag, expense.getExpenseAmount(), BigDecimal::add);
-                        profileMap.putIfAbsent(tag, category.getProfile().getProfileId());
-                    }
-                });
-        return ExpenseMapper.createResponseTagExpenseDTOFromMaps(tagMap, profileMap);
+        return responseTagExpenseDTOList.stream()
+                .map(
+                        projection ->
+                                new ResponseTagExpenseDTO(
+                                        projection.getTag(),
+                                        projection.getExpenseAmount(),
+                                        projection.getProfileId(),
+                                        projection.getProfileColorCode()))
+                .toList();
     }
 }

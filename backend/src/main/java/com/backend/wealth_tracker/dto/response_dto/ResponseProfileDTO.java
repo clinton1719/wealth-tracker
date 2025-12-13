@@ -1,18 +1,19 @@
 package com.backend.wealth_tracker.dto.response_dto;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("PMD.DataClass")
 public class ResponseProfileDTO {
-  private Long profileId;
-  private String profileName;
+  @NotNull private Long profileId;
+  @NotNull private String profileName;
   private String profileDescription;
-  private String profileColorCode;
+  @NotNull private String profileColorCode;
   private String profilePicture;
-  private Set<Long> accountIds;
-  private Set<Long> categoryIds;
-  private Set<Long> expenseIds;
+  @NotNull private Set<Long> accountIds;
+  @NotNull private Set<Long> categoryIds;
+  @NotNull private Set<Long> expenseIds;
 
   public Long getProfileId() {
     return profileId;
