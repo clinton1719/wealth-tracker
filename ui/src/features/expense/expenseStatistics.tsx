@@ -45,7 +45,7 @@ export function ExpenseStatistics() {
         </div>
       )}
 
-      {categoryExpenseData && period ? (
+      {categoryExpenseData && period && totalExpense ? (
         <ExpenseCategoryTable
           categoryExpenses={memoisedCategoryExpenseData}
           totalExpense={totalExpense}
