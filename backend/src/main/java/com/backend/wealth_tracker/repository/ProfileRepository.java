@@ -13,11 +13,13 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
   Optional<Profile> findByProfileNameAndUserId(String profileName, Long userId);
 
   @Query(
-      "SELECT p FROM profiles p "
-          + "LEFT JOIN FETCH p.accounts "
-          + "LEFT JOIN FETCH p.categories "
-          + "LEFT JOIN FETCH p.expenses "
-          + "WHERE p.user.id = :userId")
+      """
+            SELECT p FROM profiles p
+            LEFT JOIN FETCH p.accounts
+            LEFT JOIN FETCH p.categories
+            LEFT JOIN FETCH p.expenses
+            WHERE p.user.id = :userId
+            """)
   List<Profile> findAllWithRelations(@Param("userId") Long userId);
 
   Optional<Profile> findByProfileIdAndUserId(Long profileId, Long userId);

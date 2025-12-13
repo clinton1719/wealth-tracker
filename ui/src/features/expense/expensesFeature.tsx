@@ -68,8 +68,6 @@ export default function ExpensesFeature() {
   } = useGetAllExpensesInRangeQuery({
     startDate,
     endDate,
-    pageNumber: 0,
-    pageSize: 100,
   })
   const [saveExpense, { isLoading: saveExpenseLoading }]
     = useSaveExpenseMutation()

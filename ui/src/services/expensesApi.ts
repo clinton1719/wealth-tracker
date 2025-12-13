@@ -49,12 +49,10 @@ export const expensesApi = createApi({
       {
         startDate: string
         endDate: string
-        pageNumber: number
-        pageSize: number
       }
     >({
-      query: ({ startDate, endDate, pageNumber, pageSize }) =>
-        `/expenses/range/${pageNumber}/${pageSize}?startDate=${startDate}&endDate=${endDate}`,
+      query: ({ startDate, endDate }) =>
+        `/expenses/range?startDate=${startDate}&endDate=${endDate}`,
       providesTags: ['Expenses'],
     }),
   }),

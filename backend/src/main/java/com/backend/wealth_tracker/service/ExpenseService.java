@@ -13,21 +13,19 @@ import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ExpenseService {
@@ -175,14 +173,10 @@ public class ExpenseService {
   public List<Expense> getExpensesInRange(
       UserDetails userDetails,
       String startDate,
-      String endDate,
-      Integer pageNumber,
-      Integer pageSize) {
+      String endDate) {
     LocalDate start = LocalDate.parse(startDate);
     LocalDate end = LocalDate.parse(endDate);
-    Pageable pageable =
-        PageRequest.of(pageNumber, pageSize, Sort.by("expenseCreatedAt").descending());
-    List<Expense> expenses = expenseRepository.findByCreatedAtBetween(start, end, pageable);
+    List<Expense> expenses = expenseRepository.findByCreatedAtBetweenOrderDesc(start, end);
     LOGGER.atInfo().log("Found {} expenses between {} and {}", expenses.size(), startDate, endDate);
     return expenses;
   }

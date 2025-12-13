@@ -8,14 +8,16 @@ import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.service.ExpenseService;
+import com.backend.wealth_tracker.service.ExpenseStatisticsService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/expenses")
@@ -23,25 +25,37 @@ import org.springframework.web.bind.annotation.*;
 public class ExpenseController {
 
   private final ExpenseService expenseService;
+  private final ExpenseStatisticsService expenseStatisticsService;
 
   @SuppressFBWarnings("EI_EXPOSE_REP2")
-  public ExpenseController(ExpenseService expenseService) {
+  public ExpenseController(ExpenseService expenseService, ExpenseStatisticsService expenseStatisticsService) {
     this.expenseService = expenseService;
+    this.expenseStatisticsService = expenseStatisticsService;
   }
 
-  @GetMapping("/range/{pageNumber}/{pageSize}")
+  @GetMapping("/range")
   @ResponseStatus(HttpStatus.OK)
   @Tag(name = "FIND")
   public List<ResponseExpenseDTO> getExpensesInRange(
       @AuthenticationPrincipal UserDetails userDetails,
       @RequestParam String startDate,
-      @RequestParam String endDate,
-      @PathVariable Integer pageNumber,
-      @PathVariable Integer pageSize) {
+      @RequestParam String endDate) {
     return ExpenseMapper.expensesToResponseExpenseDTOs(
         this.expenseService.getExpensesInRange(
-            userDetails, startDate, endDate, pageNumber, pageSize));
+            userDetails, startDate, endDate));
   }
+
+    @GetMapping("/by-category-and-created-at")
+    @ResponseStatus(HttpStatus.OK)
+    @Tag(name = "FIND")
+    public List<ResponseExpenseDTO> getExpensesByCategoryAndCreatedAt(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        return ExpenseMapper.expensesToResponseExpenseDTOs(
+                this.expenseStatisticsService.getExpensesByCategoryAndCreatedAt(
+                        userDetails, startDate, endDate));
+    }
 
   @PostMapping(path = "/save")
   @ResponseStatus(HttpStatus.CREATED)
