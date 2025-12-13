@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class ResponseTagExpenseDTO implements Comparable<ResponseTagExpenseDTO> {
   @NotBlank private String tag;
   @NotNull private BigDecimal expenseAmount;
+    @NotNull private Long profileId;
 
   public String getTag() {
     return tag;
@@ -25,7 +26,15 @@ public class ResponseTagExpenseDTO implements Comparable<ResponseTagExpenseDTO> 
     this.expenseAmount = expenseAmount;
   }
 
-  @Override
+    public Long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(Long profileId) {
+        this.profileId = profileId;
+    }
+
+    @Override
   public int compareTo(ResponseTagExpenseDTO responseTagExpenseDTO) {
     return this.getExpenseAmount().compareTo(responseTagExpenseDTO.getExpenseAmount());
   }

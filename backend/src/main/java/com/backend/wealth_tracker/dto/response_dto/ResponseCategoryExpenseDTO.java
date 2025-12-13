@@ -10,7 +10,7 @@ public class ResponseCategoryExpenseDTO implements Comparable<ResponseCategoryEx
   @NotNull private String categoryColorCode;
   private String categoryIcon;
   @NotNull private BigDecimal expenseAmount;
-
+    @NotNull private Long profileId;
   public String getCategoryName() {
     return categoryName;
   }
@@ -43,7 +43,15 @@ public class ResponseCategoryExpenseDTO implements Comparable<ResponseCategoryEx
     this.expenseAmount = expenseAmount;
   }
 
-  @Override
+    public Long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(Long profileId) {
+        this.profileId = profileId;
+    }
+
+    @Override
   public int compareTo(ResponseCategoryExpenseDTO responseCategoryExpenseDTO) {
     return this.getExpenseAmount().compareTo(responseCategoryExpenseDTO.getExpenseAmount());
   }

@@ -3,4 +3,5 @@ export interface CategoryExpense {
     categoryColorCode: string;
     categoryIcon: string;
     expenseAmount: number;
+    profileId: number;
 }

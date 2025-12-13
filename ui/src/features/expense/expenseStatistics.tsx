@@ -9,9 +9,12 @@ import { ExpensePeriodSelector } from "./expense-statistics-components/expensePe
 import { TagCategoryTable } from "./expense-statistics-components/expenseTagTable";
 import { ExpenseCategoryPie } from "./expense-statistics-components/expenseCategoryPie";
 import { ExpenseTagPie } from "./expense-statistics-components/expenseTagPie";
+import { selectProfileSlice } from "@/slices/profileSlice";
+import { useSelector } from "react-redux";
 
 export function ExpenseStatistics() {
   const [period, setPeriod] = useState<{ from: Date; to: Date } | null>(null);
+  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
 
   const {
     data: categoryExpenseData,
@@ -35,12 +38,14 @@ export function ExpenseStatistics() {
 
   const memoisedCategoryExpenseData = useMemo(() => {
     if (!categoryExpenseData) return [];
-    return categoryExpenseData;
+    const enabledCategoryExpenseData = categoryExpenseData.filter(categoryExpense => enabledMap[categoryExpense.profileId]);
+    return enabledCategoryExpenseData;
   }, [categoryExpenseData]);
 
   const memoisedTagExpenseData = useMemo(() => {
     if (!tagExpenseData) return [];
-    return tagExpenseData;
+    const enabledTagExpenseData = tagExpenseData.filter(tagExpense => enabledMap[tagExpense.profileId]);
+    return enabledTagExpenseData;
   }, [tagExpenseData]);
 
   const totalCategoryExpense = memoisedCategoryExpenseData.reduce((acc, currentCategoryExpense) => acc + currentCategoryExpense.expenseAmount, 0);
@@ -64,31 +69,31 @@ export function ExpenseStatistics() {
         </div>
       )}
 
-      {categoryExpenseData && period && totalCategoryExpense && (
+      {memoisedCategoryExpenseData && memoisedCategoryExpenseData.length > 0 && period && totalCategoryExpense ? (
         <ExpenseCategoryTable
           categoryExpenses={memoisedCategoryExpenseData}
           totalExpense={totalCategoryExpense}
           fromDate={period.from.toDateString()}
           toDate={period.to.toDateString()}
         />
-      )}
+      ) : null}
 
-      {tagExpenseData && period && totalTagExpense && (
+      {memoisedTagExpenseData && memoisedTagExpenseData.length && period && totalTagExpense ? (
         <TagCategoryTable
           tagExpenses={memoisedTagExpenseData}
           totalExpense={totalTagExpense}
           fromDate={period.from.toDateString()}
           toDate={period.to.toDateString()}
         />
-      )}
+      ) : null}
 
       <div className="flex flex-col justify-between gap-4">
-        {categoryExpenseData && period &&
-          (<ExpenseCategoryPie categoryExpenses={categoryExpenseData} fromDate={period.from.toDateString()}
-            toDate={period.to.toDateString()} />)
+        {memoisedCategoryExpenseData && memoisedCategoryExpenseData.length > 0 && period ?
+          (<ExpenseCategoryPie categoryExpenses={memoisedCategoryExpenseData} fromDate={period.from.toDateString()}
+            toDate={period.to.toDateString()} />) : null
         }
-        {tagExpenseData && period && (<ExpenseTagPie tagExpenses={tagExpenseData} fromDate={period.from.toDateString()}
-          toDate={period.to.toDateString()} />)
+        {memoisedTagExpenseData && memoisedTagExpenseData.length > 0 && period ? (<ExpenseTagPie tagExpenses={memoisedTagExpenseData} fromDate={period.from.toDateString()}
+          toDate={period.to.toDateString()} />) : null
         }
       </div>
     </div>
