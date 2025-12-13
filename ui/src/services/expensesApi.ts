@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { selectAuthToken } from '@/slices/authSlice'
 import { baseAPI } from '@/static-values/constants'
 import { ALL_TAG_TYPES } from '@/utilities/constants'
+import type { CategoryExpense } from '@/types/CategoryExpense'
 
 export const expensesApi = createApi({
   reducerPath: 'expensesApi',
@@ -55,6 +56,17 @@ export const expensesApi = createApi({
         `/expenses/range?startDate=${startDate}&endDate=${endDate}`,
       providesTags: ['Expenses'],
     }),
+    getExpensesByCategoryAndCreatedAt: builder.query<
+      CategoryExpense[],
+      {
+        startDate: string
+        endDate: string
+      }
+    >({
+      query: ({ startDate, endDate }) =>
+        `/expenses/by-category-and-created-at?startDate=${startDate}&endDate=${endDate}`,
+      providesTags: ['Expenses'],
+    }),
   }),
 })
 
@@ -62,5 +74,6 @@ export const {
   useSaveExpenseMutation,
   useDeleteExpenseMutation,
   useGetAllExpensesInRangeQuery,
+  useGetExpensesByCategoryAndCreatedAtQuery,
   useUpdateExpenseMutation,
 } = expensesApi

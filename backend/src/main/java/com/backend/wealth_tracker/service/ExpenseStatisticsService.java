@@ -1,5 +1,8 @@
 package com.backend.wealth_tracker.service;
 
+import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryExpenseDTO;
+import com.backend.wealth_tracker.mapper.ExpenseMapper;
+import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import org.slf4j.Logger;
@@ -10,8 +13,11 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ExpenseStatisticsService {
@@ -28,13 +34,26 @@ public class ExpenseStatisticsService {
             isolation = Isolation.READ_COMMITTED,
             propagation = Propagation.REQUIRED,
             readOnly = true)
-    public void getExpensesByCategoryAndCreatedAt(UserDetails userDetails,
-                                                  String startDate,
-                                                  String endDate) {
+    public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(UserDetails userDetails,
+                                                                              String startDate,
+                                                                              String endDate) {
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
         List<Expense> expenses = expenseRepository.findByCreatedAtBetween(start, end);
         LOGGER.atInfo().log("Found {} expenses between {} and {}", expenses.size(), startDate, endDate);
-//        return expenses;
+        Map<Long, BigDecimal> categoryExpenseMap = new HashMap<>();
+        Map<Long, Category> categoryMap = new HashMap<>();
+        expenses
+                .forEach(
+                        expense ->
+                        {
+                            Category category = expense.getCategory();
+                            Long categoryId = category.getCategoryId();
+                            categoryExpenseMap.merge(categoryId,
+                                        expense.getExpenseAmount(), BigDecimal::add);
+                            categoryMap.putIfAbsent(categoryId, category);
+                        }
+                );
+        return ExpenseMapper.createCategoryExpenseDTOFromMaps(categoryExpenseMap, categoryMap);
     }
 }

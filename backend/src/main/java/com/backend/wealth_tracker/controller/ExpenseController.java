@@ -1,6 +1,7 @@
 package com.backend.wealth_tracker.controller;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.AccountCannotHaveNegativeBalanceException;
@@ -48,13 +49,13 @@ public class ExpenseController {
     @GetMapping("/by-category-and-created-at")
     @ResponseStatus(HttpStatus.OK)
     @Tag(name = "FIND")
-    public List<ResponseExpenseDTO> getExpensesByCategoryAndCreatedAt(
+    public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam String startDate,
             @RequestParam String endDate) {
-        return ExpenseMapper.expensesToResponseExpenseDTOs(
+        return
                 this.expenseStatisticsService.getExpensesByCategoryAndCreatedAt(
-                        userDetails, startDate, endDate));
+                        userDetails, startDate, endDate);
     }
 
   @PostMapping(path = "/save")
