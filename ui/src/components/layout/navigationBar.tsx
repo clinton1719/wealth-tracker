@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,6 +15,7 @@ import { navigationStaticValues } from '@/static-values/navigation-values'
 export function NavigationBar() {
   const isMobile = useIsMobile()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   return (
     <NavigationMenu viewport={isMobile}>
@@ -64,8 +65,11 @@ export function NavigationBar() {
         <NavigationMenuItem>
           <button
             type="button"
-            onClick={() => dispatch(logout())}
-            className="card-value"
+            onClick={() => {
+              dispatch(logout())
+              navigate('/')
+            }}
+            className="card-value ml-2"
           >
             Logout
           </button>

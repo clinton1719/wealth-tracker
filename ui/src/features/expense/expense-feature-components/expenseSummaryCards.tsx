@@ -119,7 +119,7 @@ export function ExpenseSummaryCards({
 
   return (
     <div className="flex flex-col md:flex-row justify-between mt-6">
-      <Card className="mt-4 w-full max-w-sm">
+      <Card className="card card-border border-black">
         <CardHeader>
           <CardTitle className="font-bold">Total expenses</CardTitle>
           <CardDescription>
@@ -139,7 +139,7 @@ export function ExpenseSummaryCards({
           </p>
         </CardFooter>
       </Card>
-      <Card className="mt-4 w-full max-w-sm">
+      <Card className="card card-border border-black">
         <CardHeader>
           <CardTitle className="font-bold">Top category</CardTitle>
           <CardDescription>
@@ -185,7 +185,7 @@ export function ExpenseSummaryCards({
               <></>
             )}
       </Card>
-      <Card className="mt-4 w-full max-w-sm">
+      <Card className="card card-border border-black">
         <CardHeader>
           <CardTitle className="font-bold">Top tag</CardTitle>
           <CardDescription>Highest spending tag this month</CardDescription>

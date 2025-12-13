@@ -10,6 +10,7 @@ import { ProtectedRoute } from '@/features/auth/protectedRoute.tsx'
 import SignUp from '@/features/auth/signUp.tsx'
 import { store } from '@/store.ts'
 import ErrorBoundary from './components/error-boundary/error-boundary'
+import { ExpenseStatistics } from './features/expense/expenseStatistics'
 import '@/styles/index.css'
 
 const App = lazy(() => import('@/App.tsx'))
@@ -28,13 +29,14 @@ createRoot(document.getElementById('root')!).render(
         <ErrorBoundary>
           <Routes>
             {/* PUBLIC ROUTES */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<SignUp />} />
 
             {/* PROTECTED ROUTES */}
             <Route element={<ProtectedRoute />}>
               <Route index element={<App />} />
               <Route path="expense" element={<ExpensesSection />} />
+              <Route path="expense/statistics" element={<ExpenseStatistics />} />
               <Route path="category" element={<CategoriesSection />} />
             </Route>
           </Routes>

@@ -7,11 +7,16 @@ export const navigationStaticValues: {
     title: 'Add expense',
     to: '/expense',
     description:
-      'Quickly add a new expense to keep track of your spending habits.',
+      'Add a new expense to keep track of your spending habits.',
+  },
+  {
+    title: 'View and generate expense reports',
+    to: '/expense/statistics',
+    description: 'View complete detailed report of your expenses',
   },
   {
     title: 'Manage categories',
     to: '/category',
-    description: 'Quickly view and manage your categories.',
+    description: 'View and manage your categories.',
   },
 ]
