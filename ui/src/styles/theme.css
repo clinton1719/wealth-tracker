@@ -7,33 +7,54 @@
      #AED9E0  (muted teal)
      #5E6472  (deep slate)
   */
-  --background: #faf3dd; /* light cream */
-  --foreground: #000000; /* deep slate for text */
+  --background: #faf3dd;
+  /* light cream */
+  --foreground: #000000;
+  /* deep slate for text */
 
   --card: #ffffff;
   --card-foreground: var(--foreground);
   --popover: #ffffff;
   --popover-foreground: var(--foreground);
 
-  --primary: #ffa69e; /* warm accent */
+  --primary: #ffa69e;
+  /* warm accent */
   --primary-foreground: #ffffff;
-  --secondary: #b8f2e6; /* soft aqua */
+  --secondary: #b8f2e6;
+  /* soft aqua */
   --secondary-foreground: var(--foreground);
-  --muted: #aed9e0; /* muted teal */
+  --muted: #aed9e0;
+  /* muted teal */
   --muted-foreground: var(--foreground);
   --accent: #aed9e0;
   --accent-foreground: var(--foreground);
 
   --destructive: #ff6b6b;
-  --border: rgba(94, 100, 114, 0.08); /* subtle border using deep slate */
+  --border: rgba(94, 100, 114, 0.08);
+  /* subtle border using deep slate */
   --input: rgba(94, 100, 114, 0.06);
   --ring: rgba(255, 166, 158, 0.18);
 
-  --chart-1: #ffa69e;
-  --chart-2: #b8f2e6;
-  --chart-3: #aed9e0;
-  --chart-4: #faf3dd;
-  --chart-5: #5e6472;
+  --chart-1: #3b82f6;
+  /* Blue (Primary) */
+  --chart-2: #10b981;
+  /* Emerald Green */
+  --chart-3: #f59e0b;
+  /* Amber/Orange */
+  --chart-4: #8b5cf6;
+  /* Violet */
+  --chart-5: #ef4444;
+  /* Red */
+  --chart-6: #06b6d4;
+  /* Cyan */
+  --chart-7: #f472b6;
+  /* Pink */
+  --chart-8: #6366f1;
+  /* Indigo */
+  --chart-9: #84cc16;
+  /* Lime */
+  --chart-10: #a855f7;
+  /* Purple */
 
   --sidebar: var(--background);
   --sidebar-foreground: var(--foreground);
@@ -47,8 +68,10 @@
 
 .dark {
   /* Dark mode: invert to deep slate background with light text */
-  --background: #5e6472; /* deep slate */
-  --foreground: #faf3dd; /* light cream */
+  --background: #5e6472;
+  /* deep slate */
+  --foreground: #faf3dd;
+  /* light cream */
 
   --card: #4a5057;
   --card-foreground: var(--foreground);

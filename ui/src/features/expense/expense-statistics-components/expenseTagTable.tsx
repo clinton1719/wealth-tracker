@@ -17,7 +17,7 @@ export function TagCategoryTable({ tagExpenses, fromDate, toDate, totalExpense }
             <TableCaption>Expenses per tag from {fromDate} to {toDate}</TableCaption>
             <TableHeader>
                 <TableRow>
-                    <TableHead>Category</TableHead>
+                    <TableHead>Tag</TableHead>
                     <TableHead className="text-right">Expense amount</TableHead>
                 </TableRow>
             </TableHeader>
