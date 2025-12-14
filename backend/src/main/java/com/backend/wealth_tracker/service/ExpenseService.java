@@ -10,6 +10,7 @@ import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.model.User;
+import com.backend.wealth_tracker.projections.ExpenseSummaryProjection;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -20,10 +21,6 @@ import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -172,18 +169,16 @@ public class ExpenseService {
       isolation = Isolation.READ_COMMITTED,
       propagation = Propagation.REQUIRED,
       readOnly = true)
-  public List<Expense> getExpensesInRange(
-      UserDetails userDetails,
-      String startDate,
-      String endDate,
-      Integer pageNumber,
-      Integer pageSize) {
+  public List<ExpenseSummaryProjection> getExpensesInRange(String startDate, String endDate) {
     LocalDate start = LocalDate.parse(startDate);
     LocalDate end = LocalDate.parse(endDate);
-    Pageable pageable =
-        PageRequest.of(pageNumber, pageSize, Sort.by("expenseCreatedAt").descending());
-    List<Expense> expenses = expenseRepository.findByCreatedAtBetween(start, end, pageable);
-    LOGGER.atInfo().log("Found {} expenses between {} and {}", expenses.size(), startDate, endDate);
-    return expenses;
+    List<ExpenseSummaryProjection> expenseSummaryProjectionList =
+        expenseRepository.findExpenseSummaryBetween(start, end);
+    LOGGER.atInfo().log(
+        "Found {} expenses between {} and {}",
+        expenseSummaryProjectionList.size(),
+        startDate,
+        endDate);
+    return expenseSummaryProjectionList;
   }
 }

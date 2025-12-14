@@ -40,9 +40,8 @@ export function ExpensesList({
   accountsData,
   categoriesData,
   profilesData,
-  handleUpdateProfile,
-  enabledMap,
-  handleDeleteAccount,
+  handleUpdateExpense,
+  handleDeleteExpense,
 }: ExpensesListProps) {
   const categoryMap = React.useMemo(() => {
     if (!categoriesData)
@@ -64,7 +63,6 @@ export function ExpensesList({
 
   const filteredExpensesData = React.useMemo(() => {
     return expensesData
-      .filter(expense => enabledMap[expense.profileId])
       .map(expense => ({
         expenseId: expense.expenseId,
         expenseAmount: expense.expenseAmount,
@@ -79,11 +77,11 @@ export function ExpensesList({
         profilePicture: profileMap[expense.profileId].profilePicture,
         profileColorCode: profileMap[expense.profileId].profileColorCode,
       }))
-  }, [expensesData, enabledMap, categoryMap, accountMap, profileMap])
+  }, [expensesData, categoryMap, accountMap, profileMap])
 
   const columns = React.useMemo(
-    () => createColumns(handleUpdateProfile, handleDeleteAccount),
-    [handleUpdateProfile, handleDeleteAccount],
+    () => createColumns(handleUpdateExpense, handleDeleteExpense),
+    [handleUpdateExpense, handleDeleteExpense],
   )
 
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -93,6 +91,7 @@ export function ExpensesList({
   const [columnVisibility, setColumnVisibility]
     = React.useState<VisibilityState>({ accountName: false, profileName: false })
 
+  /* eslint-disable react-hooks/incompatible-library */
   const table = useReactTable({
     data: filteredExpensesData,
     columns,
@@ -112,6 +111,7 @@ export function ExpensesList({
       columnVisibility,
     },
   })
+  /* eslint-enable react-hooks/incompatible-library */
 
   return (
     <div className="w-full">
@@ -184,6 +184,9 @@ export function ExpensesList({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
+                      style={{
+                        borderLeft: `6px solid ${row.getValue('profileColorCode') ?? undefined}`,
+                      }}
                     >
                       {row.getVisibleCells().map(cell => (
                         <TableCell key={cell.id}>

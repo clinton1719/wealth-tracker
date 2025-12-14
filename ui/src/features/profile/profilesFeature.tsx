@@ -36,6 +36,7 @@ export function ProfilesFeature() {
   const {
     error,
     isLoading: getAllProfilesLoading,
+    isFetching: getAllProfilesFetching,
     data: profileData,
   } = useGetAllProfilesForUserQuery()
   const [saveProfile, { isLoading: saveProfileLoading }]
@@ -62,6 +63,7 @@ export function ProfilesFeature() {
 
   if (
     getAllProfilesLoading
+    || getAllProfilesFetching
     || saveProfileLoading
     || updateProfileLoading
     || deleteProfileLoading
@@ -144,11 +146,11 @@ export function ProfilesFeature() {
     formData: z.infer<typeof profileFormSchema>,
   ) {
     try {
-      const formDataa = {
+      const updatedFormData = {
         ...formData,
         profilePicture: undefined,
       }
-      const result = await updateProfile({ ...formDataa }).unwrap()
+      const result = await updateProfile({ ...updatedFormData }).unwrap()
 
       if (!result) {
         toast.error('Failed to update profile, please try again later')
@@ -213,7 +215,7 @@ export function ProfilesFeature() {
 
   const deleteCurrentProfile = async () => {
     if (currentProfile && currentProfile.profileId) {
-      await deleteProfile(currentProfile.profileId)
+      await deleteProfile(currentProfile.profileId).unwrap()
       toast.info(
         `Profile : ${currentProfile.profileName} deleted successfully!`,
       )
@@ -244,6 +246,7 @@ export function ProfilesFeature() {
           onSubmit={onSubmit}
           profileDialogOpen={profileDialogOpen}
           setProfileDialogOpen={setProfileDialogOpen}
+          setIsUpdate={setIsUpdate}
         />
       </div>
       <div className="normal-grid">

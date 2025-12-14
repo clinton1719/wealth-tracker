@@ -80,7 +80,18 @@ export function createColumns(
     },
     {
       accessorKey: 'expenseCreatedAt',
-      header: () => <div className="text-left">Created at</div>,
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            style={{ marginLeft: '-1em' }}
+          >
+            Created at
+            <ArrowUpDown />
+          </Button>
+        )
+      },
       cell: ({ row }) => (
         <div className="text-left">{row.getValue('expenseCreatedAt')}</div>
       ),

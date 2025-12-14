@@ -5,6 +5,4 @@ export interface Profile {
   profileDescription?: string
   profilePicture?: string
   profilePictureFile?: File
-  categoryIds: Array<number>
-  expenseIds: Array<number>
 }

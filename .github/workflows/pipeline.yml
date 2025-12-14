@@ -42,6 +42,7 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
+          cache-dependency-path: 'backend/pom.xml'
 
       - name: Backend build
         run: pnpm run backend:build

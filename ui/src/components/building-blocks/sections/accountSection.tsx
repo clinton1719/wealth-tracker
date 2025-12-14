@@ -40,8 +40,8 @@ export function AccountSection({
 
   return (
     <Card
-      className="card"
-      style={{ backgroundColor: `${profile.profileColorCode}40` }}
+      className="card card-border"
+      style={{ borderColor: profile.profileColorCode }}
     >
       <CardHeader>
         <CardTitle>

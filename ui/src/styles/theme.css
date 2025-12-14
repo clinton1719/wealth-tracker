@@ -7,33 +7,142 @@
      #AED9E0  (muted teal)
      #5E6472  (deep slate)
   */
-  --background: #faf3dd; /* light cream */
-  --foreground: #000000; /* deep slate for text */
+  --background: #faf3dd;
+  /* light cream */
+  --foreground: #000000;
+  /* deep slate for text */
 
   --card: #ffffff;
   --card-foreground: var(--foreground);
   --popover: #ffffff;
   --popover-foreground: var(--foreground);
 
-  --primary: #ffa69e; /* warm accent */
+  --primary: #ffa69e;
+  /* warm accent */
   --primary-foreground: #ffffff;
-  --secondary: #b8f2e6; /* soft aqua */
+  --secondary: #b8f2e6;
+  /* soft aqua */
   --secondary-foreground: var(--foreground);
-  --muted: #aed9e0; /* muted teal */
+  --muted: #aed9e0;
+  /* muted teal */
   --muted-foreground: var(--foreground);
   --accent: #aed9e0;
   --accent-foreground: var(--foreground);
 
   --destructive: #ff6b6b;
-  --border: rgba(94, 100, 114, 0.08); /* subtle border using deep slate */
+  --border: rgba(94, 100, 114, 0.08);
+  /* subtle border using deep slate */
   --input: rgba(94, 100, 114, 0.06);
   --ring: rgba(255, 166, 158, 0.18);
 
-  --chart-1: #ffa69e;
-  --chart-2: #b8f2e6;
-  --chart-3: #aed9e0;
-  --chart-4: #faf3dd;
-  --chart-5: #5e6472;
+  --chart-1: #3b82f6;
+  /* Blue (Primary) */
+  --chart-2: #10b981;
+  /* Emerald Green */
+  --chart-3: #f59e0b;
+  /* Amber/Orange */
+  --chart-4: #8b5cf6;
+  /* Violet */
+  --chart-5: #ef4444;
+  /* Red */
+  --chart-6: #06b6d4;
+  /* Cyan */
+  --chart-7: #f472b6;
+  /* Pink */
+  --chart-8: #6366f1;
+  /* Indigo */
+  --chart-9: #84cc16;
+  /* Lime */
+  --chart-10: #a855f7;
+  /* Purple */
+
+  /* --- EXPANDED SET (Distinct Hues) --- */
+  --chart-11: #14b8a6;
+  /* Teal - Distinct from Green/Cyan */
+  --chart-12: #eab308;
+  /* Yellow - Distinct from Amber */
+  --chart-13: #f43f5e;
+  /* Rose - Distinct from Red */
+  --chart-14: #64748b;
+  /* Slate Blue - Neutral/Greyish */
+  --chart-15: #d946ef;
+  /* Fuchsia - Bright Magenta */
+  --chart-16: #0ea5e9;
+  /* Sky Blue - Lighter than Primary */
+  --chart-17: #22c55e;
+  /* Green - Standard Green */
+  --chart-18: #f97316;
+  /* Orange - Bright Orange */
+  --chart-19: #ec4899;
+  /* Pink - Darker Pink */
+  --chart-20: #71717a;
+  /* Zinc - Dark Grey (Good for neutral bars) */
+
+  /* --- DEEPER/DARKER SHADES (For contrast against pastels) --- */
+  --chart-21: #1e3a8a;
+  /* Dark Blue */
+  --chart-22: #14532d;
+  /* Dark Forest Green */
+  --chart-23: #78350f;
+  /* Dark Brown/Amber */
+  --chart-24: #581c87;
+  /* Dark Purple */
+  --chart-25: #991b1b;
+  /* Dark Red */
+  --chart-26: #155e75;
+  /* Dark Cyan */
+  --chart-27: #831843;
+  /* Dark Pink/Maroon */
+  --chart-28: #312e81;
+  /* Dark Indigo */
+  --chart-29: #365314;
+  /* Dark Lime/Olive */
+  --chart-30: #4c1d95;
+  /* Deep Violet */
+
+  /* --- LIGHTER/PASTEL SHADES (Soft colors) --- */
+  --chart-31: #93c5fd;
+  /* Light Blue */
+  --chart-32: #6ee7b7;
+  /* Soft Emerald */
+  --chart-33: #fcd34d;
+  /* Soft Amber */
+  --chart-34: #c4b5fd;
+  /* Soft Violet */
+  --chart-35: #fca5a5;
+  /* Soft Red */
+  --chart-36: #67e8f9;
+  /* Soft Cyan */
+  --chart-37: #fbcfe8;
+  /* Soft Pink */
+  --chart-38: #a5b4fc;
+  /* Soft Indigo */
+  --chart-39: #bef264;
+  /* Soft Lime */
+  --chart-40: #e9d5ff;
+  /* Soft Purple */
+
+  /* --- UNIQUE INTERMEDIATES (Earthy & Complex tones) --- */
+  --chart-41: #0d9488;
+  /* Dark Teal */
+  --chart-42: #ca8a04;
+  /* Dark Yellow/Gold */
+  --chart-43: #be123c;
+  /* Crimson */
+  --chart-44: #334155;
+  /* Dark Slate */
+  --chart-45: #c026d3;
+  /* Dark Magenta */
+  --chart-46: #0284c7;
+  /* Steel Blue */
+  --chart-47: #15803d;
+  /* Grass Green */
+  --chart-48: #ea580c;
+  /* Burnt Orange */
+  --chart-49: #db2777;
+  /* Deep Rose */
+  --chart-50: #52525b;
+  /* Neutral Zinc */
 
   --sidebar: var(--background);
   --sidebar-foreground: var(--foreground);
@@ -47,8 +156,10 @@
 
 .dark {
   /* Dark mode: invert to deep slate background with light text */
-  --background: #5e6472; /* deep slate */
-  --foreground: #faf3dd; /* light cream */
+  --background: #5e6472;
+  /* deep slate */
+  --foreground: #faf3dd;
+  /* light cream */
 
   --card: #4a5057;
   --card-foreground: var(--foreground);

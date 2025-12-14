@@ -1,7 +1,7 @@
 import type * as z from 'zod'
 import type { Account } from '@/types/Account'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
@@ -39,6 +39,7 @@ export function AccountsFeature() {
   const {
     error: accountsError,
     isLoading: getAllAccountsLoading,
+    isFetching: getAllAccountsFetching,
     data: accountsData,
   } = useGetAllAccountsQuery()
   const {
@@ -58,8 +59,19 @@ export function AccountsFeature() {
   const { isError: isProfilesError, errorComponent: profilesErrorComponent }
     = useApiError(profilesError)
 
+  const filteredAccountsData = useMemo(() => accountsData?.filter((account) => {
+    return (
+      enabledMap[account.profileId]
+      && (!accountSearchText
+        || account.accountName
+          .toLowerCase()
+          .includes(accountSearchText.toLowerCase()))
+    )
+  }), [accountsData, enabledMap, accountSearchText])
+
   if (
     getAllAccountsLoading
+    || getAllAccountsFetching
     || saveAccountLoading
     || updateAccountLoading
     || deleteAccountLoading
@@ -235,7 +247,7 @@ export function AccountsFeature() {
 
   const deleteCurrentAccount = async () => {
     if (currentAccount && currentAccount.accountId) {
-      await deleteAccount(currentAccount.accountId)
+      await deleteAccount(currentAccount.accountId).unwrap()
       toast.info(
         `Account : ${currentAccount.accountName} deleted successfully!`,
       )
@@ -250,16 +262,6 @@ export function AccountsFeature() {
     setDeleteAccountDialogOpen(true)
     setCurrentAccount(account)
   }
-
-  const filteredAccountsData = accountsData?.filter((account) => {
-    return (
-      enabledMap[account.profileId]
-      && (!accountSearchText
-        || account.accountName
-          .toLowerCase()
-          .includes(accountSearchText.toLowerCase()))
-    )
-  })
 
   if (profilesData) {
     return (
@@ -308,13 +310,8 @@ export function AccountsFeature() {
                     }
                     else {
                       return (
-                        <p
-                          key={account.accountId}
-                          role="alert"
-                          className="text-red-600 font-medium"
-                        >
-                          Profile not found for this account, contact admin.
-                        </p>
+                        <Fragment key={account.accountId}>
+                        </Fragment>
                       )
                     }
                   })

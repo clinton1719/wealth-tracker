@@ -10,7 +10,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-  @Query("SELECT a FROM accounts a " + "LEFT JOIN FETCH a.expenses " + "WHERE a.user.id = :userId")
+  @Query(
+      """
+            SELECT a FROM accounts a WHERE a.user.id = :userId
+            """)
   List<Account> findAllWithRelations(@Param("userId") Long userId);
 
   Optional<Account> findByAccountNameAndUserId(String accountName, Long userId);

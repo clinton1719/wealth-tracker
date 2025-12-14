@@ -2,7 +2,7 @@ import type { Category } from '@/types/Category'
 import type { Expense } from '@/types/Expense'
 import type { ExpenseSummaryCardsProps } from '@/types/ExpenseSummaryCardsProps'
 import { DynamicIcon } from 'lucide-react/dynamic'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   Card,
   CardContent,
@@ -13,85 +13,89 @@ import {
 } from '@/components/ui/card'
 import { formatCurrency } from '@/utilities/helper'
 
-function getHighestSpendingCategory(
-  expensesData: Expense[],
-  categoriesData: Category[],
-): { category: Category, totalSpent: number } | null {
-  if (!expensesData || expensesData.length === 0)
-    return null
-
-  const totalsByCategory = expensesData.reduce(
-    (acc, exp) => {
-      acc[exp.categoryId] = (acc[exp.categoryId] || 0) + exp.expenseAmount
-      return acc
-    },
-    {} as Record<number, number>,
-  )
-
-  let maxCategoryId = null
-  let maxAmount = -Infinity
-
-  for (const [categoryId, total] of Object.entries(totalsByCategory)) {
-    if (total > maxAmount) {
-      maxAmount = total
-      maxCategoryId = Number(categoryId)
-    }
-  }
-
-  if (!maxCategoryId)
-    return null
-
-  return {
-    category: categoriesData.find(cat => cat.categoryId === maxCategoryId)!,
-    totalSpent: maxAmount,
-  }
-}
-
-function getHighestSpendingTag(
-  expensesData: Expense[],
-  categoriesData: Category[],
-): { tag: string, totalSpent: number } | null {
-  if (!expensesData || expensesData.length === 0)
-    return null
-
-  const totalsByTag = expensesData.reduce(
-    (acc, expense) => {
-      const tags: string[] | undefined = categoriesData.find(
-        category => category.categoryId === expense.categoryId,
-      )?.categoryTags
-      if (tags) {
-        for (const tag of tags) {
-          acc[tag] = (acc[tag] || 0) + expense.expenseAmount
-        }
-      }
-      return acc
-    },
-    {} as Record<string, number>,
-  )
-
-  let maxTag = null
-  let maxTagAmount = -Infinity
-
-  for (const [tag, total] of Object.entries(totalsByTag)) {
-    if (total > maxTagAmount) {
-      maxTagAmount = total
-      maxTag = tag
-    }
-  }
-
-  if (!maxTag)
-    return null
-
-  return {
-    tag: maxTag,
-    totalSpent: maxTagAmount,
-  }
-}
-
 export function ExpenseSummaryCards({
   expensesData,
   categoriesData,
 }: ExpenseSummaryCardsProps) {
+  const getHighestSpendingCategory = useCallback((
+    expensesData: Expense[],
+    categoriesData: Category[],
+  ): { category: Category, totalSpent: number } | null => {
+    if (!expensesData || expensesData.length === 0) {
+      return null
+    }
+
+    const totalsByCategory = expensesData.reduce(
+      (acc, exp) => {
+        acc[exp.categoryId] = (acc[exp.categoryId] || 0) + exp.expenseAmount
+        return acc
+      },
+      {} as Record<number, number>,
+    )
+
+    let maxCategoryId: number | null = null
+    let maxAmount = -Infinity
+
+    for (const [categoryId, total] of Object.entries(totalsByCategory)) {
+      if (total > maxAmount) {
+        maxAmount = total
+        maxCategoryId = Number(categoryId)
+      }
+    }
+
+    const foundCategory = categoriesData.find(cat => cat.categoryId === maxCategoryId)
+
+    if (!maxCategoryId || !foundCategory) {
+      return null
+    }
+
+    return {
+      category: foundCategory,
+      totalSpent: maxAmount,
+    }
+  }, [])
+
+  const getHighestSpendingTag = useCallback((
+    expensesData: Expense[],
+    categoriesData: Category[],
+  ): { tag: string, totalSpent: number } | null => {
+    if (!expensesData || expensesData.length === 0)
+      return null
+
+    const totalsByTag = expensesData.reduce(
+      (acc, expense) => {
+        const tags: string[] | undefined = categoriesData.find(
+          category => category.categoryId === expense.categoryId,
+        )?.categoryTags
+        if (tags) {
+          for (const tag of tags) {
+            acc[tag] = (acc[tag] || 0) + expense.expenseAmount
+          }
+        }
+        return acc
+      },
+      {} as Record<string, number>,
+    )
+
+    let maxTag = null
+    let maxTagAmount = -Infinity
+
+    for (const [tag, total] of Object.entries(totalsByTag)) {
+      if (total > maxTagAmount) {
+        maxTagAmount = total
+        maxTag = tag
+      }
+    }
+
+    if (!maxTag)
+      return null
+
+    return {
+      tag: maxTag,
+      totalSpent: maxTagAmount,
+    }
+  }, [])
+
   const monthlyExpense = useMemo(
     () =>
       expensesData.reduce((total, expense) => total + expense.expenseAmount, 0),
@@ -105,16 +109,17 @@ export function ExpenseSummaryCards({
 
   const highestSpendingCategory = useMemo(
     () => getHighestSpendingCategory(expensesData, categoriesData),
-    [expensesData, categoriesData],
+    [expensesData, categoriesData, getHighestSpendingCategory],
   )
+
   const highestSpendingTag = useMemo(
     () => getHighestSpendingTag(expensesData, categoriesData),
-    [expensesData, categoriesData],
+    [expensesData, categoriesData, getHighestSpendingTag],
   )
 
   return (
     <div className="flex flex-col md:flex-row justify-between mt-6">
-      <Card className="mt-4 w-full max-w-sm">
+      <Card className="card card-border border-black">
         <CardHeader>
           <CardTitle className="font-bold">Total expenses</CardTitle>
           <CardDescription>
@@ -134,7 +139,7 @@ export function ExpenseSummaryCards({
           </p>
         </CardFooter>
       </Card>
-      <Card className="mt-4 w-full max-w-sm">
+      <Card className="card card-border border-black">
         <CardHeader>
           <CardTitle className="font-bold">Top category</CardTitle>
           <CardDescription>
@@ -180,7 +185,7 @@ export function ExpenseSummaryCards({
               <></>
             )}
       </Card>
-      <Card className="mt-4 w-full max-w-sm">
+      <Card className="card card-border border-black">
         <CardHeader>
           <CardTitle className="font-bold">Top tag</CardTitle>
           <CardDescription>Highest spending tag this month</CardDescription>

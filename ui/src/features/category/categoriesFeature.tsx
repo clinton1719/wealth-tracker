@@ -1,7 +1,7 @@
 import type * as z from 'zod'
 import type { Category } from '@/types/Category'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
@@ -58,6 +58,7 @@ export default function CategoriesFeature() {
   const {
     error: categoriesError,
     isLoading: getAllCategoriesLoading,
+    isFetching: getAllCategoriesFetching,
     data: categoriesData,
   } = useGetAllCategoriesQuery()
   const {
@@ -73,8 +74,25 @@ export default function CategoriesFeature() {
   const { isError: isProfilesError, errorComponent: profilesErrorComponent }
     = useApiError(profilesError)
 
+  const filteredCategoriesData = useMemo(() => categoriesData?.filter((category) => {
+    return (
+      enabledMap[category.profileId]
+      && (!categorySearchText
+        || category.categoryName
+          .toLowerCase()
+          .includes(categorySearchText.toLowerCase()))
+        && (selectedTag ? category.categoryTags?.includes(selectedTag) : true)
+    )
+  }), [categoriesData, enabledMap, categorySearchText, selectedTag])
+
+  const tags = useMemo(() => filteredCategoriesData?.flatMap(
+    category => category.categoryTags,
+  ), [filteredCategoriesData])
+  const uniqueTags = [...new Set(tags)]
+
   if (
     saveCategoryLoading
+    || getAllCategoriesFetching
     || getAllCategoriesLoading
     || updateCategoryLoading
     || deleteCategoryLoading
@@ -252,7 +270,7 @@ export default function CategoriesFeature() {
 
   const deleteCurrentCategory = async () => {
     if (currentCategory && currentCategory.categoryId) {
-      await deleteCategory(currentCategory.categoryId)
+      await deleteCategory(currentCategory.categoryId).unwrap()
       toast.info(
         `Category : ${currentCategory.categoryName} deleted successfully!`,
       )
@@ -262,22 +280,6 @@ export default function CategoriesFeature() {
       toast.error('Invalid category! Please refresh the page')
     }
   }
-
-  const filteredCategoriesData = categoriesData?.filter((category) => {
-    return (
-      enabledMap[category.profileId]
-      && (!categorySearchText
-        || category.categoryName
-          .toLowerCase()
-          .includes(categorySearchText.toLowerCase()))
-        && (selectedTag ? category.categoryTags?.includes(selectedTag) : true)
-    )
-  })
-
-  const tags = filteredCategoriesData?.flatMap(
-    category => category.categoryTags,
-  )
-  const uniqueTags = [...new Set(tags)]
 
   if (filteredCategoriesData && profilesData) {
     return (
@@ -361,13 +363,8 @@ export default function CategoriesFeature() {
               }
               else {
                 return (
-                  <p
-                    key={category.categoryId}
-                    role="alert"
-                    className="text-red-600 font-medium"
-                  >
-                    Profile not found for this category, contact admin.
-                  </p>
+                  <Fragment key={category.categoryId}>
+                  </Fragment>
                 )
               }
             })}

@@ -3,14 +3,10 @@ package com.backend.wealth_tracker.mapper;
 import com.backend.wealth_tracker.dto.request_dto.CreateProfileDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseProfileDTO;
 import com.backend.wealth_tracker.helper.Helper;
-import com.backend.wealth_tracker.model.Account;
-import com.backend.wealth_tracker.model.Category;
-import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.model.Profile;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.web.multipart.MultipartFile;
 
 public final class ProfileMapper {
@@ -40,18 +36,6 @@ public final class ProfileMapper {
     responseProfileDTO.setProfilePicture(
         profile.getProfilePictureExtension()
             + Base64.getEncoder().encodeToString(profile.getProfilePicture()));
-    responseProfileDTO.setAccountIds(
-        profile.getAccounts().parallelStream()
-            .map(Account::getAccountId)
-            .collect(Collectors.toSet()));
-    responseProfileDTO.setCategoryIds(
-        profile.getCategories().parallelStream()
-            .map(Category::getCategoryId)
-            .collect(Collectors.toSet()));
-    responseProfileDTO.setExpenseIds(
-        profile.getExpenses().parallelStream()
-            .map(Expense::getExpenseId)
-            .collect(Collectors.toSet()));
     return responseProfileDTO;
   }
 

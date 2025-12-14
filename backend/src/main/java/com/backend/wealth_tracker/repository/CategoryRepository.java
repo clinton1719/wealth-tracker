@@ -11,7 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
   @Query(
-      "SELECT c FROM categories c " + "LEFT JOIN FETCH c.expenses " + "WHERE c.user.id = :userId")
+      """
+             SELECT DISTINCT c FROM categories c
+             LEFT JOIN FETCH c.categoryTags
+             WHERE c.user.id = :userId
+            """)
   List<Category> findAllWithRelations(@Param("userId") Long userId);
 
   Optional<Category> findByCategoryNameAndUserId(String categoryName, Long userId);

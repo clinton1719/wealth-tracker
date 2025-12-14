@@ -47,7 +47,7 @@ export default function ExpensesFeature() {
   function getMonthRange(offset: number) {
     const now = new Date()
     const start = new Date(now.getFullYear(), now.getMonth() + offset, 1)
-    const end = new Date(now.getFullYear(), now.getMonth() + offset + 1, 0)
+    const end = new Date(now.getFullYear(), now.getMonth() + offset + 1, offset === 0 ? now.getDate() : 0)
 
     return {
       startDate: formatDate(start),
@@ -63,12 +63,11 @@ export default function ExpensesFeature() {
   const {
     data: expensesData,
     isLoading: getAllExpensesLoading,
+    isFetching: getAllExpensesFetching,
     error: expensesError,
   } = useGetAllExpensesInRangeQuery({
     startDate,
     endDate,
-    pageNumber: 0,
-    pageSize: 100,
   })
   const [saveExpense, { isLoading: saveExpenseLoading }]
     = useSaveExpenseMutation()
@@ -80,20 +79,23 @@ export default function ExpensesFeature() {
   const {
     error: profilesError,
     isLoading: getAllProfilesLoading,
+    isFetching: getAllProfilesFetching,
     data: profilesData,
   } = useGetAllProfilesForUserQuery()
   const {
     error: accountsError,
     isLoading: getAllAccountsLoading,
+    isFetching: getAllAccountsFetching,
     data: accountsData,
   } = useGetAllAccountsQuery()
   const {
     error: categoriesError,
     isLoading: getAllCategoriesLoading,
+    isFetching: getAllCategoriesFetching,
     data: categoriesData,
   } = useGetAllCategoriesQuery()
 
-  const handleUpdateProfile = useCallback(
+  const handleUpdateExpense = useCallback(
     (updateExpense: UpdateExpense) => {
       form.reset({
         ...updateExpense,
@@ -124,6 +126,10 @@ export default function ExpensesFeature() {
     || saveExpenseLoading
     || updateExpenseLoading
     || deleteExpenseLoading
+    || getAllAccountsFetching
+    || getAllExpensesFetching
+    || getAllCategoriesFetching
+    || getAllProfilesFetching
   ) {
     return <Spinner className="spinner" />
   }
@@ -147,7 +153,7 @@ export default function ExpensesFeature() {
 
   const deleteCurrentExpense = async () => {
     if (currentExpense && currentExpense.expenseId) {
-      await deleteExpense(currentExpense.expenseId)
+      await deleteExpense(currentExpense.expenseId).unwrap()
       toast.info(
         `Expense of ${currentExpense.expenseAmount} created at ${currentExpense.expenseCreatedAt} deleted successfully!`,
       )
@@ -158,7 +164,7 @@ export default function ExpensesFeature() {
     }
   }
 
-  const handleDeleteAccount = (expense: Partial<FilteredExpense>) => {
+  const handleDeleteExpense = (expense: Partial<FilteredExpense>) => {
     setDeleteExpenseDialogOpen(true)
     setCurrentExpense(expense)
   }
@@ -333,7 +339,13 @@ export default function ExpensesFeature() {
     }
   }
 
-  if (expensesData && profilesData && accountsData && categoriesData) {
+  let enabledExpenses
+
+  if (expensesData) {
+    enabledExpenses = expensesData.filter(expense => enabledMap[expense.profileId])
+  }
+
+  if (enabledExpenses && profilesData && accountsData && categoriesData) {
     return (
       <div className="container mx-auto p-4 min-h-screen mb-4">
         <div className="flex items-center justify-between">
@@ -358,7 +370,7 @@ export default function ExpensesFeature() {
           />
         </div>
         <ExpenseSummaryCards
-          expensesData={expensesData}
+          expensesData={enabledExpenses}
           categoriesData={categoriesData}
         />
         <div className="flex items-center justify-between mb-4 mt-8">
@@ -389,13 +401,12 @@ export default function ExpensesFeature() {
           </Button>
         </div>
         <ExpensesList
-          expensesData={expensesData}
+          expensesData={enabledExpenses}
           categoriesData={categoriesData}
           accountsData={accountsData}
           profilesData={profilesData}
-          handleUpdateProfile={handleUpdateProfile}
-          enabledMap={enabledMap}
-          handleDeleteAccount={handleDeleteAccount}
+          handleUpdateExpense={handleUpdateExpense}
+          handleDeleteExpense={handleDeleteExpense}
         />
         <AlertDialogComponent
           isDialogOpen={deleteExpenseDialogOpen}

@@ -7,9 +7,12 @@ interface AuthState {
   token: string | null
 }
 
+const persistedUsername = localStorage.getItem('username')
+const persistedToken = localStorage.getItem('token')
+
 const initialState: AuthState = {
-  username: null,
-  token: null,
+  username: persistedUsername || null,
+  token: persistedToken || null,
 }
 
 const authSlice = createSlice({
@@ -17,12 +20,24 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials(state, action: PayloadAction<AuthState>) {
-      state.username = action.payload.username
-      state.token = action.payload.token
+      const { username, token } = action.payload
+      state.username = username
+      state.token = token
+
+      if (token && username) {
+        localStorage.setItem('username', username)
+        localStorage.setItem('token', token)
+      }
+    },
+    logout(state) {
+      state.username = null
+      state.token = null
+      localStorage.removeItem('username')
+      localStorage.removeItem('token')
     },
   },
 })
 
 export const selectAuthToken = (state: RootState) => state.auth.token
-export const { setCredentials } = authSlice.actions
+export const { setCredentials, logout } = authSlice.actions
 export default authSlice.reducer

@@ -29,7 +29,10 @@ public class Category implements Serializable {
   @Column(name = "categoryIcon")
   private String categoryIcon;
 
-  @Column private List<String> categoryTags;
+  @ElementCollection
+  @CollectionTable(name = "category_tags", joinColumns = @JoinColumn(name = "category_id"))
+  @Column(name = "tag")
+  private List<String> categoryTags;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

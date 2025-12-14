@@ -1,17 +1,1 @@
-when updating expense, need to credit/debit accoridngly from account. not just update expense
-
-
-
-
-
-
-
-
-
-
-
-Try and use usememo() wherever possible.  - because of usememo - sorting is not done for profiles, accounts EventCounts, fix that
-<Child onDelete={() => doThing(id)} />
-const handleDelete = useCallback(() => doThing(id), [id]);
-Use useCallback
-
+optimise queries-  basically remove the children if not needed like expenses etc

@@ -1,13 +1,14 @@
 package com.backend.wealth_tracker.controller;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
-import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
+import com.backend.wealth_tracker.dto.response_dto.*;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.AccountCannotHaveNegativeBalanceException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.service.ExpenseService;
+import com.backend.wealth_tracker.service.ExpenseStatisticsService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -21,26 +22,60 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/expenses")
 @Tag(name = "Expense", description = "API methods to manipulate Expense data")
 public class ExpenseController {
-
+  private static final String GET_MAPPING_TAG = "FIND";
   private final ExpenseService expenseService;
+  private final ExpenseStatisticsService expenseStatisticsService;
 
   @SuppressFBWarnings("EI_EXPOSE_REP2")
-  public ExpenseController(ExpenseService expenseService) {
+  public ExpenseController(
+      ExpenseService expenseService, ExpenseStatisticsService expenseStatisticsService) {
     this.expenseService = expenseService;
+    this.expenseStatisticsService = expenseStatisticsService;
   }
 
-  @GetMapping("/range/{pageNumber}/{pageSize}")
+  @GetMapping("/range")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "FIND")
+  @Tag(name = GET_MAPPING_TAG)
   public List<ResponseExpenseDTO> getExpensesInRange(
-      @AuthenticationPrincipal UserDetails userDetails,
-      @RequestParam String startDate,
-      @RequestParam String endDate,
-      @PathVariable Integer pageNumber,
-      @PathVariable Integer pageSize) {
-    return ExpenseMapper.expensesToResponseExpenseDTOs(
-        this.expenseService.getExpensesInRange(
-            userDetails, startDate, endDate, pageNumber, pageSize));
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return ExpenseMapper.expenseSummaryProjectionsToResponseExpenseDTOs(
+        this.expenseService.getExpensesInRange(startDate, endDate));
+  }
+
+  @GetMapping("/by-category-and-created-at")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = GET_MAPPING_TAG)
+  public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return ExpenseMapper.categoryExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
+        this.expenseStatisticsService.getExpensesByCategoryAndCreatedAt(startDate, endDate));
+  }
+
+  @GetMapping("/by-tag-and-created-at")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = GET_MAPPING_TAG)
+  public List<ResponseTagExpenseDTO> getExpensesByTagAndCreatedAt(
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return ExpenseMapper.tagExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
+        this.expenseStatisticsService.getExpensesByTagAndCreatedAt(startDate, endDate));
+  }
+
+  @GetMapping("/by-monthly-category-and-created-at")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = GET_MAPPING_TAG)
+  public List<ResponseCategoryMonthlyExpenseDTO> getMonthlyExpensesByCategory(
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return ExpenseMapper.categoryMonthlyExpenseProjectionsToResponseCategoryExpenseDTOs(
+        this.expenseStatisticsService.getMonthlyExpensesByCategory(startDate, endDate));
+  }
+
+  @GetMapping("/by-monthly-tag-and-created-at")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = GET_MAPPING_TAG)
+  public List<ResponseTagMonthlyExpenseDTO> getMonthlyExpensesByTag(
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return ExpenseMapper.tagMonthlyExpenseProjectionsToResponseTagExpenseDTOs(
+        this.expenseStatisticsService.getMonthlyExpensesByTag(startDate, endDate));
   }
 
   @PostMapping(path = "/save")

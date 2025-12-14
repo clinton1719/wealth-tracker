@@ -10,7 +10,6 @@ export interface ExpensesListProps {
   categoriesData: Category[]
   accountsData: Account[]
   profilesData: Profile[]
-  handleUpdateProfile: (updateExpense: UpdateExpense) => void
-  enabledMap: Record<number, boolean>
-  handleDeleteAccount: (expenseId: Partial<FilteredExpense>) => void
+  handleUpdateExpense: (updateExpense: UpdateExpense) => void
+  handleDeleteExpense: (expenseId: Partial<FilteredExpense>) => void
 }
