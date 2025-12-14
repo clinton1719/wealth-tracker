@@ -11,7 +11,7 @@ import { ExpenseCategoryPie } from './expense-statistics-components/expenseCateg
 import { ExpenseCategoryTable } from './expense-statistics-components/expenseCategoryTable'
 import { ExpenseLineChart } from './expense-statistics-components/expenseLineChart'
 import { ExpensePeriodSelector } from './expense-statistics-components/expensePeriodSelector'
-import { ExpenseTagLineChart } from './expense-statistics-components/expenseTagLineChart'
+import { ExpenseTagLineChart } from './expense-statistics-components/dxpenseTagLineChart'
 import { ExpenseTagPie } from './expense-statistics-components/expenseTagPie'
 import { TagCategoryTable } from './expense-statistics-components/expenseTagTable'
 
