@@ -7,11 +7,11 @@ import java.math.BigDecimal;
 @SuppressWarnings("PMD.DataClass")
 public class ResponseCategoryExpenseDTO implements Comparable<ResponseCategoryExpenseDTO> {
   @NotBlank private String categoryName;
-  @NotNull private String categoryColorCode;
+  @NotBlank private String categoryColorCode;
   private String categoryIcon;
   @NotNull private BigDecimal expenseAmount;
   @NotNull private Long profileId;
-  @NotNull private String profileColorCode;
+  @NotBlank private String profileColorCode;
 
   public ResponseCategoryExpenseDTO(
       String categoryName,

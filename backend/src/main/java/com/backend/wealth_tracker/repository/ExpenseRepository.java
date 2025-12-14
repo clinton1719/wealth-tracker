@@ -53,13 +53,15 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
           """
         SELECT
             ct.tag                AS tag,
-            c.profile_id          AS profile_id,
-            SUM(e.expense_amount)
+            p.profile_id           AS profileId,
+            p.profile_color_code   AS profileColorCode,
+            SUM(e.expense_amount) AS expenseAmount
         FROM expenses e
         JOIN categories c ON e.category_id = c.category_id
         JOIN category_tags ct ON ct.category_id = c.category_id
+        JOIN profiles p ON c.profile_id = p.profile_id
         WHERE e.expense_created_at BETWEEN :startDate AND :endDate
-        GROUP BY ct.tag, c.profile_id
+        GROUP BY ct.tag, c.profile_id, p.profile_id
     """,
       nativeQuery = true)
   List<TagExpenseSummaryProjection> findByTagAndCreatedAt(LocalDate startDate, LocalDate endDate);

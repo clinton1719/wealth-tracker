@@ -56,6 +56,94 @@
   --chart-10: #a855f7;
   /* Purple */
 
+  /* --- EXPANDED SET (Distinct Hues) --- */
+  --chart-11: #14b8a6;
+  /* Teal - Distinct from Green/Cyan */
+  --chart-12: #eab308;
+  /* Yellow - Distinct from Amber */
+  --chart-13: #f43f5e;
+  /* Rose - Distinct from Red */
+  --chart-14: #64748b;
+  /* Slate Blue - Neutral/Greyish */
+  --chart-15: #d946ef;
+  /* Fuchsia - Bright Magenta */
+  --chart-16: #0ea5e9;
+  /* Sky Blue - Lighter than Primary */
+  --chart-17: #22c55e;
+  /* Green - Standard Green */
+  --chart-18: #f97316;
+  /* Orange - Bright Orange */
+  --chart-19: #ec4899;
+  /* Pink - Darker Pink */
+  --chart-20: #71717a;
+  /* Zinc - Dark Grey (Good for neutral bars) */
+
+  /* --- DEEPER/DARKER SHADES (For contrast against pastels) --- */
+  --chart-21: #1e3a8a;
+  /* Dark Blue */
+  --chart-22: #14532d;
+  /* Dark Forest Green */
+  --chart-23: #78350f;
+  /* Dark Brown/Amber */
+  --chart-24: #581c87;
+  /* Dark Purple */
+  --chart-25: #991b1b;
+  /* Dark Red */
+  --chart-26: #155e75;
+  /* Dark Cyan */
+  --chart-27: #831843;
+  /* Dark Pink/Maroon */
+  --chart-28: #312e81;
+  /* Dark Indigo */
+  --chart-29: #365314;
+  /* Dark Lime/Olive */
+  --chart-30: #4c1d95;
+  /* Deep Violet */
+
+  /* --- LIGHTER/PASTEL SHADES (Soft colors) --- */
+  --chart-31: #93c5fd;
+  /* Light Blue */
+  --chart-32: #6ee7b7;
+  /* Soft Emerald */
+  --chart-33: #fcd34d;
+  /* Soft Amber */
+  --chart-34: #c4b5fd;
+  /* Soft Violet */
+  --chart-35: #fca5a5;
+  /* Soft Red */
+  --chart-36: #67e8f9;
+  /* Soft Cyan */
+  --chart-37: #fbcfe8;
+  /* Soft Pink */
+  --chart-38: #a5b4fc;
+  /* Soft Indigo */
+  --chart-39: #bef264;
+  /* Soft Lime */
+  --chart-40: #e9d5ff;
+  /* Soft Purple */
+
+  /* --- UNIQUE INTERMEDIATES (Earthy & Complex tones) --- */
+  --chart-41: #0d9488;
+  /* Dark Teal */
+  --chart-42: #ca8a04;
+  /* Dark Yellow/Gold */
+  --chart-43: #be123c;
+  /* Crimson */
+  --chart-44: #334155;
+  /* Dark Slate */
+  --chart-45: #c026d3;
+  /* Dark Magenta */
+  --chart-46: #0284c7;
+  /* Steel Blue */
+  --chart-47: #15803d;
+  /* Grass Green */
+  --chart-48: #ea580c;
+  /* Burnt Orange */
+  --chart-49: #db2777;
+  /* Deep Rose */
+  --chart-50: #52525b;
+  /* Neutral Zinc */
+
   --sidebar: var(--background);
   --sidebar-foreground: var(--foreground);
   --sidebar-primary: var(--primary);

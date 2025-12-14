@@ -23,7 +23,7 @@ export function TagCategoryTable({ tagExpenses, fromDate, toDate, totalExpense }
             </TableHeader>
             <TableBody>
                 {tagExpenses.map((tagExpense) => (
-                    <TableRow key={tagExpense.tag}>
+                    <TableRow key={tagExpense.tag} style={{ borderLeft: `6px solid ${tagExpense.profileColorCode}`, }}>
                         <TableCell className="flex gap-4">
                             {tagExpense.tag}
                         </TableCell>

@@ -25,7 +25,7 @@ export function ExpenseCategoryTable({ categoryExpenses, fromDate, toDate, total
             </TableHeader>
             <TableBody>
                 {categoryExpenses.map((categoryExpense) => (
-                    <TableRow key={categoryExpense.categoryName}>
+                    <TableRow key={categoryExpense.categoryName} style={{ borderLeft: `6px solid ${categoryExpense.profileColorCode}`, }}>
                         <TableCell className="font-medium flex gap-4" style={{ color: categoryExpense.categoryColorCode }}>
                             {categoryExpense.categoryIcon ? (<DynamicIcon
                                 name={

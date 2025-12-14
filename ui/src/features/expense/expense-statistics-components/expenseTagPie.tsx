@@ -44,8 +44,40 @@ export function ExpenseTagPie({ fromDate, toDate, tagExpenses }: ExpenseTagPiePr
         return config;
     }, [tagExpenses]) satisfies ChartConfig;
 
+    const borderGradient = useMemo(() => {
+        const colors = tagExpenses.reduce<string[]>(
+            (acc, expense) => {
+                acc.push(expense.profileColorCode);
+                return acc;
+            },
+            []
+        );
+        if (colors.length === 0) return undefined;
+        if (colors.length === 1) return colors[0];
+
+        const step = 100 / colors.length;
+
+        return `linear-gradient(
+                90deg,
+                ${colors
+                .map(
+                    (color, i) =>
+                        `${color} ${i * step}%, ${color} ${(i + 1) * step}%`
+                )
+                .join(',')}
+                )`;
+    }, [tagExpenses]);
+
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col rounded-xl"
+            style={{
+                border: '2px solid transparent',
+                backgroundImage: borderGradient
+                    ? `linear-gradient(var(--background), var(--background)), ${borderGradient}`
+                    : undefined,
+                backgroundOrigin: 'border-box',
+                backgroundClip: 'padding-box, border-box',
+            }}>
             <CardHeader className="items-center pb-0">
                 <CardTitle>Tag</CardTitle>
                 <CardDescription>{fromDate} - {toDate}</CardDescription>

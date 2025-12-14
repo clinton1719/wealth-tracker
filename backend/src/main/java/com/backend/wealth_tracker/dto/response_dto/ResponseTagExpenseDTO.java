@@ -9,7 +9,7 @@ public class ResponseTagExpenseDTO implements Comparable<ResponseTagExpenseDTO> 
   @NotBlank private String tag;
   @NotNull private BigDecimal expenseAmount;
   @NotNull private Long profileId;
-  @NotNull private String profileColorCode;
+  @NotBlank private String profileColorCode;
 
   public ResponseTagExpenseDTO(
       String tag, BigDecimal expenseAmount, Long profileId, String profileColorCode) {
