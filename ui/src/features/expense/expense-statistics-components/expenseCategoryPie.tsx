@@ -20,12 +20,30 @@ import {
 
 export function ExpenseCategoryPie({ fromDate, toDate, categoryExpenses }: ExpenseCategoryPieProps) {
   const chartData = useMemo(() => {
-    return categoryExpenses.map(item => ({
-      category: item.categoryName.toLowerCase(),
-      expenseAmount: item.expenseAmount,
-      fill: item.categoryColorCode,
+    return categoryExpenses.map(categoryExpense => ({
+      category: categoryExpense.categoryName.toLowerCase(),
+      expenseAmount: categoryExpense.expenseAmount,
+      fill: categoryExpense.categoryColorCode,
     }))
   }, [categoryExpenses])
+
+  const chartConfig = useMemo(() => {
+    const config: ChartConfig = {
+      expenseAmount: {
+        label: 'Expense Amount',
+      },
+    }
+
+    categoryExpenses.forEach((categoryExpense) => {
+      const key = categoryExpense.categoryName.toLowerCase()
+      config[key] = {
+        label: categoryExpense.categoryName,
+        color: categoryExpense.categoryColorCode,
+      }
+    })
+
+    return config
+  }, [categoryExpenses]) satisfies ChartConfig
 
   const borderGradient = useMemo(() => {
     const colors = categoryExpenses.reduce<string[]>(
@@ -52,24 +70,6 @@ export function ExpenseCategoryPie({ fromDate, toDate, categoryExpenses }: Expen
                   .join(',')}
                 )`
   }, [categoryExpenses])
-
-  const chartConfig = useMemo(() => {
-    const config: ChartConfig = {
-      expenseAmount: {
-        label: 'Expense Amount',
-      },
-    }
-
-    categoryExpenses.forEach((item) => {
-      const key = item.categoryName.toLowerCase()
-      config[key] = {
-        label: item.categoryName,
-        color: item.categoryColorCode,
-      }
-    })
-
-    return config
-  }, [categoryExpenses]) satisfies ChartConfig
 
   return (
     <Card

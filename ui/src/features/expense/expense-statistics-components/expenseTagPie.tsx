@@ -20,9 +20,9 @@ import {
 
 export function ExpenseTagPie({ fromDate, toDate, tagExpenses }: ExpenseTagPieProps) {
   const chartData = useMemo(() => {
-    return tagExpenses.map((item, index) => ({
-      category: item.tag.toLowerCase(),
-      expenseAmount: item.expenseAmount,
+    return tagExpenses.map((tagExpense, index) => ({
+      category: tagExpense.tag.toLowerCase(),
+      expenseAmount: tagExpense.expenseAmount,
       fill: `var(--chart-${index + 1})`,
     }))
   }, [tagExpenses])
@@ -34,10 +34,10 @@ export function ExpenseTagPie({ fromDate, toDate, tagExpenses }: ExpenseTagPiePr
       },
     }
 
-    tagExpenses.forEach((item, index) => {
-      const key = item.tag.toLowerCase()
+    tagExpenses.forEach((tagExpense, index) => {
+      const key = tagExpense.tag.toLowerCase()
       config[key] = {
-        label: item.tag,
+        label: tagExpense.tag,
         color: `var(--chart-${index + 1})`,
       }
     })

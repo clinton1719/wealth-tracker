@@ -2,6 +2,7 @@ package com.backend.wealth_tracker.controller;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryExpenseDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryMonthlyExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseTagExpenseDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
@@ -14,11 +15,12 @@ import com.backend.wealth_tracker.service.ExpenseStatisticsService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/expenses")
@@ -60,6 +62,15 @@ public class ExpenseController {
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.tagExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
         this.expenseStatisticsService.getExpensesByTagAndCreatedAt(startDate, endDate));
+  }
+
+  @GetMapping("/by-monthly-category-and-created-at")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = "FIND")
+  public List<ResponseCategoryMonthlyExpenseDTO> getMonthlyExpensesByCategory(
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return ExpenseMapper.categoryMonthlyExpenseProjectionsToResponseCategoryExpenseDTOs(
+        this.expenseStatisticsService.getMonthlyExpensesByCategory(startDate, endDate));
   }
 
   @PostMapping(path = "/save")
