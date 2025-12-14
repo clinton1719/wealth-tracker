@@ -4,7 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@SuppressWarnings("PMD.DataClass")
+/** DTOs treated as distinct instances despite identical values */
+@SuppressWarnings({"PMD.DataClass", "PMD.OverrideBothEqualsAndHashCodeOnComparable"})
 public class ResponseCategoryExpenseDTO implements Comparable<ResponseCategoryExpenseDTO> {
   @NotBlank private String categoryName;
   @NotBlank private String categoryColorCode;

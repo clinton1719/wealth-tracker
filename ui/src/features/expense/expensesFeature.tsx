@@ -47,7 +47,7 @@ export default function ExpensesFeature() {
   function getMonthRange(offset: number) {
     const now = new Date()
     const start = new Date(now.getFullYear(), now.getMonth() + offset, 1)
-    const end = new Date(now.getFullYear(), now.getMonth() + offset + 1, offset === 0 ? now.getDate() : 0);
+    const end = new Date(now.getFullYear(), now.getMonth() + offset + 1, offset === 0 ? now.getDate() : 0)
 
     return {
       startDate: formatDate(start),

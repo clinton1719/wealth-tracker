@@ -1,35 +1,36 @@
-import { CalendarComponent } from "@/components/building-blocks/calendar";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState } from 'react'
+import { CalendarComponent } from '@/components/building-blocks/calendar'
+import { Button } from '@/components/ui/button'
 
 export function ExpensePeriodSelector({
   onGenerate,
 }: {
   onGenerate: (from: Date, to: Date) => void
 }) {
-  const [from, setFrom] = useState<Date | undefined>();
-  const [to, setTo] = useState<Date | undefined>();
+  const [from, setFrom] = useState<Date | undefined>()
+  const [to, setTo] = useState<Date | undefined>()
 
-  const isInvalid = from && to && from > to;
-  const canGenerate = from && to && !isInvalid;
+  const isInvalid = from && to && from > to
+  const canGenerate = from && to && !isInvalid
 
   const setPreset = (type: 'thisMonth' | 'lastMonth') => {
-    const now = new Date();
-    let start: Date;
-    let end: Date;
+    const now = new Date()
+    let start: Date
+    let end: Date
 
     if (type === 'thisMonth') {
-      start = new Date(now.getFullYear(), now.getMonth(), 1);
-      end = new Date();
-    } else {
-      start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      end = new Date(now.getFullYear(), now.getMonth(), 0);
+      start = new Date(now.getFullYear(), now.getMonth(), 1)
+      end = new Date()
     }
-    
-    setFrom(start);
-    setTo(end);
-    onGenerate(start, end);
-  };
+    else {
+      start = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+      end = new Date(now.getFullYear(), now.getMonth(), 0)
+    }
+
+    setFrom(start)
+    setTo(end)
+    onGenerate(start, end)
+  }
 
   return (
     <section className="rounded-xl border p-4 space-y-4 shadow-sm">
@@ -47,11 +48,11 @@ export function ExpensePeriodSelector({
           >
             Generate Report
           </Button>
-          
+
           <Button variant="outline" onClick={() => setPreset('thisMonth')}>
             This Month
           </Button>
-          
+
           <Button variant="outline" onClick={() => setPreset('lastMonth')}>
             Last Month
           </Button>
@@ -64,5 +65,5 @@ export function ExpensePeriodSelector({
         </p>
       )}
     </section>
-  );
+  )
 }

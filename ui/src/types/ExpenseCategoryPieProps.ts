@@ -1,7 +1,7 @@
-import type { CategoryExpense } from "./CategoryExpense";
+import type { CategoryExpense } from './CategoryExpense'
 
 export interface ExpenseCategoryPieProps {
-    categoryExpenses: CategoryExpense[];
-    fromDate: string;
-    toDate: string;
+  categoryExpenses: CategoryExpense[]
+  fromDate: string
+  toDate: string
 }

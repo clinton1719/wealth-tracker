@@ -4,12 +4,11 @@ import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.projections.CategoryExpenseSummaryProjection;
 import com.backend.wealth_tracker.projections.ExpenseSummaryProjection;
 import com.backend.wealth_tracker.projections.TagExpenseSummaryProjection;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {

@@ -1,7 +1,7 @@
-import type { TagExpense } from "./TagExpense";
+import type { TagExpense } from './TagExpense'
 
 export interface ExpenseTagPieProps {
-    tagExpenses: TagExpense[];
-    fromDate: string;
-    toDate: string;
+  tagExpenses: TagExpense[]
+  fromDate: string
+  toDate: string
 }

@@ -4,5 +4,5 @@ export interface Profile {
   profileColorCode: string
   profileDescription?: string
   profilePicture?: string
-  profilePictureFile?: File;
+  profilePictureFile?: File
 }

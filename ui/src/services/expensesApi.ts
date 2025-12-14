@@ -1,10 +1,10 @@
+import type { CategoryExpense } from '@/types/CategoryExpense'
 import type { Expense } from '@/types/Expense'
+import type { TagExpense } from '@/types/TagExpense'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { selectAuthToken } from '@/slices/authSlice'
 import { baseAPI } from '@/static-values/constants'
 import { ALL_TAG_TYPES } from '@/utilities/constants'
-import type { CategoryExpense } from '@/types/CategoryExpense'
-import type { TagExpense } from '@/types/TagExpense'
 
 export const expensesApi = createApi({
   reducerPath: 'expensesApi',

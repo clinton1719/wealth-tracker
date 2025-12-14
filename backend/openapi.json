@@ -876,7 +876,7 @@
                 }
             }
         },
-        "/api/v1/expenses/range/{pageNumber}/{pageSize}": {
+        "/api/v1/expenses/range": {
             "get": {
                 "tags": [
                     "Expense",
@@ -898,24 +898,6 @@
                         "required": true,
                         "schema": {
                             "type": "string"
-                        }
-                    },
-                    {
-                        "name": "pageNumber",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32"
-                        }
-                    },
-                    {
-                        "name": "pageSize",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32"
                         }
                     }
                 ],
@@ -961,6 +943,156 @@
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/ResponseExpenseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/expenses/by-tag-and-created-at": {
+            "get": {
+                "tags": [
+                    "Expense",
+                    "FIND"
+                ],
+                "operationId": "getExpensesByTagAndCreatedAt",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResponseTagExpenseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/expenses/by-category-and-created-at": {
+            "get": {
+                "tags": [
+                    "Expense",
+                    "FIND"
+                ],
+                "operationId": "getExpensesByCategoryAndCreatedAt",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResponseCategoryExpenseDTO"
                                     }
                                 }
                             }
@@ -1367,32 +1499,13 @@
                     },
                     "profilePicture": {
                         "type": "string"
-                    },
-                    "accountIds": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer",
-                            "format": "int64"
-                        },
-                        "uniqueItems": true
-                    },
-                    "categoryIds": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer",
-                            "format": "int64"
-                        },
-                        "uniqueItems": true
-                    },
-                    "expenseIds": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer",
-                            "format": "int64"
-                        },
-                        "uniqueItems": true
                     }
-                }
+                },
+                "required": [
+                    "profileColorCode",
+                    "profileId",
+                    "profileName"
+                ]
             },
             "UpdateExpenseDTO": {
                 "type": "object",
@@ -1758,6 +1871,61 @@
                     "accountBalance",
                     "accountName",
                     "accountType",
+                    "profileId"
+                ]
+            },
+            "ResponseTagExpenseDTO": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": "string"
+                    },
+                    "expenseAmount": {
+                        "type": "number"
+                    },
+                    "profileId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "profileColorCode": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "expenseAmount",
+                    "profileColorCode",
+                    "profileId",
+                    "tag"
+                ]
+            },
+            "ResponseCategoryExpenseDTO": {
+                "type": "object",
+                "properties": {
+                    "categoryName": {
+                        "type": "string"
+                    },
+                    "categoryColorCode": {
+                        "type": "string"
+                    },
+                    "categoryIcon": {
+                        "type": "string"
+                    },
+                    "expenseAmount": {
+                        "type": "number"
+                    },
+                    "profileId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "profileColorCode": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "categoryColorCode",
+                    "categoryName",
+                    "expenseAmount",
+                    "profileColorCode",
                     "profileId"
                 ]
             }
