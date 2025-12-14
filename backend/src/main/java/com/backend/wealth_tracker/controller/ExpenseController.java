@@ -40,7 +40,7 @@ public class ExpenseController {
   @Tag(name = "FIND")
   public List<ResponseExpenseDTO> getExpensesInRange(
       @RequestParam String startDate, @RequestParam String endDate) {
-    return ExpenseMapper.expensesToResponseExpenseDTOs(
+    return ExpenseMapper.expenseSummaryProjectionsToResponseExpenseDTOs(
         this.expenseService.getExpensesInRange(startDate, endDate));
   }
 
@@ -49,7 +49,8 @@ public class ExpenseController {
   @Tag(name = "FIND")
   public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(
       @RequestParam String startDate, @RequestParam String endDate) {
-    return this.expenseStatisticsService.getExpensesByCategoryAndCreatedAt(startDate, endDate);
+    return ExpenseMapper.categoryExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
+        this.expenseStatisticsService.getExpensesByCategoryAndCreatedAt(startDate, endDate));
   }
 
   @GetMapping("/by-tag-and-created-at")
@@ -57,7 +58,8 @@ public class ExpenseController {
   @Tag(name = "FIND")
   public List<ResponseTagExpenseDTO> getExpensesByTagAndCreatedAt(
       @RequestParam String startDate, @RequestParam String endDate) {
-    return this.expenseStatisticsService.getExpensesByTagAndCreatedAt(startDate, endDate);
+    return ExpenseMapper.tagExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
+        this.expenseStatisticsService.getExpensesByTagAndCreatedAt(startDate, endDate));
   }
 
   @PostMapping(path = "/save")

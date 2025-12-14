@@ -24,6 +24,27 @@ public class ResponseExpenseDTO {
   @NotNull private Long profileId;
   @NotNull private Long accountId;
 
+  public ResponseExpenseDTO() {}
+
+  public ResponseExpenseDTO(
+      Long expenseId,
+      BigDecimal expenseAmount,
+      String expenseDescription,
+      LocalDate expenseCreatedAt,
+      LocalDate expenseUpdatedAt,
+      Long categoryId,
+      Long profileId,
+      Long accountId) {
+    this.expenseId = expenseId;
+    this.expenseAmount = expenseAmount;
+    this.expenseDescription = expenseDescription;
+    this.expenseCreatedAt = expenseCreatedAt;
+    this.expenseUpdatedAt = expenseUpdatedAt;
+    this.categoryId = categoryId;
+    this.profileId = profileId;
+    this.accountId = accountId;
+  }
+
   public Long getExpenseId() {
     return expenseId;
   }

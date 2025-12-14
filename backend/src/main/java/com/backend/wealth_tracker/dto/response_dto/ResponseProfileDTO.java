@@ -8,8 +8,7 @@ public class ResponseProfileDTO {
   @NotNull private Long profileId;
   @NotBlank private String profileName;
   private String profileDescription;
-  @NotBlank
-  private String profileColorCode;
+  @NotBlank private String profileColorCode;
   private String profilePicture;
 
   public Long getProfileId() {

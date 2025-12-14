@@ -10,6 +10,7 @@ import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.model.User;
+import com.backend.wealth_tracker.projections.ExpenseSummaryProjection;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -168,11 +169,16 @@ public class ExpenseService {
       isolation = Isolation.READ_COMMITTED,
       propagation = Propagation.REQUIRED,
       readOnly = true)
-  public List<Expense> getExpensesInRange(String startDate, String endDate) {
+  public List<ExpenseSummaryProjection> getExpensesInRange(String startDate, String endDate) {
     LocalDate start = LocalDate.parse(startDate);
     LocalDate end = LocalDate.parse(endDate);
-    List<Expense> expenses = expenseRepository.findByCreatedAtBetweenOrderDesc(start, end);
-    LOGGER.atInfo().log("Found {} expenses between {} and {}", expenses.size(), startDate, endDate);
-    return expenses;
+    List<ExpenseSummaryProjection> expenseSummaryProjectionList =
+        expenseRepository.findExpenseSummaryBetween(start, end);
+    LOGGER.atInfo().log(
+        "Found {} expenses between {} and {}",
+        expenseSummaryProjectionList.size(),
+        startDate,
+        endDate);
+    return expenseSummaryProjectionList;
   }
 }

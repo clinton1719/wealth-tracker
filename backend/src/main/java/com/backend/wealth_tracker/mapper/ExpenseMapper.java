@@ -1,8 +1,14 @@
 package com.backend.wealth_tracker.mapper;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseTagExpenseDTO;
 import com.backend.wealth_tracker.model.Expense;
+import com.backend.wealth_tracker.projections.CategoryExpenseSummaryProjection;
+import com.backend.wealth_tracker.projections.ExpenseSummaryProjection;
+import com.backend.wealth_tracker.projections.TagExpenseSummaryProjection;
+import java.util.Collections;
 import java.util.List;
 
 public final class ExpenseMapper {
@@ -31,5 +37,60 @@ public final class ExpenseMapper {
 
   public static List<ResponseExpenseDTO> expensesToResponseExpenseDTOs(List<Expense> expenses) {
     return expenses.parallelStream().map(ExpenseMapper::expenseToResponseExpenseDTO).toList();
+  }
+
+  public static List<ResponseExpenseDTO> expenseSummaryProjectionsToResponseExpenseDTOs(
+      List<ExpenseSummaryProjection> expenseSummaryProjectionList) {
+    return expenseSummaryProjectionList.stream()
+        .map(
+            projection ->
+                new ResponseExpenseDTO(
+                    projection.getExpenseId(),
+                    projection.getExpenseAmount(),
+                    projection.getExpenseDescription(),
+                    projection.getExpenseCreatedAt(),
+                    projection.getExpenseUpdatedAt(),
+                    projection.getCategoryId(),
+                    projection.getProfileId(),
+                    projection.getAccountId()))
+        .toList();
+  }
+
+  public static List<ResponseCategoryExpenseDTO>
+      categoryExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
+          List<CategoryExpenseSummaryProjection> categoryExpenseSummaryProjectionList) {
+    List<ResponseCategoryExpenseDTO> responseCategoryExpenseDTOList =
+        new java.util.ArrayList<>(
+            categoryExpenseSummaryProjectionList.stream()
+                .map(
+                    projection ->
+                        new ResponseCategoryExpenseDTO(
+                            projection.getCategoryName(),
+                            projection.getCategoryColorCode(),
+                            projection.getCategoryIcon(),
+                            projection.getExpenseAmount(),
+                            projection.getProfileId(),
+                            projection.getProfileColorCode()))
+                .toList());
+    Collections.sort(responseCategoryExpenseDTOList);
+    return responseCategoryExpenseDTOList;
+  }
+
+  public static List<ResponseTagExpenseDTO>
+      tagExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
+          List<TagExpenseSummaryProjection> tagExpenseSummaryProjectionList) {
+    List<ResponseTagExpenseDTO> tagExpenseDTOList =
+        new java.util.ArrayList<>(
+            tagExpenseSummaryProjectionList.stream()
+                .map(
+                    projection ->
+                        new ResponseTagExpenseDTO(
+                            projection.getTag(),
+                            projection.getExpenseAmount(),
+                            projection.getProfileId(),
+                            projection.getProfileColorCode()))
+                .toList());
+    Collections.sort(tagExpenseDTOList);
+    return tagExpenseDTOList;
   }
 }

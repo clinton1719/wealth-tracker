@@ -1,12 +1,9 @@
 package com.backend.wealth_tracker.service;
 
-import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryExpenseDTO;
-import com.backend.wealth_tracker.dto.response_dto.ResponseTagExpenseDTO;
 import com.backend.wealth_tracker.projections.CategoryExpenseSummaryProjection;
 import com.backend.wealth_tracker.projections.TagExpenseSummaryProjection;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +27,7 @@ public class ExpenseStatisticsService {
       isolation = Isolation.READ_COMMITTED,
       propagation = Propagation.REQUIRED,
       readOnly = true)
-  public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(
+  public List<CategoryExpenseSummaryProjection> getExpensesByCategoryAndCreatedAt(
       String startDate, String endDate) {
     LocalDate start = LocalDate.parse(startDate);
     LocalDate end = LocalDate.parse(endDate);
@@ -41,28 +38,14 @@ public class ExpenseStatisticsService {
         categoryExpenseSummaryProjectionList.size(),
         startDate,
         endDate);
-    List<ResponseCategoryExpenseDTO> responseCategoryExpenseDTOList =
-        new java.util.ArrayList<>(
-            categoryExpenseSummaryProjectionList.stream()
-                .map(
-                    projection ->
-                        new ResponseCategoryExpenseDTO(
-                            projection.getCategoryName(),
-                            projection.getCategoryColorCode(),
-                            projection.getCategoryIcon(),
-                            projection.getExpenseAmount(),
-                            projection.getProfileId(),
-                            projection.getProfileColorCode()))
-                .toList());
-    Collections.sort(responseCategoryExpenseDTOList);
-    return responseCategoryExpenseDTOList;
+    return categoryExpenseSummaryProjectionList;
   }
 
   @Transactional(
       isolation = Isolation.READ_COMMITTED,
       propagation = Propagation.REQUIRED,
       readOnly = true)
-  public List<ResponseTagExpenseDTO> getExpensesByTagAndCreatedAt(
+  public List<TagExpenseSummaryProjection> getExpensesByTagAndCreatedAt(
       String startDate, String endDate) {
     LocalDate start = LocalDate.parse(startDate);
     LocalDate end = LocalDate.parse(endDate);
@@ -73,18 +56,6 @@ public class ExpenseStatisticsService {
         tagExpenseSummaryProjectionList.size(),
         startDate,
         endDate);
-    List<ResponseTagExpenseDTO> tagExpenseDTOList =
-        new java.util.ArrayList<>(
-            tagExpenseSummaryProjectionList.stream()
-                .map(
-                    projection ->
-                        new ResponseTagExpenseDTO(
-                            projection.getTag(),
-                            projection.getExpenseAmount(),
-                            projection.getProfileId(),
-                            projection.getProfileColorCode()))
-                .toList());
-    Collections.sort(tagExpenseDTOList);
-    return tagExpenseDTOList;
+    return tagExpenseSummaryProjectionList;
   }
 }
