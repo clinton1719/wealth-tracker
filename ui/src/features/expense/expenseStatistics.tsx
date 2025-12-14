@@ -138,76 +138,76 @@ export function ExpenseStatistics() {
 
       {memoisedCategoryExpenseData && memoisedCategoryExpenseData.length > 0 && period && totalCategoryExpense
         ? (
-          <ExpenseCategoryTable
-            categoryExpenses={memoisedCategoryExpenseData}
-            totalExpense={totalCategoryExpense}
-            fromDate={period.from.toDateString()}
-            toDate={period.to.toDateString()}
-          />
-        )
+            <ExpenseCategoryTable
+              categoryExpenses={memoisedCategoryExpenseData}
+              totalExpense={totalCategoryExpense}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
+          )
         : null}
 
       {memoisedTagExpenseData && memoisedTagExpenseData.length && period && totalTagExpense
         ? (
-          <TagCategoryTable
-            tagExpenses={memoisedTagExpenseData}
-            totalExpense={totalTagExpense}
-            fromDate={period.from.toDateString()}
-            toDate={period.to.toDateString()}
-          />
-        )
+            <TagCategoryTable
+              tagExpenses={memoisedTagExpenseData}
+              totalExpense={totalTagExpense}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
+          )
         : null}
 
       <div className="flex flex-col justify-between gap-4">
         {memoisedCategoryExpenseData && memoisedCategoryExpenseData.length > 0 && period
           ? (
-            <ExpenseCategoryPie
-              categoryExpenses={memoisedCategoryExpenseData}
-              fromDate={period.from.toDateString()}
-              toDate={period.to.toDateString()}
-            />
-          )
+              <ExpenseCategoryPie
+                categoryExpenses={memoisedCategoryExpenseData}
+                fromDate={period.from.toDateString()}
+                toDate={period.to.toDateString()}
+              />
+            )
           : null}
 
         {memoisedTagExpenseData && memoisedTagExpenseData.length > 0 && period
           ? (
-            <ExpenseTagPie
-              tagExpenses={memoisedTagExpenseData}
-              fromDate={period.from.toDateString()}
-              toDate={period.to.toDateString()}
-            />
-          )
+              <ExpenseTagPie
+                tagExpenses={memoisedTagExpenseData}
+                fromDate={period.from.toDateString()}
+                toDate={period.to.toDateString()}
+              />
+            )
           : null}
       </div>
 
       {memoisedMonthlyCategoryExpenseData && memoisedMonthlyCategoryExpenseData.length > 0 && period
         ? (
-          <ExpenseCategoryLineChart
-            monthlyCategoryExpenses={memoisedMonthlyCategoryExpenseData}
-            fromDate={period.from.toDateString()}
-            toDate={period.to.toDateString()}
-          />
-        )
+            <ExpenseCategoryLineChart
+              monthlyCategoryExpenses={memoisedMonthlyCategoryExpenseData}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
+          )
         : null}
 
       {memoisedMonthlyTagExpenseData && memoisedMonthlyTagExpenseData.length > 0 && period
         ? (
-          <ExpenseTagLineChart
-            monthlyTagExpenses={memoisedMonthlyTagExpenseData}
-            fromDate={period.from.toDateString()}
-            toDate={period.to.toDateString()}
-          />
-        )
+            <ExpenseTagLineChart
+              monthlyTagExpenses={memoisedMonthlyTagExpenseData}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
+          )
         : null}
 
       {memoisedExpenseData && memoisedExpenseData.length > 0 && period
         ? (
-          <ExpenseLineChart
-            expenses={memoisedExpenseData}
-            fromDate={period.from.toDateString()}
-            toDate={period.to.toDateString()}
-          />
-        )
+            <ExpenseLineChart
+              expenses={memoisedExpenseData}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
+          )
         : null}
     </div>
   )
