@@ -1,8 +1,6 @@
 name: Pipeline
 
 on:
-  push:
-    branches: feature/*
   pull_request:
     branches:
       - main
