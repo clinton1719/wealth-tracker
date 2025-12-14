@@ -1,6 +1,6 @@
 import type { ChartConfig } from '@/components/ui/chart'
 
-import type { ExpenseCategoryLineChartProps } from '@/types/ExpenseCategoryLineChartProps'
+import type { ExpenseTagLineChartProps } from '@/types/ExpenseTagLineChartProps'
 import { useMemo } from 'react'
 import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from 'recharts'
 import {
@@ -19,55 +19,47 @@ import {
 } from '@/components/ui/chart'
 import { formatMonth } from '@/utilities/helper'
 
-export function ExpenseCategoryLineChart({ monthlyCategoryExpenses, fromDate, toDate }: ExpenseCategoryLineChartProps) {
+export function ExpenseTagLineChart({ monthlyTagExpenses, fromDate, toDate }: ExpenseTagLineChartProps) {
   const chartConfig = useMemo(() => {
     const config: ChartConfig = {}
 
-    monthlyCategoryExpenses.forEach((monthlyCategoryExpense) => {
-      if (!config[monthlyCategoryExpense.categoryName]) {
-        config[monthlyCategoryExpense.categoryName] = {
-          label: monthlyCategoryExpense.categoryName,
-          color: monthlyCategoryExpense.categoryColorCode,
-        }
+    const uniqueTags = Array.from(new Set(monthlyTagExpenses.map(item => item.tag)))
+
+    uniqueTags.forEach((tag, index) => {
+      config[tag] = {
+        label: tag,
+        color: `var(--chart-${(index % 50) + 1})`,
       }
     })
 
     return config
-  }, [monthlyCategoryExpenses]) satisfies ChartConfig
+  }, [monthlyTagExpenses]) satisfies ChartConfig
 
   const chartData = useMemo(() => {
     const grouped: Record<string, any> = {}
+    const allTags = Array.from(new Set(monthlyTagExpenses.map(item => item.tag)))
 
-    const allCategories = Array.from(
-      new Set(monthlyCategoryExpenses.map(item => item.categoryName)),
-    )
-
-    monthlyCategoryExpenses.forEach((item) => {
-      const monthKey = item.month
-
+    monthlyTagExpenses.forEach((monthlyTagExpense) => {
+      const monthKey = monthlyTagExpense.month
       if (!grouped[monthKey]) {
         grouped[monthKey] = {
           month: formatMonth(monthKey),
           _rawMonth: monthKey,
         }
-
-        allCategories.forEach((cat) => {
-          grouped[monthKey][cat] = 0
+        allTags.forEach((tag) => {
+          grouped[monthKey][tag] = 0
         })
       }
-
-      grouped[monthKey][item.categoryName] = item.expenseAmount
+      grouped[monthKey][monthlyTagExpense.tag] = monthlyTagExpense.expenseAmount
     })
 
-    return Object.values(grouped).sort((a, b) =>
-      a._rawMonth.localeCompare(b._rawMonth),
-    )
-  }, [monthlyCategoryExpenses])
+    return Object.values(grouped).sort((a, b) => a._rawMonth.localeCompare(b._rawMonth))
+  }, [monthlyTagExpenses])
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Expenses per category over time</CardTitle>
+        <CardTitle>Expenses per tag over time</CardTitle>
         <CardDescription>
           {fromDate}
           {' '}
@@ -85,7 +77,7 @@ export function ExpenseCategoryLineChart({ monthlyCategoryExpenses, fromDate, to
               left: 12,
               right: 12,
             }}
-            syncId="expenseCategoryLineChart"
+            syncId="expenseTagLineChart"
           >
             <CartesianGrid vertical={false} />
             <XAxis
@@ -110,6 +102,7 @@ export function ExpenseCategoryLineChart({ monthlyCategoryExpenses, fromDate, to
                 stroke={cfg.color}
                 strokeWidth={2}
                 dot={true}
+                connectNulls={true}
               />
             ))}
 
@@ -118,7 +111,7 @@ export function ExpenseCategoryLineChart({ monthlyCategoryExpenses, fromDate, to
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">
-          Total categories:
+          Total tags:
           {' '}
           {Object.keys(chartConfig).length}
         </div>

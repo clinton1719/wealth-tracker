@@ -6,40 +6,26 @@ import java.math.BigDecimal;
 import java.time.YearMonth;
 
 @SuppressWarnings({"PMD.DataClass"})
-public class ResponseCategoryMonthlyExpenseDTO {
-  @NotBlank private String categoryName;
-  @NotBlank private String categoryColorCode;
+public class ResponseTagMonthlyExpenseDTO {
+  @NotBlank private String tag;
   @NotNull private YearMonth month;
   @NotNull private BigDecimal expenseAmount;
   @NotNull private Long profileId;
 
-  public ResponseCategoryMonthlyExpenseDTO(
-      String categoryName,
-      String categoryColorCode,
-      YearMonth month,
-      BigDecimal expenseAmount,
-      Long profileId) {
-    this.categoryName = categoryName;
-    this.categoryColorCode = categoryColorCode;
+  public ResponseTagMonthlyExpenseDTO(
+      String tag, YearMonth month, BigDecimal expenseAmount, Long profileId) {
+    this.tag = tag;
     this.month = month;
     this.expenseAmount = expenseAmount;
     this.profileId = profileId;
   }
 
-  public String getCategoryName() {
-    return categoryName;
+  public String getTag() {
+    return tag;
   }
 
-  public void setCategoryName(String categoryName) {
-    this.categoryName = categoryName;
-  }
-
-  public String getCategoryColorCode() {
-    return categoryColorCode;
-  }
-
-  public void setCategoryColorCode(String categoryColorCode) {
-    this.categoryColorCode = categoryColorCode;
+  public void setTag(String tag) {
+    this.tag = tag;
   }
 
   public YearMonth getMonth() {

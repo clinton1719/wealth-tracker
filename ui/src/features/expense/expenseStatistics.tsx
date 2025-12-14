@@ -3,15 +3,17 @@ import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Spinner } from '@/components/ui/spinner'
 import { useApiError } from '@/hooks/use-api-error'
-import { useGetExpensesByCategoryAndCreatedAtQuery, useGetExpensesByTagAndCreatedAtQuery, useGetMonthlyExpensesByCategoryQuery } from '@/services/expensesApi'
+import { useGetAllExpensesInRangeQuery, useGetExpensesByCategoryAndCreatedAtQuery, useGetExpensesByTagAndCreatedAtQuery, useGetMonthlyExpensesByCategoryQuery, useGetMonthlyExpensesByTagQuery } from '@/services/expensesApi'
 import { selectProfileSlice } from '@/slices/profileSlice'
 import { formatDate } from '@/utilities/helper'
+import { ExpenseCategoryLineChart } from './expense-statistics-components/expenseCategoryLineChart'
 import { ExpenseCategoryPie } from './expense-statistics-components/expenseCategoryPie'
 import { ExpenseCategoryTable } from './expense-statistics-components/expenseCategoryTable'
+import { ExpenseLineChart } from './expense-statistics-components/expenseLineChart'
 import { ExpensePeriodSelector } from './expense-statistics-components/expensePeriodSelector'
+import { ExpenseTagLineChart } from './expense-statistics-components/expenseTagLineChart'
 import { ExpenseTagPie } from './expense-statistics-components/expenseTagPie'
 import { TagCategoryTable } from './expense-statistics-components/expenseTagTable'
-import { ExpenseCategoryLineChart } from './expense-statistics-components/expenseCategoryLineChart'
 
 export function ExpenseStatistics() {
   const [period, setPeriod] = useState<{ from: Date, to: Date } | null>(null)
@@ -41,10 +43,28 @@ export function ExpenseStatistics() {
   } = useGetMonthlyExpensesByCategoryQuery(
     period ? { startDate: formatDate(period.from), endDate: formatDate(period.to) } : skipToken,
   )
+  const {
+    data: monthlyTagExpenseData,
+    isLoading: isMonthlyTagExpenseLoading,
+    isFetching: isMonthlyTagExpenseFetching,
+    error: monthlyTagExpenseError,
+  } = useGetMonthlyExpensesByTagQuery(
+    period ? { startDate: formatDate(period.from), endDate: formatDate(period.to) } : skipToken,
+  )
+  const {
+    data: expensesData,
+    isLoading: getAllExpensesLoading,
+    isFetching: getAllExpensesFetching,
+    error: expensesError,
+  } = useGetAllExpensesInRangeQuery(
+    period ? { startDate: formatDate(period.from), endDate: formatDate(period.to) } : skipToken,
+  )
 
   const { isError: isCategoryExpenseError, errorComponent: categoryExpenseErrorComponent } = useApiError(categoryExpenseError)
   const { isError: isTagExpenseError, errorComponent: tagExpenseErrorComponent } = useApiError(tagExpenseError)
   const { isError: isMonthlyCategoryExpenseError, errorComponent: monthlyCategoryExpenseErrorComponent } = useApiError(monthlyCategoryExpenseError)
+  const { isError: isMonthlyTagExpenseError, errorComponent: monthlyTagExpenseErrorComponent } = useApiError(monthlyTagExpenseError)
+  const { isError: isGetAllExpensesError, errorComponent: getAllExpensesErrorComponent } = useApiError(expensesError)
 
   const memoisedCategoryExpenseData = useMemo(() => {
     if (!categoryExpenseData)
@@ -67,17 +87,36 @@ export function ExpenseStatistics() {
     return enabledMonthlyCategoryExpenseData
   }, [monthlyCategoryExpenseData, enabledMap])
 
+  const memoisedMonthlyTagExpenseData = useMemo(() => {
+    if (!monthlyTagExpenseData)
+      return []
+    const enabledMonthlyTagExpenseData = monthlyTagExpenseData.filter(monthlyCategoryExpense => enabledMap[monthlyCategoryExpense.profileId])
+    return enabledMonthlyTagExpenseData
+  }, [monthlyTagExpenseData, enabledMap])
+
+  const memoisedExpenseData = useMemo(() => {
+    if (!expensesData)
+      return []
+    const enabledExpenseData = expensesData.filter(monthlyCategoryExpense => enabledMap[monthlyCategoryExpense.profileId])
+    return enabledExpenseData
+  }, [expensesData, enabledMap])
+
   const totalCategoryExpense = memoisedCategoryExpenseData.reduce((acc, currentCategoryExpense) => acc + currentCategoryExpense.expenseAmount, 0)
   const totalTagExpense = memoisedTagExpenseData.reduce((acc, currentTagExpense) => acc + currentTagExpense.expenseAmount, 0)
 
-  if (isCategoryExpenseLoading || isCategoryExpenseFetching || isTagExpenseLoading || isTagExpenseFetching || isMonthlyCategoryExpenseLoading || isMonthlyCategoryExpenseFetching)
+  if (isCategoryExpenseLoading || isCategoryExpenseFetching || isTagExpenseLoading || isTagExpenseFetching || isMonthlyCategoryExpenseLoading || isMonthlyCategoryExpenseFetching || isMonthlyTagExpenseLoading || isMonthlyTagExpenseFetching || getAllExpensesLoading || getAllExpensesFetching)
     return <Spinner className="spinner" />
+
   if (isCategoryExpenseError)
     return categoryExpenseErrorComponent
   if (isTagExpenseError)
     return tagExpenseErrorComponent
   if (isMonthlyCategoryExpenseError)
     return monthlyCategoryExpenseErrorComponent
+  if (isMonthlyTagExpenseError)
+    return monthlyTagExpenseErrorComponent
+  if (isGetAllExpensesError)
+    return getAllExpensesErrorComponent
 
   const handleGenerate = (from: Date, to: Date) => setPeriod({ from, to })
 
@@ -99,52 +138,77 @@ export function ExpenseStatistics() {
 
       {memoisedCategoryExpenseData && memoisedCategoryExpenseData.length > 0 && period && totalCategoryExpense
         ? (
-          <ExpenseCategoryTable
-            categoryExpenses={memoisedCategoryExpenseData}
-            totalExpense={totalCategoryExpense}
-            fromDate={period.from.toDateString()}
-            toDate={period.to.toDateString()}
-          />
-        )
+            <ExpenseCategoryTable
+              categoryExpenses={memoisedCategoryExpenseData}
+              totalExpense={totalCategoryExpense}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
+          )
         : null}
 
       {memoisedTagExpenseData && memoisedTagExpenseData.length && period && totalTagExpense
         ? (
-          <TagCategoryTable
-            tagExpenses={memoisedTagExpenseData}
-            totalExpense={totalTagExpense}
-            fromDate={period.from.toDateString()}
-            toDate={period.to.toDateString()}
-          />
-        )
+            <TagCategoryTable
+              tagExpenses={memoisedTagExpenseData}
+              totalExpense={totalTagExpense}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
+          )
         : null}
 
       <div className="flex flex-col justify-between gap-4">
         {memoisedCategoryExpenseData && memoisedCategoryExpenseData.length > 0 && period
           ? (
-            <ExpenseCategoryPie
-              categoryExpenses={memoisedCategoryExpenseData}
-              fromDate={period.from.toDateString()}
-              toDate={period.to.toDateString()}
-            />
-          )
+              <ExpenseCategoryPie
+                categoryExpenses={memoisedCategoryExpenseData}
+                fromDate={period.from.toDateString()}
+                toDate={period.to.toDateString()}
+              />
+            )
           : null}
+
         {memoisedTagExpenseData && memoisedTagExpenseData.length > 0 && period
           ? (
-            <ExpenseTagPie
-              tagExpenses={memoisedTagExpenseData}
+              <ExpenseTagPie
+                tagExpenses={memoisedTagExpenseData}
+                fromDate={period.from.toDateString()}
+                toDate={period.to.toDateString()}
+              />
+            )
+          : null}
+      </div>
+
+      {memoisedMonthlyCategoryExpenseData && memoisedMonthlyCategoryExpenseData.length > 0 && period
+        ? (
+            <ExpenseCategoryLineChart
+              monthlyCategoryExpenses={memoisedMonthlyCategoryExpenseData}
               fromDate={period.from.toDateString()}
               toDate={period.to.toDateString()}
             />
           )
-          : null}
-        {memoisedMonthlyCategoryExpenseData && memoisedMonthlyCategoryExpenseData.length > 0 && period
-          ? (
-            <ExpenseCategoryLineChart monthlyCategoryExpenses={memoisedMonthlyCategoryExpenseData} fromDate={period.from.toDateString()}
-              toDate={period.to.toDateString()} />
+        : null}
+
+      {memoisedMonthlyTagExpenseData && memoisedMonthlyTagExpenseData.length > 0 && period
+        ? (
+            <ExpenseTagLineChart
+              monthlyTagExpenses={memoisedMonthlyTagExpenseData}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
           )
-          : null}
-      </div>
+        : null}
+
+      {memoisedExpenseData && memoisedExpenseData.length > 0 && period
+        ? (
+            <ExpenseLineChart
+              expenses={memoisedExpenseData}
+              fromDate={period.from.toDateString()}
+              toDate={period.to.toDateString()}
+            />
+          )
+        : null}
     </div>
   )
 }

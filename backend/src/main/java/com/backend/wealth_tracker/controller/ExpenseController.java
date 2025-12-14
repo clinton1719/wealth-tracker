@@ -1,10 +1,7 @@
 package com.backend.wealth_tracker.controller;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
-import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryExpenseDTO;
-import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryMonthlyExpenseDTO;
-import com.backend.wealth_tracker.dto.response_dto.ResponseExpenseDTO;
-import com.backend.wealth_tracker.dto.response_dto.ResponseTagExpenseDTO;
+import com.backend.wealth_tracker.dto.response_dto.*;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.AccountCannotHaveNegativeBalanceException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
@@ -26,7 +23,7 @@ import java.util.List;
 @RequestMapping("/api/v1/expenses")
 @Tag(name = "Expense", description = "API methods to manipulate Expense data")
 public class ExpenseController {
-
+  private static final String GET_MAPPING_TAG = "FIND";
   private final ExpenseService expenseService;
   private final ExpenseStatisticsService expenseStatisticsService;
 
@@ -39,7 +36,7 @@ public class ExpenseController {
 
   @GetMapping("/range")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "FIND")
+  @Tag(name = GET_MAPPING_TAG)
   public List<ResponseExpenseDTO> getExpensesInRange(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.expenseSummaryProjectionsToResponseExpenseDTOs(
@@ -48,7 +45,7 @@ public class ExpenseController {
 
   @GetMapping("/by-category-and-created-at")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "FIND")
+  @Tag(name = GET_MAPPING_TAG)
   public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.categoryExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
@@ -57,7 +54,7 @@ public class ExpenseController {
 
   @GetMapping("/by-tag-and-created-at")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "FIND")
+  @Tag(name = GET_MAPPING_TAG)
   public List<ResponseTagExpenseDTO> getExpensesByTagAndCreatedAt(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.tagExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
@@ -66,11 +63,20 @@ public class ExpenseController {
 
   @GetMapping("/by-monthly-category-and-created-at")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "FIND")
+  @Tag(name = GET_MAPPING_TAG)
   public List<ResponseCategoryMonthlyExpenseDTO> getMonthlyExpensesByCategory(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.categoryMonthlyExpenseProjectionsToResponseCategoryExpenseDTOs(
         this.expenseStatisticsService.getMonthlyExpensesByCategory(startDate, endDate));
+  }
+
+  @GetMapping("/by-monthly-tag-and-created-at")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = GET_MAPPING_TAG)
+  public List<ResponseTagMonthlyExpenseDTO> getMonthlyExpensesByTag(
+      @RequestParam String startDate, @RequestParam String endDate) {
+    return ExpenseMapper.tagMonthlyExpenseProjectionsToResponseTagExpenseDTOs(
+        this.expenseStatisticsService.getMonthlyExpensesByTag(startDate, endDate));
   }
 
   @PostMapping(path = "/save")

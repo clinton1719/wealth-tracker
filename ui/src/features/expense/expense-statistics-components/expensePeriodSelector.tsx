@@ -46,7 +46,7 @@ export function ExpensePeriodSelector({
             disabled={!canGenerate}
             onClick={() => onGenerate(from!, to!)}
           >
-            Generate Report
+            Generate report
           </Button>
 
           <Button variant="outline" onClick={() => setPreset('thisMonth')}>

@@ -91,6 +91,7 @@ export function ExpensesList({
   const [columnVisibility, setColumnVisibility]
     = React.useState<VisibilityState>({ accountName: false, profileName: false })
 
+  /* eslint-disable react-hooks/incompatible-library */
   const table = useReactTable({
     data: filteredExpensesData,
     columns,
@@ -110,6 +111,7 @@ export function ExpensesList({
       columnVisibility,
     },
   })
+  /* eslint-enable react-hooks/incompatible-library */
 
   return (
     <div className="w-full">

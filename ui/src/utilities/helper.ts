@@ -14,3 +14,11 @@ export function formatCurrency(amount: number): string {
   }).format(amount)
   return formatted
 }
+
+export function formatMonth(yearMonth: string) {
+  const [year, month] = yearMonth.split('-').map(Number)
+  return new Date(year, month - 1).toLocaleString('en-US', {
+    month: 'short',
+    year: 'numeric',
+  })
+}

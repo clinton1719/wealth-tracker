@@ -1,7 +1,7 @@
-import type { MonthlyCategoryExpense } from "./MonthlyCategoryExpense"
+import type { MonthlyCategoryExpense } from './MonthlyCategoryExpense'
 
 export interface ExpenseCategoryLineChartProps {
-    monthlyCategoryExpenses: MonthlyCategoryExpense[]
-    fromDate: string
-    toDate: string
+  monthlyCategoryExpenses: MonthlyCategoryExpense[]
+  fromDate: string
+  toDate: string
 }

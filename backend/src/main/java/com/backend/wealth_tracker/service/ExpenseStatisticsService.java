@@ -3,16 +3,16 @@ package com.backend.wealth_tracker.service;
 import com.backend.wealth_tracker.projections.CategoryExpenseSummaryProjection;
 import com.backend.wealth_tracker.projections.CategoryMonthlyExpenseProjection;
 import com.backend.wealth_tracker.projections.TagExpenseSummaryProjection;
+import com.backend.wealth_tracker.projections.TagMonthlyExpenseProjection;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
+import java.time.LocalDate;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class ExpenseStatisticsService {
@@ -61,21 +61,39 @@ public class ExpenseStatisticsService {
     return tagExpenseSummaryProjectionList;
   }
 
-    @Transactional(
-            isolation = Isolation.READ_COMMITTED,
-            propagation = Propagation.REQUIRED,
-            readOnly = true)
-    public List<CategoryMonthlyExpenseProjection> getMonthlyExpensesByCategory(
-            String startDate, String endDate) {
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate);
-        List<CategoryMonthlyExpenseProjection> categoryMonthlyExpenseProjectionList =
-                expenseRepository.findMonthlyExpensesByCategory(start, end);
-        LOGGER.atInfo().log(
-                "Found {} expenses between {} and {} for getMonthlyExpensesByCategory",
-                categoryMonthlyExpenseProjectionList.size(),
-                startDate,
-                endDate);
-        return categoryMonthlyExpenseProjectionList;
-    }
+  @Transactional(
+      isolation = Isolation.READ_COMMITTED,
+      propagation = Propagation.REQUIRED,
+      readOnly = true)
+  public List<CategoryMonthlyExpenseProjection> getMonthlyExpensesByCategory(
+      String startDate, String endDate) {
+    LocalDate start = LocalDate.parse(startDate);
+    LocalDate end = LocalDate.parse(endDate);
+    List<CategoryMonthlyExpenseProjection> categoryMonthlyExpenseProjectionList =
+        expenseRepository.findMonthlyExpensesByCategory(start, end);
+    LOGGER.atInfo().log(
+        "Found {} expenses between {} and {} for getMonthlyExpensesByCategory",
+        categoryMonthlyExpenseProjectionList.size(),
+        startDate,
+        endDate);
+    return categoryMonthlyExpenseProjectionList;
+  }
+
+  @Transactional(
+      isolation = Isolation.READ_COMMITTED,
+      propagation = Propagation.REQUIRED,
+      readOnly = true)
+  public List<TagMonthlyExpenseProjection> getMonthlyExpensesByTag(
+      String startDate, String endDate) {
+    LocalDate start = LocalDate.parse(startDate);
+    LocalDate end = LocalDate.parse(endDate);
+    List<TagMonthlyExpenseProjection> tagMonthlyExpenseProjectionList =
+        expenseRepository.findMonthlyExpensesByTag(start, end);
+    LOGGER.atInfo().log(
+        "Found {} expenses between {} and {} for getMonthlyExpensesByTag",
+        tagMonthlyExpenseProjectionList.size(),
+        startDate,
+        endDate);
+    return tagMonthlyExpenseProjectionList;
+  }
 }

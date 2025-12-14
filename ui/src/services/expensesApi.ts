@@ -1,11 +1,12 @@
 import type { CategoryExpense } from '@/types/CategoryExpense'
 import type { Expense } from '@/types/Expense'
+import type { MonthlyCategoryExpense } from '@/types/MonthlyCategoryExpense'
+import type { MonthlyTagExpense } from '@/types/MonthlyTagExpense'
 import type { TagExpense } from '@/types/TagExpense'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { selectAuthToken } from '@/slices/authSlice'
 import { baseAPI } from '@/static-values/constants'
 import { ALL_TAG_TYPES } from '@/utilities/constants'
-import type { MonthlyCategoryExpense } from '@/types/MonthlyCategoryExpense'
 
 export const expensesApi = createApi({
   reducerPath: 'expensesApi',
@@ -91,6 +92,17 @@ export const expensesApi = createApi({
         `/expenses/by-monthly-category-and-created-at?startDate=${startDate}&endDate=${endDate}`,
       providesTags: ['Expenses'],
     }),
+    getMonthlyExpensesByTag: builder.query<
+      MonthlyTagExpense[],
+      {
+        startDate: string
+        endDate: string
+      }
+    >({
+      query: ({ startDate, endDate }) =>
+        `/expenses/by-monthly-tag-and-created-at?startDate=${startDate}&endDate=${endDate}`,
+      providesTags: ['Expenses'],
+    }),
   }),
 })
 
@@ -101,5 +113,6 @@ export const {
   useGetExpensesByCategoryAndCreatedAtQuery,
   useGetExpensesByTagAndCreatedAtQuery,
   useGetMonthlyExpensesByCategoryQuery,
+  useGetMonthlyExpensesByTagQuery,
   useUpdateExpenseMutation,
 } = expensesApi
