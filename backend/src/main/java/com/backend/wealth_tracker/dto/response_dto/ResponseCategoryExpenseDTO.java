@@ -68,15 +68,15 @@ public class ResponseCategoryExpenseDTO implements Comparable<ResponseCategoryEx
     this.profileId = profileId;
   }
 
-    public String getProfileColorCode() {
-        return profileColorCode;
-    }
+  public String getProfileColorCode() {
+    return profileColorCode;
+  }
 
-    public void setProfileColorCode(String profileColorCode) {
-        this.profileColorCode = profileColorCode;
-    }
+  public void setProfileColorCode(String profileColorCode) {
+    this.profileColorCode = profileColorCode;
+  }
 
-    @Override
+  @Override
   public int compareTo(ResponseCategoryExpenseDTO responseCategoryExpenseDTO) {
     return this.getExpenseAmount().compareTo(responseCategoryExpenseDTO.getExpenseAmount());
   }

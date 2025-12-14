@@ -1,11 +1,6 @@
 -- 1. CLEANUP
 -- Added 'category_tags' to the truncate list
-TRUNCATE TABLE public.expenses, public.category_tags, public.categories, public.accounts, public.profiles, public.users RESTART IDENTITY CASCADE;
-
--- 2. INSERT USER
-INSERT INTO public.users (id, username, password, role)
-VALUES 
-(1, 'clinton', 'clinton', 'USER');
+TRUNCATE TABLE public.expenses, public.category_tags, public.categories, public.accounts, public.profiles RESTART IDENTITY CASCADE;
 
 -- 3. INSERT PROFILES
 INSERT INTO public.profiles (profile_id, profile_name, profile_color_code, profile_description, user_id)

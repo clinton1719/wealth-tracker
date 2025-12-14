@@ -4,7 +4,5 @@ export interface Profile {
   profileColorCode: string
   profileDescription?: string
   profilePicture?: string
-  profilePictureFile?: File
-  categoryIds: Array<number>
-  expenseIds: Array<number>
+  profilePictureFile?: File;
 }
