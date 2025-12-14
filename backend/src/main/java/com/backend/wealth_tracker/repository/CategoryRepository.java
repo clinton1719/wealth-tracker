@@ -13,7 +13,8 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
   @Query(
       """
-             SELECT c FROM categories c
+             SELECT DISTINCT c FROM categories c
+             LEFT JOIN FETCH c.categoryTags
              WHERE c.user.id = :userId
             """)
   List<Category> findAllWithRelations(@Param("userId") Long userId);
