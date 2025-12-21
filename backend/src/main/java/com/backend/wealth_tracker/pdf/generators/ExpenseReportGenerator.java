@@ -1,83 +1,91 @@
 package com.backend.wealth_tracker.pdf.generators;
 
+import static com.backend.wealth_tracker.helper.Constants.*;
+import static com.backend.wealth_tracker.helper.Helper.loadWebContentFromResources;
+
 import com.backend.wealth_tracker.exception.PdfGenerationException;
 import com.backend.wealth_tracker.model.ExpenseReportModel;
 import com.backend.wealth_tracker.projections.ExpenseReportSummaryProjection;
 import com.backend.wealth_tracker.service.ExpenseService;
 import com.backend.wealth_tracker.service.PdfRenderService;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-
-import static com.backend.wealth_tracker.helper.Constants.*;
-import static com.backend.wealth_tracker.helper.Helper.loadWebContentFromResources;
-
 @Service
-public class ExpenseReportGenerator extends AbstractPdfReportGenerator<String[], ExpenseReportModel> {
+public class ExpenseReportGenerator
+    extends AbstractPdfReportGenerator<String[], ExpenseReportModel> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseReportGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseReportGenerator.class);
 
-    private final ExpenseService expenseService;
+  private final ExpenseService expenseService;
 
-    public ExpenseReportGenerator(PdfRenderService pdfRenderService, ExpenseService expenseService) {
-        super(pdfRenderService);
-        this.expenseService = expenseService;
+  public ExpenseReportGenerator(PdfRenderService pdfRenderService, ExpenseService expenseService) {
+    super(pdfRenderService);
+    this.expenseService = expenseService;
+  }
+
+  @Override
+  protected ExpenseReportModel loadData(String[] params) {
+    List<ExpenseReportSummaryProjection> expenseReportSummaryProjectionList =
+        expenseService.getExpensesWithNamesInRange(params[0], params[1]);
+    BigDecimal total =
+        expenseReportSummaryProjectionList.stream()
+            .map(ExpenseReportSummaryProjection::getExpenseAmount)
+            .filter(Objects::nonNull)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    String totalExpensesFormatted = INDIAN_CURRENCY_FORMATTER.format(total);
+    ExpenseReportModel expenseReportModel =
+        new ExpenseReportModel(
+            expenseReportSummaryProjectionList, totalExpensesFormatted, params[0], params[1]);
+    LOGGER.info(
+        "Model generated for report with {} entries", expenseReportModel.expenseRowList().size());
+    return expenseReportModel;
+  }
+
+  @Override
+  protected String renderHtml(ExpenseReportModel model) throws PdfGenerationException {
+    String baseHtml;
+    String baseCss;
+    String expenseCss;
+    String content;
+    try {
+      baseHtml = loadWebContentFromResources(BASE_HTML_LOCATION);
+      baseCss = loadWebContentFromResources(BASE_CSS_LOCATION);
+      expenseCss = loadWebContentFromResources(EXPENSE_CSS_LOCATION);
+      content = loadWebContentFromResources(EXPENSE_REPORT_LOCATION);
+    } catch (Exception e) {
+      throw new PdfGenerationException("Unable to render expense report", e);
     }
 
-    @Override
-    protected ExpenseReportModel loadData(String[] params) {
-        List<ExpenseReportSummaryProjection> expenseReportSummaryProjectionList =  expenseService.getExpensesWithNamesInRange(params[0], params[1]);
-        BigDecimal total = expenseReportSummaryProjectionList.stream()
-                .map(ExpenseReportSummaryProjection::getExpenseAmount)
-                .filter(Objects::nonNull)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        String totalExpensesFormatted = INDIAN_CURRENCY_FORMATTER.format(total);
-        ExpenseReportModel expenseReportModel =  new ExpenseReportModel(expenseReportSummaryProjectionList, totalExpensesFormatted, params[0], params[1]);
-        LOGGER.info("Model generated for report with {} entries", expenseReportModel.expenseRowList().size());
-        return expenseReportModel;
-    }
+    String html =
+        baseHtml
+            .replace("{{TITLE}}", model.title())
+            .replace("{{BASE_CSS}}", baseCss)
+            .replace("{{CSS}}", expenseCss)
+            .replace("{{CONTENT}}", content);
 
-    @Override
-    protected String renderHtml(ExpenseReportModel model) throws PdfGenerationException {
-        String baseHtml;
-        String baseCss;
-        String expenseCss;
-        String content;
-        try {
-            baseHtml = loadWebContentFromResources(BASE_HTML_LOCATION);
-            baseCss = loadWebContentFromResources(BASE_CSS_LOCATION);
-            expenseCss = loadWebContentFromResources(EXPENSE_CSS_LOCATION);
-            content = loadWebContentFromResources(EXPENSE_REPORT_LOCATION);
-        } catch (Exception e) {
-            throw new PdfGenerationException("Unable to render expense report", e);
-        }
+    StringBuilder rows = getExpensesTableRows(model);
 
-        String html = baseHtml
-                .replace("{{TITLE}}", model.title())
-                .replace("{{BASE_CSS}}", baseCss)
-                .replace("{{CSS}}", expenseCss)
-                .replace("{{CONTENT}}", content);
+    html =
+        html.replace("{{ROWS}}", rows.toString())
+            .replace("{{startDate}}", DATE_FORMATTER.format(LocalDate.parse(model.startDate())))
+            .replace("{{endDate}}", DATE_FORMATTER.format(LocalDate.parse(model.endDate())))
+            .replace("{{TOTAL}}", model.totalExpensesFormatted());
 
-        StringBuilder rows = getExpensesTableRows(model);
+    return html;
+  }
 
-        html = html.replace("{{ROWS}}", rows.toString())
-                .replace("{{startDate}}", DATE_FORMATTER.format(LocalDate.parse(model.startDate())))
-                .replace("{{endDate}}", DATE_FORMATTER.format(LocalDate.parse(model.endDate())))
-                .replace("{{TOTAL}}", model.totalExpensesFormatted());
-
-        return html;
-    }
-
-    private static StringBuilder getExpensesTableRows(ExpenseReportModel model) {
-        StringBuilder rows = new StringBuilder();
-        for (ExpenseReportSummaryProjection e : model.expenseRowList()) {
-            rows.append("""
+  private static StringBuilder getExpensesTableRows(ExpenseReportModel model) {
+    StringBuilder rows = new StringBuilder();
+    for (ExpenseReportSummaryProjection e : model.expenseRowList()) {
+      rows.append(
+          """
                     <tr>
                       <td>%s</td>
                       <td>%s</td>
@@ -86,20 +94,21 @@ public class ExpenseReportGenerator extends AbstractPdfReportGenerator<String[],
                       <td>%s</td>
                       <td class="amount">%s</td>
                     </tr>
-                    """.formatted(
-                    StringEscapeUtils.escapeHtml4(DATE_FORMATTER.format(e.getExpenseCreatedAt())),
-                    StringEscapeUtils.escapeHtml4(e.getCategoryName()),
-                    StringEscapeUtils.escapeHtml4(e.getExpenseDescription()),
-                    StringEscapeUtils.escapeHtml4(e.getProfileName()),
-                    StringEscapeUtils.escapeHtml4(e.getAccountName()),
-                    StringEscapeUtils.escapeHtml4(INDIAN_CURRENCY_FORMATTER.format(e.getExpenseAmount()))
-            ));
-        }
-        return rows;
+                    """
+              .formatted(
+                  StringEscapeUtils.escapeHtml4(DATE_FORMATTER.format(e.getExpenseCreatedAt())),
+                  StringEscapeUtils.escapeHtml4(e.getCategoryName()),
+                  StringEscapeUtils.escapeHtml4(e.getExpenseDescription()),
+                  StringEscapeUtils.escapeHtml4(e.getProfileName()),
+                  StringEscapeUtils.escapeHtml4(e.getAccountName()),
+                  StringEscapeUtils.escapeHtml4(
+                      INDIAN_CURRENCY_FORMATTER.format(e.getExpenseAmount()))));
     }
+    return rows;
+  }
 
-    @Override
-    public String reportName() {
-        return EXPENSE_REPORT_NAME;
-    }
+  @Override
+  public String reportName() {
+    return EXPENSE_REPORT_NAME;
+  }
 }

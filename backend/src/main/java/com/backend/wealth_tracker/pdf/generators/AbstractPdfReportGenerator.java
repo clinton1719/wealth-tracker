@@ -7,28 +7,28 @@ import org.springframework.stereotype.Component;
 
 @Component
 public abstract class AbstractPdfReportGenerator<P, M> implements PdfReportGenerator<P> {
-    private final PdfRenderService pdfRenderService;
+  private final PdfRenderService pdfRenderService;
 
-    public AbstractPdfReportGenerator(PdfRenderService pdfRenderService) {
-        this.pdfRenderService = pdfRenderService;
+  public AbstractPdfReportGenerator(PdfRenderService pdfRenderService) {
+    this.pdfRenderService = pdfRenderService;
+  }
+
+  @Override
+  public byte[] generate(P params) throws PdfGenerationException {
+    M model = loadData(params);
+    String html = renderHtml(model);
+    try {
+      return renderPdf(html);
+    } catch (Exception ex) {
+      throw new PdfGenerationException("PDF generation failed!", ex);
     }
+  }
 
-    @Override
-    public byte[] generate(P params) throws PdfGenerationException {
-        M model = loadData(params);
-        String html = renderHtml(model);
-        try {
-            return renderPdf(html);
-        } catch (Exception ex) {
-            throw new PdfGenerationException("PDF generation failed!", ex);
-        }
-    }
+  protected abstract M loadData(P params);
 
-    protected abstract M loadData(P params);
+  protected abstract String renderHtml(M model) throws PdfGenerationException;
 
-    protected abstract String renderHtml(M model) throws PdfGenerationException;
-
-    protected byte[] renderPdf(String html) throws Exception {
-        return pdfRenderService.renderToBytes(html);
-    }
+  protected byte[] renderPdf(String html) throws Exception {
+    return pdfRenderService.renderToBytes(html);
+  }
 }

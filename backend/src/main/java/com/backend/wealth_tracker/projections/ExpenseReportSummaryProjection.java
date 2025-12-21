@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface ExpenseReportSummaryProjection {
-    String getExpenseDescription();
+  String getExpenseDescription();
 
-    BigDecimal getExpenseAmount();
+  BigDecimal getExpenseAmount();
 
-    String getCategoryName();
+  String getCategoryName();
 
-    String getAccountName();
+  String getAccountName();
 
-    String getProfileName();
+  String getProfileName();
 
-    LocalDate getExpenseCreatedAt();
+  LocalDate getExpenseCreatedAt();
 }

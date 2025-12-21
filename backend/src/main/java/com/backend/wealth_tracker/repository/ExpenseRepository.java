@@ -2,16 +2,16 @@ package com.backend.wealth_tracker.repository;
 
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.projections.*;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
-    @Query("""
+  @Query(
+      """
               SELECT
                 e.expenseId AS expenseId,
                 e.expenseDescription AS expenseDescription,
@@ -25,9 +25,10 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
               WHERE e.expenseCreatedAt BETWEEN :startDate AND :endDate
               ORDER BY e.expenseCreatedAt DESC
             """)
-    List<ExpenseSummaryProjection> findExpenseSummaryBetween(LocalDate startDate, LocalDate endDate);
+  List<ExpenseSummaryProjection> findExpenseSummaryBetween(LocalDate startDate, LocalDate endDate);
 
-    @Query("""
+  @Query(
+      """
             SELECT
                 e.expenseDescription AS expenseDescription,
                 e.expenseAmount      AS expenseAmount,
@@ -42,9 +43,12 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
               WHERE e.expenseCreatedAt BETWEEN :startDate AND :endDate
               ORDER BY e.expenseCreatedAt ASC
             """)
-    List<ExpenseReportSummaryProjection> findExpenseReportSummaryBetween(LocalDate startDate, LocalDate endDate);
+  List<ExpenseReportSummaryProjection> findExpenseReportSummaryBetween(
+      LocalDate startDate, LocalDate endDate);
 
-    @Query(value = """
+  @Query(
+      value =
+          """
                 SELECT
                     c.category_name        AS categoryName,
                     c.category_color_code  AS categoryColorCode,
@@ -62,10 +66,14 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
                     c.category_icon,
                     p.profile_id,
                     p.profile_color_code;
-            """, nativeQuery = true)
-    List<CategoryExpenseSummaryProjection> findByCategoryAndCreatedAt(LocalDate startDate, LocalDate endDate);
+            """,
+      nativeQuery = true)
+  List<CategoryExpenseSummaryProjection> findByCategoryAndCreatedAt(
+      LocalDate startDate, LocalDate endDate);
 
-    @Query(value = """
+  @Query(
+      value =
+          """
                 SELECT
                     ct.tag                AS tag,
                     p.profile_id           AS profileId,
@@ -77,10 +85,13 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
                 JOIN profiles p ON c.profile_id = p.profile_id
                 WHERE e.expense_created_at BETWEEN :startDate AND :endDate
                 GROUP BY ct.tag, c.profile_id, p.profile_id
-            """, nativeQuery = true)
-    List<TagExpenseSummaryProjection> findByTagAndCreatedAt(LocalDate startDate, LocalDate endDate);
+            """,
+      nativeQuery = true)
+  List<TagExpenseSummaryProjection> findByTagAndCreatedAt(LocalDate startDate, LocalDate endDate);
 
-    @Query(value = """
+  @Query(
+      value =
+          """
                 SELECT
                     c.category_name         AS categoryName,
                     c.category_color_code   AS categoryColorCode,
@@ -98,10 +109,14 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
                     p.profile_id
                 ORDER BY
                     month ASC
-            """, nativeQuery = true)
-    List<CategoryMonthlyExpenseProjection> findMonthlyExpensesByCategory(LocalDate startDate, LocalDate endDate);
+            """,
+      nativeQuery = true)
+  List<CategoryMonthlyExpenseProjection> findMonthlyExpensesByCategory(
+      LocalDate startDate, LocalDate endDate);
 
-    @Query(value = """
+  @Query(
+      value =
+          """
                 SELECT
                     ct.tag                AS tag,
                     date_trunc('month', e.expense_created_at) AS month,
@@ -118,6 +133,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
                     p.profile_id
                 ORDER BY
                     month ASC
-            """, nativeQuery = true)
-    List<TagMonthlyExpenseProjection> findMonthlyExpensesByTag(LocalDate startDate, LocalDate endDate);
+            """,
+      nativeQuery = true)
+  List<TagMonthlyExpenseProjection> findMonthlyExpensesByTag(
+      LocalDate startDate, LocalDate endDate);
 }

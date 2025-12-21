@@ -1,5 +1,8 @@
 package com.backend.wealth_tracker.controller;
 
+import static com.backend.wealth_tracker.helper.Constants.EXPENSE_REPORT_FILE_NAME;
+import static com.backend.wealth_tracker.helper.Constants.EXPENSE_REPORT_NAME;
+
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.*;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
@@ -15,6 +18,7 @@ import com.backend.wealth_tracker.service.ExpenseStatisticsService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,11 +26,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static com.backend.wealth_tracker.helper.Constants.EXPENSE_REPORT_FILE_NAME;
-import static com.backend.wealth_tracker.helper.Constants.EXPENSE_REPORT_NAME;
 
 @RestController
 @RequestMapping("/api/v1/expenses")
@@ -40,7 +39,9 @@ public class ExpenseController {
 
   @SuppressFBWarnings("EI_EXPOSE_REP2")
   public ExpenseController(
-      ExpenseService expenseService, ExpenseStatisticsService expenseStatisticsService, PdfReportRegistry pdfReportRegistry) {
+      ExpenseService expenseService,
+      ExpenseStatisticsService expenseStatisticsService,
+      PdfReportRegistry pdfReportRegistry) {
     this.expenseService = expenseService;
     this.expenseStatisticsService = expenseStatisticsService;
     this.pdfReportRegistry = pdfReportRegistry;
@@ -104,20 +105,21 @@ public class ExpenseController {
         this.expenseService.saveExpense(createExpenseDTO, userDetails.getUsername()));
   }
 
-    @GetMapping("/report")
-    @ResponseStatus(HttpStatus.OK)
-    @Tag(name = REPORT_MAPPING_TAG)
-    @SuppressWarnings("unchecked")
-    public ResponseEntity<byte[]> getExpensesReport(
-            @RequestParam String startDate, @RequestParam String endDate) throws PdfGenerationException {
-        PdfReportGenerator<String[]> pdfReportGenerator = (PdfReportGenerator<String[]>) pdfReportRegistry.get(EXPENSE_REPORT_NAME);
-        byte[] pdfContentBytes = pdfReportGenerator.generate(new String[] {startDate, endDate});
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", EXPENSE_REPORT_FILE_NAME);
-        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-        return new ResponseEntity<>(pdfContentBytes, headers, HttpStatus.OK);
-    }
+  @GetMapping("/report")
+  @ResponseStatus(HttpStatus.OK)
+  @Tag(name = REPORT_MAPPING_TAG)
+  @SuppressWarnings("unchecked")
+  public ResponseEntity<byte[]> getExpensesReport(
+      @RequestParam String startDate, @RequestParam String endDate) throws PdfGenerationException {
+    PdfReportGenerator<String[]> pdfReportGenerator =
+        (PdfReportGenerator<String[]>) pdfReportRegistry.get(EXPENSE_REPORT_NAME);
+    byte[] pdfContentBytes = pdfReportGenerator.generate(new String[] {startDate, endDate});
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_PDF);
+    headers.setContentDispositionFormData("attachment", EXPENSE_REPORT_FILE_NAME);
+    headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+    return new ResponseEntity<>(pdfContentBytes, headers, HttpStatus.OK);
+  }
 
   @PutMapping(path = "/update")
   @ResponseStatus(HttpStatus.OK)
