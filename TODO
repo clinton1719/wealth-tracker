@@ -1,1 +1,2 @@
-optimise queries-  basically remove the children if not needed like expenses etc
+use mapper library instead of manual
+put picture in spring boot itself instead of db
