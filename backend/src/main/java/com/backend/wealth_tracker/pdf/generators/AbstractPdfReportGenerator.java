@@ -24,7 +24,7 @@ public abstract class AbstractPdfReportGenerator<P, M> implements PdfReportGener
     }
   }
 
-  protected abstract M loadData(P params);
+  protected abstract M loadData(P params) throws PdfGenerationException;
 
   protected abstract String renderHtml(M model) throws PdfGenerationException;
 

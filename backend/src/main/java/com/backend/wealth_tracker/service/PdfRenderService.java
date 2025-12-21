@@ -1,15 +1,16 @@
 package com.backend.wealth_tracker.service;
 
-import static com.backend.wealth_tracker.helper.Constants.*;
-
 import com.backend.wealth_tracker.exception.PdfGenerationException;
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+
+import static com.backend.wealth_tracker.helper.Constants.*;
 
 @Service
 public class PdfRenderService {
@@ -55,9 +56,9 @@ public class PdfRenderService {
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       render(html, byteArrayOutputStream);
       return byteArrayOutputStream.toByteArray();
-    } catch (Exception ex) {
-      LOGGER.atError().log("Error while rendering PDF: {}", ex.getMessage(), ex);
-      throw new PdfGenerationException("Error while rendering PDF", ex);
+    } catch (Exception e) {
+      LOGGER.atError().log("Error while rendering PDF: {}", e.getMessage(), e);
+      throw new PdfGenerationException("Error while rendering PDF", e);
     }
   }
 }

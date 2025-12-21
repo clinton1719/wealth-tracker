@@ -18,7 +18,12 @@ export const store = configureStore({
     profile: profileReducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware()
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['expensesApi/executeMutation/fulfilled'],
+        ignoredPaths: ['expensesApi.mutations'],
+      },
+    })
       .concat(expensesApi.middleware)
       .concat(authApi.middleware)
       .concat(categoriesApi.middleware)
