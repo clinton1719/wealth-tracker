@@ -1,24 +1,25 @@
 package com.backend.wealth_tracker.pdf.generators;
 
-import static com.backend.wealth_tracker.helper.Constants.*;
-import static com.backend.wealth_tracker.helper.Helper.loadWebContentFromResources;
-
 import com.backend.wealth_tracker.dto.request_dto.ExpenseReportRequest;
 import com.backend.wealth_tracker.exception.PdfGenerationException;
 import com.backend.wealth_tracker.model.ExpenseReportModel;
 import com.backend.wealth_tracker.projections.ExpenseReportSummaryProjection;
 import com.backend.wealth_tracker.service.ExpenseService;
 import com.backend.wealth_tracker.service.PdfRenderService;
+import org.apache.commons.text.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.apache.commons.text.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+
+import static com.backend.wealth_tracker.helper.Constants.*;
+import static com.backend.wealth_tracker.helper.Helper.loadWebContentFromResources;
 
 @Service
 public class ExpenseReportGenerator
@@ -78,7 +79,7 @@ public class ExpenseReportGenerator
             expenseReportRequest.startDate(),
             expenseReportRequest.endDate(),
             chartImagesMap);
-    LOGGER.info(
+    LOGGER.atInfo().log(
         "Model generated for report with {} entries", expenseReportModel.expenseRowList().size());
     return expenseReportModel;
   }

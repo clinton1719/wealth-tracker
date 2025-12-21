@@ -65,10 +65,10 @@ export const expensesApi = createApi({
     >({
       query: (formData) => {
         return {
-          url: "/expenses/report",
-          method: "POST",
+          url: '/expenses/report',
+          method: 'POST',
           body: formData,
-          responseHandler: (response) => response.blob(),
+          responseHandler: response => response.blob(),
         }
       },
     }),
@@ -128,5 +128,5 @@ export const {
   useGetMonthlyExpensesByCategoryQuery,
   useGetMonthlyExpensesByTagQuery,
   useUpdateExpenseMutation,
-  useGetExpensesReportMutation
+  useGetExpensesReportMutation,
 } = expensesApi

@@ -63,18 +63,22 @@ export function NavigationBar() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        {token ? (<NavigationMenuItem>
-          <button
-            type="button"
-            onClick={() => {
-              dispatch(logout())
-              navigate('/')
-            }}
-            className="card-value ml-2"
-          >
-            Logout
-          </button>
-        </NavigationMenuItem>) : null}
+        {token
+          ? (
+              <NavigationMenuItem>
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch(logout())
+                    navigate('/')
+                  }}
+                  className="card-value ml-2"
+                >
+                  Logout
+                </button>
+              </NavigationMenuItem>
+            )
+          : null}
       </NavigationMenuList>
     </NavigationMenu>
   )

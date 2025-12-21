@@ -33,4 +33,3 @@ export function base64ToPngBlob(base64: string): Blob {
 
   return new Blob([byteArray], { type: 'image/png' })
 }
-
