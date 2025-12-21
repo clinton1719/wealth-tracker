@@ -124,7 +124,6 @@ export function ExpenseStatistics() {
   }, [expensesData, enabledMap])
 
   const totalCategoryExpense = memoisedCategoryExpenseData.reduce((acc, currentCategoryExpense) => acc + currentCategoryExpense.expenseAmount, 0)
-  const totalTagExpense = memoisedTagExpenseData.reduce((acc, currentTagExpense) => acc + currentTagExpense.expenseAmount, 0)
 
   if (isCategoryExpenseLoading || isCategoryExpenseFetching || isTagExpenseLoading || isTagExpenseFetching || isMonthlyCategoryExpenseLoading || isMonthlyCategoryExpenseFetching || isMonthlyTagExpenseLoading || isMonthlyTagExpenseFetching || getAllExpensesLoading || getAllExpensesFetching || getExpensesReportLoading)
     return <Spinner className="spinner" />
@@ -242,11 +241,11 @@ export function ExpenseStatistics() {
           : null}
       </div>
 
-      <div ref={tagTableRef}>{memoisedTagExpenseData && memoisedTagExpenseData.length && period && totalTagExpense
+      <div ref={tagTableRef}>{memoisedTagExpenseData && memoisedTagExpenseData.length && period && totalCategoryExpense
         ? (
           <TagCategoryTable
             tagExpenses={memoisedTagExpenseData}
-            totalExpense={totalTagExpense}
+            totalExpense={totalCategoryExpense}
             fromDate={period.from.toDateString()}
             toDate={period.to.toDateString()}
           />
