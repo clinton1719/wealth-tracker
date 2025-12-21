@@ -104,7 +104,7 @@ public class ExpenseController {
         this.expenseService.saveExpense(createExpenseDTO, userDetails.getUsername()));
   }
 
-    @PostMapping("/report")
+    @GetMapping("/report")
     @ResponseStatus(HttpStatus.OK)
     @Tag(name = REPORT_MAPPING_TAG)
     @SuppressWarnings("unchecked")
@@ -114,7 +114,7 @@ public class ExpenseController {
         byte[] pdfContentBytes = pdfReportGenerator.generate(new String[] {startDate, endDate});
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("filename", EXPENSE_REPORT_FILE_NAME);
+        headers.setContentDispositionFormData("attachment", EXPENSE_REPORT_FILE_NAME);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         return new ResponseEntity<>(pdfContentBytes, headers, HttpStatus.OK);
     }

@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
 import {
   NavigationMenu,
@@ -9,13 +9,14 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { logout } from '@/slices/authSlice'
+import { logout, selectAuthToken } from '@/slices/authSlice'
 import { navigationStaticValues } from '@/static-values/navigation-values'
 
 export function NavigationBar() {
   const isMobile = useIsMobile()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const token = useSelector(selectAuthToken)
 
   return (
     <NavigationMenu viewport={isMobile}>
@@ -62,7 +63,7 @@ export function NavigationBar() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem>
+        {token ? (<NavigationMenuItem>
           <button
             type="button"
             onClick={() => {
@@ -73,7 +74,7 @@ export function NavigationBar() {
           >
             Logout
           </button>
-        </NavigationMenuItem>
+        </NavigationMenuItem>) : null}
       </NavigationMenuList>
     </NavigationMenu>
   )

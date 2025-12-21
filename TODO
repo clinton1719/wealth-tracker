@@ -1,2 +1,3 @@
 use mapper library instead of manual
 put picture in spring boot itself instead of db
+logout only when token is present.
