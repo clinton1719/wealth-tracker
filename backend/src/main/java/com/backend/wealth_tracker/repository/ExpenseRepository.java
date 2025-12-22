@@ -28,6 +28,25 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
   List<ExpenseSummaryProjection> findExpenseSummaryBetween(LocalDate startDate, LocalDate endDate);
 
   @Query(
+      """
+            SELECT
+                e.expenseDescription AS expenseDescription,
+                e.expenseAmount      AS expenseAmount,
+                c.categoryName       AS categoryName,
+                a.accountName        AS accountName,
+                p.profileName        AS profileName,
+                e.expenseCreatedAt   AS expenseCreatedAt
+              FROM expenses e
+                JOIN e.category c
+                JOIN e.profile p
+                JOIN e.account a
+              WHERE e.expenseCreatedAt BETWEEN :startDate AND :endDate
+              ORDER BY e.expenseCreatedAt ASC
+            """)
+  List<ExpenseReportSummaryProjection> findExpenseReportSummaryBetween(
+      LocalDate startDate, LocalDate endDate);
+
+  @Query(
       value =
           """
                 SELECT

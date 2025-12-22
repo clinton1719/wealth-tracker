@@ -22,3 +22,14 @@ export function formatMonth(yearMonth: string) {
     year: 'numeric',
   })
 }
+
+export function base64ToPngBlob(base64: string): Blob {
+  const byteString = atob(base64.split(',')[1])
+  const byteArray = new Uint8Array(byteString.length)
+
+  for (let i = 0; i < byteString.length; i++) {
+    byteArray[i] = byteString.charCodeAt(i)
+  }
+
+  return new Blob([byteArray], { type: 'image/png' })
+}

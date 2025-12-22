@@ -10,7 +10,6 @@ import java.util.List;
 
 public final class ExpenseMapper {
   private ExpenseMapper() {}
-  ;
 
   public static ResponseExpenseDTO expenseToResponseExpenseDTO(Expense expense) {
     ResponseExpenseDTO dto = new ResponseExpenseDTO();

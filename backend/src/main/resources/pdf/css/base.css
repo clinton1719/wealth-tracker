@@ -1,0 +1,94 @@
+@page {
+    @bottom-center {
+        content: counter(page);
+        font-family: sans-serif;
+        padding-right: 15px;
+    }
+
+    size: A4;
+    margin: 0;
+}
+
+p {
+    margin-bottom: 12px;
+}
+
+body {
+    font-family: "Noto Sans";
+    background: #FAF3DD;
+    color: #000000;
+    font-weight: 400;
+    margin: 32px;
+    font-size: 12px;
+}
+
+h1,
+h2 {
+    color: #000000;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.card {
+    background: #FFFFFF;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(94, 100, 114);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.card p {
+    margin: 2px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.badge {
+    display: inline-block;
+    background: #FFA69E;
+    color: #FFFFFF;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-style: italic;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    table-layout: fixed;
+    -fs-table-paginate: paginate;
+    -fs-page-break-min-height: 2cm;
+}
+
+thead {
+    background: #B8F2E6;
+}
+
+th {
+    text-align: left;
+    padding: 8px;
+    font-size: 11px;
+    color: #000000;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(94, 100, 114);
+}
+
+td {
+    padding: 8px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(94, 100, 114);
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+tfoot td {
+    font-weight: 700;
+    background: #AED9E0;
+}

@@ -1,0 +1,66 @@
+<h1>Expense Report</h1>
+<p>Period: {{startDate}} to {{endDate}}</p>
+
+<div class="card">
+  <h2>Summary</h2>
+  <p>
+    This report provides a breakdown of expenses by category.
+    Values are rounded to two decimal places.
+  </p>
+  <span class="badge">Auto-generated</span>
+</div>
+
+<div class="card">
+  <h2>Expense Details</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Profile</th>
+        <th>Account</th>
+        <th class="amount">Amount (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ROWS}}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5">Total</td>
+        <td class="amount">{{TOTAL}}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="chart-block">
+    <div class="chart-container">
+      <img src="data:image/png;base64,{{categoryTable}}" />
+    </div>
+
+    <div class="chart-container">
+      <img src="data:image/png;base64,{{tagTable}}" />
+    </div>
+
+    <div class="chart-container">
+      <img src="data:image/png;base64,{{categoryPie}}" />
+    </div>
+
+    <div class="chart-container">
+      <img src="data:image/png;base64,{{tagPie}}" />
+    </div>
+
+    <div class="chart-container">
+      <img src="data:image/png;base64,{{categoryLine}}" />
+    </div>
+
+    <div class="chart-container">
+      <img src="data:image/png;base64,{{tagLine}}" />
+    </div>
+
+    <div class="chart-container">
+      <img src="data:image/png;base64,{{expenseLine}}" />
+    </div>
+  </div>
+</div>

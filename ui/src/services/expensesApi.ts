@@ -59,6 +59,19 @@ export const expensesApi = createApi({
         `/expenses/range?startDate=${startDate}&endDate=${endDate}`,
       providesTags: ['Expenses'],
     }),
+    getExpensesReport: builder.mutation<
+      Blob,
+      FormData
+    >({
+      query: (formData) => {
+        return {
+          url: '/expenses/report',
+          method: 'POST',
+          body: formData,
+          responseHandler: response => response.blob(),
+        }
+      },
+    }),
     getExpensesByCategoryAndCreatedAt: builder.query<
       CategoryExpense[],
       {
@@ -115,4 +128,5 @@ export const {
   useGetMonthlyExpensesByCategoryQuery,
   useGetMonthlyExpensesByTagQuery,
   useUpdateExpenseMutation,
+  useGetExpensesReportMutation,
 } = expensesApi

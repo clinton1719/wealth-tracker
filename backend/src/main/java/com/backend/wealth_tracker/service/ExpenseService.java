@@ -10,6 +10,7 @@ import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.model.User;
+import com.backend.wealth_tracker.projections.ExpenseReportSummaryProjection;
 import com.backend.wealth_tracker.projections.ExpenseSummaryProjection;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
@@ -175,7 +176,25 @@ public class ExpenseService {
     List<ExpenseSummaryProjection> expenseSummaryProjectionList =
         expenseRepository.findExpenseSummaryBetween(start, end);
     LOGGER.atInfo().log(
-        "Found {} expenses between {} and {}",
+        "Found {} expenses between {} and {} for getExpensesInRange",
+        expenseSummaryProjectionList.size(),
+        startDate,
+        endDate);
+    return expenseSummaryProjectionList;
+  }
+
+  @Transactional(
+      isolation = Isolation.READ_COMMITTED,
+      propagation = Propagation.REQUIRED,
+      readOnly = true)
+  public List<ExpenseReportSummaryProjection> getExpensesWithNamesInRange(
+      String startDate, String endDate) {
+    LocalDate start = LocalDate.parse(startDate);
+    LocalDate end = LocalDate.parse(endDate);
+    List<ExpenseReportSummaryProjection> expenseSummaryProjectionList =
+        expenseRepository.findExpenseReportSummaryBetween(start, end);
+    LOGGER.atInfo().log(
+        "Found {} expenses between {} and {} for getExpensesWithNamesInRange",
         expenseSummaryProjectionList.size(),
         startDate,
         endDate);
