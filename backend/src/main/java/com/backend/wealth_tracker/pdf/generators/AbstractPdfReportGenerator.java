@@ -17,18 +17,14 @@ public abstract class AbstractPdfReportGenerator<P, M> implements PdfReportGener
   public byte[] generate(P params) throws PdfGenerationException {
     M model = loadData(params);
     String html = renderHtml(model);
-    try {
-      return renderPdf(html);
-    } catch (Exception ex) {
-      throw new PdfGenerationException("PDF generation failed!", ex);
-    }
+    return renderPdf(html);
   }
 
   protected abstract M loadData(P params) throws PdfGenerationException;
 
   protected abstract String renderHtml(M model) throws PdfGenerationException;
 
-  protected byte[] renderPdf(String html) throws Exception {
+  protected byte[] renderPdf(String html) throws PdfGenerationException {
     return pdfRenderService.renderToBytes(html);
   }
 }

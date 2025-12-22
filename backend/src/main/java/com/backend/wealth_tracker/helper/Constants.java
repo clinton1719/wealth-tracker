@@ -1,12 +1,11 @@
 package com.backend.wealth_tracker.helper;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public final class Constants {
-  private Constants() {}
-
   /*** PDF CONSTANTS STARTS **/
   public static final String FONT_FAMILY = "Noto Sans";
 
@@ -21,8 +20,11 @@ public final class Constants {
   public static final String EXPENSE_REPORT_LOCATION = "pdf/reports/expense/expense-report.html";
   public static final String EXPENSE_CSS_LOCATION = "pdf/reports/expense/expense.css";
   public static final String EXPENSE_REPORT_FILE_NAME = "expense-report.pdf";
-
-  public static final NumberFormat INDIAN_CURRENCY_FORMATTER =
-      NumberFormat.getCurrencyInstance(Locale.of("en", "IN"));
   public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+  private Constants() {}
+
+  public static String formatCurrency(BigDecimal amount) {
+    return NumberFormat.getCurrencyInstance(Locale.of("en", "IN")).format(amount);
+  }
 }

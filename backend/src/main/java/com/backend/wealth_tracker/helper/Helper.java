@@ -1,5 +1,6 @@
 package com.backend.wealth_tracker.helper;
 
+import com.backend.wealth_tracker.exception.PdfGenerationException;
 import com.backend.wealth_tracker.model.Account;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Profile;
@@ -9,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Set;
 import org.apache.tika.Tika;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -61,14 +63,15 @@ public final class Helper {
         && isAccountIdValid(accounts, accountId);
   }
 
-  public static String loadWebContentFromResources(String path) throws Exception {
-    try (InputStream is = Helper.class.getClassLoader().getResourceAsStream(path)) {
+  private static InputStream getResourceStream(String path) throws IOException {
+    return new ClassPathResource(path).getInputStream();
+  }
 
-      if (is == null) {
-        throw new IllegalStateException("Resource not found: " + path);
-      }
-
+  public static String loadWebContentFromResources(String path) throws PdfGenerationException {
+    try (InputStream is = getResourceStream(path)) {
       return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      throw new PdfGenerationException("Failed to load web content for PDF rendering", e);
     }
   }
 }

@@ -20,6 +20,13 @@ public class GlobalExceptionHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+  @ExceptionHandler(PdfGenerationException.class)
+  @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+  public String handlePDFGenerationException(AccountCannotHaveNegativeBalanceException e) {
+    LOGGER.atError().log("PDF generation exception: {}", e.getMessage(), e);
+    return "Unhandled server error, please try again";
+  }
+
   @ExceptionHandler(AccountCannotHaveNegativeBalanceException.class)
   @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
   public String handleAccountCannotHaveNegativeBalanceException(

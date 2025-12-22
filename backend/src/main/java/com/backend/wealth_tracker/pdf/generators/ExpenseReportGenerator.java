@@ -1,25 +1,24 @@
 package com.backend.wealth_tracker.pdf.generators;
 
+import static com.backend.wealth_tracker.helper.Constants.*;
+import static com.backend.wealth_tracker.helper.Helper.loadWebContentFromResources;
+
 import com.backend.wealth_tracker.dto.request_dto.ExpenseReportRequest;
 import com.backend.wealth_tracker.exception.PdfGenerationException;
 import com.backend.wealth_tracker.model.ExpenseReportModel;
 import com.backend.wealth_tracker.projections.ExpenseReportSummaryProjection;
 import com.backend.wealth_tracker.service.ExpenseService;
 import com.backend.wealth_tracker.service.PdfRenderService;
-import org.apache.commons.text.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.backend.wealth_tracker.helper.Constants.*;
-import static com.backend.wealth_tracker.helper.Helper.loadWebContentFromResources;
+import org.apache.commons.text.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ExpenseReportGenerator
@@ -39,23 +38,22 @@ public class ExpenseReportGenerator
     for (ExpenseReportSummaryProjection e : model.expenseRowList()) {
       rows.append(
           """
-                            <tr>
-                              <td>%s</td>
-                              <td>%s</td>
-                              <td>%s</td>
-                              <td>%s</td>
-                              <td>%s</td>
-                              <td class="amount">%s</td>
-                            </tr>
-                            """
+                    <tr>
+                      <td>%s</td>
+                      <td>%s</td>
+                      <td>%s</td>
+                      <td>%s</td>
+                      <td>%s</td>
+                      <td class="amount">%s</td>
+                    </tr>
+                    """
               .formatted(
                   StringEscapeUtils.escapeHtml4(DATE_FORMATTER.format(e.getExpenseCreatedAt())),
                   StringEscapeUtils.escapeHtml4(e.getCategoryName()),
                   StringEscapeUtils.escapeHtml4(e.getExpenseDescription()),
                   StringEscapeUtils.escapeHtml4(e.getProfileName()),
                   StringEscapeUtils.escapeHtml4(e.getAccountName()),
-                  StringEscapeUtils.escapeHtml4(
-                      INDIAN_CURRENCY_FORMATTER.format(e.getExpenseAmount()))));
+                  StringEscapeUtils.escapeHtml4(formatCurrency(e.getExpenseAmount()))));
     }
     return rows;
   }
@@ -71,7 +69,7 @@ public class ExpenseReportGenerator
             .map(ExpenseReportSummaryProjection::getExpenseAmount)
             .filter(Objects::nonNull)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-    String totalExpensesFormatted = INDIAN_CURRENCY_FORMATTER.format(total);
+    String totalExpensesFormatted = formatCurrency(total);
     ExpenseReportModel expenseReportModel =
         new ExpenseReportModel(
             expenseReportSummaryProjectionList,
@@ -86,18 +84,10 @@ public class ExpenseReportGenerator
 
   @Override
   protected String renderHtml(ExpenseReportModel model) throws PdfGenerationException {
-    String baseHtml;
-    String baseCss;
-    String expenseCss;
-    String content;
-    try {
-      baseHtml = loadWebContentFromResources(BASE_HTML_LOCATION);
-      baseCss = loadWebContentFromResources(BASE_CSS_LOCATION);
-      expenseCss = loadWebContentFromResources(EXPENSE_CSS_LOCATION);
-      content = loadWebContentFromResources(EXPENSE_REPORT_LOCATION);
-    } catch (Exception e) {
-      throw new PdfGenerationException("Unable to render expense report", e);
-    }
+    String baseHtml = loadWebContentFromResources(BASE_HTML_LOCATION);
+    String baseCss = loadWebContentFromResources(BASE_CSS_LOCATION);
+    String expenseCss = loadWebContentFromResources(EXPENSE_CSS_LOCATION);
+    String content = loadWebContentFromResources(EXPENSE_REPORT_LOCATION);
 
     String html =
         baseHtml
