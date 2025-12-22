@@ -100,12 +100,12 @@ export function CategorySection({
           </DropdownMenu>
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between items-center">
-            <span className="card-key">Description: </span>
-            <span className="text-value">{category.categoryDescription}</span>
-          </div>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          {category.categoryDescription ? (<div>
+            <p className="text-muted-foreground">Description</p>
+            <p className="font-medium">{category.categoryDescription}</p>
+          </div>) : null}
         </div>
       </CardContent>
       <CardFooter className="flex-col gap-2">

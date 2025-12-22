@@ -151,8 +151,8 @@ export function ExpenseSummaryCards({
               <CardContent>
                 <div className="flex flex-col gap-2">
                   <div className="flex justify-between items-center">
-                    <span className="card-key">Category:</span>
-                    <span className="card-value flex gap-2">
+                    <span>Category:</span>
+                    <span className="highlightBox flex gap-2">
                       <DynamicIcon
                         name={
                           highestSpendingCategory.category.categoryIcon
@@ -195,8 +195,8 @@ export function ExpenseSummaryCards({
               <CardContent>
                 <div className="flex flex-col gap-2">
                   <div className="flex justify-between items-center">
-                    <span className="card-key">Tag:</span>
-                    <span className="card-value flex gap-2">
+                    <span>Tag:</span>
+                    <span className="highlightBox flex gap-2">
                       {highestSpendingTag.tag}
                     </span>
                   </div>

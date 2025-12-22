@@ -137,12 +137,7 @@
   @apply text-lg font-medium text-muted-foreground break-all;
 }
 
-.card-key {
-  @apply text-sm font-semibold text-muted-foreground
-         pr-2 uppercase break-all;
-}
-
-.card-value {
+.highlightBox {
   @apply bg-foreground text-background text-sm font-semibold
          px-2 py-0.5 rounded-md
          bg-card border border-border
@@ -185,4 +180,12 @@
 
 .card-border {
   @apply border-4 border-solid;
+}
+
+.heading4 {
+  @apply scroll-m-20 text-xl font-semibold tracking-tight;
+}
+
+.heading1 {
+  @apply scroll-m-20 text-4xl font-extrabold tracking-tight text-balance;
 }

@@ -12,6 +12,7 @@ import { store } from '@/store.ts'
 import ErrorBoundary from './components/error-boundary/error-boundary'
 import { ExpenseStatistics } from './features/expense/expenseStatistics'
 import '@/styles/index.css'
+import DepositsFeature from './features/investment/depositsFeature'
 
 const App = lazy(() => import('@/App.tsx'))
 const CategoriesSection = lazy(
@@ -36,6 +37,7 @@ createRoot(document.getElementById('root')!).render(
             <Route element={<ProtectedRoute />}>
               <Route index element={<App />} />
               <Route path="expense" element={<ExpensesSection />} />
+              <Route path="investment" element={<DepositsFeature />} />
               <Route path="expense/statistics" element={<ExpenseStatistics />} />
               <Route path="category" element={<CategoriesSection />} />
             </Route>

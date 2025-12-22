@@ -350,10 +350,10 @@ export default function ExpensesFeature() {
       <div className="container mx-auto p-4 min-h-screen mb-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
+            <h1 className="heading1">
               Expense Tracker
             </h1>
-            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            <h4 className="heading4">
               Manage and track your daily expenses
             </h4>
           </div>

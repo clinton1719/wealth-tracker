@@ -86,17 +86,15 @@ export function AccountSection({
           </DropdownMenu>
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between items-center">
-            <span className="card-key">Account balance:</span>
-            <span className="card-value">
-              {formatCurrency(account.accountBalance)}
-            </span>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <p className="text-muted-foreground">Account balance:</p>
+            <p className="font-medium">{formatCurrency(account.accountBalance)}</p>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="card-key">Account type:</span>
-            <span className="card-value">{account.accountType}</span>
+          <div>
+            <p className="text-muted-foreground">Account type:</p>
+            <p className="font-medium">{account.accountType}</p>
           </div>
         </div>
       </CardContent>

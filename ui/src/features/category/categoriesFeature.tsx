@@ -285,7 +285,7 @@ export default function CategoriesFeature() {
     return (
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Categories</h1>
+          <h1 className="heading1">Categories</h1>
           <div className="flex gap-2 min-w-lg">
             <Input
               type="search"

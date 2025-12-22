@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/navigation-menu'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { logout, selectAuthToken } from '@/slices/authSlice'
-import { navigationStaticValues } from '@/static-values/navigation-values'
+import { expenseNavigationStaticValues, investmentNavigationStaticValues } from '@/static-values/navigation-values'
 
 export function NavigationBar() {
   const isMobile = useIsMobile()
@@ -51,13 +51,29 @@ export function NavigationBar() {
           <NavigationMenuTrigger>Expenses</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {navigationStaticValues.map(navigationStaticValue => (
+              {expenseNavigationStaticValues.map(expenseNavigationStaticValue => (
                 <ListItem
-                  key={navigationStaticValue.title}
-                  title={navigationStaticValue.title}
-                  to={navigationStaticValue.to}
+                  key={expenseNavigationStaticValue.title}
+                  title={expenseNavigationStaticValue.title}
+                  to={expenseNavigationStaticValue.to}
                 >
-                  {navigationStaticValue.description}
+                  {expenseNavigationStaticValue.description}
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Investments</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid gap-2 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              {investmentNavigationStaticValues.map(investmentNavigationStaticValue => (
+                <ListItem
+                  key={investmentNavigationStaticValue.title}
+                  title={investmentNavigationStaticValue.title}
+                  to={investmentNavigationStaticValue.to}
+                >
+                  {investmentNavigationStaticValue.description}
                 </ListItem>
               ))}
             </ul>
@@ -72,7 +88,7 @@ export function NavigationBar() {
                     dispatch(logout())
                     navigate('/')
                   }}
-                  className="card-value ml-2"
+                  className="highlightBox ml-2"
                 >
                   Logout
                 </button>
