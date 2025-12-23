@@ -147,15 +147,15 @@
 .enabled {
   @apply text-foreground text-sm font-semibold
          px-2 py-0.5 rounded-md
-         bg-card border border-border
-         whitespace-normal break-all cursor-default;
+         bg-card border border-black
+         whitespace-normal break-all cursor-default mr-2;
 }
 
 .disabled {
   @apply text-white text-sm font-semibold
          px-2 py-0.5 rounded-md
          bg-black border border-border
-         whitespace-normal break-all opacity-60 cursor-not-allowed;
+         whitespace-normal break-all opacity-60 cursor-not-allowed mr-2;
 }
 
 .spinner {
@@ -171,7 +171,7 @@
 }
 
 .card {
-  @apply w-full max-w-sm hover:shadow-md transition flex justify-between;
+  @apply w-full max-w-sm hover:shadow-md transition;
 }
 
 .text-value {

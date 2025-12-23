@@ -63,7 +63,7 @@ export function CategorySection({
                 color={category.categoryColorCode}
               />
               <span
-                className="card-title"
+                className="heading4"
                 style={{ color: category.categoryColorCode }}
               >
                 {category.categoryName}
