@@ -288,9 +288,6 @@ export function AccountsFeature() {
           {filteredAccountsData
             ? (
                 filteredAccountsData
-                  .sort((accountA, accountB) =>
-                    accountA.accountName.localeCompare(accountB.accountName),
-                  )
                   .map((account) => {
                     const profile = profilesData.find(
                       profile => profile.profileId === account.profileId,

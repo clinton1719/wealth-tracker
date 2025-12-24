@@ -1,4 +1,5 @@
 import { ProfilePicture } from '@/components/building-blocks/profilePicture'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -6,9 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { Account } from '@/types/Account'
-import type { AccountSectionProps } from '@/types/AccountSectionProps'
-import { formatCurrency } from '@/utilities/helper'
+import type { FixedDepositSectionProps } from '@/types/FixedDepositSectionProps'
+import { formatCurrency, formatDate } from '@/utilities/helper'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import {
   Card,
@@ -20,22 +20,10 @@ import {
 } from '../../ui/card'
 
 export function FixedDepositSection({
-  account,
+  fixedDeposit,
   profile,
-  form,
-  setAccountDialogOpen,
-  setIsUpdate,
-  handleDeleteAccount,
-}: AccountSectionProps) {
-  const handleUpdateAccount = (account: Account) => {
-    form.reset({
-      ...account,
-      accountDescription: account.accountDescription ?? '',
-    })
-    form.setValue('profileName', profile.profileName)
-    setAccountDialogOpen(true)
-    setIsUpdate(true)
-  }
+  handleDeleteFixedDeposit
+}: FixedDepositSectionProps) {
 
   return (
     <Card
@@ -43,19 +31,21 @@ export function FixedDepositSection({
       style={{ borderColor: profile.profileColorCode }}
     >
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>
-          <ProfilePicture
-            imageSource={profile.profilePicture}
-            fallbackName={profile.profileName.charAt(0)}
-            imageColor={profile.profileColorCode}
-          />
-        </CardTitle>
-        <CardDescription>
-          <div className="flex flex-col">
-            <span className="heading4">{account.accountName}</span>
-            <span className="description">{account.accountDescription}</span>
-          </div>
-        </CardDescription>
+        <div>
+          <CardTitle>
+            <ProfilePicture
+              imageSource={profile.profilePicture}
+              fallbackName={profile.profileName.charAt(0)}
+              imageColor={profile.profileColorCode}
+            />
+          </CardTitle>
+          <CardDescription>
+            <div className="flex flex-col">
+              <span className="heading4">{fixedDeposit.fixedDepositName}</span>
+            </div>
+          </CardDescription>
+        </div>
+        <Badge variant="secondary">Active</Badge>
         <CardAction>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -70,13 +60,13 @@ export function FixedDepositSection({
 
             <DropdownMenuContent align="end" className="bg-white">
               <DropdownMenuItem
-                onClick={() => handleUpdateAccount(account)}
+                // onClick={() => handleUpdateAccount(account)}
                 className="cursor-pointer"
               >
-                Edit
+                Cancel (penalty incl.)
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleDeleteAccount(account)}
+                onClick={() => handleDeleteFixedDeposit(fixedDeposit)}
                 className="cursor-pointer"
               >
                 Delete
@@ -87,20 +77,24 @@ export function FixedDepositSection({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-3 text-sm">
-          {account.accountDescription ? (<div>
-            <p className="text-muted-foreground">Description</p>
-            <p className="font-medium">{account.accountDescription}</p>
-          </div>) : null}
           <div>
-            <p className="text-muted-foreground">Account balance:</p>
-            <p className="font-medium">{formatCurrency(account.accountBalance)}</p>
+            <p className="text-muted-foreground">Interest rate:</p>
+            <p className="font-medium">{formatCurrency(fixedDeposit.fixedDepositInterestRate)}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Account type:</p>
-            <p className="font-medium">{account.accountType}</p>
+            <p className="text-muted-foreground">Principal:</p>
+            <p className="font-medium">{fixedDeposit.fixedDepositPrincipal}</p>
+          </div>
+          <div>
+            <p className="text-muted-foreground">Start date:</p>
+            <p className="font-medium">{formatDate(fixedDeposit.fixedDepositStartDate)}</p>
+          </div>
+          <div>
+            <p className="text-muted-foreground">Tenure:</p>
+            <p className="font-medium">{fixedDeposit.fixedDepositTenure}</p>
           </div>
         </div>
-      </CardContent>
-    </Card>
+    </CardContent>
+    </Card >
   )
 }

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from "react-hook-form";
 import { fixedDepositFormSchema } from "@/utilities/zodSchemas";
 import { defaultFixedDeposit } from "@/utilities/constants";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useGetAllAccountsQuery } from "@/services/accountsApi";
 import { useSelector } from "react-redux";
 import { selectProfileSlice } from "@/slices/profileSlice";
@@ -36,15 +36,15 @@ export function FixedDepositFeature() {
         isLoading: getAllProfilesLoading,
         isFetching: getAllProfilesFetching,
         data: profilesData,
-      } = useGetAllProfilesForUserQuery()
+    } = useGetAllProfilesForUserQuery()
     const {
         error: fixedDepositsError,
         isLoading: getAllFixedDepositsLoading,
         isFetching: getAllFixedDepositsFetching,
         data: fixedDepositsData,
     } = useGetAllFixedDepositsQuery();
-  const [deleteFixedDeposit, { isLoading: deleteFixedDepositLoading }]
-      = useDeleteFixedDepositMutation()
+    const [deleteFixedDeposit, { isLoading: deleteFixedDepositLoading }]
+        = useDeleteFixedDepositMutation()
     const {
         error: accountsError,
         isLoading: getAllAccountsLoading,
@@ -127,8 +127,8 @@ export function FixedDepositFeature() {
         setCurrentFixedDeposit(fixedDeposit)
     }
 
-    return (
-        <div id="fixedDepositsSection">
+    if (profilesData) {
+        return (<div id="fixedDepositsSection">
             <div className="flex items-center justify-between mb-8">
                 <h1 className="text-2xl font-bold">Fixed Desposits</h1>
                 <Input
@@ -137,7 +137,7 @@ export function FixedDepositFeature() {
                     className="search-bar"
                     onChange={e => setFixedDepositSearchText(e.target.value)}
                 />
-                {accountsData && profilesData? (
+                {accountsData && profilesData ? (
                     <AddFixedDepositForm
                         form={form}
                         onSubmit={onSubmit}
@@ -152,15 +152,21 @@ export function FixedDepositFeature() {
             <div className="normal-grid">
                 {filteredFixedDepositsData
                     ? (
-                        filteredFixedDepositsData.map(fixedDeposit => (
-                            <FixedDepositSection
-                                fixedDeposit={fixedDeposit}
-                                key={fixedDeposit.fixedDepositId}
-                                form={form}
-                                setFixedDepositDialogOpen={setFixedDepositDialogOpen}
-                                handleDeleteFixedDeposit={handleDeleteFixedDeposit}
-                            />
-                        ))
+                        filteredFixedDepositsData.map(fixedDeposit => {
+                            const profile = profilesData.find(profile => profile.profileId === fixedDeposit.profileId)
+                            if (profile) {
+                                return ((
+                                    <FixedDepositSection
+                                        fixedDeposit={fixedDeposit}
+                                        profile={profile}
+                                        handleDeleteFixedDeposit={handleDeleteFixedDeposit}
+                                    />
+                                ));
+                            } else {
+                                <Fragment key={fixedDeposit.fixedDepositId}>
+                                </Fragment>
+                            }
+                        })
                     )
                     : (
                         <p className="text-muted-foreground text-sm">
@@ -175,5 +181,6 @@ export function FixedDepositFeature() {
                 onPrimaryButtonClick={deleteCurrentFixedDeposit}
             />
         </div>
-    )
+        );
+    }
 }

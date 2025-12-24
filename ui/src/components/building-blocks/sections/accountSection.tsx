@@ -53,7 +53,6 @@ export function AccountSection({
         <CardDescription>
           <div className="flex flex-col">
             <span className="heading4">{account.accountName}</span>
-            <span className="description">{account.accountDescription}</span>
           </div>
         </CardDescription>
         <CardAction>

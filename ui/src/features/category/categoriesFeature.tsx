@@ -341,9 +341,6 @@ export default function CategoriesFeature() {
 
         <div className="normal-grid">
           {filteredCategoriesData
-            .sort((categoryA, categoryB) =>
-              categoryA.categoryName.localeCompare(categoryB.categoryName),
-            )
             .map((category) => {
               const profile = profilesData.find(
                 profile => profile.profileId === category.profileId,
