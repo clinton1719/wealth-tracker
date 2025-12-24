@@ -3,16 +3,24 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import type { AddFixedDepositFormProps } from "@/types/AddFixedDepositFormProps"
+import { defaultFixedDeposit } from "@/utilities/constants"
+import { PlusCircle } from "lucide-react"
 import { Controller } from "react-hook-form"
 import { CalendarComponent } from "../calendar"
 
-export function AddFixedDepositForm() {
-    return (
+export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepositDialogOpen, onSubmit, accounts }: AddFixedDepositFormProps) {
+  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter')
+      e.preventDefault()
+  }
+
+  return (
     <Dialog open={fixedDepositDialogOpen}>
       <DialogTrigger asChild>
         <Button
           onClick={() => {
-            setProfileDialogOpen(true)
+            setFixedDepositDialogOpen(true)
           }}
         >
           <PlusCircle className="mr-2 h-5 w-5" />
@@ -22,8 +30,7 @@ export function AddFixedDepositForm() {
       <DialogContent
         className="max-w-md"
         onClickMethod={() => {
-          setProfileDialogOpen(false)
-          setIsUpdate(false)
+          setFixedDepositDialogOpen(false)
         }}
       >
         <DialogHeader>
@@ -82,7 +89,7 @@ export function AddFixedDepositForm() {
                 </Field>
               )}
             />
-             <Controller
+            <Controller
               name="fixedDepositInterestRate"
               control={form.control}
               render={({ field, fieldState }) => (
@@ -179,7 +186,6 @@ export function AddFixedDepositForm() {
                     name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
-                    disabled={isUpdate === true}
                   >
                     <SelectTrigger
                       id="form-rhf-select-account"
@@ -191,10 +197,10 @@ export function AddFixedDepositForm() {
                     <SelectContent position="item-aligned">
                       {accounts.map(account => (
                         <SelectItem
-                          key={account.profileId}
-                          value={account.profileName}
+                          key={account.accountId}
+                          value={account.accountName}
                         >
-                          {account.profileName}
+                          {account.accountName}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -203,7 +209,7 @@ export function AddFixedDepositForm() {
               )}
             />
             <Controller
-              name="accountName"
+              name="fixedDepositStartDate"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field
@@ -211,7 +217,7 @@ export function AddFixedDepositForm() {
                   data-invalid={fieldState.invalid}
                 >
                   <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-account-type">
+                    <FieldLabel htmlFor="form-rhf-select-fixedDeposit-startDate">
                       Start date
                     </FieldLabel>
                     <FieldDescription>Pick start date of deposit</FieldDescription>
@@ -219,7 +225,7 @@ export function AddFixedDepositForm() {
                       <FieldError errors={[fieldState.error]} />
                     )}
                   </FieldContent>
-                  <CalendarComponent date={from} setDate={setFrom(field)} label="Start date"/>
+                  <CalendarComponent date={field.value} setDate={field.onChange} label="Start date" />
                 </Field>
               )}
             />

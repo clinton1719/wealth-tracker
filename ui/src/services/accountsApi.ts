@@ -6,9 +6,6 @@ import { ALL_TAG_TYPES } from '@/utilities/constants'
 
 export const accountApi = createApi({
   reducerPath: 'accountApi',
-  refetchOnMountOrArgChange: true,
-  refetchOnFocus: true,
-  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI,
     prepareHeaders: (headers, { getState }) => {

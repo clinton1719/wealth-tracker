@@ -42,10 +42,20 @@ export const defaultExpense = {
   profileName: '',
 }
 
+export const defaultFixedDeposit = {
+    fixedDepositName: '',
+    fixedDepositPrincipal: 0,
+    fixedDepositInterestRate: 0,
+    fixedDepositTenure: '',
+    accountName: '',
+    fixedDepositStartDate: new Date(),
+}
+
 export const ALL_TAG_TYPES = [
   'Accounts',
   'Expenses',
   'Categories',
   'Auth',
   'Profiles',
+  'FixedDeposits'
 ] as const

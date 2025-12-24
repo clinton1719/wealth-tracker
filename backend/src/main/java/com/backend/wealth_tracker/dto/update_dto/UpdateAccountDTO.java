@@ -2,8 +2,6 @@ package com.backend.wealth_tracker.dto.update_dto;
 
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import java.math.BigDecimal;
 
 @SuppressWarnings("PMD.DataClass")
 public class UpdateAccountDTO {
@@ -12,9 +10,6 @@ public class UpdateAccountDTO {
 
   private String accountName;
   private String accountDescription;
-
-  @PositiveOrZero(message = "Account balance cannot be negative")
-  private BigDecimal accountBalance;
 
   private AccountType accountType;
 
@@ -40,14 +35,6 @@ public class UpdateAccountDTO {
 
   public void setAccountDescription(String accountDescription) {
     this.accountDescription = accountDescription;
-  }
-
-  public BigDecimal getAccountBalance() {
-    return accountBalance;
-  }
-
-  public void setAccountBalance(BigDecimal accountBalance) {
-    this.accountBalance = accountBalance;
   }
 
   public AccountType getAccountType() {

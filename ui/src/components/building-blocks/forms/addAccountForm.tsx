@@ -217,6 +217,7 @@ export function AddAccountForm({
                     autoComplete="off"
                     min={0}
                     step="any"
+                    disabled={isUpdate === true}
                     onChange={e => field.onChange(e.target.valueAsNumber)}
                   />
                   {fieldState.invalid && (
