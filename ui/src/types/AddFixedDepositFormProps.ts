@@ -1,5 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
 import type { Account } from "./Account";
+import type { Profile } from "./Profile";
 
 export interface AddFixedDepositFormProps {
     form: UseFormReturn<{
@@ -8,6 +9,7 @@ export interface AddFixedDepositFormProps {
         fixedDepositInterestRate: number;
         fixedDepositTenure: string;
         accountName: string;
+        profileName: string;
         fixedDepositStartDate: Date;
         fixedDepositId?: number | undefined;
     }, any, {
@@ -16,6 +18,7 @@ export interface AddFixedDepositFormProps {
         fixedDepositInterestRate: number;
         fixedDepositTenure: string;
         accountName: string;
+        profileName: string;
         fixedDepositStartDate: Date;
         fixedDepositId?: number | undefined;
     }>;
@@ -27,8 +30,10 @@ export interface AddFixedDepositFormProps {
         fixedDepositInterestRate: number;
         fixedDepositTenure: string;
         accountName: string;
+        profileName: string;
         fixedDepositStartDate: Date;
         fixedDepositId?: number | undefined;
     }) => Promise<void>;
     accounts: Array<Account>
+    profiles: Array<Profile>
 }

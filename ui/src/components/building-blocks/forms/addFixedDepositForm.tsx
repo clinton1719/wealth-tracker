@@ -9,10 +9,25 @@ import { PlusCircle } from "lucide-react"
 import { Controller } from "react-hook-form"
 import { CalendarComponent } from "../calendar"
 
-export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepositDialogOpen, onSubmit, accounts }: AddFixedDepositFormProps) {
+export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepositDialogOpen, onSubmit, accounts, profiles }: AddFixedDepositFormProps) {
+  const { watch } = form;
+
+  const profileName = watch('profileName')
+  const profile = profiles.find(
+    profile => profile.profileName === profileName,
+  )
+
   const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter')
       e.preventDefault()
+  }
+
+  let filteredAccounts
+
+  if (profile) {
+    filteredAccounts = accounts.filter(
+      account => account.profileId === profile.profileId,
+    )
   }
 
   return (
@@ -166,6 +181,49 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
               )}
             />
             <Controller
+              name="profileName"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-profile">
+                      Profile
+                    </FieldLabel>
+                    <FieldDescription>Choose your profile</FieldDescription>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-profile"
+                      aria-invalid={fieldState.invalid}
+                      className="min-w-[120px]"
+                    >
+                      <SelectValue placeholder="Select profile" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      {profiles.map(profile => (
+                        <SelectItem
+                          key={profile.profileId}
+                          value={profile.profileName}
+                        >
+                          {profile.profileName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
+            />
+            {filteredAccounts ? (<Controller
               name="accountName"
               control={form.control}
               render={({ field, fieldState }) => (
@@ -207,7 +265,7 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
                   </Select>
                 </Field>
               )}
-            />
+            />) : null}
             <Controller
               name="fixedDepositStartDate"
               control={form.control}

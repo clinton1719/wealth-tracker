@@ -14,7 +14,9 @@ import { useApiError } from "@/hooks/use-api-error";
 import { AlertDialogComponent } from "@/components/building-blocks/alertDialogComponent";
 import type { FixedDeposit } from "@/types/FixedDeposit";
 import { toast } from "sonner";
-import { useGetAllFixedDepositsQuery } from "@/services/fixedDepositsApi";
+import { useDeleteFixedDepositMutation, useGetAllFixedDepositsQuery } from "@/services/fixedDepositsApi";
+import { useGetAllProfilesForUserQuery } from "@/services/profilesApi";
+import { FixedDepositSection } from "@/components/building-blocks/sections/fixedDepositSection";
 
 export function FixedDepositFeature() {
     const [fixedDepositDialogOpen, setFixedDepositDialogOpen] = useState<boolean>(false);
@@ -30,11 +32,19 @@ export function FixedDepositFeature() {
     });
 
     const {
+        error: profilesError,
+        isLoading: getAllProfilesLoading,
+        isFetching: getAllProfilesFetching,
+        data: profilesData,
+      } = useGetAllProfilesForUserQuery()
+    const {
         error: fixedDepositsError,
         isLoading: getAllFixedDepositsLoading,
         isFetching: getAllFixedDepositsFetching,
         data: fixedDepositsData,
     } = useGetAllFixedDepositsQuery();
+  const [deleteFixedDeposit, { isLoading: deleteFixedDepositLoading }]
+      = useDeleteFixedDepositMutation()
     const {
         error: accountsError,
         isLoading: getAllAccountsLoading,
@@ -45,10 +55,19 @@ export function FixedDepositFeature() {
 
     const { isError: isAccountsError, errorComponent: accountsErrorComponent }
         = useApiError(accountsError);
+    const { isError: isFixedDepositsError, errorComponent: fixedDepositsErrorComponent }
+        = useApiError(fixedDepositsError);
+    const { isError: isProfilesError, errorComponent: profilesErrorComponent }
+        = useApiError(profilesError);
 
     if (
         getAllAccountsLoading
         || getAllAccountsFetching
+        || getAllFixedDepositsLoading
+        || getAllFixedDepositsFetching
+        || deleteFixedDepositLoading
+        || getAllProfilesLoading
+        || getAllProfilesFetching
     ) {
         return <Spinner className="spinner" />
     }
@@ -56,10 +75,16 @@ export function FixedDepositFeature() {
     if (isAccountsError) {
         return accountsErrorComponent
     }
+    if (isFixedDepositsError) {
+        return fixedDepositsErrorComponent
+    }
+    if (isProfilesError) {
+        return profilesErrorComponent
+    }
 
     const filteredFixedDepositsData = useMemo(() => fixedDepositsData?.filter((fixedDeposit) => {
         return (
-            enabledMap[fixedDeposit.fixedDepositId]
+            enabledMap[fixedDeposit.profileId]
             && (!fixedDepositSearchText
                 || fixedDeposit.fixedDepositName
                     .toLowerCase()
@@ -68,6 +93,7 @@ export function FixedDepositFeature() {
     }), [accountsData, enabledMap, fixedDepositSearchText])
 
     async function onSubmit(formData: z.infer<typeof fixedDepositFormSchema>) {
+        console.log(formData);
         //   if (isUpdate) {
         //     await updateExistingProfile(formData)
         //   }
@@ -85,14 +111,14 @@ export function FixedDepositFeature() {
 
     const deleteCurrentFixedDeposit = async () => {
         if (currentFixedDeposit && currentFixedDeposit.fixedDepositId) {
-            // await deleteFixedDeposit(currentFixedDeposit.accountId).unwrap()
+            await deleteFixedDeposit(currentFixedDeposit.fixedDepositId).unwrap()
             toast.info(
                 `Fixed deposit : ${currentFixedDeposit.fixedDepositName} deleted successfully!`,
             )
             setDeleteFixedDepositDialogOpen(false)
         }
         else {
-            toast.error('Invalid account! Please refresh the page')
+            toast.error('Invalid fixed deposit! Please refresh the page')
         }
     }
 
@@ -111,13 +137,14 @@ export function FixedDepositFeature() {
                     className="search-bar"
                     onChange={e => setFixedDepositSearchText(e.target.value)}
                 />
-                {accountsData ? (
+                {accountsData && profilesData? (
                     <AddFixedDepositForm
                         form={form}
                         onSubmit={onSubmit}
                         fixedDepositDialogOpen={fixedDepositDialogOpen}
                         setFixedDepositDialogOpen={setFixedDepositDialogOpen}
                         accounts={accountsData}
+                        profiles={profilesData}
                     />
                 )
                     : null}

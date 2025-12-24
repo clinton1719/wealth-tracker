@@ -152,7 +152,7 @@ export function AddExpenseForm({
                   data-invalid={fieldState.invalid}
                 >
                   <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-account-type">
+                    <FieldLabel htmlFor="form-rhf-select-profile">
                       Profile
                     </FieldLabel>
                     <FieldDescription>Choose your profile</FieldDescription>
@@ -237,7 +237,7 @@ export function AddExpenseForm({
                   />
                 )
               : (
-                  <></>
+                  null
                 )}
             {filteredCategories
               ? (
@@ -295,7 +295,7 @@ export function AddExpenseForm({
                   />
                 )
               : (
-                  <></>
+                  null
                 )}
             <Field orientation="horizontal">
               <Button

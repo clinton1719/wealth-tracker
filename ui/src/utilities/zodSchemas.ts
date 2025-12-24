@@ -82,5 +82,6 @@ export const fixedDepositFormSchema = z.object({
     .positive('Fixed deposit rate must be greater than zero'),
   fixedDepositTenure: z.string().min(1, 'Fixed deposit tenure is required'),
   accountName: z.string().min(1, 'Account is required'),
+  profileName: z.string().min(1, 'Profile is required'),
   fixedDepositStartDate: z.date().min(1, 'Fixed deposit start date is required'),
 })

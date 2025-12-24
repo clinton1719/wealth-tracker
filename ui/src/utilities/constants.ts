@@ -48,6 +48,7 @@ export const defaultFixedDeposit = {
     fixedDepositInterestRate: 0,
     fixedDepositTenure: '',
     accountName: '',
+    profileName: '',
     fixedDepositStartDate: new Date(),
 }
 
