@@ -7,8 +7,8 @@ interface AuthState {
   token: string | null
 }
 
-const persistedUsername = localStorage.getItem('username')
-const persistedToken = localStorage.getItem('token')
+const persistedUsername = sessionStorage.getItem('username')
+const persistedToken = sessionStorage.getItem('token')
 
 const initialState: AuthState = {
   username: persistedUsername || null,
@@ -25,15 +25,15 @@ const authSlice = createSlice({
       state.token = token
 
       if (token && username) {
-        localStorage.setItem('username', username)
-        localStorage.setItem('token', token)
+        sessionStorage.setItem('username', username)
+        sessionStorage.setItem('token', token)
       }
     },
     logout(state) {
       state.username = null
       state.token = null
-      localStorage.removeItem('username')
-      localStorage.removeItem('token')
+      sessionStorage.removeItem('username')
+      sessionStorage.removeItem('token')
     },
   },
 })

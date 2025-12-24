@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
-export default function DepositsFeature() {
+export default function BackupDepositsFeature() {
   return (
     <div className="space-y-10 p-6">
       {/* Page Header */}
@@ -29,7 +29,9 @@ export default function DepositsFeature() {
         <CardContent>
           <Tabs defaultValue="fd" className="space-y-6">
             <TabsList>
-              <TabsTrigger value="fd">Fixed Deposit</TabsTrigger>
+              <TabsTrigger value="fd">Fixed Deposit
+                
+              </TabsTrigger>
               <TabsTrigger value="rd">Recurring Deposit</TabsTrigger>
             </TabsList>
 
