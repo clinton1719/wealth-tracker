@@ -1,4 +1,4 @@
-package com.backend.wealth_tracker.service;
+package com.backend.wealth_tracker.service.expense;
 
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
@@ -10,10 +10,12 @@ import com.backend.wealth_tracker.mapper.ExpenseMapper;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.model.User;
-import com.backend.wealth_tracker.projections.ExpenseReportSummaryProjection;
-import com.backend.wealth_tracker.projections.ExpenseSummaryProjection;
+import com.backend.wealth_tracker.projections.expense.ExpenseReportSummaryProjection;
+import com.backend.wealth_tracker.projections.expense.ExpenseSummaryProjection;
 import com.backend.wealth_tracker.repository.CategoryRepository;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
+import com.backend.wealth_tracker.service.AccountService;
+import com.backend.wealth_tracker.service.AuthService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
 import java.time.LocalDate;

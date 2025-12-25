@@ -7,22 +7,24 @@ import com.backend.wealth_tracker.exception.AccountCannotHaveNegativeBalanceExce
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.exception.UnAuthorizedException;
 import com.backend.wealth_tracker.mapper.ExpenseMapper;
-import com.backend.wealth_tracker.service.ExpenseService;
-import com.backend.wealth_tracker.service.ExpenseStatisticsService;
+import com.backend.wealth_tracker.service.expense.ExpenseService;
+import com.backend.wealth_tracker.service.expense.ExpenseStatisticsService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static com.backend.wealth_tracker.helper.Constants.*;
+
 @RestController
 @RequestMapping("/api/v1/expenses")
 @Tag(name = "Expense", description = "API methods to manipulate Expense data")
 public class ExpenseController {
-  private static final String GET_MAPPING_TAG = "FIND";
   private final ExpenseService expenseService;
   private final ExpenseStatisticsService expenseStatisticsService;
 
@@ -35,7 +37,7 @@ public class ExpenseController {
 
   @GetMapping("/range")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = GET_MAPPING_TAG)
+  @Tag(name = READ_CALL_TAG)
   public List<ResponseExpenseDTO> getExpensesInRange(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.expenseSummaryProjectionsToResponseExpenseDTOs(
@@ -44,7 +46,7 @@ public class ExpenseController {
 
   @GetMapping("/by-category-and-created-at")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = GET_MAPPING_TAG)
+  @Tag(name = READ_CALL_TAG)
   public List<ResponseCategoryExpenseDTO> getExpensesByCategoryAndCreatedAt(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.categoryExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
@@ -53,7 +55,7 @@ public class ExpenseController {
 
   @GetMapping("/by-tag-and-created-at")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = GET_MAPPING_TAG)
+  @Tag(name = READ_CALL_TAG)
   public List<ResponseTagExpenseDTO> getExpensesByTagAndCreatedAt(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.tagExpenseSummaryProjectionsToResponseCategoryExpenseDTOs(
@@ -62,7 +64,7 @@ public class ExpenseController {
 
   @GetMapping("/by-monthly-category-and-created-at")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = GET_MAPPING_TAG)
+  @Tag(name = READ_CALL_TAG)
   public List<ResponseCategoryMonthlyExpenseDTO> getMonthlyExpensesByCategory(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.categoryMonthlyExpenseProjectionsToResponseCategoryExpenseDTOs(
@@ -71,7 +73,7 @@ public class ExpenseController {
 
   @GetMapping("/by-monthly-tag-and-created-at")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = GET_MAPPING_TAG)
+  @Tag(name = READ_CALL_TAG)
   public List<ResponseTagMonthlyExpenseDTO> getMonthlyExpensesByTag(
       @RequestParam String startDate, @RequestParam String endDate) {
     return ExpenseMapper.tagMonthlyExpenseProjectionsToResponseTagExpenseDTOs(
@@ -80,7 +82,7 @@ public class ExpenseController {
 
   @PostMapping(path = "/save")
   @ResponseStatus(HttpStatus.CREATED)
-  @Tag(name = "SAVE")
+  @Tag(name = CREATE_CALL_TAG)
   public ResponseExpenseDTO saveExpense(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateExpenseDTO createExpenseDTO)
@@ -93,7 +95,7 @@ public class ExpenseController {
 
   @PutMapping(path = "/update")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "UPDATE")
+  @Tag(name = UPDATE_CALL_TAG)
   public ResponseExpenseDTO updateExpense(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateExpenseDTO updateExpenseDTO)
@@ -106,7 +108,7 @@ public class ExpenseController {
 
   @DeleteMapping(path = "/delete/{id}")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "DELETE")
+  @Tag(name = DELETE_CALL_TAG)
   public void updateExpense(@PathVariable Long id) throws ResourceNotFoundException {
     this.expenseService.deleteExpense(id);
   }

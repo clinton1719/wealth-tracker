@@ -1,7 +1,7 @@
 package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.helper.Constants;
-import com.backend.wealth_tracker.projections.ExpenseReportSummaryProjection;
+import com.backend.wealth_tracker.projections.expense.ExpenseReportSummaryProjection;
 import java.util.List;
 import java.util.Map;
 

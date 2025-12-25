@@ -1,9 +1,9 @@
-package com.backend.wealth_tracker.service;
+package com.backend.wealth_tracker.service.expense;
 
-import com.backend.wealth_tracker.projections.CategoryExpenseSummaryProjection;
-import com.backend.wealth_tracker.projections.CategoryMonthlyExpenseProjection;
-import com.backend.wealth_tracker.projections.TagExpenseSummaryProjection;
-import com.backend.wealth_tracker.projections.TagMonthlyExpenseProjection;
+import com.backend.wealth_tracker.projections.expense.CategoryExpenseSummaryProjection;
+import com.backend.wealth_tracker.projections.expense.CategoryMonthlyExpenseProjection;
+import com.backend.wealth_tracker.projections.expense.TagExpenseSummaryProjection;
+import com.backend.wealth_tracker.projections.expense.TagMonthlyExpenseProjection;
 import com.backend.wealth_tracker.repository.ExpenseRepository;
 import java.time.LocalDate;
 import java.util.List;

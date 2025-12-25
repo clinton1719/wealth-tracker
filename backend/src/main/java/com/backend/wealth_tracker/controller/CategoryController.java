@@ -11,11 +11,14 @@ import com.backend.wealth_tracker.service.CategoryService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.backend.wealth_tracker.helper.Constants.*;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -31,7 +34,7 @@ public class CategoryController {
 
   @GetMapping("/all")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "FIND")
+  @Tag(name = READ_CALL_TAG)
   public List<ResponseCategoryDTO> getAllCategories(
       @AuthenticationPrincipal UserDetails userDetails) throws ResourceNotFoundException {
     return CategoryMapper.categoriesToResponseCategoryDTOs(
@@ -39,7 +42,7 @@ public class CategoryController {
   }
 
   @PostMapping("/save")
-  @Tag(name = "SAVE")
+  @Tag(name = CREATE_CALL_TAG)
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseCategoryDTO saveCategory(
       @AuthenticationPrincipal UserDetails userDetails,
@@ -51,7 +54,7 @@ public class CategoryController {
 
   @PutMapping("/update")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "UPDATE")
+  @Tag(name = UPDATE_CALL_TAG)
   public ResponseCategoryDTO updateCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO)
@@ -61,7 +64,7 @@ public class CategoryController {
   }
 
   @DeleteMapping("/delete/{id}")
-  @Tag(name = "DELETE")
+  @Tag(name = DELETE_CALL_TAG)
   @ResponseStatus(HttpStatus.OK)
   public void deleteCategory(
       @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id)

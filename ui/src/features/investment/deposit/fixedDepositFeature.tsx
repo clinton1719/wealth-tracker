@@ -60,6 +60,17 @@ export function FixedDepositFeature() {
     const { isError: isProfilesError, errorComponent: profilesErrorComponent }
         = useApiError(profilesError);
 
+
+    const filteredFixedDepositsData = useMemo(() => fixedDepositsData?.filter((fixedDeposit) => {
+        return (
+            enabledMap[fixedDeposit.profileId]
+            && (!fixedDepositSearchText
+                || fixedDeposit.fixedDepositName
+                    .toLowerCase()
+                    .includes(fixedDepositSearchText.toLowerCase()))
+        )
+    }), [fixedDepositsData, enabledMap, fixedDepositSearchText])
+
     if (
         getAllAccountsLoading
         || getAllAccountsFetching
@@ -81,16 +92,6 @@ export function FixedDepositFeature() {
     if (isProfilesError) {
         return profilesErrorComponent
     }
-
-    const filteredFixedDepositsData = useMemo(() => fixedDepositsData?.filter((fixedDeposit) => {
-        return (
-            enabledMap[fixedDeposit.profileId]
-            && (!fixedDepositSearchText
-                || fixedDeposit.fixedDepositName
-                    .toLowerCase()
-                    .includes(fixedDepositSearchText.toLowerCase()))
-        )
-    }), [accountsData, enabledMap, fixedDepositSearchText])
 
     async function onSubmit(formData: z.infer<typeof fixedDepositFormSchema>) {
         console.log(formData);
@@ -160,6 +161,7 @@ export function FixedDepositFeature() {
                                         fixedDeposit={fixedDeposit}
                                         profile={profile}
                                         handleDeleteFixedDeposit={handleDeleteFixedDeposit}
+                                        key={fixedDeposit.fixedDepositId}
                                     />
                                 ));
                             } else {

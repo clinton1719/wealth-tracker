@@ -1,4 +1,4 @@
-package com.backend.wealth_tracker.projections;
+package com.backend.wealth_tracker.projections.expense;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -3,7 +3,8 @@ package com.backend.wealth_tracker.mapper;
 import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.*;
 import com.backend.wealth_tracker.model.Expense;
-import com.backend.wealth_tracker.projections.*;
+import com.backend.wealth_tracker.projections.expense.*;
+
 import java.time.YearMonth;
 import java.util.Collections;
 import java.util.List;

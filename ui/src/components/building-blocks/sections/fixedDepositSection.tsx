@@ -31,20 +31,18 @@ export function FixedDepositSection({
       style={{ borderColor: profile.profileColorCode }}
     >
       <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle>
-            <ProfilePicture
-              imageSource={profile.profilePicture}
-              fallbackName={profile.profileName.charAt(0)}
-              imageColor={profile.profileColorCode}
-            />
-          </CardTitle>
-          <CardDescription>
-            <div className="flex flex-col">
-              <span className="heading4">{fixedDeposit.fixedDepositName}</span>
-            </div>
-          </CardDescription>
-        </div>
+        <CardTitle>
+          <ProfilePicture
+            imageSource={profile.profilePicture}
+            fallbackName={profile.profileName.charAt(0)}
+            imageColor={profile.profileColorCode}
+          />
+        </CardTitle>
+        <CardDescription>
+          <div className="flex flex-col">
+            <span className="heading4">{fixedDeposit.fixedDepositName}</span>
+          </div>
+        </CardDescription>
         <Badge variant="secondary">Active</Badge>
         <CardAction>
           <DropdownMenu>
@@ -87,14 +85,14 @@ export function FixedDepositSection({
           </div>
           <div>
             <p className="text-muted-foreground">Start date:</p>
-            <p className="font-medium">{formatDate(fixedDeposit.fixedDepositStartDate)}</p>
+            {/* <p className="font-medium">{formatDate(fixedDeposit.fixedDepositStartDate)}</p> */}
           </div>
           <div>
             <p className="text-muted-foreground">Tenure:</p>
             <p className="font-medium">{fixedDeposit.fixedDepositTenure}</p>
           </div>
         </div>
-    </CardContent>
+      </CardContent>
     </Card >
   )
 }

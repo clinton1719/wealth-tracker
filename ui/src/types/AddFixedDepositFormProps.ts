@@ -7,7 +7,9 @@ export interface AddFixedDepositFormProps {
         fixedDepositName: string;
         fixedDepositPrincipal: number;
         fixedDepositInterestRate: number;
-        fixedDepositTenure: string;
+        fixedDepositYears: string;
+        fixedDepositMonths: string;
+        fixedDepositDays: string;
         accountName: string;
         profileName: string;
         fixedDepositStartDate: Date;
@@ -16,7 +18,9 @@ export interface AddFixedDepositFormProps {
         fixedDepositName: string;
         fixedDepositPrincipal: number;
         fixedDepositInterestRate: number;
-        fixedDepositTenure: string;
+        fixedDepositYears: string;
+        fixedDepositMonths: string;
+        fixedDepositDays: string;
         accountName: string;
         profileName: string;
         fixedDepositStartDate: Date;
@@ -28,7 +32,9 @@ export interface AddFixedDepositFormProps {
         fixedDepositName: string;
         fixedDepositPrincipal: number;
         fixedDepositInterestRate: number;
-        fixedDepositTenure: string;
+        fixedDepositYears: string;
+        fixedDepositMonths: string;
+        fixedDepositDays: string;
         accountName: string;
         profileName: string;
         fixedDepositStartDate: Date;

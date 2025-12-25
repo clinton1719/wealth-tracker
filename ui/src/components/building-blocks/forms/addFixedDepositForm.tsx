@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
+import type { Account } from "@/types/Account"
 import type { AddFixedDepositFormProps } from "@/types/AddFixedDepositFormProps"
-import { defaultFixedDeposit } from "@/utilities/constants"
+import { defaultFixedDeposit, FIXED_DEPOSIT_DAY_GROUPS, FIXED_DEPOSIT_MONTHS, FIXED_DEPOSIT_YEAR_GROUPS } from "@/utilities/constants"
 import { PlusCircle } from "lucide-react"
 import { Controller } from "react-hook-form"
 import { CalendarComponent } from "../calendar"
@@ -110,7 +111,7 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="form-rhf-fixedDeposit-interest-rate">
-                    Interest rate
+                    Interest rate (%)
                   </FieldLabel>
                   <Input
                     {...field}
@@ -123,63 +124,122 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
                     step="any"
                     onChange={e => field.onChange(e.target.valueAsNumber)}
                   />
-                  (%)
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
                 </Field>
               )}
             />
-            <Controller
-              name="fixedDepositTenure"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  orientation="responsive"
-                  data-invalid={fieldState.invalid}
-                >
-                  <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-fixedDeposit-tenure">
-                      Tenure
-                    </FieldLabel>
-                    <FieldDescription>
-                      Choose how long the amount is invested for
-                    </FieldDescription>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </FieldContent>
-                  <Select
-                    name={field.name}
-                    value={field.value}
-                    onValueChange={field.onChange}
+            <FieldContent>
+              <FieldLabel htmlFor="form-rhf-select-fixedDeposit-tenure">
+                Tenure
+              </FieldLabel>
+              <FieldDescription>
+                Choose how long the amount is invested for
+              </FieldDescription>
+            </FieldContent>
+            <div className="flex justify-between">
+              <Controller
+                name="fixedDepositYears"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                    className={fieldState.invalid ? "flex" : ""}
                   >
-                    <SelectTrigger
-                      id="form-rhf-select-fixedDeposit-tenure"
-                      aria-invalid={fieldState.invalid}
-                      className="min-w-[120px]"
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
                     >
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="item-aligned">
-                      <SelectItem key="years" value="years">
-                        Years
-                      </SelectItem>
-                    </SelectContent>
-                    <SelectContent position="item-aligned">
-                      <SelectItem key="months" value="months">
-                        Months
-                      </SelectItem>
-                    </SelectContent>
-                    <SelectContent position="item-aligned">
-                      <SelectItem key="days" value="days">
-                        Days
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </Field>
-              )}
-            />
+                      <SelectTrigger
+                        id="form-rhf-select-fixedDeposit-tenure"
+                        aria-invalid={fieldState.invalid}
+                        className="min-w-[120px]"
+                      >
+                        <SelectValue placeholder="Years" />
+                      </SelectTrigger>
+                      <SelectContent position="item-aligned">
+                        {FIXED_DEPOSIT_YEAR_GROUPS.map(yearGroup => (
+                          <SelectGroup>
+                            <SelectLabel>{yearGroup.groupLabel}</SelectLabel>
+                            {
+                              yearGroup.years.map(year => (
+                                <SelectItem value={year} key={year}>{year}</SelectItem>
+                              ))
+                            }
+                          </SelectGroup>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+              />
+              <Controller
+                name="fixedDepositMonths"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id="form-rhf-select-fixedDeposit-tenure"
+                        aria-invalid={fieldState.invalid}
+                        className="min-w-[120px]"
+                      >
+                        <SelectValue placeholder="Months" />
+                      </SelectTrigger>
+                      <SelectContent position="item-aligned">
+                        {FIXED_DEPOSIT_MONTHS.map(month => (<SelectItem value={month} key={month}>{month}</SelectItem>))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+              />
+              <Controller
+                name="fixedDepositDays"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id="form-rhf-select-fixedDeposit-tenure"
+                        aria-invalid={fieldState.invalid}
+                        className="min-w-[120px]"
+                      >
+                        <SelectValue placeholder="Days" />
+                      </SelectTrigger>
+                      <SelectContent position="item-aligned">
+                        {FIXED_DEPOSIT_DAY_GROUPS.map(dayGroup => (
+                          <SelectGroup>
+                            <SelectLabel>{dayGroup.groupLabel}</SelectLabel>
+                            {
+                              dayGroup.days.map(day => (
+                                <SelectItem value={day} key={day}>{day}</SelectItem>
+                              ))
+                            }
+                          </SelectGroup>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+              />
+            </div>
             <Controller
               name="profileName"
               control={form.control}
@@ -223,49 +283,50 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
                 </Field>
               )}
             />
-            {filteredAccounts ? (<Controller
-              name="accountName"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  orientation="responsive"
-                  data-invalid={fieldState.invalid}
-                >
-                  <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-account-type">
-                      Account
-                    </FieldLabel>
-                    <FieldDescription>Choose your account</FieldDescription>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </FieldContent>
-                  <Select
-                    name={field.name}
-                    value={field.value}
-                    onValueChange={field.onChange}
+            {filteredAccounts ?
+              (<Controller
+                name="accountName"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
                   >
-                    <SelectTrigger
-                      id="form-rhf-select-account"
-                      aria-invalid={fieldState.invalid}
-                      className="min-w-[120px]"
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf-select-account-type">
+                        Account
+                      </FieldLabel>
+                      <FieldDescription>Choose your account</FieldDescription>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </FieldContent>
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
                     >
-                      <SelectValue placeholder="Select account" />
-                    </SelectTrigger>
-                    <SelectContent position="item-aligned">
-                      {accounts.map(account => (
-                        <SelectItem
-                          key={account.accountId}
-                          value={account.accountName}
-                        >
-                          {account.accountName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              )}
-            />) : null}
+                      <SelectTrigger
+                        id="form-rhf-select-account"
+                        aria-invalid={fieldState.invalid}
+                        className="min-w-[120px]"
+                      >
+                        <SelectValue placeholder="Select account" />
+                      </SelectTrigger>
+                      <SelectContent position="item-aligned">
+                        {filteredAccounts.map((filteredAccount: Account) => (
+                          <SelectItem
+                            key={filteredAccount.accountId}
+                            value={filteredAccount.accountName}
+                          >
+                            {filteredAccount.accountName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+              />) : null}
             <Controller
               name="fixedDepositStartDate"
               control={form.control}

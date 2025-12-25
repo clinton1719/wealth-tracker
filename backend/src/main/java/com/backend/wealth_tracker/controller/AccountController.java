@@ -11,11 +11,14 @@ import com.backend.wealth_tracker.service.AccountService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.backend.wealth_tracker.helper.Constants.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/accounts")
@@ -31,7 +34,7 @@ public class AccountController {
 
   @GetMapping("/all")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "FIND")
+  @Tag(name = READ_CALL_TAG)
   public List<ResponseAccountDTO> getAllAccounts(@AuthenticationPrincipal UserDetails userDetails)
       throws ResourceNotFoundException {
     return AccountMapper.accountsToResponseAccountDTOs(
@@ -40,7 +43,7 @@ public class AccountController {
 
   @PostMapping("/save")
   @ResponseStatus(HttpStatus.CREATED)
-  @Tag(name = "SAVE")
+  @Tag(name = CREATE_CALL_TAG)
   public ResponseAccountDTO saveAccount(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody CreateAccountDTO createAccountDTO)
@@ -51,17 +54,17 @@ public class AccountController {
 
   @PutMapping("/update")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "UPDATE")
+  @Tag(name = UPDATE_CALL_TAG)
   public ResponseAccountDTO updateAccount(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateAccountDTO updateAccountDTO)
-      throws ResourceNotFoundException, ResourceAlreadyExistsException, UnAuthorizedException {
+      throws ResourceNotFoundException, ResourceAlreadyExistsException {
     return AccountMapper.accountToResponseAccountDTO(
         this.accountService.updateAccount(updateAccountDTO, userDetails.getUsername()));
   }
 
   @DeleteMapping("/delete/{id}")
-  @Tag(name = "DELETE")
+  @Tag(name = DELETE_CALL_TAG)
   @ResponseStatus(HttpStatus.OK)
   public void deleteCategory(
       @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id)

@@ -11,6 +11,7 @@ import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Profile;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.CategoryRepository;
+import com.backend.wealth_tracker.service.expense.ExpenseService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.List;
 import java.util.Objects;

@@ -6,8 +6,8 @@ import static com.backend.wealth_tracker.helper.Helper.loadWebContentFromResourc
 import com.backend.wealth_tracker.dto.request_dto.ExpenseReportRequest;
 import com.backend.wealth_tracker.exception.PdfGenerationException;
 import com.backend.wealth_tracker.model.ExpenseReportModel;
-import com.backend.wealth_tracker.projections.ExpenseReportSummaryProjection;
-import com.backend.wealth_tracker.service.ExpenseService;
+import com.backend.wealth_tracker.projections.expense.ExpenseReportSummaryProjection;
+import com.backend.wealth_tracker.service.expense.ExpenseService;
 import com.backend.wealth_tracker.service.PdfRenderService;
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.backend.wealth_tracker.service;
+package com.backend.wealth_tracker.service.expense;
 
 import com.backend.wealth_tracker.dto.update_dto.UpdateExpenseDTO;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;

@@ -4,10 +4,11 @@ import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+
 import java.math.BigDecimal;
 
 @SuppressWarnings("PMD.DataClass")
-public class ResponseAccountDTO {
+public class ResponseAccountDTO implements Comparable<ResponseAccountDTO>{
   @NotNull private Long accountId;
   @NotBlank private String accountName;
   private String accountDescription;
@@ -66,4 +67,9 @@ public class ResponseAccountDTO {
   public void setProfileId(Long profileId) {
     this.profileId = profileId;
   }
+
+    @Override
+    public int compareTo(@NotNull ResponseAccountDTO responseAccountDTO) {
+        return accountName.compareToIgnoreCase(responseAccountDTO.accountName);
+    }
 }

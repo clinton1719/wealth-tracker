@@ -10,13 +10,16 @@ import com.backend.wealth_tracker.service.ProfileService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.io.IOException;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
+
+import static com.backend.wealth_tracker.helper.Constants.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles")
@@ -32,7 +35,7 @@ public class ProfileController {
 
   @GetMapping(value = "/all")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "FIND")
+  @Tag(name = READ_CALL_TAG)
   public List<ResponseProfileDTO> getAllProfilesForUser(
       @AuthenticationPrincipal UserDetails userDetails) throws ResourceNotFoundException {
     return ProfileMapper.profilesToResponseProfileDTOs(
@@ -41,7 +44,7 @@ public class ProfileController {
 
   @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  @Tag(name = "SAVE")
+  @Tag(name = CREATE_CALL_TAG)
   public ResponseProfileDTO saveProfile(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @ModelAttribute CreateProfileDTO createProfileDTO)
@@ -52,7 +55,7 @@ public class ProfileController {
 
   @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "UPDATE")
+  @Tag(name = UPDATE_CALL_TAG)
   public ResponseProfileDTO updateCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @ModelAttribute UpdateProfileDTO updateProfileDTO)
@@ -63,7 +66,7 @@ public class ProfileController {
 
   @DeleteMapping("/delete/{id}")
   @ResponseStatus(HttpStatus.OK)
-  @Tag(name = "DELETE")
+  @Tag(name = DELETE_CALL_TAG)
   public void deleteCategory(
       @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id)
       throws ResourceNotFoundException {

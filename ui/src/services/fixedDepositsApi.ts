@@ -19,7 +19,7 @@ export const fixedDepositApi = createApi({
   tagTypes: ALL_TAG_TYPES,
   endpoints: builder => ({
     getAllFixedDeposits: builder.query<FixedDeposit[], void>({
-      query: () => `/accounts/all`,
+      query: () => '/investments/fixed-deposits/all',
       providesTags: ['FixedDeposits'],
     }),
     saveFixedDeposit: builder.mutation<FixedDeposit, Partial<FixedDeposit>>({

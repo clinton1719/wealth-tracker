@@ -1,9 +1,11 @@
 package com.backend.wealth_tracker.repository;
 
 import com.backend.wealth_tracker.model.Expense;
-import com.backend.wealth_tracker.projections.*;
+
 import java.time.LocalDate;
 import java.util.List;
+
+import com.backend.wealth_tracker.projections.expense.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
