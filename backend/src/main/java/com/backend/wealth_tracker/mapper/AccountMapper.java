@@ -5,6 +5,8 @@ import com.backend.wealth_tracker.dto.response_dto.ResponseAccountDTO;
 import com.backend.wealth_tracker.model.Account;
 import com.backend.wealth_tracker.model.Profile;
 import com.backend.wealth_tracker.model.User;
+
+import java.util.Comparator;
 import java.util.List;
 
 public final class AccountMapper {
@@ -36,6 +38,6 @@ public final class AccountMapper {
   }
 
   public static List<ResponseAccountDTO> accountsToResponseAccountDTOs(List<Account> accounts) {
-    return accounts.parallelStream().map(AccountMapper::accountToResponseAccountDTO).toList();
+      return accounts.parallelStream().map(AccountMapper::accountToResponseAccountDTO).sorted(Comparator.comparing(ResponseAccountDTO::getAccountName)).toList();
   }
 }

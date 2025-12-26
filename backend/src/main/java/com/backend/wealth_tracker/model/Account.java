@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "accounts")
-@SuppressWarnings("PMD.DataClass")
 public class Account implements Serializable {
 
   @Serial private static final long serialVersionUID = 1L;

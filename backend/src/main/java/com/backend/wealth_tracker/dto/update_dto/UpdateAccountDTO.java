@@ -3,7 +3,7 @@ package com.backend.wealth_tracker.dto.update_dto;
 import com.backend.wealth_tracker.enums.AccountType;
 import jakarta.validation.constraints.NotNull;
 
-@SuppressWarnings("PMD.DataClass")
+
 public class UpdateAccountDTO {
   @NotNull(message = "Account ID cannot be null")
   private Long accountId;

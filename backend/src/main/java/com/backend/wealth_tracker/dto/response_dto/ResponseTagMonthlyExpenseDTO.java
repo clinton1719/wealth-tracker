@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 
-@SuppressWarnings({"PMD.DataClass"})
 public class ResponseTagMonthlyExpenseDTO {
   @NotBlank private String tag;
   @NotNull private YearMonth month;

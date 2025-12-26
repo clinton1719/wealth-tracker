@@ -5,6 +5,8 @@ import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryDTO;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Profile;
 import com.backend.wealth_tracker.model.User;
+
+import java.util.Comparator;
 import java.util.List;
 
 public final class CategoryMapper {
@@ -39,6 +41,6 @@ public final class CategoryMapper {
 
   public static List<ResponseCategoryDTO> categoriesToResponseCategoryDTOs(
       List<Category> categories) {
-    return categories.parallelStream().map(CategoryMapper::categoryToResponseCategoryDTO).toList();
+    return categories.parallelStream().map(CategoryMapper::categoryToResponseCategoryDTO).sorted(Comparator.comparing(ResponseCategoryDTO::getCategoryName)).toList();
   }
 }

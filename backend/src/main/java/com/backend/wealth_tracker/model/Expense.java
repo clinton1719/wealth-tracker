@@ -2,17 +2,17 @@ package com.backend.wealth_tracker.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import java.io.Serial;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Entity(name = "expenses")
 @EntityListeners(AuditingEntityListener.class)
-@SuppressWarnings("PMD.DataClass")
 public class Expense implements Serializable {
   @Serial private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class Expense implements Serializable {
   private String expenseDescription;
 
   @Column(nullable = false)
-  @Positive()
+  @Positive
   private BigDecimal expenseAmount;
 
   @CreatedDate

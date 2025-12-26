@@ -50,13 +50,15 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  @SuppressWarnings("PMD.LawOfDemeter")
   public ResponseEntity<JwtDto> login(@RequestBody @Valid LogInDto logInDto) {
-    var usernamePassword =
+      UsernamePasswordAuthenticationToken usernamePassword =
         new UsernamePasswordAuthenticationToken(logInDto.getUsername(), logInDto.getPassword());
-    var authUser = authenticationManager.authenticate(usernamePassword);
-    var principal = authUser.getPrincipal();
+    var principal = extractPrincipal(usernamePassword);
     var accessToken = tokenService.generateAccessToken((User) principal);
     return ResponseEntity.ok(new JwtDto(accessToken));
   }
+    private Object extractPrincipal(UsernamePasswordAuthenticationToken usernamePassword) {
+        var authUser = authenticationManager.authenticate(usernamePassword);
+        return authUser.getPrincipal();
+    }
 }

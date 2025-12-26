@@ -1,6 +1,5 @@
 package com.backend.wealth_tracker.config;
 
-import com.backend.wealth_tracker.exception.SecurityConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,7 @@ public class AuthConfig {
   @Autowired SecurityFilter securityFilter;
 
   @Bean
-  @SuppressWarnings("PMD.AvoidCatchingGenericException")
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
-    try {
       return httpSecurity
           .csrf(AbstractHttpConfigurer::disable)
           .sessionManagement(
@@ -47,22 +44,12 @@ public class AuthConfig {
                       .authenticated())
           .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
           .build();
-    } catch (Exception e) {
-      LOGGER.atError().log("Failed to build SecurityFilterChain bean", e);
-      throw new SecurityConfigurationException("Failed to build SecurityFilterChain bean", e);
-    }
   }
 
   @Bean
-  @SuppressWarnings("PMD.AvoidCatchingGenericException")
   AuthenticationManager authenticationManager(
       AuthenticationConfiguration authenticationConfiguration) {
-    try {
       return authenticationConfiguration.getAuthenticationManager();
-    } catch (Exception e) {
-      LOGGER.atError().log("Failed to get Authentication manager", e);
-      throw new SecurityConfigurationException("ailed to get Authentication manager", e);
-    }
   }
 
   @Bean

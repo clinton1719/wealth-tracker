@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "profiles")
-@SuppressWarnings("PMD.DataClass")
 public class Profile implements Serializable {
 
   @Serial private static final long serialVersionUID = 1L;

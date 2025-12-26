@@ -4,7 +4,7 @@ import com.backend.wealth_tracker.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-@SuppressWarnings("PMD.DataClass")
+
 public class SignUpDto {
   @NotBlank(message = "Username cannot be blank")
   @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")

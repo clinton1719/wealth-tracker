@@ -3,7 +3,7 @@ package com.backend.wealth_tracker.dto.update_dto;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@SuppressWarnings("PMD.DataClass")
+
 public class UpdateExpenseDTO {
   @NotNull(message = "Expense ID cannot be null")
   private Long expenseId;

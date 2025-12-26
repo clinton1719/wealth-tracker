@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 
-@SuppressWarnings({"PMD.DataClass"})
 public class ResponseCategoryMonthlyExpenseDTO {
   @NotBlank private String categoryName;
   @NotBlank private String categoryColorCode;

@@ -11,7 +11,11 @@ import { Controller } from "react-hook-form"
 import { CalendarComponent } from "../calendar"
 
 export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepositDialogOpen, onSubmit, accounts, profiles }: AddFixedDepositFormProps) {
-  const { watch } = form;
+  const { watch, formState: {errors} } = form;
+
+  const fixedDepositYearsError = errors.fixedDepositYears;
+  const fixedDepositMonthsError = errors.fixedDepositYears;
+  const fixedDepositDaysError = errors.fixedDepositYears;
 
   const profileName = watch('profileName')
   const profile = profiles.find(
@@ -58,7 +62,7 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
           onSubmit={form.handleSubmit(onSubmit)}
           onKeyDown={e => checkKeyDown(e)}
         >
-          <FieldGroup>
+          <FieldGroup className="gap-3">
             <Controller
               name="fixedDepositName"
               control={form.control}
@@ -137,6 +141,9 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
               <FieldDescription>
                 Choose how long the amount is invested for
               </FieldDescription>
+              {fixedDepositYearsError && fixedDepositMonthsError && fixedDepositDaysError ? (
+                <FieldError errors={[(fixedDepositYearsError ?? fixedDepositMonthsError) ?? fixedDepositDaysError]} />
+              ) : null}
             </FieldContent>
             <div className="flex justify-between">
               <Controller
@@ -155,7 +162,6 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
                     >
                       <SelectTrigger
                         id="form-rhf-select-fixedDeposit-tenure"
-                        aria-invalid={fieldState.invalid}
                         className="min-w-[120px]"
                       >
                         <SelectValue placeholder="Years" />
@@ -191,7 +197,6 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
                     >
                       <SelectTrigger
                         id="form-rhf-select-fixedDeposit-tenure"
-                        aria-invalid={fieldState.invalid}
                         className="min-w-[120px]"
                       >
                         <SelectValue placeholder="Months" />
@@ -218,7 +223,6 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
                     >
                       <SelectTrigger
                         id="form-rhf-select-fixedDeposit-tenure"
-                        aria-invalid={fieldState.invalid}
                         className="min-w-[120px]"
                       >
                         <SelectValue placeholder="Days" />

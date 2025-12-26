@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity(name = "categories")
-@SuppressWarnings("PMD.DataClass")
 public class Category implements Serializable {
 
   @Serial private static final long serialVersionUID = 1L;

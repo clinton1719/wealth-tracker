@@ -80,9 +80,9 @@ export const fixedDepositFormSchema = z.object({
   fixedDepositInterestRate: z
     .number({ error: 'Invalid input, please enter a valid amount' })
     .positive('Fixed deposit rate must be greater than zero'),
-  fixedDepositYears: z.string(),
-  fixedDepositMonths: z.string(),
-  fixedDepositDays: z.string(),
+  fixedDepositYears: z.string().min(1, 'Please enter a valid tenure'),
+  fixedDepositMonths: z.string().min(1, 'Please enter a valid tenure'),
+  fixedDepositDays: z.string().min(1, 'Please enter a valid tenure'),
   accountName: z.string().min(1, 'Account is required'),
   profileName: z.string().min(1, 'Profile is required'),
   fixedDepositStartDate: z.date().min(1, 'Fixed deposit start date is required'),

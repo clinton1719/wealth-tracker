@@ -57,7 +57,7 @@ public class AccountController {
   @Tag(name = UPDATE_CALL_TAG)
   public ResponseAccountDTO updateAccount(
       @AuthenticationPrincipal UserDetails userDetails,
-      @Valid @RequestBody UpdateAccountDTO updateAccountDTO)
+      @Valid @RequestBody final UpdateAccountDTO updateAccountDTO)
       throws ResourceNotFoundException, ResourceAlreadyExistsException {
     return AccountMapper.accountToResponseAccountDTO(
         this.accountService.updateAccount(updateAccountDTO, userDetails.getUsername()));

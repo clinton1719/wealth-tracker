@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@SuppressWarnings("PMD.DataClass")
+
 public class ResponseExpenseDTO {
   @NotNull private Long expenseId;
   @NotNull private BigDecimal expenseAmount;

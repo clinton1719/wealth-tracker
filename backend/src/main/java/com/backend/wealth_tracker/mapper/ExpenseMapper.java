@@ -6,7 +6,7 @@ import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.projections.expense.*;
 
 import java.time.YearMonth;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public final class ExpenseMapper {
@@ -69,7 +69,7 @@ public final class ExpenseMapper {
                             projection.getProfileId(),
                             projection.getProfileColorCode()))
                 .toList());
-    Collections.sort(responseCategoryExpenseDTOList);
+      responseCategoryExpenseDTOList.sort(Comparator.comparing(ResponseCategoryExpenseDTO::getExpenseAmount));
     return responseCategoryExpenseDTOList;
   }
 
@@ -87,7 +87,7 @@ public final class ExpenseMapper {
                             projection.getProfileId(),
                             projection.getProfileColorCode()))
                 .toList());
-    Collections.sort(responseTagExpenseDTOList);
+    responseTagExpenseDTOList.sort(Comparator.comparing(ResponseTagExpenseDTO::getExpenseAmount));
     return responseTagExpenseDTOList;
   }
 

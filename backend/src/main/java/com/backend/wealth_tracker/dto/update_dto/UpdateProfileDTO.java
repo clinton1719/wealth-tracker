@@ -3,7 +3,7 @@ package com.backend.wealth_tracker.dto.update_dto;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
-@SuppressWarnings("PMD.DataClass")
+
 public class UpdateProfileDTO {
   @NotNull(message = "Profile ID cannot be null")
   private Long profileId;

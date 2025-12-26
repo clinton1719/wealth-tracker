@@ -1,5 +1,7 @@
 package com.backend.wealth_tracker.controller;
 
+import static com.backend.wealth_tracker.helper.Constants.*;
+
 import com.backend.wealth_tracker.dto.request_dto.CreateProfileDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseProfileDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateProfileDTO;
@@ -10,16 +12,13 @@ import com.backend.wealth_tracker.service.ProfileService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.util.List;
-
-import static com.backend.wealth_tracker.helper.Constants.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles")

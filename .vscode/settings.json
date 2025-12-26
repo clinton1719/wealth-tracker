@@ -14,6 +14,7 @@
         "plaintext": false,
         "markdown": false,
         "scminput": false,
-        "typescriptreact": false
+        "typescriptreact": false,
+        "typescript": true
     },
 }
