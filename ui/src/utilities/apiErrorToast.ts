@@ -17,6 +17,9 @@ export function showApiErrorToast(
         case 409:
             toast.error(error?.data?.message ?? 'Conflict detected.')
             break
+        case 406:
+            toast.error('Insufficient balance in account')
+            break;
         default:
             toast.error(fallbackMessage)
     }

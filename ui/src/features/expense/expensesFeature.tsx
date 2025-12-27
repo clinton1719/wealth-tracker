@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { useExpensesFeature } from '@/hooks/useExpensesFeature'
 import type { FilteredExpense } from '@/types/FilteredExpense'
-import { expenseShouldBePositive } from '@/utilities/errorMessages'
+import { showApiErrorToast } from '@/utilities/apiErrorToast'
+import { formatCurrency, resolveAccountId, resolveCategoryId, resolveProfileId } from '@/utilities/helper'
 import { expenseFormSchema } from '@/utilities/zodSchemas'
 import { toast } from 'sonner'
 import type * as z from 'zod'
@@ -12,31 +13,31 @@ import { ExpensesList } from './expense-feature-components/expensesList'
 import { ExpenseSummaryCards } from './expense-feature-components/expenseSummaryCards'
 
 export default function ExpensesFeature() {
- const {    
-        expenseDialogOpen,
-        setExpenseDialogOpen,
-        isUpdate,
-        setIsUpdate,
-        deleteExpenseDialogOpen,
-        setDeleteExpenseDialogOpen,
-        currentExpense,
-        setCurrentExpense,
-        monthOffset,
-        setMonthOffset,
-        form,
-        expenses,
-        profiles,
-        accounts,
-        categories,
-        saveExpense,
-        updateExpense,
-        deleteExpense,
-        handleUpdateExpense,
-        isError,
-        errorComponent,
-        isLoading,
-        startDate
-    } = useExpensesFeature();
+  const {
+    expenseDialogOpen,
+    setExpenseDialogOpen,
+    isUpdate,
+    setIsUpdate,
+    deleteExpenseDialogOpen,
+    setDeleteExpenseDialogOpen,
+    currentExpense,
+    setCurrentExpense,
+    monthOffset,
+    setMonthOffset,
+    form,
+    expenses,
+    profiles,
+    accounts,
+    categories,
+    saveExpense,
+    updateExpense,
+    deleteExpense,
+    handleUpdateExpense,
+    isError,
+    errorComponent,
+    isLoading,
+    startDate
+  } = useExpensesFeature();
 
   if (
     isLoading
@@ -84,80 +85,29 @@ export default function ExpensesFeature() {
 
   async function saveNewExpense(formData: z.infer<typeof expenseFormSchema>) {
     try {
-      const profile = profiles?.find(
-        profile => profile.profileName === formData.profileName,
-      )
+      if (profiles && accounts && categories) {
+        const profileId = resolveProfileId(profiles, formData.profileName);
+        const accountId = resolveAccountId(accounts, formData.profileName);
+        const categoryId = resolveCategoryId(categories, formData.profileName);
 
-      const category = categories?.find(
-        category => category.categoryName === formData.categoryName,
-      )
+        const result = await saveExpense({
+          ...formData,
+          profileId,
+          accountId,
+          categoryId,
+        }).unwrap()
 
-      const account = accounts?.find(
-        account => account.accountName === formData.accountName,
-      )
+        toast.success(`Expense ${formatCurrency(result.expenseAmount)} saved!`)
 
-      if (!category || !profile || !account) {
+        setExpenseDialogOpen(false)
+      } else {
         toast.error('Invalid data found, refresh and try again')
         return
       }
-
-      const result = await saveExpense({
-        ...formData,
-        profileId: profile.profileId,
-        accountId: account.accountId,
-        categoryId: category.categoryId,
-      }).unwrap()
-
-      toast('Expense saved!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Expense of
-              {' '}
-              {result.expenseAmount}
-              {' '}
-              created at
-              {' '}
-              {result.expenseCreatedAt}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
-
-      setExpenseDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 406) {
-        toast.error(`Insufficient balance in account: ${formData.accountName}`)
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else {
-        toast.error('Failed to create expense, please try again')
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to create account')
       }
     }
   }
@@ -166,76 +116,25 @@ export default function ExpensesFeature() {
     formData: z.infer<typeof expenseFormSchema>,
   ) {
     try {
-      const category = categories?.find(
-        category => category.categoryName === formData.categoryName,
-      )
+      if (categories) {
+        const categoryId = resolveCategoryId(categories, formData.profileName);
+        const result = await updateExpense({
+          ...formData,
+          categoryId,
+        }).unwrap()
 
-      if (!category) {
+        toast.success(`Expense ${formatCurrency(result.expenseAmount)} updated!`)
+
+        setIsUpdate(false)
+        setExpenseDialogOpen(false)
+      } else {
         toast.error('Invalid data found, refresh and try again')
         return
       }
-
-      const result = await updateExpense({
-        ...formData,
-        categoryId: category.categoryId,
-      }).unwrap()
-
-      toast('Expense updated!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Expense of
-              {' '}
-              {result.expenseAmount}
-              {' '}
-              updated at
-              {' '}
-              {result.expenseUpdatedAt}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
-
-      setIsUpdate(false)
-      setExpenseDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 406) {
-        toast.error(`Insufficient balance in account: ${formData.accountName}`)
-      }
-      else if (error.status === 400) {
-        if (expenseShouldBePositive === error.data.error) {
-          toast.error('Expense should be greater than zero')
-        }
-        else {
-          toast.error('Invalid input. Please check your details.')
-        }
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else {
-        toast.error('Failed to update expense, please try again')
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to create account')
       }
     }
   }

@@ -1,3 +1,5 @@
+import type { Account } from "@/types/Account"
+import type { Category } from "@/types/Category"
 import type { Profile } from "@/types/Profile"
 import { toast } from "sonner"
 
@@ -52,6 +54,30 @@ export function resolveProfileId(
     throw new Error('Profile not found');
   }
   return profile.profileId;
+}
+
+export function resolveAccountId(
+  accounts: Account[],
+  accountName: string,
+): number {
+  const account = accounts.find(p => p.accountName === accountName)
+  if (!account) {
+    toast.error('Invalid data found, refresh and try again');
+    throw new Error('Account not found');
+  }
+  return account.accountId;
+}
+
+export function resolveCategoryId(
+  categories: Category[],
+  categoryName: string,
+): number {
+  const category = categories.find(p => p.categoryName === categoryName)
+  if (!category) {
+    toast.error('Invalid data found, refresh and try again');
+    throw new Error('Category not found');
+  }
+  return category.categoryId;
 }
 
 export function getMonthRange(offset: number) {

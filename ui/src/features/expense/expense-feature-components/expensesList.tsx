@@ -1,9 +1,9 @@
+import type { ExpensesListProps } from '@/types/ExpensesListProps'
 import type {
   ColumnFiltersState,
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table'
-import type { ExpensesListProps } from '@/types/ExpensesListProps'
 import {
   flexRender,
   getCoreRowModel,
@@ -15,8 +15,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { ChevronDown } from 'lucide-react'
+import { useMemo } from 'react'
 
-import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -33,6 +33,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import * as React from 'react'
 import { createColumns } from './columnDefinition'
 
 export function ExpensesList({
@@ -43,25 +44,25 @@ export function ExpensesList({
   handleUpdateExpense,
   handleDeleteExpense,
 }: ExpensesListProps) {
-  const categoryMap = React.useMemo(() => {
+  const categoryMap = useMemo(() => {
     if (!categoriesData)
       return {}
     return Object.fromEntries(categoriesData.map(c => [c.categoryId, c]))
   }, [categoriesData])
 
-  const accountMap = React.useMemo(() => {
+  const accountMap = useMemo(() => {
     if (!accountsData)
       return {}
     return Object.fromEntries(accountsData.map(a => [a.accountId, a]))
   }, [accountsData])
 
-  const profileMap = React.useMemo(() => {
+  const profileMap = useMemo(() => {
     if (!profilesData)
       return {}
     return Object.fromEntries(profilesData.map(p => [p.profileId, p]))
   }, [profilesData])
 
-  const filteredExpensesData = React.useMemo(() => {
+  const filteredExpensesData = useMemo(() => {
     return expensesData
       .map(expense => ({
         expenseId: expense.expenseId,
