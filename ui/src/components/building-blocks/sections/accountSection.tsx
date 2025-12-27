@@ -6,7 +6,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { Account } from '@/types/Account'
 import type { AccountSectionProps } from '@/types/AccountSectionProps'
 import { formatCurrency } from '@/utilities/helper'
 import { DynamicIcon } from 'lucide-react/dynamic'
@@ -22,21 +21,9 @@ import {
 export function AccountSection({
   account,
   profile,
-  form,
-  setAccountDialogOpen,
-  setIsUpdate,
   handleDeleteAccount,
+  handleUpdateAccount
 }: AccountSectionProps) {
-  const handleUpdateAccount = (account: Account) => {
-    form.reset({
-      ...account,
-      accountDescription: account.accountDescription ?? '',
-    })
-    form.setValue('profileName', profile.profileName)
-    setAccountDialogOpen(true)
-    setIsUpdate(true)
-  }
-
   return (
     <Card
       className='card card-border'
@@ -69,7 +56,7 @@ export function AccountSection({
 
             <DropdownMenuContent align="end" className="bg-white">
               <DropdownMenuItem
-                onClick={() => handleUpdateAccount(account)}
+                onClick={() => handleUpdateAccount(account, profile)}
                 className="cursor-pointer"
               >
                 Edit

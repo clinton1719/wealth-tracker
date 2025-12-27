@@ -1,10 +1,3 @@
-import type * as z from 'zod'
-import type { Category } from '@/types/Category'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Fragment, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddCategoryForm } from '@/components/building-blocks/forms/addCategoryForm'
 import { CategorySection } from '@/components/building-blocks/sections/categorySection'
@@ -20,92 +13,45 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
-import { useApiError } from '@/hooks/use-api-error'
-import {
-  useDeleteCategoryMutation,
-  useGetAllCategoriesQuery,
-  useSaveCategoryMutation,
-  useUpdateCategoryMutation,
-} from '@/services/categoriesApi'
-import { useGetAllProfilesForUserQuery } from '@/services/profilesApi'
-import { selectProfileSlice } from '@/slices/profileSlice'
-import { defaultCategory } from '@/utilities/constants'
+import { useCategoriesFeature } from '@/hooks/useCategoriesFeature'
+import type { Category } from '@/types/Category'
 import { categoryFormSchema } from '@/utilities/zodSchemas'
+import { Fragment } from 'react'
+import { toast } from 'sonner'
+import type * as z from 'zod'
 
 export default function CategoriesFeature() {
-  const [isUpdate, setIsUpdate] = useState(false)
-  const [deleteCategoryDialogOpen, setDeleteCategoryDialogOpen]
-    = useState<boolean>(false)
-  const [currentCategory, setCurrentCategory] = useState<
-    Category | undefined
-  >()
-  const [categoryDialogOpen, setCategoryDialogOpen] = useState<boolean>(false)
-  const [categorySearchText, setACategorySearchText] = useState('')
-  const [selectedTag, setSelectedTag] = useState('')
-
-  const form = useForm<z.infer<typeof categoryFormSchema>>({
-    resolver: zodResolver(categoryFormSchema),
-    mode: 'onSubmit',
-    defaultValues: defaultCategory,
-  })
-
-  const [saveCategory, { isLoading: saveCategoryLoading }]
-    = useSaveCategoryMutation()
-  const [updateCategory, { isLoading: updateCategoryLoading }]
-    = useUpdateCategoryMutation()
-  const [deleteCategory, { isLoading: deleteCategoryLoading }]
-    = useDeleteCategoryMutation()
   const {
-    error: categoriesError,
-    isLoading: getAllCategoriesLoading,
-    isFetching: getAllCategoriesFetching,
-    data: categoriesData,
-  } = useGetAllCategoriesQuery()
-  const {
-    error: profilesError,
-    isLoading: getAllProfilesLoading,
-    data: profilesData,
-  } = useGetAllProfilesForUserQuery()
-  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
-  const {
-    isError: isCategoriesError,
-    errorComponent: categoriesErrorComponent,
-  } = useApiError(categoriesError)
-  const { isError: isProfilesError, errorComponent: profilesErrorComponent }
-    = useApiError(profilesError)
-
-  const filteredCategoriesData = useMemo(() => categoriesData?.filter((category) => {
-    return (
-      enabledMap[category.profileId]
-      && (!categorySearchText
-        || category.categoryName
-          .toLowerCase()
-          .includes(categorySearchText.toLowerCase()))
-        && (selectedTag ? category.categoryTags?.includes(selectedTag) : true)
-    )
-  }), [categoriesData, enabledMap, categorySearchText, selectedTag])
-
-  const tags = useMemo(() => filteredCategoriesData?.flatMap(
-    category => category.categoryTags,
-  ), [filteredCategoriesData])
-  const uniqueTags = [...new Set(tags)]
+    isUpdate,
+    setIsUpdate,
+    deleteCategoryDialogOpen,
+    setDeleteCategoryDialogOpen,
+    currentCategory,
+    setCurrentCategory,
+    categoryDialogOpen,
+    setCategoryDialogOpen,
+    setCategorySearchText,
+    selectedTag,
+    setSelectedTag,
+    form,
+    categories,
+    tags,
+    saveCategory,
+    updateCategory,
+    deleteCategory,
+    isError,
+    errorComponent,
+    isLoading, profiles
+  } = useCategoriesFeature();
 
   if (
-    saveCategoryLoading
-    || getAllCategoriesFetching
-    || getAllCategoriesLoading
-    || updateCategoryLoading
-    || deleteCategoryLoading
-    || getAllProfilesLoading
+    isLoading
   ) {
     return <Spinner className="spinner" />
   }
 
-  if (isCategoriesError) {
-    return categoriesErrorComponent
-  }
-  if (isProfilesError) {
-    return profilesErrorComponent
+  if (isError) {
+    return errorComponent
   }
 
   async function onSubmit(formData: z.infer<typeof categoryFormSchema>) {
@@ -122,7 +68,7 @@ export default function CategoriesFeature() {
 
   async function saveNewCategory(formData: z.infer<typeof categoryFormSchema>) {
     try {
-      const profile = profilesData?.find(
+      const profile = profiles?.find(
         profile => profile.profileName === formData.profileName,
       )
       if (!profile) {
@@ -190,7 +136,7 @@ export default function CategoriesFeature() {
     formData: z.infer<typeof categoryFormSchema>,
   ) {
     try {
-      const profile = profilesData?.find(
+      const profile = profiles?.find(
         profile => profile.profileName === formData.profileName,
       )
       if (!profile) {
@@ -281,7 +227,7 @@ export default function CategoriesFeature() {
     }
   }
 
-  if (filteredCategoriesData && profilesData) {
+  if (categories && profiles) {
     return (
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-8">
@@ -291,42 +237,42 @@ export default function CategoriesFeature() {
               type="search"
               placeholder="Search categories by name..."
               className="search-bar"
-              onChange={e => setACategorySearchText(e.target.value)}
+              onChange={e => setCategorySearchText(e.target.value)}
             />
             {tags
               ? (
-                  <>
-                    <Select
-                      value={selectedTag}
-                      onValueChange={e => setSelectedTag(e)}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Filter by tags" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Tags</SelectLabel>
-                          {uniqueTags.map((tag) => {
-                            return (
-                              <SelectItem key={tag} value={tag ?? ''}>
-                                {tag}
-                              </SelectItem>
-                            )
-                          })}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <Button
-                      variant="destructive"
-                      onClick={() => setSelectedTag('')}
-                    >
-                      Clear tags
-                    </Button>
-                  </>
-                )
+                <>
+                  <Select
+                    value={selectedTag}
+                    onValueChange={e => setSelectedTag(e)}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Filter by tags" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Tags</SelectLabel>
+                        {tags.map((tag) => {
+                          return (
+                            <SelectItem key={tag} value={tag ?? ''}>
+                              {tag}
+                            </SelectItem>
+                          )
+                        })}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant="destructive"
+                    onClick={() => setSelectedTag('')}
+                  >
+                    Clear tags
+                  </Button>
+                </>
+              )
               : (
-                  <></>
-                )}
+                <></>
+              )}
           </div>
           <AddCategoryForm
             form={form}
@@ -335,14 +281,14 @@ export default function CategoriesFeature() {
             setIsUpdate={setIsUpdate}
             setCategoryDialogOpen={setCategoryDialogOpen}
             onSubmit={onSubmit}
-            profiles={profilesData}
+            profiles={profiles}
           />
         </div>
 
         <div className="normal-grid">
-          {filteredCategoriesData
+          {categories
             .map((category) => {
-              const profile = profilesData.find(
+              const profile = profiles.find(
                 profile => profile.profileId === category.profileId,
               )
               if (profile) {

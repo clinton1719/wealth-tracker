@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { defaultExpense } from '@/utilities/constants'
+import { checkKeyDown } from '@/utilities/helper'
 
 export function AddExpenseForm({
   expenseDialogOpen,
@@ -49,11 +50,6 @@ export function AddExpenseForm({
   const profile = profiles.find(
     profile => profile.profileName === profileName,
   )
-
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
 
   let filteredAccounts
   let filteredCategories

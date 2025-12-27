@@ -1,3 +1,11 @@
+import type { Profile } from "@/types/Profile"
+import { toast } from "sonner"
+
+export const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter')
+      e.preventDefault()
+  }
+
 export function formatDate(date: Date): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -32,4 +40,16 @@ export function base64ToPngBlob(base64: string): Blob {
   }
 
   return new Blob([byteArray], { type: 'image/png' })
+}
+
+export function resolveProfileId(
+  profiles: Profile[],
+  profileName: string,
+): number {
+  const profile = profiles.find(p => p.profileName === profileName)
+  if (!profile) {
+    toast.error('Invalid data found, refresh and try again');
+    throw new Error('Profile not found');
+  }
+  return profile.profileId;
 }

@@ -9,6 +9,7 @@ import { defaultFixedDeposit, FIXED_DEPOSIT_DAY_GROUPS, FIXED_DEPOSIT_MONTHS, FI
 import { PlusCircle } from "lucide-react"
 import { Controller } from "react-hook-form"
 import { CalendarComponent } from "../calendar"
+import { checkKeyDown } from "@/utilities/helper"
 
 export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepositDialogOpen, onSubmit, accounts, profiles }: AddFixedDepositFormProps) {
   const { watch, formState: {errors} } = form;
@@ -21,11 +22,6 @@ export function AddFixedDepositForm({ form, fixedDepositDialogOpen, setFixedDepo
   const profile = profiles.find(
     profile => profile.profileName === profileName,
   )
-
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
 
   let filteredAccounts
 

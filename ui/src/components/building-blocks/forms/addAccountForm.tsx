@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { defaultAccount } from '@/utilities/constants'
+import { checkKeyDown } from '@/utilities/helper'
 
 export function AddAccountForm({
   profiles,
@@ -37,11 +38,6 @@ export function AddAccountForm({
   isUpdate,
   setIsUpdate,
 }: AddAccountFormProps) {
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
-
   return (
     <Dialog open={accountDialogOpen}>
       <DialogTrigger asChild>

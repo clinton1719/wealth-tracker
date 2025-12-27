@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { defaultCategory } from '@/utilities/constants'
+import { checkKeyDown } from '@/utilities/helper'
 
 export function AddCategoryForm({
   form,
@@ -42,11 +43,6 @@ export function AddCategoryForm({
   profiles,
 }: AddCategoryFormProps) {
   const [inputValue, setInputValue] = useState('')
-
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
 
   return (
     <Dialog open={categoryDialogOpen}>

@@ -1,90 +1,46 @@
-import type * as z from 'zod'
-import type { Account } from '@/types/Account'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Fragment, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddAccountForm } from '@/components/building-blocks/forms/addAccountForm'
 import { AccountSection } from '@/components/building-blocks/sections/accountSection'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { useApiError } from '@/hooks/use-api-error'
-import {
-  useDeleteAccountMutation,
-  useGetAllAccountsQuery,
-  useSaveAccountMutation,
-  useUpdateAccountMutation,
-} from '@/services/accountsApi'
-import { useGetAllProfilesForUserQuery } from '@/services/profilesApi'
-import { selectProfileSlice } from '@/slices/profileSlice'
-import { defaultAccount } from '@/utilities/constants'
+import { useAccountsFeature } from '@/hooks/useAccountsFeature'
+import type { Account } from '@/types/Account'
+import type { Profile } from '@/types/Profile'
+import { showApiErrorToast } from '@/utilities/apiErrorToast'
+import { resolveProfileId } from '@/utilities/helper'
 import { accountFormSchema } from '@/utilities/zodSchemas'
+import { Fragment } from 'react'
+import { toast } from 'sonner'
+import type * as z from 'zod'
 
 export function AccountsFeature() {
-  const [isUpdate, setIsUpdate] = useState(false)
-  const [accountDialogOpen, setAccountDialogOpen] = useState<boolean>(false)
-  const [deleteAccountDialogOpen, setDeleteAccountDialogOpen]
-    = useState<boolean>(false)
-  const [currentAccount, setCurrentAccount] = useState<Account | undefined>()
-  const [accountSearchText, setAccountSearchText] = useState('')
-
-  const form = useForm<z.infer<typeof accountFormSchema>>({
-    resolver: zodResolver(accountFormSchema),
-    mode: 'onSubmit',
-    defaultValues: defaultAccount,
-  })
-
-  const {
-    error: accountsError,
-    isLoading: getAllAccountsLoading,
-    isFetching: getAllAccountsFetching,
-    data: accountsData,
-  } = useGetAllAccountsQuery()
-  const {
-    error: profilesError,
-    isLoading: getAllProfilesLoading,
-    data: profilesData,
-  } = useGetAllProfilesForUserQuery()
-  const [saveAccount, { isLoading: saveAccountLoading }]
-    = useSaveAccountMutation()
-  const [updateAccount, { isLoading: updateAccountLoading }]
-    = useUpdateAccountMutation()
-  const [deleteAccount, { isLoading: deleteAccountLoading }]
-    = useDeleteAccountMutation()
-  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
-  const { isError: isAccountsError, errorComponent: accountsErrorComponent }
-    = useApiError(accountsError)
-  const { isError: isProfilesError, errorComponent: profilesErrorComponent }
-    = useApiError(profilesError)
-
-  const filteredAccountsData = useMemo(() => accountsData?.filter((account) => {
-    return (
-      enabledMap[account.profileId]
-      && (!accountSearchText
-        || account.accountName
-          .toLowerCase()
-          .includes(accountSearchText.toLowerCase()))
-    )
-  }), [accountsData, enabledMap, accountSearchText])
+  const { isUpdate,
+    setIsUpdate,
+    accountDialogOpen,
+    setAccountDialogOpen,
+    deleteAccountDialogOpen,
+    setDeleteAccountDialogOpen,
+    currentAccount,
+    setCurrentAccount,
+    setAccountSearchText,
+    form,
+    accounts,
+    profiles,
+    saveAccount,
+    updateAccount,
+    deleteAccount,
+    isError,
+    errorComponent,
+    isLoading, } = useAccountsFeature();
 
   if (
-    getAllAccountsLoading
-    || getAllAccountsFetching
-    || saveAccountLoading
-    || updateAccountLoading
-    || deleteAccountLoading
-    || getAllProfilesLoading
+    isLoading
   ) {
     return <Spinner className="spinner" />
   }
 
-  if (isAccountsError) {
-    return accountsErrorComponent
-  }
-  if (isProfilesError) {
-    return profilesErrorComponent
+  if (isError) {
+    return errorComponent
   }
 
   async function onSubmit(formData: z.infer<typeof accountFormSchema>) {
@@ -101,65 +57,24 @@ export function AccountsFeature() {
 
   async function saveNewAccount(formData: z.infer<typeof accountFormSchema>) {
     try {
-      const profile = profilesData?.find(
-        profile => profile.profileName === formData.profileName,
-      )
-      if (!profile) {
+      if (profiles) {
+        const profileId = resolveProfileId(profiles, formData.profileName);
+        const result = await saveAccount({
+          ...formData,
+          profileId,
+        }).unwrap()
+
+        toast.success(`Account ${result.accountName} saved!`)
+
+        setAccountDialogOpen(false)
+      } else {
         toast.error('Invalid data found, refresh and try again')
         return
       }
-      const result = await saveAccount({
-        ...formData,
-        profileId: profile.profileId,
-      }).unwrap()
-
-      toast('Account saved!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Account name:
-              {result.accountName}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
-
-      setAccountDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 409) {
-        toast.error(
-          `Account already exists with name: ${formData.accountName}`,
-        )
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else {
-        toast.error('Failed to create account, please try again')
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to create account')
       }
     }
   }
@@ -168,87 +83,38 @@ export function AccountsFeature() {
     formData: z.infer<typeof accountFormSchema>,
   ) {
     try {
-      const updatedFormData = {
-        ...formData,
-        accountPicture: undefined,
-      }
-      const profile = profilesData?.find(
-        profile => profile.profileName === updatedFormData.profileName,
-      )
-      if (!profile) {
+      if (profiles) {
+        const profileId = resolveProfileId(profiles, formData.profileName);
+        const updatedFormData = {
+          ...formData,
+          accountPicture: undefined,
+        }
+
+        const result = await updateAccount({
+          ...updatedFormData,
+          profileId,
+        }).unwrap()
+
+        toast.success(`Account ${result.accountName} updated!`)
+
+        setIsUpdate(false)
+        setAccountDialogOpen(false)
+      } else {
         toast.error('Invalid data found, refresh and try again')
         return
       }
-      const result = await updateAccount({
-        ...updatedFormData,
-        profileId: profile.profileId,
-      }).unwrap()
-
-      if (!result) {
-        toast.error('Failed to update account, please try again later')
-        return
-      }
-
-      toast('Account updated!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Account name:
-              {result.accountName}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
-
-      setIsUpdate(false)
-      setAccountDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 409) {
-        toast.error(
-          `Account already exists with name: ${formData.accountName}`,
-        )
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else {
-        toast.error('Failed to update account, please try again')
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to update account')
       }
     }
-  }
-
-  const cancelDeleteAccount = () => {
-    setDeleteAccountDialogOpen(false)
   }
 
   const deleteCurrentAccount = async () => {
     if (currentAccount && currentAccount.accountId) {
       await deleteAccount(currentAccount.accountId).unwrap()
-      toast.info(
+      toast.success(
         `Account : ${currentAccount.accountName} deleted successfully!`,
       )
       setDeleteAccountDialogOpen(false)
@@ -263,7 +129,17 @@ export function AccountsFeature() {
     setCurrentAccount(account)
   }
 
-  if (profilesData) {
+  const handleUpdateAccount = (account: Account, profile: Profile) => {
+    form.reset({
+      ...account,
+      accountDescription: account.accountDescription ?? '',
+    })
+    form.setValue('profileName', profile.profileName)
+    setAccountDialogOpen(true)
+    setIsUpdate(true)
+  }
+
+  if (profiles && accounts) {
     return (
       <div id="accountsSection">
         <div className="flex items-center justify-between mb-8">
@@ -275,7 +151,7 @@ export function AccountsFeature() {
             onChange={e => setAccountSearchText(e.target.value)}
           />
           <AddAccountForm
-            profiles={profilesData}
+            profiles={profiles}
             form={form}
             onSubmit={onSubmit}
             isUpdate={isUpdate}
@@ -285,44 +161,34 @@ export function AccountsFeature() {
           />
         </div>
         <div className="normal-grid">
-          {filteredAccountsData
-            ? (
-                filteredAccountsData
-                  .map((account) => {
-                    const profile = profilesData.find(
-                      profile => profile.profileId === account.profileId,
-                    )
-                    if (profile) {
-                      return (
-                        <AccountSection
-                          account={account}
-                          profile={profile}
-                          key={account.accountId}
-                          form={form}
-                          setIsUpdate={setIsUpdate}
-                          setAccountDialogOpen={setAccountDialogOpen}
-                          handleDeleteAccount={handleDeleteAccount}
-                        />
-                      )
-                    }
-                    else {
-                      return (
-                        <Fragment key={account.accountId}>
-                        </Fragment>
-                      )
-                    }
-                  })
+          {accounts
+            .map((account) => {
+              const profile = profiles.find(
+                profile => profile.profileId === account.profileId,
               )
-            : (
-                <p className="text-muted-foreground text-sm">
-                  Create a new account here
-                </p>
-              )}
+              if (profile) {
+                return (
+                  <AccountSection
+                    account={account}
+                    profile={profile}
+                    key={account.accountId}
+                    handleUpdateAccount={handleUpdateAccount}
+                    handleDeleteAccount={handleDeleteAccount}
+                  />
+                )
+              }
+              else {
+                return (
+                  <Fragment key={account.accountId}>
+                  </Fragment>
+                )
+              }
+            })}
         </div>
         <AlertDialogComponent
           isDialogOpen={deleteAccountDialogOpen}
           alertType="DELETE_ACCOUNT"
-          onSecondaryButtonClick={cancelDeleteAccount}
+          onSecondaryButtonClick={() => setDeleteAccountDialogOpen(false)}
           onPrimaryButtonClick={deleteCurrentAccount}
         />
       </div>

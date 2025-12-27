@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { defaultProfile } from '@/utilities/constants'
+import { checkKeyDown } from '@/utilities/helper'
 
 export function AddProfileForm({
   profileDialogOpen,
@@ -26,11 +27,6 @@ export function AddProfileForm({
   onSubmit,
   setIsUpdate,
 }: AddProfileFormProps) {
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
-
   return (
     <Dialog open={profileDialogOpen}>
       <DialogTrigger asChild>
