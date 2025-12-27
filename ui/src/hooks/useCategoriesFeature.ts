@@ -50,7 +50,12 @@ export function useCategoriesFeature() {
         = useApiError(profilesQuery.error)
 
     const isError = isCategoriesError || isProfilesError;
-    const errorComponent = categoriesErrorComponent ?? profilesErrorComponent;
+    const errorComponent = () => {
+        if (isCategoriesError) return categoriesErrorComponent
+        if (isProfilesError) return profilesErrorComponent
+        return null
+    }
+
     const isLoading = categoriesQuery.isLoading
         || categoriesQuery.isFetching
         || profilesQuery.isLoading
@@ -70,7 +75,7 @@ export function useCategoriesFeature() {
         )
     }), [categoriesQuery.data, enabledMap, categorySearchText, selectedTag])
 
-    const profiles = useMemo(() => profilesQuery.data, [profilesQuery.data])
+    const profiles = profilesQuery.data
 
     const tagsList = useMemo(() => categories?.flatMap(
         category => category.categoryTags,

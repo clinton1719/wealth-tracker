@@ -35,7 +35,7 @@ export function ProfilesFeature() {
   }
 
   if (isError) {
-    return errorComponent
+    return errorComponent;
   }
 
   async function onSubmit(formData: z.infer<typeof profileFormSchema>) {

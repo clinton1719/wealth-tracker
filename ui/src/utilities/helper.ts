@@ -2,9 +2,9 @@ import type { Profile } from "@/types/Profile"
 import { toast } from "sonner"
 
 export const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
+  if (e.key === 'Enter')
+    e.preventDefault()
+}
 
 export function formatDate(date: Date): string {
   const year = date.getFullYear()
@@ -52,4 +52,15 @@ export function resolveProfileId(
     throw new Error('Profile not found');
   }
   return profile.profileId;
+}
+
+export function getMonthRange(offset: number) {
+  const now = new Date()
+  const start = new Date(now.getFullYear(), now.getMonth() + offset, 1)
+  const end = new Date(now.getFullYear(), now.getMonth() + offset + 1, offset === 0 ? now.getDate() : 0)
+
+  return {
+    startDate: formatDate(start),
+    endDate: formatDate(end),
+  }
 }

@@ -40,7 +40,7 @@ export function AccountsFeature() {
   }
 
   if (isError) {
-    return errorComponent
+    return errorComponent()
   }
 
   async function onSubmit(formData: z.infer<typeof accountFormSchema>) {

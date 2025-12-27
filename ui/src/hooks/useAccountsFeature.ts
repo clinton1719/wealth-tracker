@@ -46,8 +46,12 @@ export function useAccountsFeature() {
         = useApiError(profilesQuery.error)
 
     const isError = isAccountsError || isProfilesError;
-    const errorComponent = accountsErrorComponent ?? profilesErrorComponent;
-
+    
+    const errorComponent = () => {
+        if (isAccountsError) return accountsErrorComponent
+        if (isProfilesError) return profilesErrorComponent
+        return null
+    }
     const isLoading = accountsQuery.isLoading
         || accountsQuery.isFetching
         || saveAccountState.isLoading
@@ -65,7 +69,7 @@ export function useAccountsFeature() {
                     .includes(accountSearchText.toLowerCase()))
         )
     }), [accountsQuery.data, enabledMap, accountSearchText])
-    const profiles = useMemo(() => profilesQuery.data, [profilesQuery.data])
+    const profiles = profilesQuery.data
 
     return {
         isUpdate,

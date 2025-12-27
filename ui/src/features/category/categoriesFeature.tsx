@@ -16,6 +16,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useCategoriesFeature } from '@/hooks/useCategoriesFeature'
 import type { Category } from '@/types/Category'
 import { showApiErrorToast } from '@/utilities/apiErrorToast'
+import { resolveProfileId } from '@/utilities/helper'
 import { categoryFormSchema } from '@/utilities/zodSchemas'
 import { Fragment } from 'react'
 import { toast } from 'sonner'
@@ -52,7 +53,7 @@ export default function CategoriesFeature() {
   }
 
   if (isError) {
-    return errorComponent
+    return errorComponent()
   }
 
   async function onSubmit(formData: z.infer<typeof categoryFormSchema>) {
@@ -69,51 +70,26 @@ export default function CategoriesFeature() {
 
   async function saveNewCategory(formData: z.infer<typeof categoryFormSchema>) {
     try {
-      const profile = profiles?.find(
-        profile => profile.profileName === formData.profileName,
-      )
-      if (!profile) {
+      if (profiles) {
+        const profileId = resolveProfileId(profiles, formData.profileName);
+
+        const result = await saveCategory({
+          ...formData,
+          profileId,
+        }).unwrap()
+
+        toast.success(`Category ${result.categoryName} saved!`)
+
+        setCategoryDialogOpen(false)
+      } else {
         toast.error('Invalid data found, refresh and try again')
         return
       }
-
-      const result = await saveCategory({
-        ...formData,
-        profileId: profile.profileId,
-      }).unwrap()
-
-      toast('Category saved!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Category name:
-              {result.categoryName}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
-
-      setCategoryDialogOpen(false)
     }
     catch (error: any) {
       if (error.status) {
-              showApiErrorToast(error, 'Failed to update account')
-            }
+        showApiErrorToast(error, 'Failed to update account');
+      }
     }
   }
 
@@ -121,71 +97,23 @@ export default function CategoriesFeature() {
     formData: z.infer<typeof categoryFormSchema>,
   ) {
     try {
-      const profile = profiles?.find(
-        profile => profile.profileName === formData.profileName,
-      )
-      if (!profile) {
-        toast.error('Invalid data found, refresh and try again')
-        return
-      }
-      const result = await updateCategory({
-        ...formData,
-        profileId: profile.profileId,
-      }).unwrap()
+      if (profiles) {
+        const profileId = resolveProfileId(profiles, formData.profileName);
+        const result = await updateCategory({
+          ...formData,
+          profileId,
+        }).unwrap();
 
-      if (!result) {
-        toast.error('Failed to update category, please try again later')
-        return
+        toast.success(`Category ${result.categoryName} updated!`)
+
+        setIsUpdate(false)
+        setCategoryDialogOpen(false)
       }
 
-      toast('Category updated!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Category name:
-              {result.categoryName}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
-
-      setIsUpdate(false)
-      setCategoryDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 409) {
-        toast.error(
-          `Category already exists with name: ${formData.categoryName}`,
-        )
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else {
-        toast.error('Failed to update category, please try again')
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to update account');
       }
     }
   }

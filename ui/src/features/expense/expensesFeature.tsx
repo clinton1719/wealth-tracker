@@ -1,150 +1,51 @@
-import type * as z from 'zod'
-import type { FilteredExpense } from '@/types/FilteredExpense'
-import type { UpdateExpense } from '@/types/UpdateExpense'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useCallback, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddExpenseForm } from '@/components/building-blocks/forms/addExpenseForm'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
-import { useApiError } from '@/hooks/use-api-error'
-import { useGetAllAccountsQuery } from '@/services/accountsApi'
-import { useGetAllCategoriesQuery } from '@/services/categoriesApi'
-import {
-  useDeleteExpenseMutation,
-  useGetAllExpensesInRangeQuery,
-  useSaveExpenseMutation,
-  useUpdateExpenseMutation,
-} from '@/services/expensesApi'
-import { useGetAllProfilesForUserQuery } from '@/services/profilesApi'
-import { selectProfileSlice } from '@/slices/profileSlice'
-import { defaultExpense } from '@/utilities/constants'
+import { useExpensesFeature } from '@/hooks/useExpensesFeature'
+import type { FilteredExpense } from '@/types/FilteredExpense'
 import { expenseShouldBePositive } from '@/utilities/errorMessages'
-import { formatDate } from '@/utilities/helper'
 import { expenseFormSchema } from '@/utilities/zodSchemas'
+import { toast } from 'sonner'
+import type * as z from 'zod'
 import { ExpensesList } from './expense-feature-components/expensesList'
 import { ExpenseSummaryCards } from './expense-feature-components/expenseSummaryCards'
 
 export default function ExpensesFeature() {
-  const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false)
-  const [isUpdate, setIsUpdate] = useState(false)
-  const [deleteExpenseDialogOpen, setDeleteExpenseDialogOpen]
-    = useState<boolean>(false)
-  const [currentExpense, setCurrentExpense] = useState<
-    Partial<FilteredExpense> | undefined
-  >()
-  const [monthOffset, setMonthOffset] = useState(0)
-
-  const form = useForm<z.infer<typeof expenseFormSchema>>({
-    resolver: zodResolver(expenseFormSchema),
-    mode: 'onSubmit',
-    defaultValues: defaultExpense,
-  })
-
-  function getMonthRange(offset: number) {
-    const now = new Date()
-    const start = new Date(now.getFullYear(), now.getMonth() + offset, 1)
-    const end = new Date(now.getFullYear(), now.getMonth() + offset + 1, offset === 0 ? now.getDate() : 0)
-
-    return {
-      startDate: formatDate(start),
-      endDate: formatDate(end),
-    }
-  }
-
-  const { startDate, endDate } = useMemo(
-    () => getMonthRange(monthOffset),
-    [monthOffset],
-  )
-
-  const {
-    data: expensesData,
-    isLoading: getAllExpensesLoading,
-    isFetching: getAllExpensesFetching,
-    error: expensesError,
-  } = useGetAllExpensesInRangeQuery({
-    startDate,
-    endDate,
-  })
-  const [saveExpense, { isLoading: saveExpenseLoading }]
-    = useSaveExpenseMutation()
-  const [updateExpense, { isLoading: updateExpenseLoading }]
-    = useUpdateExpenseMutation()
-  const [deleteExpense, { isLoading: deleteExpenseLoading }]
-    = useDeleteExpenseMutation()
-  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
-  const {
-    error: profilesError,
-    isLoading: getAllProfilesLoading,
-    isFetching: getAllProfilesFetching,
-    data: profilesData,
-  } = useGetAllProfilesForUserQuery()
-  const {
-    error: accountsError,
-    isLoading: getAllAccountsLoading,
-    isFetching: getAllAccountsFetching,
-    data: accountsData,
-  } = useGetAllAccountsQuery()
-  const {
-    error: categoriesError,
-    isLoading: getAllCategoriesLoading,
-    isFetching: getAllCategoriesFetching,
-    data: categoriesData,
-  } = useGetAllCategoriesQuery()
-
-  const handleUpdateExpense = useCallback(
-    (updateExpense: UpdateExpense) => {
-      form.reset({
-        ...updateExpense,
-        expenseDescription: updateExpense.expenseDescription ?? '',
-      })
-      setExpenseDialogOpen(true)
-      setIsUpdate(true)
-    },
-    [form],
-  )
-
-  const { isError: isExpensesError, errorComponent: expensesErrorComponent }
-    = useApiError(expensesError)
-  const { isError: isProfilesError, errorComponent: profilesErrorComponent }
-    = useApiError(profilesError)
-  const { isError: isAccountsError, errorComponent: accountsErrorComponent }
-    = useApiError(accountsError)
-  const {
-    isError: isCategoriesError,
-    errorComponent: categoriesErrorComponent,
-  } = useApiError(categoriesError)
+ const {    
+        expenseDialogOpen,
+        setExpenseDialogOpen,
+        isUpdate,
+        setIsUpdate,
+        deleteExpenseDialogOpen,
+        setDeleteExpenseDialogOpen,
+        currentExpense,
+        setCurrentExpense,
+        monthOffset,
+        setMonthOffset,
+        form,
+        expenses,
+        profiles,
+        accounts,
+        categories,
+        saveExpense,
+        updateExpense,
+        deleteExpense,
+        handleUpdateExpense,
+        isError,
+        errorComponent,
+        isLoading,
+        startDate
+    } = useExpensesFeature();
 
   if (
-    getAllExpensesLoading
-    || getAllProfilesLoading
-    || getAllAccountsLoading
-    || getAllCategoriesLoading
-    || saveExpenseLoading
-    || updateExpenseLoading
-    || deleteExpenseLoading
-    || getAllAccountsFetching
-    || getAllExpensesFetching
-    || getAllCategoriesFetching
-    || getAllProfilesFetching
+    isLoading
   ) {
     return <Spinner className="spinner" />
   }
 
-  if (isExpensesError) {
-    return expensesErrorComponent
-  }
-  else if (isProfilesError) {
-    return profilesErrorComponent
-  }
-  else if (isAccountsError) {
-    return accountsErrorComponent
-  }
-  else if (isCategoriesError) {
-    return categoriesErrorComponent
+  if (isError) {
+    return errorComponent
   }
 
   const cancelDeleteExpense = () => {
@@ -183,15 +84,15 @@ export default function ExpensesFeature() {
 
   async function saveNewExpense(formData: z.infer<typeof expenseFormSchema>) {
     try {
-      const profile = profilesData?.find(
+      const profile = profiles?.find(
         profile => profile.profileName === formData.profileName,
       )
 
-      const category = categoriesData?.find(
+      const category = categories?.find(
         category => category.categoryName === formData.categoryName,
       )
 
-      const account = accountsData?.find(
+      const account = accounts?.find(
         account => account.accountName === formData.accountName,
       )
 
@@ -265,7 +166,7 @@ export default function ExpensesFeature() {
     formData: z.infer<typeof expenseFormSchema>,
   ) {
     try {
-      const category = categoriesData?.find(
+      const category = categories?.find(
         category => category.categoryName === formData.categoryName,
       )
 
@@ -339,13 +240,7 @@ export default function ExpensesFeature() {
     }
   }
 
-  let enabledExpenses
-
-  if (expensesData) {
-    enabledExpenses = expensesData.filter(expense => enabledMap[expense.profileId])
-  }
-
-  if (enabledExpenses && profilesData && accountsData && categoriesData) {
+  if (expenses && profiles && accounts && categories) {
     return (
       <div className="container mx-auto p-4 min-h-screen mb-4">
         <div className="flex items-center justify-between">
@@ -364,14 +259,14 @@ export default function ExpensesFeature() {
             setIsUpdate={setIsUpdate}
             form={form}
             onSubmit={onSubmit}
-            profiles={profilesData}
-            accounts={accountsData}
-            categories={categoriesData}
+            profiles={profiles}
+            accounts={accounts}
+            categories={categories}
           />
         </div>
         <ExpenseSummaryCards
-          expensesData={enabledExpenses}
-          categoriesData={categoriesData}
+          expensesData={expenses}
+          categoriesData={categories}
         />
         <div className="flex items-center justify-between mb-4 mt-8">
           <Button
@@ -401,10 +296,10 @@ export default function ExpensesFeature() {
           </Button>
         </div>
         <ExpensesList
-          expensesData={enabledExpenses}
-          categoriesData={categoriesData}
-          accountsData={accountsData}
-          profilesData={profilesData}
+          expensesData={expenses}
+          categoriesData={categories}
+          accountsData={accounts}
+          profilesData={profiles}
           handleUpdateExpense={handleUpdateExpense}
           handleDeleteExpense={handleDeleteExpense}
         />
