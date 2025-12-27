@@ -15,6 +15,7 @@ import {
 import { Spinner } from '@/components/ui/spinner'
 import { useCategoriesFeature } from '@/hooks/useCategoriesFeature'
 import type { Category } from '@/types/Category'
+import { showApiErrorToast } from '@/utilities/apiErrorToast'
 import { categoryFormSchema } from '@/utilities/zodSchemas'
 import { Fragment } from 'react'
 import { toast } from 'sonner'
@@ -110,25 +111,9 @@ export default function CategoriesFeature() {
       setCategoryDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 409) {
-        toast.error(
-          `Category already exists with name: ${formData.categoryName}`,
-        )
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else {
-        toast.error('Failed to create category, please try again')
-      }
+      if (error.status) {
+              showApiErrorToast(error, 'Failed to update account')
+            }
     }
   }
 
