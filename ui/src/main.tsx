@@ -11,8 +11,8 @@ import SignUp from '@/features/auth/signUp.tsx'
 import { store } from '@/store.ts'
 import ErrorBoundary from './components/error-boundary/error-boundary'
 import { ExpenseStatistics } from './features/expense/expenseStatistics'
-import '@/styles/index.css'
 import DepositsFeature from './features/investment/deposit/depositsFeature'
+import '@/styles/index.css'
 
 const App = lazy(() => import('@/App.tsx'))
 const CategoriesSection = lazy(

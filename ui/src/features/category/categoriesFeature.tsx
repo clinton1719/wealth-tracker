@@ -1,3 +1,8 @@
+import type * as z from 'zod'
+import type { Category } from '@/types/Category'
+import type { categoryFormSchema } from '@/utilities/zodSchemas'
+import { Fragment } from 'react'
+import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddCategoryForm } from '@/components/building-blocks/forms/addCategoryForm'
 import { CategorySection } from '@/components/building-blocks/sections/categorySection'
@@ -14,13 +19,8 @@ import {
 } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
 import { useCategoriesFeature } from '@/hooks/useCategoriesFeature'
-import type { Category } from '@/types/Category'
 import { showApiErrorToast } from '@/utilities/apiErrorToast'
 import { resolveProfileId } from '@/utilities/helper'
-import { categoryFormSchema } from '@/utilities/zodSchemas'
-import { Fragment } from 'react'
-import { toast } from 'sonner'
-import type * as z from 'zod'
 
 export default function CategoriesFeature() {
   const {
@@ -43,8 +43,9 @@ export default function CategoriesFeature() {
     deleteCategory,
     isError,
     errorComponent,
-    isLoading, profiles
-  } = useCategoriesFeature();
+    isLoading,
+    profiles,
+  } = useCategoriesFeature()
 
   if (
     isLoading
@@ -71,7 +72,7 @@ export default function CategoriesFeature() {
   async function saveNewCategory(formData: z.infer<typeof categoryFormSchema>) {
     try {
       if (profiles) {
-        const profileId = resolveProfileId(profiles, formData.profileName);
+        const profileId = resolveProfileId(profiles, formData.profileName)
 
         const result = await saveCategory({
           ...formData,
@@ -81,14 +82,14 @@ export default function CategoriesFeature() {
         toast.success(`Category ${result.categoryName} saved!`)
 
         setCategoryDialogOpen(false)
-      } else {
+      }
+      else {
         toast.error('Invalid data found, refresh and try again')
-        return
       }
     }
     catch (error: any) {
       if (error.status) {
-        showApiErrorToast(error, 'Failed to update account');
+        showApiErrorToast(error, 'Failed to update account')
       }
     }
   }
@@ -98,22 +99,21 @@ export default function CategoriesFeature() {
   ) {
     try {
       if (profiles) {
-        const profileId = resolveProfileId(profiles, formData.profileName);
+        const profileId = resolveProfileId(profiles, formData.profileName)
         const result = await updateCategory({
           ...formData,
           profileId,
-        }).unwrap();
+        }).unwrap()
 
         toast.success(`Category ${result.categoryName} updated!`)
 
         setIsUpdate(false)
         setCategoryDialogOpen(false)
       }
-
     }
     catch (error: any) {
       if (error.status) {
-        showApiErrorToast(error, 'Failed to update account');
+        showApiErrorToast(error, 'Failed to update account')
       }
     }
   }
@@ -154,38 +154,38 @@ export default function CategoriesFeature() {
             />
             {tags
               ? (
-                <>
-                  <Select
-                    value={selectedTag}
-                    onValueChange={e => setSelectedTag(e)}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Filter by tags" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Tags</SelectLabel>
-                        {tags.map((tag) => {
-                          return (
-                            <SelectItem key={tag} value={tag ?? ''}>
-                              {tag}
-                            </SelectItem>
-                          )
-                        })}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    variant="destructive"
-                    onClick={() => setSelectedTag('')}
-                  >
-                    Clear tags
-                  </Button>
-                </>
-              )
+                  <>
+                    <Select
+                      value={selectedTag}
+                      onValueChange={e => setSelectedTag(e)}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Filter by tags" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Tags</SelectLabel>
+                          {tags.map((tag) => {
+                            return (
+                              <SelectItem key={tag} value={tag ?? ''}>
+                                {tag}
+                              </SelectItem>
+                            )
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      variant="destructive"
+                      onClick={() => setSelectedTag('')}
+                    >
+                      Clear tags
+                    </Button>
+                  </>
+                )
               : (
-                <></>
-              )}
+                  <></>
+                )}
           </div>
           <AddCategoryForm
             form={form}

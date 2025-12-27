@@ -1,9 +1,9 @@
-import type { ExpensesListProps } from '@/types/ExpensesListProps'
 import type {
   ColumnFiltersState,
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table'
+import type { ExpensesListProps } from '@/types/ExpensesListProps'
 import {
   flexRender,
   getCoreRowModel,
@@ -17,6 +17,7 @@ import {
 import { ChevronDown } from 'lucide-react'
 import { useMemo } from 'react'
 
+import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -33,7 +34,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import * as React from 'react'
 import { createColumns } from './columnDefinition'
 
 export function ExpensesList({

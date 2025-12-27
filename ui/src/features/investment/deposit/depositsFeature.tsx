@@ -1,6 +1,5 @@
-import { Separator } from "@radix-ui/react-separator";
-import { FixedDepositFeature } from "./fixedDepositFeature";
-import { RecurringDespositFeature } from "./recurringDespositFeature";
+import { Separator } from '@radix-ui/react-separator'
+import { FixedDepositFeature } from './fixedDepositFeature'
 
 export default function DepositsFeature() {
   return (

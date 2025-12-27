@@ -1,9 +1,9 @@
-import type { Account } from "@/types/Account"
-import type { Category } from "@/types/Category"
-import type { Profile } from "@/types/Profile"
-import { toast } from "sonner"
+import type { Account } from '@/types/Account'
+import type { Category } from '@/types/Category'
+import type { Profile } from '@/types/Profile'
+import { toast } from 'sonner'
 
-export const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+export function checkKeyDown(e: React.KeyboardEvent<HTMLFormElement>) {
   if (e.key === 'Enter')
     e.preventDefault()
 }
@@ -50,10 +50,10 @@ export function resolveProfileId(
 ): number {
   const profile = profiles.find(p => p.profileName === profileName)
   if (!profile) {
-    toast.error('Invalid data found, refresh and try again');
-    throw new Error('Profile not found');
+    toast.error('Invalid data found, refresh and try again')
+    throw new Error('Profile not found')
   }
-  return profile.profileId;
+  return profile.profileId
 }
 
 export function resolveAccountId(
@@ -62,10 +62,10 @@ export function resolveAccountId(
 ): number {
   const account = accounts.find(p => p.accountName === accountName)
   if (!account) {
-    toast.error('Invalid data found, refresh and try again');
-    throw new Error('Account not found');
+    toast.error('Invalid data found, refresh and try again')
+    throw new Error('Account not found')
   }
-  return account.accountId;
+  return account.accountId
 }
 
 export function resolveCategoryId(
@@ -74,10 +74,10 @@ export function resolveCategoryId(
 ): number {
   const category = categories.find(p => p.categoryName === categoryName)
   if (!category) {
-    toast.error('Invalid data found, refresh and try again');
-    throw new Error('Category not found');
+    toast.error('Invalid data found, refresh and try again')
+    throw new Error('Category not found')
   }
-  return category.categoryId;
+  return category.categoryId
 }
 
 export function getMonthRange(offset: number) {

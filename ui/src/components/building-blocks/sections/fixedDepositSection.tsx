@@ -1,3 +1,5 @@
+import type { FixedDepositSectionProps } from '@/types/FixedDepositSectionProps'
+import { DynamicIcon } from 'lucide-react/dynamic'
 import { ProfilePicture } from '@/components/building-blocks/profilePicture'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -7,27 +9,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { FixedDepositSectionProps } from '@/types/FixedDepositSectionProps'
-import { formatCurrency, formatDate } from '@/utilities/helper'
-import { DynamicIcon } from 'lucide-react/dynamic'
+import { formatCurrency } from '@/utilities/helper'
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '../../ui/card'
 
 export function FixedDepositSection({
   fixedDeposit,
   profile,
-  handleDeleteFixedDeposit
+  handleDeleteFixedDeposit,
 }: FixedDepositSectionProps) {
-
   return (
     <Card
-      className='card card-border'
+      className="card card-border"
       style={{ borderColor: profile.profileColorCode }}
     >
       <CardHeader className="flex flex-row items-center justify-between">
@@ -93,6 +92,6 @@ export function FixedDepositSection({
           </div>
         </div>
       </CardContent>
-    </Card >
+    </Card>
   )
 }

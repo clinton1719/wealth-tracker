@@ -1,8 +1,8 @@
+import type { FixedDeposit } from '@/types/FixedDeposit'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { selectAuthToken } from '@/slices/authSlice'
 import { baseAPI } from '@/static-values/constants'
-import type { FixedDeposit } from '@/types/FixedDeposit'
 import { ALL_TAG_TYPES } from '@/utilities/constants'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const fixedDepositApi = createApi({
   reducerPath: 'fixedDepositApi',
@@ -41,7 +41,7 @@ export const fixedDepositApi = createApi({
 })
 
 export const {
-    useGetAllFixedDepositsQuery,
-    useSaveFixedDepositMutation,
-    useDeleteFixedDepositMutation
+  useGetAllFixedDepositsQuery,
+  useSaveFixedDepositMutation,
+  useDeleteFixedDepositMutation,
 } = fixedDepositApi

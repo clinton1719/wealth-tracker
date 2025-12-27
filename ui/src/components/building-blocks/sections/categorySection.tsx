@@ -102,10 +102,14 @@ export function CategorySection({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-3 text-sm">
-          {category.categoryDescription ? (<div>
-            <p className="text-muted-foreground">Description</p>
-            <p className="font-medium">{category.categoryDescription}</p>
-          </div>) : null}
+          {category.categoryDescription
+            ? (
+                <div>
+                  <p className="text-muted-foreground">Description</p>
+                  <p className="font-medium">{category.categoryDescription}</p>
+                </div>
+              )
+            : null}
         </div>
       </CardContent>
       <CardFooter className="flex-col gap-2">

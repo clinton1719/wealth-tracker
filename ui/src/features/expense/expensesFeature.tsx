@@ -1,14 +1,14 @@
+import type * as z from 'zod'
+import type { FilteredExpense } from '@/types/FilteredExpense'
+import type { expenseFormSchema } from '@/utilities/zodSchemas'
+import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddExpenseForm } from '@/components/building-blocks/forms/addExpenseForm'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { useExpensesFeature } from '@/hooks/useExpensesFeature'
-import type { FilteredExpense } from '@/types/FilteredExpense'
 import { showApiErrorToast } from '@/utilities/apiErrorToast'
 import { formatCurrency, resolveAccountId, resolveCategoryId, resolveProfileId } from '@/utilities/helper'
-import { expenseFormSchema } from '@/utilities/zodSchemas'
-import { toast } from 'sonner'
-import type * as z from 'zod'
 import { ExpensesList } from './expense-feature-components/expensesList'
 import { ExpenseSummaryCards } from './expense-feature-components/expenseSummaryCards'
 
@@ -36,8 +36,8 @@ export default function ExpensesFeature() {
     isError,
     errorComponent,
     isLoading,
-    startDate
-  } = useExpensesFeature();
+    startDate,
+  } = useExpensesFeature()
 
   if (
     isLoading
@@ -86,9 +86,9 @@ export default function ExpensesFeature() {
   async function saveNewExpense(formData: z.infer<typeof expenseFormSchema>) {
     try {
       if (profiles && accounts && categories) {
-        const profileId = resolveProfileId(profiles, formData.profileName);
-        const accountId = resolveAccountId(accounts, formData.profileName);
-        const categoryId = resolveCategoryId(categories, formData.profileName);
+        const profileId = resolveProfileId(profiles, formData.profileName)
+        const accountId = resolveAccountId(accounts, formData.profileName)
+        const categoryId = resolveCategoryId(categories, formData.profileName)
 
         const result = await saveExpense({
           ...formData,
@@ -100,9 +100,9 @@ export default function ExpensesFeature() {
         toast.success(`Expense ${formatCurrency(result.expenseAmount)} saved!`)
 
         setExpenseDialogOpen(false)
-      } else {
+      }
+      else {
         toast.error('Invalid data found, refresh and try again')
-        return
       }
     }
     catch (error: any) {
@@ -117,7 +117,7 @@ export default function ExpensesFeature() {
   ) {
     try {
       if (categories) {
-        const categoryId = resolveCategoryId(categories, formData.profileName);
+        const categoryId = resolveCategoryId(categories, formData.profileName)
         const result = await updateExpense({
           ...formData,
           categoryId,
@@ -127,9 +127,9 @@ export default function ExpensesFeature() {
 
         setIsUpdate(false)
         setExpenseDialogOpen(false)
-      } else {
+      }
+      else {
         toast.error('Invalid data found, refresh and try again')
-        return
       }
     }
     catch (error: any) {

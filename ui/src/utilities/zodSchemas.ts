@@ -70,7 +70,6 @@ export const expenseFormSchema = z.object({
   profileName: z.string().min(1, 'Profile is required'),
 })
 
-
 export const fixedDepositFormSchema = z.object({
   fixedDepositId: z.number().optional(),
   fixedDepositName: z.string().min(1, 'Fixed deposit name is required'),

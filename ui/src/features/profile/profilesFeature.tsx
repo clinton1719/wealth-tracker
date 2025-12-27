@@ -1,14 +1,14 @@
+import type * as z from 'zod'
+import type { Profile } from '@/types/Profile'
+import type { profileFormSchema } from '@/utilities/zodSchemas'
+import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddProfileForm } from '@/components/building-blocks/forms/addProfileForm'
 import { ProfileSection } from '@/components/building-blocks/sections/profileSection'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { useProfilesFeature } from '@/hooks/useProfilesFeature'
-import type { Profile } from '@/types/Profile'
 import { showApiErrorToast } from '@/utilities/apiErrorToast'
-import { profileFormSchema } from '@/utilities/zodSchemas'
-import { toast } from 'sonner'
-import type * as z from 'zod'
 
 export function ProfilesFeature() {
   const {
@@ -28,14 +28,15 @@ export function ProfilesFeature() {
     deleteProfile,
     isError,
     errorComponent,
-    isLoading, } = useProfilesFeature();
+    isLoading,
+  } = useProfilesFeature()
 
   if (isLoading) {
     return <Spinner className="spinner" />
   }
 
   if (isError) {
-    return errorComponent;
+    return errorComponent
   }
 
   async function onSubmit(formData: z.infer<typeof profileFormSchema>) {
@@ -54,7 +55,7 @@ export function ProfilesFeature() {
     try {
       const result = await saveProfile({ ...formData }).unwrap()
 
-      toast.success(`Profile ${result.profileName} saved!`);
+      toast.success(`Profile ${result.profileName} saved!`)
 
       setProfileDialogOpen(false)
     }
@@ -80,7 +81,7 @@ export function ProfilesFeature() {
         return
       }
 
-      toast.success(`Profile ${result.profileName} update!`);
+      toast.success(`Profile ${result.profileName} update!`)
 
       setIsUpdate(false)
       setProfileDialogOpen(false)
@@ -135,22 +136,22 @@ export function ProfilesFeature() {
       <div className="normal-grid">
         {profiles
           ? (
-            profiles.map(profile => (
-              <ProfileSection
-                profile={profile}
-                key={profile.profileId}
-                form={form}
-                setIsUpdate={setIsUpdate}
-                setProfileDialogOpen={setProfileDialogOpen}
-                handleDeleteProfile={handleDeleteProfile}
-              />
-            ))
-          )
+              profiles.map(profile => (
+                <ProfileSection
+                  profile={profile}
+                  key={profile.profileId}
+                  form={form}
+                  setIsUpdate={setIsUpdate}
+                  setProfileDialogOpen={setProfileDialogOpen}
+                  handleDeleteProfile={handleDeleteProfile}
+                />
+              ))
+            )
           : (
-            <p className="text-muted-foreground text-sm">
-              Create a new profile here
-            </p>
-          )}
+              <p className="text-muted-foreground text-sm">
+                Create a new profile here
+              </p>
+            )}
       </div>
       <AlertDialogComponent
         isDialogOpen={deleteProfileDialogOpen}

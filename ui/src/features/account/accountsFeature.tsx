@@ -1,37 +1,20 @@
+import type * as z from 'zod'
+import type { Account } from '@/types/Account'
+import type { Profile } from '@/types/Profile'
+import type { accountFormSchema } from '@/utilities/zodSchemas'
+import { Fragment } from 'react'
+import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddAccountForm } from '@/components/building-blocks/forms/addAccountForm'
 import { AccountSection } from '@/components/building-blocks/sections/accountSection'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { useAccountsFeature } from '@/hooks/useAccountsFeature'
-import type { Account } from '@/types/Account'
-import type { Profile } from '@/types/Profile'
 import { showApiErrorToast } from '@/utilities/apiErrorToast'
 import { resolveProfileId } from '@/utilities/helper'
-import { accountFormSchema } from '@/utilities/zodSchemas'
-import { Fragment } from 'react'
-import { toast } from 'sonner'
-import type * as z from 'zod'
 
 export function AccountsFeature() {
-  const { isUpdate,
-    setIsUpdate,
-    accountDialogOpen,
-    setAccountDialogOpen,
-    deleteAccountDialogOpen,
-    setDeleteAccountDialogOpen,
-    currentAccount,
-    setCurrentAccount,
-    setAccountSearchText,
-    form,
-    accounts,
-    profiles,
-    saveAccount,
-    updateAccount,
-    deleteAccount,
-    isError,
-    errorComponent,
-    isLoading, } = useAccountsFeature();
+  const { isUpdate, setIsUpdate, accountDialogOpen, setAccountDialogOpen, deleteAccountDialogOpen, setDeleteAccountDialogOpen, currentAccount, setCurrentAccount, setAccountSearchText, form, accounts, profiles, saveAccount, updateAccount, deleteAccount, isError, errorComponent, isLoading } = useAccountsFeature()
 
   if (
     isLoading
@@ -58,7 +41,7 @@ export function AccountsFeature() {
   async function saveNewAccount(formData: z.infer<typeof accountFormSchema>) {
     try {
       if (profiles) {
-        const profileId = resolveProfileId(profiles, formData.profileName);
+        const profileId = resolveProfileId(profiles, formData.profileName)
         const result = await saveAccount({
           ...formData,
           profileId,
@@ -67,9 +50,9 @@ export function AccountsFeature() {
         toast.success(`Account ${result.accountName} saved!`)
 
         setAccountDialogOpen(false)
-      } else {
+      }
+      else {
         toast.error('Invalid data found, refresh and try again')
-        return
       }
     }
     catch (error: any) {
@@ -84,7 +67,7 @@ export function AccountsFeature() {
   ) {
     try {
       if (profiles) {
-        const profileId = resolveProfileId(profiles, formData.profileName);
+        const profileId = resolveProfileId(profiles, formData.profileName)
         const updatedFormData = {
           ...formData,
           accountPicture: undefined,
@@ -99,9 +82,9 @@ export function AccountsFeature() {
 
         setIsUpdate(false)
         setAccountDialogOpen(false)
-      } else {
+      }
+      else {
         toast.error('Invalid data found, refresh and try again')
-        return
       }
     }
     catch (error: any) {

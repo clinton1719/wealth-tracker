@@ -1,3 +1,5 @@
+import type { AccountSectionProps } from '@/types/AccountSectionProps'
+import { DynamicIcon } from 'lucide-react/dynamic'
 import { ProfilePicture } from '@/components/building-blocks/profilePicture'
 import { Button } from '@/components/ui/button'
 import {
@@ -6,27 +8,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { AccountSectionProps } from '@/types/AccountSectionProps'
 import { formatCurrency } from '@/utilities/helper'
-import { DynamicIcon } from 'lucide-react/dynamic'
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '../../ui/card'
 
 export function AccountSection({
   account,
   profile,
   handleDeleteAccount,
-  handleUpdateAccount
+  handleUpdateAccount,
 }: AccountSectionProps) {
   return (
     <Card
-      className='card card-border'
+      className="card card-border"
       style={{ borderColor: profile.profileColorCode }}
     >
       <CardHeader className="flex flex-row items-center justify-between">
@@ -73,10 +73,14 @@ export function AccountSection({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-3 text-sm">
-          {account.accountDescription ? (<div>
-            <p className="text-muted-foreground">Description</p>
-            <p className="font-medium">{account.accountDescription}</p>
-          </div>) : null}
+          {account.accountDescription
+            ? (
+                <div>
+                  <p className="text-muted-foreground">Description</p>
+                  <p className="font-medium">{account.accountDescription}</p>
+                </div>
+              )
+            : null}
           <div>
             <p className="text-muted-foreground">Account balance:</p>
             <p className="font-medium">{formatCurrency(account.accountBalance)}</p>

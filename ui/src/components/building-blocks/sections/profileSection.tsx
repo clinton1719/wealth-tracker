@@ -1,3 +1,7 @@
+import type { Profile } from '@/types/Profile'
+import type { ProfileSectionProps } from '@/types/ProfileSectionProps'
+import { DynamicIcon } from 'lucide-react/dynamic'
+import { useDispatch, useSelector } from 'react-redux'
 import { ProfilePicture } from '@/components/building-blocks/profilePicture'
 import { Button } from '@/components/ui/button'
 import {
@@ -8,17 +12,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Switch } from '@/components/ui/switch'
 import { selectProfileSlice, toggleProfile } from '@/slices/profileSlice'
-import type { Profile } from '@/types/Profile'
-import type { ProfileSectionProps } from '@/types/ProfileSectionProps'
-import { DynamicIcon } from 'lucide-react/dynamic'
-import { useDispatch, useSelector } from 'react-redux'
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '../../ui/card'
 
 export function ProfileSection({
@@ -42,7 +42,7 @@ export function ProfileSection({
 
   return (
     <Card
-      className='card card-border'
+      className="card card-border"
       style={{ borderColor: profile.profileColorCode }}
     >
       <CardHeader className="flex flex-row items-center justify-between">
@@ -89,15 +89,19 @@ export function ProfileSection({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-3 text-sm">
-          {profile.profileDescription ? (<div>
-            <p className="text-muted-foreground">Description</p>
-            <p className="font-medium">{profile.profileDescription}</p>
-          </div>) : null}
+          {profile.profileDescription
+            ? (
+                <div>
+                  <p className="text-muted-foreground">Description</p>
+                  <p className="font-medium">{profile.profileDescription}</p>
+                </div>
+              )
+            : null}
 
           <div>
             <span
               className={`${enabledMap[profile.profileId] ? 'enabled' : 'disabled'
-                }`}
+              }`}
             >
               {enabledMap[profile.profileId] ? 'Enabled' : 'Disabled'}
             </span>
@@ -106,7 +110,7 @@ export function ProfileSection({
               id={`profile-${profile.profileId}`}
               checked={enabledMap[profile.profileId]}
               onCheckedChange={() => dispatch(toggleProfile(profile.profileId))}
-              className='ml-1'
+              className="ml-1"
             />
           </div>
         </div>

@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function BackupDepositsFeature() {
   return (
@@ -29,8 +29,9 @@ export default function BackupDepositsFeature() {
         <CardContent>
           <Tabs defaultValue="fd" className="space-y-6">
             <TabsList>
-              <TabsTrigger value="fd">Fixed Deposit
-                
+              <TabsTrigger value="fd">
+                Fixed Deposit
+
               </TabsTrigger>
               <TabsTrigger value="rd">Recurring Deposit</TabsTrigger>
             </TabsList>
@@ -163,5 +164,5 @@ export default function BackupDepositsFeature() {
         </div>
       </div>
     </div>
-  );
+  )
 }
