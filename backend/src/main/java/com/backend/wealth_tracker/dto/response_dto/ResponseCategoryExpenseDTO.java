@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /** DTOs treated as distinct instances despite identical values */
-public class ResponseCategoryExpenseDTO{
+public class ResponseCategoryExpenseDTO {
   @NotBlank private String categoryName;
   @NotBlank private String categoryColorCode;
   private String categoryIcon;

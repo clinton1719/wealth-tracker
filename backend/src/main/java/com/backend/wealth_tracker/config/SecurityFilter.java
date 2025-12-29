@@ -6,6 +6,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.Instant;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.Instant;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -28,7 +27,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-          @NonNull HttpServletRequest request,  @NonNull HttpServletResponse response,  @NonNull FilterChain filterChain)
+      @NonNull HttpServletRequest request,
+      @NonNull HttpServletResponse response,
+      @NonNull FilterChain filterChain)
       throws ServletException, IOException {
     var token = this.recoverToken(request);
     if (token != null) {
@@ -60,6 +61,11 @@ public class SecurityFilter extends OncePerRequestFilter {
       throws IOException {
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setContentType("application/json");
+    writeErrorMessage(response, message);
+  }
+
+  @SuppressWarnings({"PMD.CloseResource", "PMD.LawOfDemeter"})
+  private void writeErrorMessage(HttpServletResponse response, String message) throws IOException {
     PrintWriter writer = response.getWriter();
     writer.write("{\"error\": \"" + message + "\"}");
     writer.flush();

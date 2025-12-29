@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
-
 public class CreateProfileDTO {
   @NotBlank(message = "Profile name cannot be blank")
   private String profileName;

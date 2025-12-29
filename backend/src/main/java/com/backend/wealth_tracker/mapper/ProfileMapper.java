@@ -4,12 +4,11 @@ import com.backend.wealth_tracker.dto.request_dto.CreateProfileDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseProfileDTO;
 import com.backend.wealth_tracker.helper.Helper;
 import com.backend.wealth_tracker.model.Profile;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public final class ProfileMapper {
   private ProfileMapper() {}
@@ -42,6 +41,9 @@ public final class ProfileMapper {
   }
 
   public static List<ResponseProfileDTO> profilesToResponseProfileDTOs(List<Profile> profiles) {
-    return profiles.parallelStream().map(ProfileMapper::profileToResponseProfileDTO).sorted(Comparator.comparing(ResponseProfileDTO::getProfileName)).toList();
+    return profiles.parallelStream()
+        .map(ProfileMapper::profileToResponseProfileDTO)
+        .sorted(Comparator.comparing(ResponseProfileDTO::getProfileName))
+        .toList();
   }
 }

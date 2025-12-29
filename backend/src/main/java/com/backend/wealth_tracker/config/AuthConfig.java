@@ -25,31 +25,31 @@ public class AuthConfig {
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
-      return httpSecurity
-          .csrf(AbstractHttpConfigurer::disable)
-          .sessionManagement(
-              session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-          .authorizeHttpRequests(
-              authorize ->
-                  authorize
-                      .requestMatchers(HttpMethod.POST, "/api/v1/auth/*")
-                      .permitAll()
-                      .requestMatchers("/swagger-ui/**")
-                      .permitAll()
-                      .requestMatchers("/api-docs*/**")
-                      .permitAll()
-                      .requestMatchers(HttpMethod.POST, "/api/v1/admin*")
-                      .hasRole("ADMIN")
-                      .anyRequest()
-                      .authenticated())
-          .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-          .build();
+    return httpSecurity
+        .csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            authorize ->
+                authorize
+                    .requestMatchers(HttpMethod.POST, "/api/v1/auth/*")
+                    .permitAll()
+                    .requestMatchers("/swagger-ui/**")
+                    .permitAll()
+                    .requestMatchers("/api-docs*/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/admin*")
+                    .hasRole("ADMIN")
+                    .anyRequest()
+                    .authenticated())
+        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+        .build();
   }
 
   @Bean
   AuthenticationManager authenticationManager(
       AuthenticationConfiguration authenticationConfiguration) {
-      return authenticationConfiguration.getAuthenticationManager();
+    return authenticationConfiguration.getAuthenticationManager();
   }
 
   @Bean

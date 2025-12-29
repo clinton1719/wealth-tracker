@@ -51,14 +51,15 @@ public class AuthController {
 
   @PostMapping("/login")
   public ResponseEntity<JwtDto> login(@RequestBody @Valid LogInDto logInDto) {
-      UsernamePasswordAuthenticationToken usernamePassword =
+    UsernamePasswordAuthenticationToken usernamePassword =
         new UsernamePasswordAuthenticationToken(logInDto.getUsername(), logInDto.getPassword());
     var principal = extractPrincipal(usernamePassword);
     var accessToken = tokenService.generateAccessToken((User) principal);
     return ResponseEntity.ok(new JwtDto(accessToken));
   }
-    private Object extractPrincipal(UsernamePasswordAuthenticationToken usernamePassword) {
-        var authUser = authenticationManager.authenticate(usernamePassword);
-        return authUser.getPrincipal();
-    }
+
+  private Object extractPrincipal(UsernamePasswordAuthenticationToken usernamePassword) {
+    var authUser = authenticationManager.authenticate(usernamePassword);
+    return authUser.getPrincipal();
+  }
 }

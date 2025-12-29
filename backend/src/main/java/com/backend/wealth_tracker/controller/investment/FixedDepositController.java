@@ -18,6 +18,7 @@ public class FixedDepositController {
     FixedDeposit fixedDeposit = new FixedDeposit();
     fixedDeposit.setFixedDepositId(1L);
     fixedDeposit.setFixedDepositInterestRate(new BigDecimal("2.5"));
+
     fixedDeposit.setFixedDepositName("HDFC deposit");
 
     fixedDeposit.setFixedDepositPrincipal(new BigDecimal("200000"));

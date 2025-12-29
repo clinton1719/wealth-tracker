@@ -4,7 +4,6 @@ import com.backend.wealth_tracker.dto.request_dto.CreateExpenseDTO;
 import com.backend.wealth_tracker.dto.response_dto.*;
 import com.backend.wealth_tracker.model.Expense;
 import com.backend.wealth_tracker.projections.expense.*;
-
 import java.time.YearMonth;
 import java.util.Comparator;
 import java.util.List;
@@ -69,7 +68,8 @@ public final class ExpenseMapper {
                             projection.getProfileId(),
                             projection.getProfileColorCode()))
                 .toList());
-      responseCategoryExpenseDTOList.sort(Comparator.comparing(ResponseCategoryExpenseDTO::getExpenseAmount));
+    responseCategoryExpenseDTOList.sort(
+        Comparator.comparing(ResponseCategoryExpenseDTO::getExpenseAmount));
     return responseCategoryExpenseDTOList;
   }
 

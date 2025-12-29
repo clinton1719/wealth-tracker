@@ -3,7 +3,6 @@ package com.backend.wealth_tracker.dto.response_dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-
 public class ResponseProfileDTO {
   @NotNull private Long profileId;
   @NotBlank private String profileName;

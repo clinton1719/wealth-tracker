@@ -6,6 +6,7 @@ import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.model.User;
 import com.backend.wealth_tracker.repository.UserRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +28,7 @@ public class AuthService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) {
+  public @Nonnull UserDetails loadUserByUsername(@Nonnull String username) {
     return userRepository.findByUsername(username);
   }
 

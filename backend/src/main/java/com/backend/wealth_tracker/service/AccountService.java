@@ -94,7 +94,7 @@ public class AccountService {
       LOGGER.atError().log("Account to be updated not found : {}", updateAccountDTO);
       throw new ResourceNotFoundException("Account not found");
     }
-    if (!accountOptional.get().getAccountName().equals(accountOptional.get().getAccountName())) {
+    if (!accountOptional.get().getAccountName().equals(updateAccountDTO.getAccountName())) {
       Optional<Account> similarAccount =
           accountRepository.findByAccountNameAndUserId(
               updateAccountDTO.getAccountName(), user.getId());
