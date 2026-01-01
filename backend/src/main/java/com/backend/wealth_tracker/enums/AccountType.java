@@ -4,13 +4,13 @@ public enum AccountType {
   SAVINGS("savings"),
   CURRENT("current");
 
-  private final String accountType;
+  private final String type;
 
-  AccountType(String accountType) {
-    this.accountType = accountType;
+  AccountType(String type) {
+    this.type = type;
   }
 
-  public String getAccountType() {
-    return this.accountType;
+  public String getType() {
+    return this.type;
   }
 }

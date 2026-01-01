@@ -2,19 +2,21 @@ package com.backend.wealth_tracker.model;
 
 import com.backend.wealth_tracker.enums.UserRole;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.annotation.Nonnull;
 import java.io.Serial;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "users")
 public class User implements UserDetails {
   @Serial private static final long serialVersionUID = 1L;
-  private static final String mappedBy = "user";
+  private static final String MAPPED_BY_OWNER = "user";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,16 +28,16 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private UserRole role;
 
-  @OneToMany(mappedBy = mappedBy, orphanRemoval = true)
+  @OneToMany(mappedBy = MAPPED_BY_OWNER, orphanRemoval = true)
   private Set<Expense> expenses = new HashSet<>();
 
-  @OneToMany(mappedBy = mappedBy, orphanRemoval = true)
+  @OneToMany(mappedBy = MAPPED_BY_OWNER, orphanRemoval = true)
   private Set<Category> categories = new HashSet<>();
 
-  @OneToMany(mappedBy = mappedBy, orphanRemoval = true)
+  @OneToMany(mappedBy = MAPPED_BY_OWNER, orphanRemoval = true)
   private Set<Account> accounts = new HashSet<>();
 
-  @OneToMany(mappedBy = mappedBy, orphanRemoval = true)
+  @OneToMany(mappedBy = MAPPED_BY_OWNER, orphanRemoval = true)
   private Set<Profile> profiles = new HashSet<>();
 
   public User(User originalUser) {
@@ -58,7 +60,7 @@ public class User implements UserDetails {
   public User() {}
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  public @Nonnull Collection<? extends GrantedAuthority> getAuthorities() {
     if (this.role == UserRole.ADMIN) {
       return List.of(
           new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
@@ -72,7 +74,7 @@ public class User implements UserDetails {
   }
 
   @Override
-  public String getUsername() {
+  public @Nonnull String getUsername() {
     return username;
   }
 

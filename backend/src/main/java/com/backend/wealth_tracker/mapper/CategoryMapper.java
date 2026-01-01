@@ -11,7 +11,6 @@ import java.util.List;
 public final class CategoryMapper {
 
   private CategoryMapper() {}
-  ;
 
   public static Category createCategoryDTOtoCategory(
       CreateCategoryDTO createCategoryDTO, User user, Profile profile) {

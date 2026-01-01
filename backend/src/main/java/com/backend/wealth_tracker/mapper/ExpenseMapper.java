@@ -12,16 +12,16 @@ public final class ExpenseMapper {
   private ExpenseMapper() {}
 
   public static ResponseExpenseDTO expenseToResponseExpenseDTO(Expense expense) {
-    ResponseExpenseDTO dto = new ResponseExpenseDTO();
-    dto.setExpenseDescription(expense.getExpenseDescription());
-    dto.setExpenseAmount(expense.getExpenseAmount());
-    dto.setCategoryId(expense.getCategory().getCategoryId());
-    dto.setAccountId(expense.getAccount().getAccountId());
-    dto.setProfileId(expense.getProfile().getProfileId());
-    dto.setExpenseCreatedAt(expense.getExpenseCreatedAt());
-    dto.setExpenseUpdatedAt(expense.getExpenseUpdatedAt());
-    dto.setExpenseId(expense.getExpenseId());
-    return dto;
+    return new ResponseExpenseDTO(
+            expense.getExpenseId(),
+            expense.getExpenseAmount(),
+            expense.getExpenseDescription(),
+            expense.getExpenseCreatedAt(),
+            expense.getExpenseUpdatedAt(),
+            expense.getCategory().getCategoryId(),
+            expense.getProfile().getProfileId(),
+            expense.getAccount().getAccountId()
+    );
   }
 
   public static Expense createExpenseDTOtoExpense(CreateExpenseDTO dto) {

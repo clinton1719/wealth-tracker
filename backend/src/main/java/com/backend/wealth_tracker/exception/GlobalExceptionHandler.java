@@ -1,9 +1,7 @@
 package com.backend.wealth_tracker.exception;
 
 import jakarta.validation.ConstraintViolationException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,6 +12,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,13 +46,13 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ResponseEntity<Map<String, String>> handleValidationExceptions(
+  public ResponseEntity<@NonNull Map<String, String>> handleValidationExceptions(
       MethodArgumentNotValidException e) {
     Map<String, String> errors = new HashMap<>();
     e.getBindingResult()
         .getAllErrors()
         .forEach(
-            (error) -> {
+            error -> {
               String fieldName = ((FieldError) error).getField();
               String errorMessage = error.getDefaultMessage();
               errors.put(fieldName, errorMessage);
@@ -61,7 +63,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(TransactionSystemException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ResponseEntity<?> handleTransactionSystemException(TransactionSystemException ex) {
+  public ResponseEntity<@NonNull Object> handleTransactionSystemException(TransactionSystemException ex) {
     Throwable rootCause = ex.getRootCause();
 
     if (rootCause instanceof ConstraintViolationException violationEx) {

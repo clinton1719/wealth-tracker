@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public abstract class AbstractPdfReportGenerator<P, M> implements PdfReportGenerator<P> {
   private final PdfRenderService pdfRenderService;
 
-  public AbstractPdfReportGenerator(PdfRenderService pdfRenderService) {
+  protected AbstractPdfReportGenerator(PdfRenderService pdfRenderService) {
     this.pdfRenderService = pdfRenderService;
   }
 

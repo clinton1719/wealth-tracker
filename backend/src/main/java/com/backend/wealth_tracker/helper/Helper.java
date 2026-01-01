@@ -4,20 +4,21 @@ import com.backend.wealth_tracker.exception.PdfGenerationException;
 import com.backend.wealth_tracker.model.Account;
 import com.backend.wealth_tracker.model.Category;
 import com.backend.wealth_tracker.model.Profile;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-import java.util.Set;
 import org.apache.tika.Tika;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+import java.util.Set;
+
 public final class Helper {
-  private static final String pngType = "image/png";
-  private static final String jpegType = "image/jpeg";
+  private static final String PNG_TYPE = "image/png";
+  private static final String JPEG_TYPE = "image/jpeg";
 
   private Helper() {}
 
@@ -25,9 +26,9 @@ public final class Helper {
     Tika tika = new Tika();
     String detectedType = tika.detect(multipartFile.getBytes());
     String extension;
-    if (pngType.equals(detectedType)) {
+    if (PNG_TYPE.equals(detectedType)) {
       extension = "data:image/png;base64,";
-    } else if (jpegType.equals(detectedType)) {
+    } else if (JPEG_TYPE.equals(detectedType)) {
       extension = "data:image/jpeg;base64,";
     } else {
       throw new ResponseStatusException(

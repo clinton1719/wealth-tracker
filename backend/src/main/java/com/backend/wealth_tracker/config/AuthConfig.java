@@ -1,8 +1,5 @@
 package com.backend.wealth_tracker.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,40 +17,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class AuthConfig {
-  private static final Logger LOGGER = LoggerFactory.getLogger(AuthConfig.class);
-  @Autowired SecurityFilter securityFilter;
 
-  @Bean
-  SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
-    return httpSecurity
-        .csrf(AbstractHttpConfigurer::disable)
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(
-            authorize ->
-                authorize
-                    .requestMatchers(HttpMethod.POST, "/api/v1/auth/*")
-                    .permitAll()
-                    .requestMatchers("/swagger-ui/**")
-                    .permitAll()
-                    .requestMatchers("/api-docs*/**")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/v1/admin*")
-                    .hasRole("ADMIN")
-                    .anyRequest()
-                    .authenticated())
-        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-        .build();
-  }
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SecurityFilter securityFilter) {
+        return httpSecurity.csrf(AbstractHttpConfigurer::disable).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll().requestMatchers("/swagger-ui/**").permitAll().requestMatchers("/api-docs*/**").permitAll().requestMatchers(HttpMethod.POST, "/api/v1/admin*").hasRole("ADMIN").anyRequest().authenticated()).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
+    }
 
-  @Bean
-  AuthenticationManager authenticationManager(
-      AuthenticationConfiguration authenticationConfiguration) {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-  @Bean
-  PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

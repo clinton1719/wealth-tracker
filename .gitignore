@@ -137,3 +137,8 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+.scannerwork
+sonarqube/extensions
+sonarqube/data
+sonarqube/logs

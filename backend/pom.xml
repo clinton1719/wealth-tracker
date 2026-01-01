@@ -307,7 +307,7 @@
             <id>sonar-local</id>
             <properties>
                 <sonar.projectKey>clinton_fernandes_1998_wealth-tracker</sonar.projectKey>
-                <sonar.projectName>Desi wealth tracker</sonar.projectName>
+                <sonar.projectName>desi-wealth-tracker-backend</sonar.projectName>
                 <sonar.host.url>http://localhost:9000</sonar.host.url>
                 <!--suppress UnresolvedMavenProperty -->
                 <sonar.token>${env.SONAR_TOKEN}</sonar.token>

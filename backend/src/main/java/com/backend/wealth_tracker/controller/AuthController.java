@@ -11,6 +11,7 @@ import com.backend.wealth_tracker.service.AuthService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,7 +43,7 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDto data)
+  public  <T> ResponseEntity<@NonNull T> signUp(@RequestBody @Valid SignUpDto data)
       throws ResourceAlreadyExistsException {
     data.setRole(UserRole.USER);
     service.signUp(data);
@@ -50,7 +51,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<JwtDto> login(@RequestBody @Valid LogInDto logInDto) {
+  public ResponseEntity<@NonNull JwtDto> login(@RequestBody @Valid LogInDto logInDto) {
     UsernamePasswordAuthenticationToken usernamePassword =
         new UsernamePasswordAuthenticationToken(logInDto.getUsername(), logInDto.getPassword());
     var principal = extractPrincipal(usernamePassword);

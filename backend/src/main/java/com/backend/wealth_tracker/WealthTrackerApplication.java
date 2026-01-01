@@ -12,5 +12,4 @@ public final class WealthTrackerApplication {
   public static void main(String[] args) {
     SpringApplication.run(WealthTrackerApplication.class, args);
   }
-  ;
 }

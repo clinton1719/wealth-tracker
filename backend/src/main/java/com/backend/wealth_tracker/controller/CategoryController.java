@@ -1,7 +1,5 @@
 package com.backend.wealth_tracker.controller;
 
-import static com.backend.wealth_tracker.helper.Constants.*;
-
 import com.backend.wealth_tracker.dto.request_dto.CreateCategoryDTO;
 import com.backend.wealth_tracker.dto.response_dto.ResponseCategoryDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateCategoryDTO;
@@ -13,11 +11,14 @@ import com.backend.wealth_tracker.service.CategoryService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.backend.wealth_tracker.helper.Constants.*;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -57,7 +58,7 @@ public class CategoryController {
   public ResponseCategoryDTO updateCategory(
       @AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO)
-      throws ResourceNotFoundException, ResourceAlreadyExistsException, UnAuthorizedException {
+      throws ResourceNotFoundException, ResourceAlreadyExistsException {
     return CategoryMapper.categoryToResponseCategoryDTO(
         this.categoryService.updateCategory(updateCategoryDTO, userDetails.getUsername()));
   }
