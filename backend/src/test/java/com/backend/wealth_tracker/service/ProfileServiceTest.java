@@ -1,9 +1,11 @@
 package com.backend.wealth_tracker.service;
 
+import com.backend.wealth_tracker.auth.service.AuthService;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
-import com.backend.wealth_tracker.model.Profile;
-import com.backend.wealth_tracker.model.User;
-import com.backend.wealth_tracker.repository.ProfileRepository;
+import com.backend.wealth_tracker.profile.model.Profile;
+import com.backend.wealth_tracker.auth.model.User;
+import com.backend.wealth_tracker.profile.repository.ProfileRepository;
+import com.backend.wealth_tracker.profile.service.ProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

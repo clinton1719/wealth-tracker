@@ -1,9 +1,9 @@
 package com.backend.wealth_tracker.helper;
 
 import com.backend.wealth_tracker.exception.PdfGenerationException;
-import com.backend.wealth_tracker.model.Account;
-import com.backend.wealth_tracker.model.Category;
-import com.backend.wealth_tracker.model.Profile;
+import com.backend.wealth_tracker.account.model.Account;
+import com.backend.wealth_tracker.category.model.Category;
+import com.backend.wealth_tracker.profile.model.Profile;
 import org.apache.tika.Tika;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
