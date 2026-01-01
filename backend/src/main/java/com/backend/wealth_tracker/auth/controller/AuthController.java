@@ -1,9 +1,9 @@
 package com.backend.wealth_tracker.auth.controller;
 
 import com.backend.wealth_tracker.auth.config.TokenProvider;
-import com.backend.wealth_tracker.dto.JwtDto;
-import com.backend.wealth_tracker.dto.LogInDto;
-import com.backend.wealth_tracker.dto.SignUpDto;
+import com.backend.wealth_tracker.dto.auth_dto.JwtDto;
+import com.backend.wealth_tracker.dto.auth_dto.LogInDto;
+import com.backend.wealth_tracker.dto.auth_dto.SignUpDto;
 import com.backend.wealth_tracker.enums.UserRole;
 import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.auth.model.User;

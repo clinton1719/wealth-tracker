@@ -1,4 +1,4 @@
-package com.backend.wealth_tracker.dto;
+package com.backend.wealth_tracker.dto.auth_dto;
 
 import com.backend.wealth_tracker.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;

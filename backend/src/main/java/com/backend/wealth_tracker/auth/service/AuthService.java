@@ -1,6 +1,6 @@
 package com.backend.wealth_tracker.auth.service;
 
-import com.backend.wealth_tracker.dto.SignUpDto;
+import com.backend.wealth_tracker.dto.auth_dto.SignUpDto;
 import com.backend.wealth_tracker.exception.ResourceAlreadyExistsException;
 import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.auth.model.User;

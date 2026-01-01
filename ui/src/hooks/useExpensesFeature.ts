@@ -2,10 +2,10 @@ import { useApiError } from '@/hooks/use-api-error'
 import { useGetAllAccountsQuery } from '@/services/accountsApi'
 import { useGetAllCategoriesQuery } from '@/services/categoriesApi'
 import {
-    useDeleteExpenseMutation,
-    useGetAllExpensesInRangeQuery,
-    useSaveExpenseMutation,
-    useUpdateExpenseMutation,
+  useDeleteExpenseMutation,
+  useGetAllExpensesInRangeQuery,
+  useSaveExpenseMutation,
+  useUpdateExpenseMutation,
 } from '@/services/expensesApi'
 import { useGetAllProfilesForUserQuery } from '@/services/profilesApi'
 import { selectProfileSlice } from '@/slices/profileSlice'
@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux'
 import type * as z from 'zod'
 
 export function useExpensesFeature() {
-    const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false)
+  const [expenseDialogOpen, setExpenseDialogOpen] = useState<boolean>(false)
   const [isUpdate, setIsUpdate] = useState(false)
   const [deleteExpenseDialogOpen, setDeleteExpenseDialogOpen]
     = useState<boolean>(false)
@@ -79,27 +79,19 @@ export function useExpensesFeature() {
     errorComponent: categoriesErrorComponent,
   } = useApiError(categoriesQuery.error)
 
-  const isError = useMemo(
-    () =>
-      isExpensesError ||
-        isProfilesError ||
-        isAccountsError ||
-        isCategoriesError,
-    [
-      isExpensesError,
-      isProfilesError,
-      isAccountsError,
-      isCategoriesError,
-    ],
-  )
-    const errorComponent = useMemo(() => {  
-        if (isExpensesError) return expensesErrorComponent
-        if (isProfilesError) return profilesErrorComponent
-        if (isAccountsError) return accountsErrorComponent
-        if (isCategoriesError) return categoriesErrorComponent
-        return null
-    }, [isExpensesError, isProfilesError, isAccountsError, isCategoriesError])
-  
+  const isError = isExpensesError ||
+    isProfilesError ||
+    isAccountsError ||
+    isCategoriesError;
+
+  const errorComponent = useMemo(() => {
+    if (isExpensesError) return expensesErrorComponent
+    if (isProfilesError) return profilesErrorComponent
+    if (isAccountsError) return accountsErrorComponent
+    if (isCategoriesError) return categoriesErrorComponent
+    return null
+  }, [isExpensesError, isProfilesError, isAccountsError, isCategoriesError])
+
   const isLoading = expensesQuery.isLoading
     || expensesQuery.isFetching
     || saveExpenseState.isLoading
@@ -112,38 +104,38 @@ export function useExpensesFeature() {
     || categoriesQuery.isLoading
     || categoriesQuery.isFetching;
 
-    const expenses = useMemo(() => expensesQuery.data?.filter((expense) => {
-        return (
-            enabledMap[expense.profileId]
-        )
-    }), [expensesQuery.data, enabledMap]);
-    const profiles = useMemo(() => profilesQuery.data, [profilesQuery.data]);
-    const accounts = useMemo(() => accountsQuery.data, [accountsQuery.data]);
-    const categories = useMemo(() => categoriesQuery.data, [categoriesQuery.data]);
+  const expenses = useMemo(() => expensesQuery.data?.filter((expense) => {
+    return (
+      enabledMap[expense.profileId]
+    )
+  }), [expensesQuery.data, enabledMap]);
+  const profiles = useMemo(() => profilesQuery.data, [profilesQuery.data]);
+  const accounts = useMemo(() => accountsQuery.data, [accountsQuery.data]);
+  const categories = useMemo(() => categoriesQuery.data, [categoriesQuery.data]);
 
-    return {    
-        expenseDialogOpen,
-        setExpenseDialogOpen,
-        isUpdate,
-        setIsUpdate,
-        deleteExpenseDialogOpen,
-        setDeleteExpenseDialogOpen,
-        currentExpense,
-        setCurrentExpense,
-        monthOffset,
-        setMonthOffset,
-        form,
-        expenses,
-        profiles,
-        categories,
-        accounts,
-        saveExpense,
-        updateExpense,
-        deleteExpense,
-        handleUpdateExpense,
-        isError,
-        errorComponent,
-        isLoading,
-        startDate
-    }
+  return {
+    expenseDialogOpen,
+    setExpenseDialogOpen,
+    isUpdate,
+    setIsUpdate,
+    deleteExpenseDialogOpen,
+    setDeleteExpenseDialogOpen,
+    currentExpense,
+    setCurrentExpense,
+    monthOffset,
+    setMonthOffset,
+    form,
+    expenses,
+    profiles,
+    categories,
+    accounts,
+    saveExpense,
+    updateExpense,
+    deleteExpense,
+    handleUpdateExpense,
+    isError,
+    errorComponent,
+    isLoading,
+    startDate
+  }
 }
