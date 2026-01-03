@@ -1,95 +1,42 @@
-import type * as z from 'zod'
-import type { FixedDeposit } from '@/types/FixedDeposit'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Fragment, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddFixedDepositForm } from '@/components/building-blocks/forms/addFixedDepositForm'
 import { FixedDepositSection } from '@/components/building-blocks/sections/fixedDepositSection'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { useApiError } from '@/hooks/use-api-error'
-import { useGetAllAccountsQuery } from '@/services/accountsApi'
-import { useDeleteFixedDepositMutation, useGetAllFixedDepositsQuery } from '@/services/fixedDepositsApi'
-import { useGetAllProfilesForUserQuery } from '@/services/profilesApi'
-import { selectProfileSlice } from '@/slices/profileSlice'
-import { defaultFixedDeposit } from '@/utilities/constants'
+import { useFixedDepositFeature } from '@/hooks/useFixedDepositFeature'
+import type { FixedDeposit } from '@/types/FixedDeposit'
 import { fixedDepositFormSchema } from '@/utilities/zodSchemas'
+import { Fragment } from 'react'
+import { toast } from 'sonner'
+import type * as z from 'zod'
 
 export function FixedDepositFeature() {
-  const [fixedDepositDialogOpen, setFixedDepositDialogOpen] = useState<boolean>(false)
-  const [fixedDepositSearchText, setFixedDepositSearchText] = useState('')
-  const [deleteFixedDepositDialogOpen, setDeleteFixedDepositDialogOpen]
-    = useState<boolean>(false)
-  const [currentFixedDeposit, setCurrentFixedDeposit] = useState<FixedDeposit | undefined>()
-
-  const form = useForm<z.infer<typeof fixedDepositFormSchema>>({
-    resolver: zodResolver(fixedDepositFormSchema),
-    mode: 'onSubmit',
-    defaultValues: defaultFixedDeposit,
-  })
-
   const {
-    error: profilesError,
-    isLoading: getAllProfilesLoading,
-    isFetching: getAllProfilesFetching,
-    data: profilesData,
-  } = useGetAllProfilesForUserQuery()
-  const {
-    error: fixedDepositsError,
-    isLoading: getAllFixedDepositsLoading,
-    isFetching: getAllFixedDepositsFetching,
-    data: fixedDepositsData,
-  } = useGetAllFixedDepositsQuery()
-  const [deleteFixedDeposit, { isLoading: deleteFixedDepositLoading }]
-    = useDeleteFixedDepositMutation()
-  const {
-    error: accountsError,
-    isLoading: getAllAccountsLoading,
-    isFetching: getAllAccountsFetching,
-    data: accountsData,
-  } = useGetAllAccountsQuery()
-  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
-
-  const { isError: isAccountsError, errorComponent: accountsErrorComponent }
-    = useApiError(accountsError)
-  const { isError: isFixedDepositsError, errorComponent: fixedDepositsErrorComponent }
-    = useApiError(fixedDepositsError)
-  const { isError: isProfilesError, errorComponent: profilesErrorComponent }
-    = useApiError(profilesError)
-
-  const filteredFixedDepositsData = useMemo(() => fixedDepositsData?.filter((fixedDeposit) => {
-    return (
-      enabledMap[fixedDeposit.profileId]
-      && (!fixedDepositSearchText
-        || fixedDeposit.fixedDepositName
-          .toLowerCase()
-          .includes(fixedDepositSearchText.toLowerCase()))
-    )
-  }), [fixedDepositsData, enabledMap, fixedDepositSearchText])
+    fixedDepositDialogOpen,
+    setFixedDepositDialogOpen,
+    deleteFixedDeposit,
+    setFixedDepositSearchText,
+    deleteFixedDepositDialogOpen,
+    setDeleteFixedDepositDialogOpen,
+    currentFixedDeposit,
+    setCurrentFixedDeposit,
+    form,
+    filteredFixedDepositsData,
+    isError,
+    isLoading,
+    errorComponent,
+    profiles,
+    accounts
+  } = useFixedDepositFeature();
 
   if (
-    getAllAccountsLoading
-    || getAllAccountsFetching
-    || getAllFixedDepositsLoading
-    || getAllFixedDepositsFetching
-    || deleteFixedDepositLoading
-    || getAllProfilesLoading
-    || getAllProfilesFetching
+    isLoading
   ) {
     return <Spinner className="spinner" />
   }
 
-  if (isAccountsError) {
-    return accountsErrorComponent
-  }
-  if (isFixedDepositsError) {
-    return fixedDepositsErrorComponent
-  }
-  if (isProfilesError) {
-    return profilesErrorComponent
+  if (isError) {
+    return errorComponent
   }
 
   async function onSubmit(formData: z.infer<typeof fixedDepositFormSchema>) {
@@ -127,7 +74,7 @@ export function FixedDepositFeature() {
     setCurrentFixedDeposit(fixedDeposit)
   }
 
-  if (profilesData) {
+  if (profiles) {
     return (
       <div id="fixedDepositsSection">
         <div className="flex items-center justify-between mb-8">
@@ -138,45 +85,45 @@ export function FixedDepositFeature() {
             className="search-bar"
             onChange={e => setFixedDepositSearchText(e.target.value)}
           />
-          {accountsData && profilesData
+          {accounts && profiles
             ? (
-                <AddFixedDepositForm
-                  form={form}
-                  onSubmit={onSubmit}
-                  fixedDepositDialogOpen={fixedDepositDialogOpen}
-                  setFixedDepositDialogOpen={setFixedDepositDialogOpen}
-                  accounts={accountsData}
-                  profiles={profilesData}
-                />
-              )
+              <AddFixedDepositForm
+                form={form}
+                onSubmit={onSubmit}
+                fixedDepositDialogOpen={fixedDepositDialogOpen}
+                setFixedDepositDialogOpen={setFixedDepositDialogOpen}
+                accounts={accounts}
+                profiles={profiles}
+              />
+            )
             : null}
         </div>
         <div className="normal-grid">
           {filteredFixedDepositsData
             ? (
-                filteredFixedDepositsData.map((fixedDeposit) => {
-                  const profile = profilesData.find(profile => profile.profileId === fixedDeposit.profileId)
-                  if (profile) {
-                    return ((
-                      <FixedDepositSection
-                        fixedDeposit={fixedDeposit}
-                        profile={profile}
-                        handleDeleteFixedDeposit={handleDeleteFixedDeposit}
-                        key={fixedDeposit.fixedDepositId}
-                      />
-                    ))
-                  }
-                  else {
-                    <Fragment key={fixedDeposit.fixedDepositId}>
-                    </Fragment>
-                  }
-                })
-              )
+              filteredFixedDepositsData.map((fixedDeposit) => {
+                const profile = profiles.find(profile => profile.profileId === fixedDeposit.profileId)
+                if (profile) {
+                  return ((
+                    <FixedDepositSection
+                      fixedDeposit={fixedDeposit}
+                      profile={profile}
+                      handleDeleteFixedDeposit={handleDeleteFixedDeposit}
+                      key={fixedDeposit.fixedDepositId}
+                    />
+                  ))
+                }
+                else {
+                  <Fragment key={fixedDeposit.fixedDepositId}>
+                  </Fragment>
+                }
+              })
+            )
             : (
-                <p className="text-muted-foreground text-sm">
-                  Create a new fixed deposit here
-                </p>
-              )}
+              <p className="text-muted-foreground text-sm">
+                Create a new fixed deposit here
+              </p>
+            )}
         </div>
         <AlertDialogComponent
           isDialogOpen={deleteFixedDepositDialogOpen}
