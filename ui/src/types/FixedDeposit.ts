@@ -4,7 +4,10 @@ export interface FixedDeposit {
   fixedDepositPrincipal: number
   fixedDepositInterestRate: number
   fixedDepositTenure: string
+  fixedDepositStartDate: Date
+  fixedDepositMaturityDate: Date
+  fixedDepositMaturityAmount: number
+  fixedDepositInterestEarned: number
   accountId: number
   profileId: number
-  fixedDepositStartDate: Date
 }

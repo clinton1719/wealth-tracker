@@ -1,5 +1,6 @@
 package com.backend.wealth_tracker.profile.service;
 
+import com.backend.wealth_tracker.auth.model.User;
 import com.backend.wealth_tracker.auth.service.AuthService;
 import com.backend.wealth_tracker.dto.request_dto.CreateProfileDTO;
 import com.backend.wealth_tracker.dto.update_dto.UpdateProfileDTO;
@@ -8,12 +9,8 @@ import com.backend.wealth_tracker.exception.ResourceNotFoundException;
 import com.backend.wealth_tracker.helper.Helper;
 import com.backend.wealth_tracker.profile.mapper.ProfileMapper;
 import com.backend.wealth_tracker.profile.model.Profile;
-import com.backend.wealth_tracker.auth.model.User;
 import com.backend.wealth_tracker.profile.repository.ProfileRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,8 +19,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
 @Service
-@Transactional
 public class ProfileService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProfileService.class);

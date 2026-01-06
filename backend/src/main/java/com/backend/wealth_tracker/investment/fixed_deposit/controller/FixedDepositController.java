@@ -1,12 +1,20 @@
 package com.backend.wealth_tracker.investment.fixed_deposit.controller;
 
+import com.backend.wealth_tracker.dto.request_dto.CreateFixedDepositDTO;
+import com.backend.wealth_tracker.dto.response_dto.ResponseFixedDepositDTO;
 import com.backend.wealth_tracker.investment.fixed_deposit.model.FixedDeposit;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import static com.backend.wealth_tracker.helper.Constants.CREATE_CALL_TAG;
 
 @RestController
 @RequestMapping(value = "/api/v1/investments/fixed-deposits")
@@ -28,5 +36,12 @@ public class FixedDepositController {
     fixedDeposit.setProfileId(1L);
     fixedDepositList.add(fixedDeposit);
     return fixedDepositList;
+  }
+
+  @PostMapping("/save")
+  @ResponseStatus(HttpStatus.CREATED)
+  @Tag(name = CREATE_CALL_TAG)
+  public ResponseFixedDepositDTO saveFixedDeposit(@AuthenticationPrincipal UserDetails userDetails, @Valid CreateFixedDepositDTO createFixedDepositDTO) {
+
   }
 }
