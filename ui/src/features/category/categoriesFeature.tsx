@@ -1,9 +1,7 @@
 import type * as z from 'zod'
 import type { Category } from '@/types/Category'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Fragment, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import type { categoryFormSchema } from '@/utilities/zodSchemas'
+import { Fragment } from 'react'
 import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddCategoryForm } from '@/components/building-blocks/forms/addCategoryForm'
@@ -20,92 +18,43 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
-import { useApiError } from '@/hooks/use-api-error'
-import {
-  useDeleteCategoryMutation,
-  useGetAllCategoriesQuery,
-  useSaveCategoryMutation,
-  useUpdateCategoryMutation,
-} from '@/services/categoriesApi'
-import { useGetAllProfilesForUserQuery } from '@/services/profilesApi'
-import { selectProfileSlice } from '@/slices/profileSlice'
-import { defaultCategory } from '@/utilities/constants'
-import { categoryFormSchema } from '@/utilities/zodSchemas'
+import { useCategoriesFeature } from '@/hooks/useCategoriesFeature'
+import { showApiErrorToast } from '@/utilities/apiErrorToast'
+import { resolveProfileId } from '@/utilities/helper'
 
 export default function CategoriesFeature() {
-  const [isUpdate, setIsUpdate] = useState(false)
-  const [deleteCategoryDialogOpen, setDeleteCategoryDialogOpen]
-    = useState<boolean>(false)
-  const [currentCategory, setCurrentCategory] = useState<
-    Category | undefined
-  >()
-  const [categoryDialogOpen, setCategoryDialogOpen] = useState<boolean>(false)
-  const [categorySearchText, setACategorySearchText] = useState('')
-  const [selectedTag, setSelectedTag] = useState('')
-
-  const form = useForm<z.infer<typeof categoryFormSchema>>({
-    resolver: zodResolver(categoryFormSchema),
-    mode: 'onSubmit',
-    defaultValues: defaultCategory,
-  })
-
-  const [saveCategory, { isLoading: saveCategoryLoading }]
-    = useSaveCategoryMutation()
-  const [updateCategory, { isLoading: updateCategoryLoading }]
-    = useUpdateCategoryMutation()
-  const [deleteCategory, { isLoading: deleteCategoryLoading }]
-    = useDeleteCategoryMutation()
   const {
-    error: categoriesError,
-    isLoading: getAllCategoriesLoading,
-    isFetching: getAllCategoriesFetching,
-    data: categoriesData,
-  } = useGetAllCategoriesQuery()
-  const {
-    error: profilesError,
-    isLoading: getAllProfilesLoading,
-    data: profilesData,
-  } = useGetAllProfilesForUserQuery()
-  const enabledMap: Record<number, boolean> = useSelector(selectProfileSlice)
-  const {
-    isError: isCategoriesError,
-    errorComponent: categoriesErrorComponent,
-  } = useApiError(categoriesError)
-  const { isError: isProfilesError, errorComponent: profilesErrorComponent }
-    = useApiError(profilesError)
-
-  const filteredCategoriesData = useMemo(() => categoriesData?.filter((category) => {
-    return (
-      enabledMap[category.profileId]
-      && (!categorySearchText
-        || category.categoryName
-          .toLowerCase()
-          .includes(categorySearchText.toLowerCase()))
-        && (selectedTag ? category.categoryTags?.includes(selectedTag) : true)
-    )
-  }), [categoriesData, enabledMap, categorySearchText, selectedTag])
-
-  const tags = useMemo(() => filteredCategoriesData?.flatMap(
-    category => category.categoryTags,
-  ), [filteredCategoriesData])
-  const uniqueTags = [...new Set(tags)]
+    isUpdate,
+    setIsUpdate,
+    deleteCategoryDialogOpen,
+    setDeleteCategoryDialogOpen,
+    currentCategory,
+    setCurrentCategory,
+    categoryDialogOpen,
+    setCategoryDialogOpen,
+    setCategorySearchText,
+    selectedTag,
+    setSelectedTag,
+    form,
+    categories,
+    tags,
+    saveCategory,
+    updateCategory,
+    deleteCategory,
+    isError,
+    errorComponent,
+    isLoading,
+    profiles,
+  } = useCategoriesFeature()
 
   if (
-    saveCategoryLoading
-    || getAllCategoriesFetching
-    || getAllCategoriesLoading
-    || updateCategoryLoading
-    || deleteCategoryLoading
-    || getAllProfilesLoading
+    isLoading
   ) {
     return <Spinner className="spinner" />
   }
 
-  if (isCategoriesError) {
-    return categoriesErrorComponent
-  }
-  if (isProfilesError) {
-    return profilesErrorComponent
+  if (isError) {
+    return errorComponent()
   }
 
   async function onSubmit(formData: z.infer<typeof categoryFormSchema>) {
@@ -122,66 +71,25 @@ export default function CategoriesFeature() {
 
   async function saveNewCategory(formData: z.infer<typeof categoryFormSchema>) {
     try {
-      const profile = profilesData?.find(
-        profile => profile.profileName === formData.profileName,
-      )
-      if (!profile) {
-        toast.error('Invalid data found, refresh and try again')
-        return
-      }
+      if (profiles) {
+        const profileId = resolveProfileId(profiles, formData.profileName)
 
-      const result = await saveCategory({
-        ...formData,
-        profileId: profile.profileId,
-      }).unwrap()
+        const result = await saveCategory({
+          ...formData,
+          profileId,
+        }).unwrap()
 
-      toast('Category saved!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Category name:
-              {result.categoryName}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
+        toast.success(`Category ${result.categoryName} saved!`)
 
-      setCategoryDialogOpen(false)
-    }
-    catch (error: any) {
-      if (error?.status === 409) {
-        toast.error(
-          `Category already exists with name: ${formData.categoryName}`,
-        )
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
+        setCategoryDialogOpen(false)
       }
       else {
-        toast.error('Failed to create category, please try again')
+        toast.error('Invalid data found, refresh and try again')
+      }
+    }
+    catch (error: any) {
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to update account')
       }
     }
   }
@@ -190,71 +98,22 @@ export default function CategoriesFeature() {
     formData: z.infer<typeof categoryFormSchema>,
   ) {
     try {
-      const profile = profilesData?.find(
-        profile => profile.profileName === formData.profileName,
-      )
-      if (!profile) {
-        toast.error('Invalid data found, refresh and try again')
-        return
+      if (profiles) {
+        const profileId = resolveProfileId(profiles, formData.profileName)
+        const result = await updateCategory({
+          ...formData,
+          profileId,
+        }).unwrap()
+
+        toast.success(`Category ${result.categoryName} updated!`)
+
+        setIsUpdate(false)
+        setCategoryDialogOpen(false)
       }
-      const result = await updateCategory({
-        ...formData,
-        profileId: profile.profileId,
-      }).unwrap()
-
-      if (!result) {
-        toast.error('Failed to update category, please try again later')
-        return
-      }
-
-      toast('Category updated!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Category name:
-              {result.categoryName}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
-
-      setIsUpdate(false)
-      setCategoryDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 409) {
-        toast.error(
-          `Category already exists with name: ${formData.categoryName}`,
-        )
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else {
-        toast.error('Failed to update category, please try again')
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to update account')
       }
     }
   }
@@ -281,17 +140,17 @@ export default function CategoriesFeature() {
     }
   }
 
-  if (filteredCategoriesData && profilesData) {
+  if (categories && profiles) {
     return (
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Categories</h1>
+          <h1 className="heading1">Categories</h1>
           <div className="flex gap-2 min-w-lg">
             <Input
               type="search"
               placeholder="Search categories by name..."
               className="search-bar"
-              onChange={e => setACategorySearchText(e.target.value)}
+              onChange={e => setCategorySearchText(e.target.value)}
             />
             {tags
               ? (
@@ -306,7 +165,7 @@ export default function CategoriesFeature() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Tags</SelectLabel>
-                          {uniqueTags.map((tag) => {
+                          {tags.map((tag) => {
                             return (
                               <SelectItem key={tag} value={tag ?? ''}>
                                 {tag}
@@ -335,17 +194,14 @@ export default function CategoriesFeature() {
             setIsUpdate={setIsUpdate}
             setCategoryDialogOpen={setCategoryDialogOpen}
             onSubmit={onSubmit}
-            profiles={profilesData}
+            profiles={profiles}
           />
         </div>
 
         <div className="normal-grid">
-          {filteredCategoriesData
-            .sort((categoryA, categoryB) =>
-              categoryA.categoryName.localeCompare(categoryB.categoryName),
-            )
+          {categories
             .map((category) => {
-              const profile = profilesData.find(
+              const profile = profiles.find(
                 profile => profile.profileId === category.profileId,
               )
               if (profile) {

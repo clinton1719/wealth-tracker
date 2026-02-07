@@ -4,9 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-/** DTOs treated as distinct instances despite identical values */
-@SuppressWarnings({"PMD.DataClass", "PMD.OverrideBothEqualsAndHashCodeOnComparable"})
-public class ResponseTagExpenseDTO implements Comparable<ResponseTagExpenseDTO> {
+public class ResponseTagExpenseDTO {
   @NotBlank private String tag;
   @NotNull private BigDecimal expenseAmount;
   @NotNull private Long profileId;
@@ -50,10 +48,5 @@ public class ResponseTagExpenseDTO implements Comparable<ResponseTagExpenseDTO> 
 
   public void setProfileColorCode(String profileColorCode) {
     this.profileColorCode = profileColorCode;
-  }
-
-  @Override
-  public int compareTo(ResponseTagExpenseDTO responseTagExpenseDTO) {
-    return this.getExpenseAmount().compareTo(responseTagExpenseDTO.getExpenseAmount());
   }
 }

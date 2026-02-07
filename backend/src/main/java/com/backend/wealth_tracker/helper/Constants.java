@@ -22,6 +22,13 @@ public final class Constants {
   public static final String EXPENSE_REPORT_FILE_NAME = "expense-report.pdf";
   public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+  /*** SWAGGER CONSTANTS STARTS ***/
+  public static final String READ_CALL_TAG = "READ";
+
+  public static final String CREATE_CALL_TAG = "CREATE";
+  public static final String UPDATE_CALL_TAG = "UPDATE";
+  public static final String DELETE_CALL_TAG = "DELETE";
+
   private Constants() {}
 
   public static String formatCurrency(BigDecimal amount) {

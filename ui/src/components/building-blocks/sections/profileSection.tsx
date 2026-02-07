@@ -17,7 +17,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '../../ui/card'
@@ -46,7 +45,7 @@ export function ProfileSection({
       className="card card-border"
       style={{ borderColor: profile.profileColorCode }}
     >
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>
           <ProfilePicture
             imageSource={profile.profilePicture}
@@ -56,8 +55,7 @@ export function ProfileSection({
         </CardTitle>
         <CardDescription>
           <div className="flex flex-col">
-            <span className="card-title">{profile.profileName}</span>
-            <span className="description">{profile.profileDescription}</span>
+            <span className="heading4">{profile.profileName}</span>
           </div>
         </CardDescription>
         <CardAction>
@@ -89,24 +87,34 @@ export function ProfileSection({
           </DropdownMenu>
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-6">
-          <div className="flex justify-between items-center">
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          {profile.profileDescription
+            ? (
+                <div>
+                  <p className="text-muted-foreground">Description</p>
+                  <p className="font-medium">{profile.profileDescription}</p>
+                </div>
+              )
+            : null}
+
+          <div>
             <span
-              className={`status-badge ${enabledMap[profile.profileId] ? 'enabled' : 'disabled'
+              className={`${enabledMap[profile.profileId] ? 'enabled' : 'disabled'
               }`}
             >
               {enabledMap[profile.profileId] ? 'Enabled' : 'Disabled'}
             </span>
+
             <Switch
               id={`profile-${profile.profileId}`}
               checked={enabledMap[profile.profileId]}
               onCheckedChange={() => dispatch(toggleProfile(profile.profileId))}
+              className="ml-1"
             />
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex-col gap-2"></CardFooter>
     </Card>
   )
 }

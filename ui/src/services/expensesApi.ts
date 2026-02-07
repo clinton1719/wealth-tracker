@@ -10,9 +10,6 @@ import { ALL_TAG_TYPES } from '@/utilities/constants'
 
 export const expensesApi = createApi({
   reducerPath: 'expensesApi',
-  refetchOnMountOrArgChange: true,
-  refetchOnFocus: true,
-  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({
     baseUrl: baseAPI,
     prepareHeaders: (headers, { getState }) => {

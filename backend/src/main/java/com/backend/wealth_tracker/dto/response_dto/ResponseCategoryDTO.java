@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("PMD.DataClass")
 public class ResponseCategoryDTO {
   @NotNull private Long categoryId;
   @NotBlank private String categoryName;

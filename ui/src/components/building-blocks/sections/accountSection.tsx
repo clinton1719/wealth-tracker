@@ -1,4 +1,3 @@
-import type { Account } from '@/types/Account'
 import type { AccountSectionProps } from '@/types/AccountSectionProps'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { ProfilePicture } from '@/components/building-blocks/profilePicture'
@@ -15,7 +14,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '../../ui/card'
@@ -23,27 +21,15 @@ import {
 export function AccountSection({
   account,
   profile,
-  form,
-  setAccountDialogOpen,
-  setIsUpdate,
   handleDeleteAccount,
+  handleUpdateAccount,
 }: AccountSectionProps) {
-  const handleUpdateAccount = (account: Account) => {
-    form.reset({
-      ...account,
-      accountDescription: account.accountDescription ?? '',
-    })
-    form.setValue('profileName', profile.profileName)
-    setAccountDialogOpen(true)
-    setIsUpdate(true)
-  }
-
   return (
     <Card
       className="card card-border"
       style={{ borderColor: profile.profileColorCode }}
     >
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>
           <ProfilePicture
             imageSource={profile.profilePicture}
@@ -53,8 +39,7 @@ export function AccountSection({
         </CardTitle>
         <CardDescription>
           <div className="flex flex-col">
-            <span className="card-title">{account.accountName}</span>
-            <span className="description">{account.accountDescription}</span>
+            <span className="heading4">{account.accountName}</span>
           </div>
         </CardDescription>
         <CardAction>
@@ -71,7 +56,7 @@ export function AccountSection({
 
             <DropdownMenuContent align="end" className="bg-white">
               <DropdownMenuItem
-                onClick={() => handleUpdateAccount(account)}
+                onClick={() => handleUpdateAccount(account, profile)}
                 className="cursor-pointer"
               >
                 Edit
@@ -86,21 +71,26 @@ export function AccountSection({
           </DropdownMenu>
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between items-center">
-            <span className="card-key">Account balance:</span>
-            <span className="card-value">
-              {formatCurrency(account.accountBalance)}
-            </span>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          {account.accountDescription
+            ? (
+                <div>
+                  <p className="text-muted-foreground">Description</p>
+                  <p className="font-medium">{account.accountDescription}</p>
+                </div>
+              )
+            : null}
+          <div>
+            <p className="text-muted-foreground">Account balance:</p>
+            <p className="font-medium">{formatCurrency(account.accountBalance)}</p>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="card-key">Account type:</span>
-            <span className="card-value">{account.accountType}</span>
+          <div>
+            <p className="text-muted-foreground">Account type:</p>
+            <p className="font-medium">{account.accountType}</p>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex-col gap-2"></CardFooter>
     </Card>
   )
 }

@@ -11,7 +11,10 @@
     "lint:fix": "eslint --fix",
     "preview": "vite preview",
     "ci:check": "pnpm run format:check && pnpm run lint",
-    "knip": "knip"
+    "knip": "knip",
+    "sonar": "node sonarscan.js",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -26,6 +29,7 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-switch": "^1.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@reduxjs/toolkit": "2.10.1",
     "@tailwindcss/vite": "4.1.16",
     "@tanstack/react-table": "^8.21.3",
@@ -51,16 +55,23 @@
   "devDependencies": {
     "@antfu/eslint-config": "^6.2.0",
     "@eslint-react/eslint-plugin": "^2.3.9",
+    "@sonar/scan": "^4.3.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react-swc": "^4.1.0",
+    "@vitest/coverage-v8": "4.0.16",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^7.0.0",
     "eslint-plugin-react-refresh": "^0.4.22",
+    "jsdom": "^27.4.0",
     "knip": "^5.64.2",
     "typescript": "~5.9.3",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vitest": "^4.0.16"
   },
   "overrides": {
     "react-is": "^19.0.0-rc-69d4b800-20241021"

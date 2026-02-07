@@ -3,6 +3,7 @@ import { accountApi } from './services/accountsApi'
 import { authApi } from './services/authApi'
 import { categoriesApi } from './services/categoriesApi'
 import { expensesApi } from './services/expensesApi'
+import { fixedDepositApi } from './services/fixedDepositsApi'
 import { profileApi } from './services/profilesApi'
 import authReducer from './slices/authSlice'
 import profileReducer from './slices/profileSlice'
@@ -14,6 +15,7 @@ export const store = configureStore({
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [accountApi.reducerPath]: accountApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,
+    [fixedDepositApi.reducerPath]: fixedDepositApi.reducer,
     auth: authReducer,
     profile: profileReducer,
   },
@@ -28,7 +30,8 @@ export const store = configureStore({
       .concat(authApi.middleware)
       .concat(categoriesApi.middleware)
       .concat(accountApi.middleware)
-      .concat(profileApi.middleware),
+      .concat(profileApi.middleware)
+      .concat(fixedDepositApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

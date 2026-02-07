@@ -1,4 +1,4 @@
-export const navigationStaticValues: {
+export const expenseNavigationStaticValues: {
   title: string
   to: string
   description: string
@@ -18,5 +18,18 @@ export const navigationStaticValues: {
     title: 'Manage categories',
     to: '/category',
     description: 'View and manage your categories.',
+  },
+]
+
+export const investmentNavigationStaticValues: {
+  title: string
+  to: string
+  description: string
+}[] = [
+  {
+    title: 'Add fixed/recurring deposits',
+    to: '/investment',
+    description:
+      'Add a new Fixed deposit(FD) or Recurring deposit(RD)',
   },
 ]

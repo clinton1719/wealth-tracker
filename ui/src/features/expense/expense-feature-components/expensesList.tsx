@@ -15,6 +15,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { ChevronDown } from 'lucide-react'
+import { useMemo } from 'react'
 
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
@@ -43,25 +44,25 @@ export function ExpensesList({
   handleUpdateExpense,
   handleDeleteExpense,
 }: ExpensesListProps) {
-  const categoryMap = React.useMemo(() => {
+  const categoryMap = useMemo(() => {
     if (!categoriesData)
       return {}
     return Object.fromEntries(categoriesData.map(c => [c.categoryId, c]))
   }, [categoriesData])
 
-  const accountMap = React.useMemo(() => {
+  const accountMap = useMemo(() => {
     if (!accountsData)
       return {}
     return Object.fromEntries(accountsData.map(a => [a.accountId, a]))
   }, [accountsData])
 
-  const profileMap = React.useMemo(() => {
+  const profileMap = useMemo(() => {
     if (!profilesData)
       return {}
     return Object.fromEntries(profilesData.map(p => [p.profileId, p]))
   }, [profilesData])
 
-  const filteredExpensesData = React.useMemo(() => {
+  const filteredExpensesData = useMemo(() => {
     return expensesData
       .map(expense => ({
         expenseId: expense.expenseId,

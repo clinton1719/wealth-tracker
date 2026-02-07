@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("PMD.DataClass")
 public class UpdateCategoryDTO {
   @NotNull(message = "Category ID cannot be null")
   private Long categoryId;

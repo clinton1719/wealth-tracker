@@ -2,14 +2,14 @@ package com.backend.wealth_tracker.pdf.generators;
 
 import com.backend.wealth_tracker.exception.PdfGenerationException;
 import com.backend.wealth_tracker.pdf.PdfReportGenerator;
-import com.backend.wealth_tracker.service.PdfRenderService;
+import com.backend.wealth_tracker.pdf.PdfRenderService;
 import org.springframework.stereotype.Component;
 
 @Component
 public abstract class AbstractPdfReportGenerator<P, M> implements PdfReportGenerator<P> {
   private final PdfRenderService pdfRenderService;
 
-  public AbstractPdfReportGenerator(PdfRenderService pdfRenderService) {
+  protected AbstractPdfReportGenerator(PdfRenderService pdfRenderService) {
     this.pdfRenderService = pdfRenderService;
   }
 

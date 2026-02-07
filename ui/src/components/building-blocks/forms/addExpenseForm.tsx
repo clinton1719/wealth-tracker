@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { defaultExpense } from '@/utilities/constants'
+import { checkKeyDown } from '@/utilities/helper'
 
 export function AddExpenseForm({
   expenseDialogOpen,
@@ -49,11 +50,6 @@ export function AddExpenseForm({
   const profile = profiles.find(
     profile => profile.profileName === profileName,
   )
-
-  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter')
-      e.preventDefault()
-  }
 
   let filteredAccounts
   let filteredCategories
@@ -152,7 +148,7 @@ export function AddExpenseForm({
                   data-invalid={fieldState.invalid}
                 >
                   <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-account-type">
+                    <FieldLabel htmlFor="form-rhf-select-profile">
                       Profile
                     </FieldLabel>
                     <FieldDescription>Choose your profile</FieldDescription>
@@ -237,7 +233,7 @@ export function AddExpenseForm({
                   />
                 )
               : (
-                  <></>
+                  null
                 )}
             {filteredCategories
               ? (
@@ -295,7 +291,7 @@ export function AddExpenseForm({
                   />
                 )
               : (
-                  <></>
+                  null
                 )}
             <Field orientation="horizontal">
               <Button

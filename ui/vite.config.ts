@@ -1,11 +1,20 @@
 import path from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react-swc'
-import { defineConfig } from 'vite'
+import { defineConfig, type UserConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './src/__tests__/setup.js',
+    coverage: {
+      reporter: ['text', 'json', 'html', 'lcov'],
+      include: ['src/**/*.{ts,tsx}']
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -34,4 +43,4 @@ export default defineConfig({
       },
     },
   },
-})
+} as UserConfig)

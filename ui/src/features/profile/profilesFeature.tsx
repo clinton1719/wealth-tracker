@@ -1,73 +1,37 @@
 import type * as z from 'zod'
 import type { Profile } from '@/types/Profile'
-import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import type { profileFormSchema } from '@/utilities/zodSchemas'
 import { toast } from 'sonner'
 import { AlertDialogComponent } from '@/components/building-blocks/alertDialogComponent'
 import { AddProfileForm } from '@/components/building-blocks/forms/addProfileForm'
 import { ProfileSection } from '@/components/building-blocks/sections/profileSection'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { useApiError } from '@/hooks/use-api-error'
-import {
-  useDeleteProfileMutation,
-  useGetAllProfilesForUserQuery,
-  useSaveProfileMutation,
-  useUpdateProfileMutation,
-} from '@/services/profilesApi'
-import { defaultProfile } from '@/utilities/constants'
-import { profileFormSchema } from '@/utilities/zodSchemas'
+import { useProfilesFeature } from '@/hooks/useProfilesFeature'
+import { showApiErrorToast } from '@/utilities/apiErrorToast'
 
 export function ProfilesFeature() {
-  const [isUpdate, setIsUpdate] = useState(false)
-  const [profileDialogOpen, setProfileDialogOpen] = useState<boolean>(false)
-  const [deleteProfileDialogOpen, setDeleteProfileDialogOpen]
-    = useState<boolean>(false)
-  const [currentProfile, setCurrentProfile] = useState<Profile | undefined>()
-  const [profileSearchText, setProfileSearchText] = useState('')
-
-  const form = useForm<z.infer<typeof profileFormSchema>>({
-    resolver: zodResolver(profileFormSchema),
-    mode: 'onSubmit',
-    defaultValues: defaultProfile,
-  })
-
   const {
-    error,
-    isLoading: getAllProfilesLoading,
-    isFetching: getAllProfilesFetching,
-    data: profileData,
-  } = useGetAllProfilesForUserQuery()
-  const [saveProfile, { isLoading: saveProfileLoading }]
-    = useSaveProfileMutation()
-  const [updateProfile, { isLoading: updateProfileLoading }]
-    = useUpdateProfileMutation()
-  const [deleteProfile, { isLoading: deleteProfileLoading }]
-    = useDeleteProfileMutation()
-  const { isError, errorComponent } = useApiError(error)
+    isUpdate,
+    setIsUpdate,
+    profileDialogOpen,
+    setProfileDialogOpen,
+    deleteProfileDialogOpen,
+    setDeleteProfileDialogOpen,
+    currentProfile,
+    setCurrentProfile,
+    setProfileSearchText,
+    form,
+    profiles,
+    saveProfile,
+    updateProfile,
+    deleteProfile,
+    isError,
+    errorComponent,
+    isLoading,
+  } = useProfilesFeature()
 
-  const filteredProfileData = React.useMemo(() => {
-    if (!profileData)
-      return undefined
-
-    if (!profileSearchText)
-      return profileData
-
-    const search = profileSearchText.toLowerCase()
-
-    return profileData.filter(profile =>
-      profile.profileName.toLowerCase().includes(search),
-    )
-  }, [profileData, profileSearchText])
-
-  if (
-    getAllProfilesLoading
-    || getAllProfilesFetching
-    || saveProfileLoading
-    || updateProfileLoading
-    || deleteProfileLoading
-  ) {
+  if (isLoading) {
     return <Spinner className="spinner" />
   }
 
@@ -91,53 +55,13 @@ export function ProfilesFeature() {
     try {
       const result = await saveProfile({ ...formData }).unwrap()
 
-      toast('Profile saved!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Profile name:
-              {result.profileName}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
+      toast.success(`Profile ${result.profileName} saved!`)
 
       setProfileDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 409) {
-        toast.error(
-          `Profile already exists with name: ${formData.profileName}`,
-        )
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else {
-        toast.error('Failed to create profile, please try again')
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to save profile!')
       }
     }
   }
@@ -157,54 +81,14 @@ export function ProfilesFeature() {
         return
       }
 
-      toast('Profile updated!', {
-        description: (
-          <pre
-            className="mt-2 w-[320px] overflow-x-auto rounded-md p-4"
-            style={{
-              background: 'var(--background-code, #1a1a1a)',
-              color: 'var(--foreground-code, #f5f5f5)',
-            }}
-          >
-            <code>
-              Profile name:
-              {result.profileName}
-            </code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-          'background': 'var(--background, #fff)',
-          'color': 'var(--foreground, #000)',
-        } as React.CSSProperties,
-      })
+      toast.success(`Profile ${result.profileName} update!`)
 
       setIsUpdate(false)
       setProfileDialogOpen(false)
     }
     catch (error: any) {
-      if (error?.status === 409) {
-        toast.error(
-          `Profile already exists with name: ${formData.profileName}`,
-        )
-      }
-      else if (error.status === 400) {
-        toast.error('Invalid input. Please check your details.')
-      }
-      else if (error.status === 403) {
-        toast.error(
-          'Access denied. You do not have permission to access this resource.',
-        )
-      }
-      else if (error.status === 404) {
-        toast.error('This resource does not exist, kindly refresh your page.')
-      }
-      else {
-        toast.error('Failed to update profile, please try again')
+      if (error.status) {
+        showApiErrorToast(error, 'Failed to update profile!')
       }
     }
   }
@@ -250,9 +134,9 @@ export function ProfilesFeature() {
         />
       </div>
       <div className="normal-grid">
-        {filteredProfileData
+        {profiles
           ? (
-              filteredProfileData.map(profile => (
+              profiles.map(profile => (
                 <ProfileSection
                   profile={profile}
                   key={profile.profileId}

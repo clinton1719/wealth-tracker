@@ -10,6 +10,7 @@
     "ui:lint:fix": "pnpm --prefix ui run lint:fix",
     "ui:preview": "pnpm --prefix ui run preview",
     "ui:knip": "pnpm --prefix ui run knip",
+    "ui:sonar": "pnpm --prefix ui run sonar",
     "backend:build": "cd backend && mvn clean install",
     "backend:analyze": "cd backend && mvn dependency:analyze -DignoreNonCompile"
   },
